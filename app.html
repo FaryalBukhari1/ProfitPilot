@@ -3,584 +3,722 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>ProfitPilot App</title>
-  <meta name="description" content="ProfitPilot app — login, 5-day trial, one-time unlock, profit calculator, fee presets, and moderated reviews.">
+  <title>ProfitPilot — App</title>
+  <meta name="description" content="ProfitPilot helps sellers estimate profit, margin, and cost sensitivity. Free trial with one-time PRO unlock.">
+  <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
+
   <style>
     :root{
-      --bg:#0b0f14; --card:#111826; --card2:#0e1521; --txt:#eaf0ff; --muted:#9aa7bd;
-      --accent:#5eead4; --line:rgba(255,255,255,.08);
-      --good:#22c55e; --warn:#fbbf24; --bad:#ef4444;
+      --bg:#0b0f14;
+      --card:#111826;
+      --card2:#0e1521;
+      --txt:#eaf0ff;
+      --muted:#9aa7bd;
+      --line:rgba(255,255,255,.08);
+      --accent:#5eead4;
+      --warn:#fbbf24;
+      --bad:#fb7185;
+      --ok:#5eead4;
     }
     *{box-sizing:border-box}
     body{
-      margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       background:
-        radial-gradient(900px 500px at 20% 0%,rgba(94,234,212,.12),transparent 55%),
+        radial-gradient(900px 500px at 20% 0%,rgba(94,234,212,.10),transparent 55%),
         radial-gradient(900px 500px at 80% 0%,rgba(99,102,241,.10),transparent 55%),
         var(--bg);
       color:var(--txt);
     }
-    .wrap{max-width:1120px;margin:18px auto;padding:0 14px}
-    .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+    a{color:var(--accent);text-decoration:none}
+    .wrap{max-width:1100px;margin:18px auto;padding:0 14px}
+    .nav{
+      display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap
+    }
     .brand{display:flex;gap:10px;align-items:center}
-    .logo{width:40px;height:40px;border-radius:14px;background:rgba(94,234,212,.12);border:1px solid rgba(94,234,212,.25);
-      display:flex;align-items:center;justify-content:center;font-weight:900}
-    .pill{display:inline-flex;gap:8px;align-items:center;padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.03);font-size:12px;color:var(--muted)}
-    .btn{cursor:pointer;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03);color:var(--txt);
-      padding:10px 12px;border-radius:999px;text-decoration:none;display:inline-flex;gap:8px;align-items:center}
-    .btn.primary{border-color:rgba(94,234,212,.35);background:rgba(94,234,212,.12)}
-    .grid{display:grid;grid-template-columns:1.15fr .85fr;gap:14px;margin-top:14px}
-    @media (max-width:980px){ .grid{grid-template-columns:1fr} }
-    .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;
-      box-shadow:0 12px 30px rgba(0,0,0,.18)}
-    label{display:block;font-size:12px;color:var(--muted);margin:12px 0 6px}
-    input, select, textarea{
-      width:100%;padding:12px;border-radius:14px;border:1px solid var(--line);
-      background:var(--card2);color:var(--txt);outline:none
+    .logo{
+      width:40px;height:40px;border-radius:14px;
+      background:rgba(94,234,212,.12);
+      border:1px solid rgba(94,234,212,.25);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:900;
     }
-    textarea{min-height:110px;resize:vertical}
-    input:focus, select:focus, textarea:focus{
-      border-color:rgba(94,234,212,.55);box-shadow:0 0 0 4px rgba(94,234,212,.10)
+    .pill{
+      padding:8px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      font-size:12px;color:var(--muted);
+      display:inline-flex;gap:8px;align-items:center
     }
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media (max-width:880px){ .row{grid-template-columns:1fr} }
-    .kpi{background:var(--card2);border:1px solid var(--line);border-radius:16px;padding:12px}
-    .big{font-size:28px;font-weight:900;letter-spacing:.2px}
-    .sub{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.35}
-    .badge{
-      display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;font-weight:900;font-size:12px;
-      border:1px solid var(--line);background:rgba(255,255,255,.03)
+    .pill.ok{border-color:rgba(94,234,212,.35);background:rgba(94,234,212,.10);color:var(--txt)}
+    .pill.warn{border-color:rgba(251,191,36,.35);background:rgba(251,191,36,.08);color:var(--txt)}
+    .pill.bad{border-color:rgba(251,113,133,.35);background:rgba(251,113,133,.08);color:var(--txt)}
+    .btn{
+      padding:10px 14px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      color:var(--txt);
+      display:inline-flex;gap:8px;align-items:center;
+      cursor:pointer;
     }
-    .b-good{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10)}
-    .b-warn{border-color:rgba(251,191,36,.35);background:rgba(251,191,36,.10)}
-    .b-bad{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.10)}
-    .tiny{font-size:12px;color:var(--muted);line-height:1.45}
-    .divider{height:1px;background:var(--line);margin:14px 0}
-    .hidden{display:none!important}
-
-    /* Paywall */
-    .paywall{
-      border:1px dashed rgba(94,234,212,.45);
-      background:rgba(94,234,212,.06);
+    .btn.primary{
+      border-color:rgba(94,234,212,.35);
+      background:rgba(94,234,212,.12);
+    }
+    .btn.ghost{background:transparent}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+    @media(max-width:980px){.grid{grid-template-columns:1fr}}
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
       border-radius:18px;
+      padding:16px;
+    }
+    .title{font-weight:900;margin:0 0 8px}
+    .small{font-size:12px;color:var(--muted);line-height:1.6}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media(max-width:560px){.row{grid-template-columns:1fr}}
+    label{display:block;font-size:12px;color:var(--muted);margin:10px 0 6px}
+    input,select{
+      width:100%;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:var(--card2);
+      color:var(--txt);
+      outline:none;
+    }
+    input:focus,select:focus{border-color:rgba(94,234,212,.35)}
+    .kpi{
+      display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px
+    }
+    @media(max-width:560px){.kpi{grid-template-columns:1fr}}
+    .k{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      border-radius:16px;
+      padding:12px;
+    }
+    .k .h{font-size:12px;color:var(--muted)}
+    .k .v{font-size:20px;font-weight:900;margin-top:6px}
+    .divider{height:1px;background:var(--line);margin:12px 0}
+    .hint{font-size:12px;color:var(--muted)}
+    footer{margin:14px 2px 0;color:var(--muted);font-size:12px;line-height:1.6}
+    .overlay{
+      position:fixed;inset:0;
+      background:rgba(0,0,0,.62);
+      display:none;
+      align-items:center;
+      justify-content:center;
       padding:14px;
+      z-index:999;
     }
-    .paywall h3{margin:0 0 8px;font-size:16px}
-    .inline{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    .msg{margin-top:10px;padding:10px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.04);color:var(--muted);font-size:12px}
-    .starsRow{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-    .starPick{
-      width:42px;height:42px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;
-      border:1px solid var(--line);background:var(--card2);font-size:18px
+    .modal{
+      width:min(680px,100%);
+      background:linear-gradient(180deg,rgba(94,234,212,.10),transparent 60%),var(--card);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px;
     }
-    .starPick.active{border-color:rgba(94,234,212,.55);background:rgba(94,234,212,.10)}
+    .modal h2{margin:0 0 8px}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+    @media(max-width:840px){.two{grid-template-columns:1fr}}
+    .review{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      border-radius:16px;
+      padding:12px;
+      margin-top:10px;
+    }
+    .stars button{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      color:var(--txt);
+      border-radius:999px;
+      padding:8px 10px;
+      cursor:pointer;
+    }
+    .stars button.active{
+      border-color:rgba(94,234,212,.45);
+      background:rgba(94,234,212,.12);
+    }
+    .toast{
+      margin-top:10px;
+      font-size:12px;
+      color:var(--muted);
+    }
   </style>
 </head>
+
 <body>
 <div class="wrap">
 
-  <div class="top">
+  <!-- NAV -->
+  <div class="nav">
     <div class="brand">
       <div class="logo">PP</div>
       <div>
         <div style="font-weight:900">ProfitPilot</div>
-        <div class="pill" id="statusPill">Checking access…</div>
+        <div class="pill">Independent tool • estimates only</div>
       </div>
     </div>
-    <div class="inline">
-      <a class="btn" href="index.html">Home</a>
-      <a class="btn" href="login.html">Account</a>
-      <button class="btn" id="logoutBtn" type="button">Log out</button>
-      <a class="btn" href="https://ukwebtools.com/">← Ukwebtools</a>
 
-    </div>
-  </div>
-
-  <!-- Paywall area -->
-  <div class="card hidden" id="paywallCard" style="margin-top:14px">
-    <div class="paywall">
-      <h3>Trial ended — unlock PRO (one-time purchase)</h3>
-      <div class="tiny">
-        Your 5-day free access has ended. Unlock lifetime PRO with a one-time payment.
-        No subscriptions.
-      </div>
-
-      <div class="inline" style="margin-top:12px">
-        <a class="btn primary" id="buyNowBtn" href="#" target="_blank" rel="noopener">Buy Now</a>
-        <span class="pill">One-time purchase • No recurring charges</span>
-      </div>
-
-      <div class="divider"></div>
-
-      <div style="font-weight:900">Already purchased? Redeem your code</div>
-      <div class="row" style="margin-top:8px">
-        <div>
-          <label>License code</label>
-          <input id="redeemCode" placeholder="e.g., PP-7A2K-19QF"/>
-        </div>
-        <div style="align-self:end">
-          <button class="btn primary" id="redeemBtn" type="button" style="width:100%">Redeem</button>
-        </div>
-      </div>
-      <div class="msg" id="redeemMsg">Enter your code to unlock.</div>
-
-      <div class="tiny" style="margin-top:10px">
-        Independent tool. Not affiliated with marketplaces/platforms. Estimates only — verify fees/shipping/taxes independently.
-      </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <a class="btn ghost" href="https://ukwebtools.com/">← Ukwebtools</a>
+      <span class="pill" id="accessPill">Checking access…</span>
+      <button class="btn" id="logoutBtn">Log out</button>
     </div>
   </div>
 
-  <!-- App content -->
-  <div class="grid hidden" id="appGrid">
+  <!-- MAIN -->
+  <div class="grid">
 
-    <!-- Inputs -->
+    <!-- CALCULATOR -->
     <div class="card">
-      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:flex-end">
+      <div class="title">Profit calculator</div>
+      <div class="small">Choose a preset or enter values manually. Outputs are estimates based on your inputs.</div>
+
+      <label>Platform preset</label>
+      <select id="preset">
+        <option value="manual">Manual (enter fees yourself)</option>
+      </select>
+
+      <div class="row">
         <div>
-          <h2 style="margin:0;font-size:16px">Calculator</h2>
-          <div class="tiny">Start with zeros. Choose a preset if you want. Everything is editable.</div>
+          <label>Selling price</label>
+          <input id="sellPrice" inputmode="decimal" placeholder="0.00" value="0">
         </div>
-        <div class="pill">Estimates only • Not advice</div>
+        <div>
+          <label>Product cost</label>
+          <input id="productCost" inputmode="decimal" placeholder="0.00" value="0">
+        </div>
       </div>
 
-      <label>Fee preset (optional)</label>
-      <select id="presetSelect">
-        <option value="">Loading presets…</option>
-      </select>
-      <div class="tiny" style="margin-top:8px">
-        Presets are <b>editable estimates</b>. Verify your platform’s current fees.
+      <div class="row">
+        <div>
+          <label>Shipping cost</label>
+          <input id="shipCost" inputmode="decimal" placeholder="0.00" value="0">
+        </div>
+        <div>
+          <label>Packaging / misc cost</label>
+          <input id="miscCost" inputmode="decimal" placeholder="0.00" value="0">
+        </div>
       </div>
 
       <div class="divider"></div>
 
       <div class="row">
         <div>
-          <label>Sell price (buyer pays for item)</label>
-          <input id="sellPrice" type="number" step="0.01" value="0">
-        </div>
-        <div>
-          <label>Shipping charged to buyer</label>
-          <input id="shipCharged" type="number" step="0.01" value="0">
-        </div>
-      </div>
-
-      <div class="row">
-        <div>
-          <label>Your item cost</label>
-          <input id="itemCost" type="number" step="0.01" value="0">
-        </div>
-        <div>
-          <label>Your shipping cost</label>
-          <input id="shipCost" type="number" step="0.01" value="0">
-        </div>
-      </div>
-
-      <div class="row">
-        <div>
-          <label>Platform fee %</label>
-          <input id="feePct" type="number" step="0.01" value="0">
+          <label>Platform fee (%)</label>
+          <input id="feePct" inputmode="decimal" placeholder="e.g., 12.8" value="0">
         </div>
         <div>
           <label>Fixed fee (per order)</label>
-          <input id="fixedFee" type="number" step="0.01" value="0">
+          <input id="feeFixed" inputmode="decimal" placeholder="0.00" value="0">
         </div>
       </div>
 
       <div class="row">
         <div>
-          <label>Ad rate % (optional)</label>
-          <input id="adPct" type="number" step="0.01" value="0">
+          <label>Ads / promo cost (%)</label>
+          <input id="adsPct" inputmode="decimal" placeholder="e.g., 3" value="0">
         </div>
         <div>
-          <label>Other costs (packaging, buffers)</label>
-          <input id="otherCost" type="number" step="0.01" value="0">
+          <label>Return rate (%)</label>
+          <input id="returnPct" inputmode="decimal" placeholder="e.g., 5" value="0">
         </div>
-      </div>
-
-      <details style="margin-top:12px;border:1px solid var(--line);border-radius:16px;padding:10px 12px;background:rgba(255,255,255,.02)">
-        <summary class="tiny">Advanced (optional)</summary>
-        <label>Return rate % (used in risk estimate)</label>
-        <input id="returnPct" type="number" step="0.01" value="0">
-        <label>Payment processor % (optional extra accuracy)</label>
-        <input id="payProcPct" type="number" step="0.01" value="0">
-      </details>
-
-      <div class="tiny" style="margin-top:12px">
-        <b>Disclaimer:</b> This tool provides estimates based on user inputs. Results are not guarantees and should not be considered financial, legal, or tax advice.
-
-      </div>
-    </div>
-
-    <!-- Results + Review submission -->
-    <div class="card">
-      <h2 style="margin:0;font-size:16px">Results</h2>
-
-      <div class="kpi" style="margin-top:10px">
-        <div class="inline" style="justify-content:space-between">
-          <span class="badge" id="verdictBadge">—</span>
-          <span class="tiny" id="riskNote">Risk: —</span>
-        </div>
-        <div class="big" id="profitOut">0.00</div>
-        <div class="sub">Estimated net profit (same currency as your inputs)</div>
-      </div>
-
-      <div class="kpi" style="margin-top:10px">
-        <div class="big" id="marginOut">0.0%</div>
-        <div class="sub">Profit margin (profit ÷ total paid by buyer)</div>
-      </div>
-
-      <div class="kpi" style="margin-top:10px">
-        <div style="font-weight:900">Breakdown</div>
-        <div class="tiny" id="breakdownOut" style="margin-top:8px">—</div>
       </div>
 
       <div class="divider"></div>
 
-      <div style="font-weight:900">Leave a review</div>
-      <div class="tiny">Your review will appear publicly after submission. We reserve the right to remove spam or abusive content.</div>
-
-      <label>Your rating</label>
-      <div class="starsRow" id="starPicker">
-        <button class="starPick" type="button" data-star="1">★</button>
-        <button class="starPick" type="button" data-star="2">★</button>
-        <button class="starPick" type="button" data-star="3">★</button>
-        <button class="starPick" type="button" data-star="4">★</button>
-        <button class="starPick" type="button" data-star="5">★</button>
-        <span class="pill" id="starText">No rating</span>
+      <div class="row">
+        <button class="btn primary" id="calcBtn">Calculate</button>
+        <button class="btn" id="resetBtn">Reset to 0</button>
       </div>
 
-      <div class="row" style="margin-top:6px">
-        <div>
-          <label>Category</label>
-          <select id="reviewCategory">
-            <option>General</option>
-            <option>Bug</option>
-            <option>Feature request</option>
-            <option>Pricing / PRO</option>
-          </select>
+      <div class="kpi">
+        <div class="k">
+          <div class="h">Estimated profit</div>
+          <div class="v" id="profitOut">£0.00</div>
+          <div class="hint" id="profitHint">—</div>
         </div>
-        <div>
-          <label>Name (optional)</label>
-          <input id="reviewName" placeholder="e.g., Alex">
+        <div class="k">
+          <div class="h">Margin</div>
+          <div class="v" id="marginOut">0.0%</div>
+          <div class="hint" id="marginHint">—</div>
         </div>
       </div>
 
-      <label>Your comment</label>
-      <textarea id="reviewMessage" placeholder="What should we improve? What do you like?"></textarea>
-
-      <div class="inline" style="margin-top:10px">
-        <button class="btn primary" id="submitReviewBtn" type="button">Submit review</button>
-        <span class="tiny" id="reviewMsg">—</span>
+      <div class="kpi">
+        <div class="k">
+          <div class="h">Total fees + ads</div>
+          <div class="v" id="feesOut">£0.00</div>
+          <div class="hint">Platform fee + fixed fee + ad %</div>
+        </div>
+        <div class="k">
+          <div class="h">Return sensitivity (expected)</div>
+          <div class="v" id="returnOut">£0.00</div>
+          <div class="hint">Expected impact based on return rate</div>
+        </div>
       </div>
 
-      <div class="tiny" style="margin-top:10px">
-       Reviews are submitted by users and appear publicly. Abuse or spam may be removed.
+      <div class="divider"></div>
+
+      <div class="small">
+        <b>Disclaimer:</b> ProfitPilot provides estimates based on user inputs. Results are not guaranteed and are not financial, legal, or tax advice.
+        Not affiliated with any marketplace or platform. See <a href="https://ukwebtools.com/terms.html">Terms</a> and <a href="https://ukwebtools.com/privacy.html">Privacy</a>.
       </div>
     </div>
+
+    <!-- PRO / REVIEWS -->
+    <div class="card">
+      <div class="title">Your workspace</div>
+      <div class="small" id="userLine">Loading account…</div>
+
+      <div class="divider"></div>
+
+      <div class="title" style="margin:0 0 6px">Leave a review</div>
+      <div class="small">Your review appears publicly after submission. Please be respectful — spam or abuse may be removed.</div>
+
+      <label>Name (optional)</label>
+      <input id="revName" placeholder="e.g., Faryal">
+
+      <label>Category</label>
+      <select id="revCat">
+        <option>General</option>
+        <option>UI/UX</option>
+        <option>Accuracy</option>
+        <option>Speed</option>
+        <option>Features</option>
+      </select>
+
+      <label>Rating</label>
+      <div class="stars" style="display:flex;gap:8px;flex-wrap:wrap" id="starsRow">
+        <button type="button" data-star="1">★ 1</button>
+        <button type="button" data-star="2">★ 2</button>
+        <button type="button" data-star="3">★ 3</button>
+        <button type="button" data-star="4">★ 4</button>
+        <button type="button" data-star="5">★ 5</button>
+      </div>
+
+      <label>Review</label>
+      <input id="revMsg" placeholder="What did you like? What should we improve?">
+
+      <button class="btn primary" id="sendReview">Submit review</button>
+      <div class="toast" id="reviewStatus">—</div>
+
+      <div class="divider"></div>
+
+      <div class="title" style="margin:0 0 6px">Quick links</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn" href="https://profitpilot.ukwebtools.com/">Landing page</a>
+        <a class="btn" href="https://profitpilot.ukwebtools.com/login.html">Login</a>
+        <a class="btn" href="https://stonevia.gumroad.com/l/goddhg" target="_blank" rel="noopener">Buy PRO</a>
+      </div>
+    </div>
+
   </div>
 
-  <div class="msg" id="globalMsg" style="margin-top:14px">Loading…</div>
+  <footer>
+    © <span id="yr"></span> Ukwebtools • ProfitPilot
+  </footer>
 
+</div>
+
+<!-- PAYWALL OVERLAY -->
+<div class="overlay" id="paywall">
+  <div class="modal">
+    <h2>Unlock ProfitPilot PRO</h2>
+    <p class="small">
+      Your free trial ended. Unlock PRO with a one-time purchase (no subscription).
+      After purchase, Gumroad emails your license key instantly. Paste it below to unlock.
+    </p>
+
+    <div class="two">
+      <div class="card" style="padding:14px">
+        <div class="title">Free Trial</div>
+        <ul class="small" style="line-height:1.8;padding-left:16px;margin:8px 0 0">
+          <li>5-day access</li>
+          <li>Basic profit & margin</li>
+          <li>Good for testing</li>
+        </ul>
+      </div>
+
+      <div class="card" style="padding:14px;border-color:rgba(94,234,212,.45)">
+        <div class="title">PRO (One-time unlock)</div>
+        <ul class="small" style="line-height:1.8;padding-left:16px;margin:8px 0 0">
+          <li><b>Unlimited access</b></li>
+          <li><b>Editable fee presets</b></li>
+          <li><b>Risk & margin signals</b></li>
+          <li><b>Return sensitivity checks</b></li>
+          <li><b>Built for repeated decisions</b></li>
+        </ul>
+        <div class="pill ok" style="margin-top:10px">One-time purchase • No subscription</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="row">
+      <a class="btn primary" id="buyBtn" href="https://stonevia.gumroad.com/l/goddhg" target="_blank" rel="noopener">Buy PRO (one-time)</a>
+      <a class="btn" href="https://ukwebtools.com/terms.html" target="_blank" rel="noopener">Terms</a>
+    </div>
+
+    <label style="margin-top:12px">Paste Gumroad license key</label>
+    <input id="redeemInput" placeholder="e.g., ABCD-1234-EFGH-5678">
+    <button class="btn primary" id="redeemBtn">Redeem & unlock</button>
+    <div class="toast" id="redeemStatus">—</div>
+
+    <div class="small" style="margin-top:12px">
+      Need help? Email <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a>
+    </div>
+  </div>
 </div>
 
 <script type="module">
   import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
+  // ✅ Your Supabase public credentials (safe for frontend)
   const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
   const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
 
-  // Payment link (Gumroad recommended)
+  // Gumroad buy link
   const BUY_URL = "https://stonevia.gumroad.com/l/goddhg";
+
+  // Edge Function that verifies Gumroad key + binds to one user
+  const GUMROAD_REDEEM_FN = "https://xsigsftvfknefpdfsyae.supabase.co/functions/v1/gumroad-redeem";
+
+  const TRIAL_DAYS = 5;
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-  // Elements
-  const statusPill = document.getElementById("statusPill");
-  const globalMsg = document.getElementById("globalMsg");
-  const paywallCard = document.getElementById("paywallCard");
-  const appGrid = document.getElementById("appGrid");
+  // UI refs
+  const accessPill = document.getElementById("accessPill");
+  const userLine = document.getElementById("userLine");
+  const paywall = document.getElementById("paywall");
+  const buyBtn = document.getElementById("buyBtn");
   const logoutBtn = document.getElementById("logoutBtn");
 
-  const buyNowBtn = document.getElementById("buyNowBtn");
-  buyNowBtn.href = BUY_URL;
+  buyBtn.href = BUY_URL;
 
-  const redeemCode = document.getElementById("redeemCode");
-  const redeemBtn = document.getElementById("redeemBtn");
-  const redeemMsg = document.getElementById("redeemMsg");
+  document.getElementById("yr").textContent = new Date().getFullYear();
 
-  // Calculator inputs
-  const sellPrice = document.getElementById("sellPrice");
-  const shipCharged = document.getElementById("shipCharged");
-  const itemCost = document.getElementById("itemCost");
-  const shipCost = document.getElementById("shipCost");
-  const feePct = document.getElementById("feePct");
-  const fixedFee = document.getElementById("fixedFee");
-  const adPct = document.getElementById("adPct");
-  const otherCost = document.getElementById("otherCost");
-  const returnPct = document.getElementById("returnPct");
-  const payProcPct = document.getElementById("payProcPct");
-  const presetSelect = document.getElementById("presetSelect");
+  function n(v){
+    const x = parseFloat(String(v).replace(/,/g,""));
+    return Number.isFinite(x) ? x : 0;
+  }
+  function money(x){
+    const v = Number.isFinite(x) ? x : 0;
+    return "£" + v.toFixed(2);
+  }
+  function pct(x){
+    const v = Number.isFinite(x) ? x : 0;
+    return v.toFixed(1) + "%";
+  }
+  function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
 
-  // Outputs
+  // Presets (names only — no logos)
+  const PRESETS = [
+    { id:"manual", name:"Manual (enter fees yourself)", feePct:0, feeFixed:0, adsPct:0, returnPct:0 },
+    { id:"ebay_uk_typical", name:"eBay UK (typical example)", feePct:12.8, feeFixed:0.30, adsPct:0, returnPct:3 },
+    { id:"etsy_typical", name:"Etsy (typical example)", feePct:9.5, feeFixed:0.20, adsPct:0, returnPct:3 },
+    { id:"shopify_card_only", name:"Shopify (card fee example)", feePct:2.0, feeFixed:0.20, adsPct:0, returnPct:2 },
+  ];
+
+  const presetSel = document.getElementById("preset");
+  const feePctEl = document.getElementById("feePct");
+  const feeFixEl = document.getElementById("feeFixed");
+  const adsPctEl = document.getElementById("adsPct");
+  const retPctEl = document.getElementById("returnPct");
+
+  // Populate presets
+  PRESETS.forEach(p=>{
+    const opt = document.createElement("option");
+    opt.value = p.id;
+    opt.textContent = p.name;
+    presetSel.appendChild(opt);
+  });
+
+  presetSel.value = "manual";
+  presetSel.addEventListener("change", ()=>{
+    const p = PRESETS.find(x=>x.id===presetSel.value) || PRESETS[0];
+    if (p.id !== "manual") {
+      feePctEl.value = String(p.feePct ?? 0);
+      feeFixEl.value = String(p.feeFixed ?? 0);
+      adsPctEl.value = String(p.adsPct ?? 0);
+      retPctEl.value = String(p.returnPct ?? 0);
+    }
+  });
+
+  // Calculator
+  const sellPriceEl = document.getElementById("sellPrice");
+  const productCostEl = document.getElementById("productCost");
+  const shipCostEl = document.getElementById("shipCost");
+  const miscCostEl = document.getElementById("miscCost");
+
   const profitOut = document.getElementById("profitOut");
   const marginOut = document.getElementById("marginOut");
-  const breakdownOut = document.getElementById("breakdownOut");
-  const verdictBadge = document.getElementById("verdictBadge");
-  const riskNote = document.getElementById("riskNote");
+  const feesOut = document.getElementById("feesOut");
+  const returnOut = document.getElementById("returnOut");
+  const profitHint = document.getElementById("profitHint");
+  const marginHint = document.getElementById("marginHint");
 
-  // Reviews submission
-  const starPicker = document.getElementById("starPicker");
-  const starText = document.getElementById("starText");
-  const reviewCategory = document.getElementById("reviewCategory");
-  const reviewName = document.getElementById("reviewName");
-  const reviewMessage = document.getElementById("reviewMessage");
-  const submitReviewBtn = document.getElementById("submitReviewBtn");
-  const reviewMsg = document.getElementById("reviewMsg");
+  function compute(){
+    const sell = n(sellPriceEl.value);
+    const cost = n(productCostEl.value);
+    const ship = n(shipCostEl.value);
+    const misc = n(miscCostEl.value);
 
-  // Helpers
-  function n(v){ v = Number(v); return Number.isFinite(v) ? v : 0; }
-  function clamp0(v){ return Math.max(0, n(v)); }
-  function setGlobal(t){ globalMsg.textContent = t; }
-  function setPill(t){ statusPill.textContent = t; }
+    const feePct = clamp(n(feePctEl.value), 0, 99);
+    const feeFixed = clamp(n(feeFixEl.value), 0, 999999);
+    const adsPct = clamp(n(adsPctEl.value), 0, 99);
+    const retPct = clamp(n(retPctEl.value), 0, 99);
 
-  function verdict(profit, margin){
-    if (profit < 0) return {t:"LOSS", cls:"b-bad"};
-    if (margin < 10) return {t:"RISKY", cls:"b-warn"};
-    return {t:"SAFE", cls:"b-good"};
-  }
+    const platformFee = sell * (feePct/100);
+    const adsFee = sell * (adsPct/100);
+    const totalFees = platformFee + feeFixed + adsFee;
 
-  function calc(){
-    const sp = clamp0(sellPrice.value);
-    const sc = clamp0(shipCharged.value);
-    const ic = clamp0(itemCost.value);
-    const sh = clamp0(shipCost.value);
-    const fp = Math.max(0, n(feePct.value))/100;
-    const ff = clamp0(fixedFee.value);
-    const ap = Math.max(0, n(adPct.value))/100;
-    const oc = clamp0(otherCost.value);
-    const pp = Math.max(0, n(payProcPct.value))/100;
+    // Expected return sensitivity: simple expected value approximation
+    const expectedReturnImpact = sell * (retPct/100);
 
-    const buyerPays = sp + sc;
-    const fees = buyerPays * fp + buyerPays * ap + buyerPays * pp + ff;
-    const costs = ic + sh + oc;
-    const profit = buyerPays - fees - costs;
-    const margin = buyerPays > 0 ? (profit / buyerPays) * 100 : 0;
+    const profit = sell - (cost + ship + misc + totalFees);
+    const margin = sell > 0 ? (profit / sell) * 100 : 0;
 
-    profitOut.textContent = profit.toFixed(2);
-    marginOut.textContent = (Number.isFinite(margin) ? margin.toFixed(1) : "0.0") + "%";
+    profitOut.textContent = money(profit);
+    marginOut.textContent = pct(margin);
+    feesOut.textContent = money(totalFees);
+    returnOut.textContent = money(expectedReturnImpact);
 
-    const v = verdict(profit, margin);
-    verdictBadge.textContent = v.t;
-    verdictBadge.className = "badge " + v.cls;
+    // Simple risk hints (not guarantees)
+    if (sell <= 0) {
+      profitHint.textContent = "Enter a selling price.";
+      marginHint.textContent = "—";
+      return;
+    }
 
-    breakdownOut.textContent =
-      `Buyer pays: ${buyerPays.toFixed(2)} · Fees: ${fees.toFixed(2)} · Costs: ${costs.toFixed(2)} · Profit: ${profit.toFixed(2)}`;
-
-    // Simple risk note (safe language, not guarantees)
-    const rp = Math.max(0, n(returnPct.value))/100;
-    const expectedReturnImpact = buyerPays * rp;
-    if (buyerPays <= 0){
-      riskNote.textContent = "Risk: —";
-    } else if (profit < 0){
-      riskNote.textContent = "Risk: High (negative profit)";
-    } else if (margin < 8 || expectedReturnImpact > profit){
-      riskNote.textContent = "Risk: Moderate/High (thin margin sensitivity)";
-    } else if (margin < 15){
-      riskNote.textContent = "Risk: Moderate (margin sensitivity)";
+    if (profit < 0) {
+      profitHint.textContent = "Loss on this pricing. Adjust price or costs.";
+      profitHint.style.color = "var(--bad)";
+    } else if (profit < sell * 0.05) {
+      profitHint.textContent = "Thin profit. Small changes can wipe margin.";
+      profitHint.style.color = "var(--warn)";
     } else {
-      riskNote.textContent = "Risk: Lower (based on inputs)";
+      profitHint.textContent = "Healthy buffer based on inputs.";
+      profitHint.style.color = "var(--ok)";
+    }
+
+    if (margin < 0) {
+      marginHint.textContent = "Negative margin.";
+      marginHint.style.color = "var(--bad)";
+    } else if (margin < 10) {
+      marginHint.textContent = "Low margin — consider stress testing fees/returns.";
+      marginHint.style.color = "var(--warn)";
+    } else {
+      marginHint.textContent = "Reasonable margin for many categories.";
+      marginHint.style.color = "var(--ok)";
     }
   }
 
-  // Presets
-  async function loadPresets(){
-    presetSelect.innerHTML = `<option value="">Choose a preset (optional)</option>`;
-    const { data, error } = await supabase
-      .from("platform_presets")
-      .select("id,name,fee_pct,fixed_fee,ad_pct")
-      .eq("active", true)
-      .order("created_at", { ascending: true });
-
-    if (error){
-      presetSelect.innerHTML = `<option value="">Could not load presets</option>`;
-      return;
-    }
-    for (const p of data){
-      const opt = document.createElement("option");
-      opt.value = p.id;
-      opt.textContent = p.name;
-      opt.dataset.fee = String(p.fee_pct ?? 0);
-      opt.dataset.fixed = String(p.fixed_fee ?? 0);
-      opt.dataset.ad = String(p.ad_pct ?? 0);
-      presetSelect.appendChild(opt);
-    }
-  }
-
-  presetSelect.addEventListener("change", ()=>{
-    const opt = presetSelect.selectedOptions[0];
-    if (!opt || !opt.value) return;
-    feePct.value = String(opt.dataset.fee || 0);
-    fixedFee.value = String(opt.dataset.fixed || 0);
-    adPct.value = String(opt.dataset.ad || 0);
-    calc();
+  document.getElementById("calcBtn").addEventListener("click", compute);
+  document.getElementById("resetBtn").addEventListener("click", ()=>{
+    [sellPriceEl, productCostEl, shipCostEl, miscCostEl, feePctEl, feeFixEl, adsPctEl, retPctEl].forEach(el=>el.value="0");
+    presetSel.value = "manual";
+    compute();
   });
 
-  // Reviews submission
-  let selectedStars = 0;
-  function renderStars(){
-    const btns = starPicker.querySelectorAll(".starPick");
-    btns.forEach(b=>{
-      const s = Number(b.dataset.star);
-      b.classList.toggle("active", s <= selectedStars);
+  // Convenience: live update on input changes
+  [sellPriceEl, productCostEl, shipCostEl, miscCostEl, feePctEl, feeFixEl, adsPctEl, retPctEl].forEach(el=>{
+    el.addEventListener("input", ()=>{ /* light live */ compute(); });
+  });
+
+  // Auth + Access enforcement
+  async function requireSession(){
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      location.href = "login.html";
+      return null;
+    }
+    return session;
+  }
+
+  async function ensureProfile(userId){
+    // Create profile row if missing
+    const { data: prof, error } = await supabase
+      .from("profiles")
+      .select("id, trial_start, paid, plan")
+      .eq("id", userId)
+      .maybeSingle();
+
+    if (error) throw error;
+
+    if (!prof) {
+      const now = new Date().toISOString();
+      const { error: insErr } = await supabase.from("profiles").insert([{
+        id: userId,
+        trial_start: now,
+        paid: false,
+        plan: "trial"
+      }]);
+      if (insErr) throw insErr;
+      return { id:userId, trial_start: now, paid:false, plan:"trial" };
+    }
+
+    // Ensure trial_start exists
+    if (!prof.trial_start) {
+      const now = new Date().toISOString();
+      const { error: upErr } = await supabase.from("profiles").update({ trial_start: now }).eq("id", userId);
+      if (upErr) throw upErr;
+      prof.trial_start = now;
+    }
+    return prof;
+  }
+
+  function daysLeft(trialStartISO){
+    const start = new Date(trialStartISO).getTime();
+    const now = Date.now();
+    const elapsedDays = (now - start) / (1000*60*60*24);
+    const left = TRIAL_DAYS - elapsedDays;
+    return Math.max(0, Math.ceil(left));
+  }
+
+  function showPaywall(show){
+    paywall.style.display = show ? "flex" : "none";
+  }
+
+  async function updateAccessUI(profile, email){
+    userLine.textContent = `Signed in as ${email}`;
+
+    if (profile.paid) {
+      accessPill.textContent = "Unlocked (PRO)";
+      accessPill.className = "pill ok";
+      showPaywall(false);
+      return;
+    }
+
+    const left = daysLeft(profile.trial_start);
+    if (left > 0) {
+      accessPill.textContent = `Trial active • ${left} day(s) left`;
+      accessPill.className = "pill warn";
+      showPaywall(false);
+    } else {
+      accessPill.textContent = "Trial ended • PRO required";
+      accessPill.className = "pill bad";
+      showPaywall(true);
+    }
+  }
+
+  // Gumroad redeem via Edge Function (binds key to this user only)
+  async function redeemGumroad(licenseKey){
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) throw new Error("Please log in again.");
+
+    const res = await fetch(GUMROAD_REDEEM_FN, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + session.access_token
+      },
+      body: JSON.stringify({ license_key: licenseKey })
     });
-    starText.textContent = selectedStars ? `${selectedStars}/5` : "No rating";
+
+    const out = await res.json().catch(()=> ({}));
+    if (!res.ok) throw new Error(out.error || "Redeem failed.");
+    return out;
   }
-  starPicker.addEventListener("click", (e)=>{
-    const btn = e.target.closest(".starPick");
-    if (!btn) return;
-    selectedStars = Number(btn.dataset.star) || 0;
-    renderStars();
-    reviewMsg.textContent = "—";
-  });
 
-  submitReviewBtn.addEventListener("click", async ()=>{
-    const msg = (reviewMessage.value || "").trim();
-    const name = (reviewName.value || "").trim();
-    const cat = reviewCategory.value || "General";
+  const redeemBtn = document.getElementById("redeemBtn");
+  const redeemInput = document.getElementById("redeemInput");
+  const redeemStatus = document.getElementById("redeemStatus");
 
-    if (!selectedStars){
-      reviewMsg.textContent = "Please select a rating.";
-      return;
-    }
-    if (!msg){
-      reviewMsg.textContent = "Please write a short comment.";
-      return;
-    }
-
-    reviewMsg.textContent = "Submitting…";
-
-    const { data: sessionData } = await supabase.auth.getSession();
-    const userId = sessionData?.session?.user?.id || null;
-
-    const { error } = await supabase.from("reviews").insert([{
-      user_id: userId,
-      name: name || null,
-      rating: selectedStars,
-      category: cat,
-      message: msg,
-      approved: true
-    }]);
-
-    if (error){
-      reviewMsg.textContent = "Could not submit. Try again.";
-      return;
-    }
-
-    reviewMessage.value = "";
-    selectedStars = 0;
-    renderStars();
-    reviewMsg.textContent = "Submitted ✔ (will appear after approval)";
-  });
-
-  // Redeem
   redeemBtn.addEventListener("click", async ()=>{
-    const code = (redeemCode.value || "").trim();
-    if (!code){
-      redeemMsg.textContent = "Please enter a code.";
-      return;
+    redeemStatus.textContent = "Verifying…";
+    try {
+      const key = (redeemInput.value || "").trim();
+      if (!key) throw new Error("Paste your Gumroad license key.");
+      const out = await redeemGumroad(key);
+      redeemStatus.textContent = out.message || "Unlocked.";
+      // Reload to refresh paid state
+      setTimeout(()=>location.reload(), 600);
+    } catch(e){
+      redeemStatus.textContent = e.message;
     }
-    redeemMsg.textContent = "Checking code…";
-
-    const { data, error } = await supabase.rpc("redeem_license", { p_code: code });
-
-    if (error){
-      redeemMsg.textContent = "Redeem failed. Try again.";
-      return;
-    }
-    if (!data?.ok){
-      const err = data?.error || "unknown";
-      redeemMsg.textContent =
-        err === "invalid_code" ? "That code is not valid."
-        : err === "already_used" ? "This code has already been used."
-        : err === "not_authenticated" ? "Please log in first."
-        : "Could not redeem.";
-      return;
-    }
-
-    redeemMsg.textContent = "Unlocked ✔ Reloading…";
-    setTimeout(()=>location.reload(), 900);
   });
 
-  // Auth + access gate
+  // Reviews
+  let selectedStars = 5;
+  const starsRow = document.getElementById("starsRow");
+  const reviewStatus = document.getElementById("reviewStatus");
+
+  function setStars(n){
+    selectedStars = n;
+    [...starsRow.querySelectorAll("button")].forEach(b=>{
+      b.classList.toggle("active", parseInt(b.dataset.star,10) === n);
+    });
+  }
+  setStars(5);
+
+  starsRow.addEventListener("click", (e)=>{
+    const btn = e.target.closest("button");
+    if (!btn) return;
+    setStars(parseInt(btn.dataset.star,10));
+  });
+
+  document.getElementById("sendReview").addEventListener("click", async ()=>{
+    reviewStatus.textContent = "Submitting…";
+    try{
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error("Please log in again.");
+
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("No user session.");
+
+      const name = document.getElementById("revName").value.trim();
+      const category = document.getElementById("revCat").value;
+      const message = document.getElementById("revMsg").value.trim();
+
+      if (!message) throw new Error("Write a short review message.");
+
+      const { error } = await supabase.from("reviews").insert([{
+        user_id: user.id,
+        name: name || null,
+        rating: selectedStars,
+        category,
+        message,
+        approved: true
+      }]);
+
+      if (error) throw error;
+      reviewStatus.textContent = "Thanks! Your review is now public.";
+      document.getElementById("revMsg").value = "";
+    } catch(e){
+      reviewStatus.textContent = e.message || "Failed to submit review.";
+    }
+  });
+
+  // Logout
   logoutBtn.addEventListener("click", async ()=>{
     await supabase.auth.signOut();
     location.href = "login.html";
   });
 
-  async function gate(){
-    setGlobal("Checking your account…");
+  // Boot
+  (async function init(){
+    const session = await requireSession();
+    if (!session) return;
 
-    const { data: sessionData } = await supabase.auth.getSession();
-    const session = sessionData?.session;
+    // Get user
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) { location.href = "login.html"; return; }
 
-    if (!session){
-      location.href = "login.html";
-      return;
-    }
+    // Ensure profile row exists
+    const profile = await ensureProfile(user.id);
 
-    // Fetch profile
-    const { data: prof, error } = await supabase
-      .from("profiles")
-      .select("trial_start, paid, plan")
-      .eq("id", session.user.id)
-      .single();
+    // Update UI access state
+    await updateAccessUI(profile, user.email || "user");
 
-    if (error || !prof){
-      setPill("Access error");
-      setGlobal("Could not read your access profile. If you just signed up, refresh once.");
-      return;
-    }
-
-    const trialStart = new Date(prof.trial_start);
-    const now = new Date();
-    const ms5days = 5 * 24 * 60 * 60 * 1000;
-    const trialActive = (now.getTime() - trialStart.getTime()) < ms5days;
-    const allowed = !!prof.paid || trialActive;
-
-    if (!allowed){
-      setPill("Locked (trial ended)");
-      paywallCard.classList.remove("hidden");
-      appGrid.classList.add("hidden");
-      setGlobal("Your trial ended. Unlock to continue.");
-      return;
-    }
-
-    const remainingMs = ms5days - (now.getTime() - trialStart.getTime());
-    const remainingDays = Math.max(0, Math.ceil(remainingMs / (24*60*60*1000)));
-
-    if (prof.paid){
-      setPill("Unlocked (paid)");
-    } else {
-      setPill(`Trial active (${remainingDays} day${remainingDays===1?"":"s"} left)`);
-    }
-
-    paywallCard.classList.add("hidden");
-    appGrid.classList.remove("hidden");
-    setGlobal("Ready.");
-
-    await loadPresets();
-    calc();
-  }
-
-  // Input listeners
-  [sellPrice, shipCharged, itemCost, shipCost, feePct, fixedFee, adPct, otherCost, returnPct, payProcPct]
-    .forEach(el => el.addEventListener("input", calc));
-
-  // Init
-  renderStars();
-  gate();
+    // Run initial compute
+    compute();
+  })();
 </script>
 </body>
 </html>
