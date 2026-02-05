@@ -7,5 +7,66 @@
 <body style="font-family:system-ui; padding:40px;">
   <h1>ProfitPilot</h1>
   <p>Loading the app…</p>
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+  const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
+  const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
+
+  const GUMROAD_URL = "https://stonevia.gumroad.com/l/goddhg";
+
+  // Attach Buy Now button if it exists
+  const buyBtn = document.getElementById("buyBtn");
+  if (buyBtn) {
+    buyBtn.href = GUMROAD_URL;
+  }
+
+  // Supabase client
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  // Load approved reviews (if review container exists)
+  async function loadReviews() {
+    const reviewsBox = document.getElementById("reviews");
+    const ratingBox = document.getElementById("ratingSummary");
+    const avgStars = document.getElementById("avgStars");
+
+    if (!reviewsBox) return;
+
+    const { data, error } = await supabase
+      .from("reviews")
+      .select("created_at,name,rating,category,message")
+      .eq("approved", true)
+      .order("created_at", { ascending: false })
+      .limit(6);
+
+    if (error || !data || data.length === 0) {
+      if (ratingBox) ratingBox.textContent = "No reviews yet.";
+      if (avgStars) avgStars.textContent = "—";
+      reviewsBox.innerHTML = "<div class='small'>No approved reviews yet.</div>";
+      return;
+    }
+
+    const avg =
+      data.reduce((sum, r) => sum + r.rating, 0) / data.length;
+
+    if (ratingBox) ratingBox.textContent = "Average rating";
+    if (avgStars) avgStars.textContent = avg.toFixed(1) + " ★";
+
+    reviewsBox.innerHTML = "";
+    data.forEach(r => {
+      const div = document.createElement("div");
+      div.className = "review";
+      div.innerHTML = `
+        <div><strong>${"★".repeat(r.rating)}</strong></div>
+        <div class="small">${r.message}</div>
+        <div class="small">— ${r.name || "Anonymous"}</div>
+      `;
+      reviewsBox.appendChild(div);
+    });
+  }
+
+  loadReviews();
+</script>
+
 </body>
 </html>
