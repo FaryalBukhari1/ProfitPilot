@@ -131,6 +131,36 @@
         </div>
         <span class="tag" id="avgStars">—</span>
       </div>
+<div class="grid" style="margin-top:16px">
+  <div class="card">
+    <h3>Free Trial</h3>
+    <ul class="small" style="line-height:1.8;padding-left:16px">
+      <li>5-day access</li>
+      <li>Profit & margin estimates</li>
+      <li>Manual inputs + basic presets</li>
+      <li>Good for testing</li>
+    </ul>
+    <div class="pill">Try it before you buy</div>
+  </div>
+
+  <div class="card" style="border-color:rgba(94,234,212,.45)">
+    <h3>PRO (One-time unlock)</h3>
+    <ul class="small" style="line-height:1.8;padding-left:16px">
+      <li><b>Unlimited access</b></li>
+      <li><b>Editable fee presets</b></li>
+      <li><b>Risk & margin signals</b></li>
+      <li><b>Return sensitivity checks</b></li>
+      <li><b>Built for repeated decisions</b></li>
+    </ul>
+    <div class="pill">Best for active sellers</div>
+  </div>
+</div>
+
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+  <a class="btn primary" href="login.html">Start free trial</a>
+  <a class="btn" id="buyBtn2" href="#" target="_blank" rel="noopener">Buy PRO — one-time</a>
+  <span class="pill">Instant unlock • No subscription</span>
+</div>
 
       <div class="reviews" id="reviews"></div>
 
@@ -155,6 +185,8 @@
 
   const GUMROAD_URL = "https://stonevia.gumroad.com/l/goddhg";
   document.getElementById("buyBtn").href = GUMROAD_URL;
+const buyBtn2 = document.getElementById("buyBtn2");
+if (buyBtn2) buyBtn2.href = GUMROAD_URL;
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
