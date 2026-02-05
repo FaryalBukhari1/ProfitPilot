@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Reset Password — ProfitPilot</title>
+  <style>
+    :root{--bg:#0b0f14;--card:#111826;--card2:#0e1521;--txt:#eaf0ff;--muted:#9aa7bd;--line:rgba(255,255,255,.08);--accent:#5eead4;}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui;background:var(--bg);color:var(--txt)}
+    .wrap{max-width:520px;margin:40px auto;padding:0 14px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px}
+    input{width:100%;padding:12px;border-radius:14px;border:1px solid var(--line);background:var(--card2);color:var(--txt)}
+    label{font-size:12px;color:var(--muted);margin-top:14px;display:block}
+    .btn{width:100%;margin-top:14px;padding:12px;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);color:var(--txt);cursor:pointer}
+    .btn.primary{background:rgba(94,234,212,.12);border-color:rgba(94,234,212,.35)}
+    .small{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.5}
+    a{color:var(--accent)}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h2 style="margin:0 0 10px">Reset your password</h2>
+    <p class="small">Enter your email. We’ll send you a reset link.</p>
+
+    <label>Email</label>
+    <input id="email" type="email" placeholder="you@example.com"/>
+
+    <button class="btn primary" id="sendBtn">Send reset link</button>
+
+    <div class="small" id="msg">—</div>
+    <div class="small"><a href="login.html">← Back to login</a></div>
+  </div>
+</div>
+
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+  const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
+  const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+  const msg = document.getElementById("msg");
+
+  document.getElementById("sendBtn").onclick = async () => {
+    const email = document.getElementById("email").value.trim();
+    if (!email){ msg.textContent = "Please enter your email."; return; }
+    msg.textContent = "Sending…";
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: "https://profitpilot.ukwebtools.com/update-password.html"
+    });
+
+    msg.textContent = error ? error.message : "Reset link sent. Check your email inbox/spam.";
+  };
+</script>
+</body>
+</html>
