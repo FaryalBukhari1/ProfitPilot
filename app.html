@@ -274,7 +274,7 @@
       </div>
 
       <div class="tiny" style="margin-top:10px">
-        We store reviews in Supabase. We show only approved reviews on the public page to maintain quality.
+       Reviews are submitted by users and appear publicly. Abuse or spam may be removed.
       </div>
     </div>
   </div>
@@ -468,7 +468,7 @@
       rating: selectedStars,
       category: cat,
       message: msg,
-      approved: false
+      approved: true
     }]);
 
     if (error){
