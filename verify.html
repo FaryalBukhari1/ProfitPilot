@@ -23,6 +23,8 @@
     a{color:var(--accent);text-decoration:none}
     .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
     .toast{font-size:12px;color:var(--muted);margin-top:10px}
+    .divider{height:1px;background:rgba(255,255,255,.08);margin:14px 0}
+    .note{margin-top:10px}
   </style>
 </head>
 <body>
@@ -35,7 +37,7 @@
         If you don’t see it, check your spam/junk folder.
       </p>
 
-      <div class="small" id="emailLine" style="margin-top:10px">Email: —</div>
+      <div class="small note" id="emailLine">Email: —</div>
 
       <div class="pill" style="margin-top:12px">
         After verifying, come back and log in to access the app.
@@ -47,10 +49,12 @@
         <a class="btn" href="https://outlook.live.com/mail/" target="_blank" rel="noopener">Open Outlook</a>
       </div>
 
-      <div class="divider" style="height:1px;background:rgba(255,255,255,.08);margin:14px 0"></div>
+      <div class="divider"></div>
 
-      <div class="small"><b>Didn’t get the email?</b> You can resend it below.</div>
-      <input id="emailInput" type="email" placeholder="Enter your email to resend">
+      <div class="small"><b>Didn’t get the email?</b> Resend it below.</div>
+
+      <label class="small" style="display:block;margin-top:10px">Email</label>
+      <input id="emailInput" type="email" placeholder="Enter your email">
 
       <button class="btn full" id="resendBtn">Resend verification email</button>
       <div class="toast" id="msg">—</div>
@@ -66,41 +70,87 @@
 
   const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
   const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
+  const EMAIL_REDIRECT = "https://profitpilot.ukwebtools.com/login.html";
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
   const emailLine = document.getElementById("emailLine");
   const emailInput = document.getElementById("emailInput");
   const msg = document.getElementById("msg");
+  const resendBtn = document.getElementById("resendBtn");
 
+  function maskEmail(email){
+    if (!email || !email.includes("@")) return email || "—";
+    const [u, d] = email.split("@");
+    const u2 = u.length <= 2 ? u[0] + "*" : u.slice(0,2) + "*".repeat(Math.min(6, Math.max(2, u.length-2)));
+    const parts = d.split(".");
+    const dom = parts[0] || d;
+    const tld = parts.slice(1).join(".") || "";
+    const dom2 = dom.length <= 2 ? dom[0] + "*" : dom.slice(0,2) + "*".repeat(Math.min(6, Math.max(2, dom.length-2)));
+    return `${u2}@${dom2}${tld ? "."+tld : ""}`;
+  }
+
+  // Prefill from localStorage
   const stored = localStorage.getItem("pp_pending_email");
   if (stored) {
-    emailLine.textContent = "Email: " + stored;
+    emailLine.textContent = "Email: " + maskEmail(stored);
     emailInput.value = stored;
   }
 
-  document.getElementById("resendBtn").addEventListener("click", async () => {
+  // Cooldown to prevent spam clicks
+  let cooldown = 0;
+  let timer = null;
+
+  function setCooldown(seconds){
+    cooldown = seconds;
+    resendBtn.disabled = true;
+    resendBtn.style.opacity = "0.7";
+
+    const tick = () => {
+      if (cooldown <= 0) {
+        resendBtn.disabled = false;
+        resendBtn.style.opacity = "1";
+        resendBtn.textContent = "Resend verification email";
+        if (timer) clearInterval(timer);
+        timer = null;
+        return;
+      }
+      resendBtn.textContent = `Resend in ${cooldown}s`;
+      cooldown -= 1;
+    };
+
+    tick();
+    timer = setInterval(tick, 1000);
+  }
+
+  resendBtn.addEventListener("click", async () => {
     const email = emailInput.value.trim();
     if (!email) { msg.textContent = "Please enter your email."; return; }
 
     msg.textContent = "Sending…";
 
-    // Re-trigger signUp email by attempting signUp again.
-    // If user already exists, Supabase may return "User already registered" which is okay.
-    const { error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.resend({
+      type: "signup",
       email,
-      password: crypto.randomUUID() + "A!", // dummy password for resend attempt; user won't use this
-      options: { emailRedirectTo: "https://profitpilot.ukwebtools.com/login.html" }
+      options: { emailRedirectTo: EMAIL_REDIRECT }
     });
 
-    // We do NOT want to scare users with "already registered".
-    if (error && !String(error.message).toLowerCase().includes("already registered")) {
+    if (error) {
       msg.textContent = error.message;
       return;
     }
 
-    msg.textContent = "If the email exists, a verification link has been sent. Check inbox/spam.";
+    // Update display + store
+    localStorage.setItem("pp_pending_email", email);
+    emailLine.textContent = "Email: " + maskEmail(email);
+
+    msg.textContent = "Verification email resent. Check inbox/spam.";
+    setCooldown(30);
   });
+
+  // Start cooldown if user just came here from signup (optional)
+  // If they landed here immediately after signup, this prevents double-send.
+  if (stored) setCooldown(10);
 </script>
 </body>
 </html>
