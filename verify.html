@@ -11,46 +11,96 @@
     body{margin:0;font-family:system-ui;background:var(--bg);color:var(--txt)}
     .wrap{max-width:560px;margin:40px auto;padding:0 14px}
     .card{background:linear-gradient(180deg,rgba(94,234,212,.10),transparent 60%),var(--card);border:1px solid var(--line);border-radius:18px;padding:20px}
-    .pill{display:inline-flex;padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03);font-size:12px;color:var(--muted)}
+    .pill{display:inline-flex;padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03);font-size:12px;color:var(--muted);gap:8px;align-items:center}
     h1{margin:0 0 10px;font-size:22px}
     p{margin:0;color:var(--muted);line-height:1.6}
-    .btn{margin-top:14px;display:inline-flex;gap:8px;align-items:center;padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03);color:var(--txt);text-decoration:none;cursor:pointer}
+    .btn{margin-top:12px;display:inline-flex;gap:8px;align-items:center;padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03);color:var(--txt);text-decoration:none;cursor:pointer}
     .btn.primary{border-color:rgba(94,234,212,.35);background:rgba(94,234,212,.12)}
+    .btn.full{width:100%;justify-content:center}
     .small{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6}
-    input{width:100%;margin-top:10px;padding:12px;border-radius:14px;border:1px solid var(--line);background:var(--card2);color:var(--txt)}
+    input{width:100%;margin-top:10px;padding:12px;border-radius:14px;border:1px solid var(--line);background:var(--card2);color:var(--txt);outline:none}
+    input:focus{border-color:rgba(94,234,212,.35)}
     a{color:var(--accent);text-decoration:none}
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .toast{font-size:12px;color:var(--muted);margin-top:10px}
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card">
-      <div class="pill">Almost there</div>
+      <div class="pill">✅ Almost there</div>
       <h1>Verify your email to activate your account</h1>
       <p>
         We’ve sent a verification link to your email. Open it to finish signup.
         If you don’t see it, check your spam/junk folder.
       </p>
 
-      <div class="small" id="emailLine">Email: —</div>
+      <div class="small" id="emailLine" style="margin-top:10px">Email: —</div>
 
-      <div style="margin-top:12px">
+      <div class="pill" style="margin-top:12px">
+        After verifying, come back and log in to access the app.
+      </div>
+
+      <div class="row">
         <a class="btn primary" href="login.html">Back to login</a>
+        <a class="btn" href="https://mail.google.com/" target="_blank" rel="noopener">Open Gmail</a>
+        <a class="btn" href="https://outlook.live.com/mail/" target="_blank" rel="noopener">Open Outlook</a>
       </div>
 
-      <div class="small" style="margin-top:14px">
-        If you used the wrong email, go back and sign up again.
-      </div>
+      <div class="divider" style="height:1px;background:rgba(255,255,255,.08);margin:14px 0"></div>
 
-      <div class="small" style="margin-top:10px">
+      <div class="small"><b>Didn’t get the email?</b> You can resend it below.</div>
+      <input id="emailInput" type="email" placeholder="Enter your email to resend">
+
+      <button class="btn full" id="resendBtn">Resend verification email</button>
+      <div class="toast" id="msg">—</div>
+
+      <div class="small" style="margin-top:12px">
         Need help? <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a>
       </div>
     </div>
   </div>
 
-<script>
-  // show the email they used, if we stored it
-  const e = localStorage.getItem("pp_pending_email");
-  if (e) document.getElementById("emailLine").textContent = "Email: " + e;
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+  const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
+  const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  const emailLine = document.getElementById("emailLine");
+  const emailInput = document.getElementById("emailInput");
+  const msg = document.getElementById("msg");
+
+  const stored = localStorage.getItem("pp_pending_email");
+  if (stored) {
+    emailLine.textContent = "Email: " + stored;
+    emailInput.value = stored;
+  }
+
+  document.getElementById("resendBtn").addEventListener("click", async () => {
+    const email = emailInput.value.trim();
+    if (!email) { msg.textContent = "Please enter your email."; return; }
+
+    msg.textContent = "Sending…";
+
+    // Re-trigger signUp email by attempting signUp again.
+    // If user already exists, Supabase may return "User already registered" which is okay.
+    const { error } = await supabase.auth.signUp({
+      email,
+      password: crypto.randomUUID() + "A!", // dummy password for resend attempt; user won't use this
+      options: { emailRedirectTo: "https://profitpilot.ukwebtools.com/login.html" }
+    });
+
+    // We do NOT want to scare users with "already registered".
+    if (error && !String(error.message).toLowerCase().includes("already registered")) {
+      msg.textContent = error.message;
+      return;
+    }
+
+    msg.textContent = "If the email exists, a verification link has been sent. Check inbox/spam.";
+  });
 </script>
 </body>
 </html>
