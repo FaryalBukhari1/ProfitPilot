@@ -56,6 +56,14 @@
       email: email.value.trim(),
       password: password.value
     });
+    await supabase.auth.signUp({
+  email,
+  password,
+  options: {
+    emailRedirectTo: "https://profitpilot.ukwebtools.com/login.html"
+  }
+});
+
     if (error) msg.textContent = error.message;
     else msg.textContent = "Account created. You can now log in.";
   };
