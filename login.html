@@ -55,10 +55,11 @@
     const { error } =  await supabase.auth.signUp({
   email,
   password,
-  options: {
-    emailRedirectTo: "https://profitpilot.ukwebtools.com/login.html"
-  }
+  options: {emailRedirectTo: "https://profitpilot.ukwebtools.com/login.html" }
 });
+    if (error) throw error;
+localStorage.setItem("pp_pending_email", email);
+location.href = "verify.html";
 
     if (error) msg.textContent = error.message;
     else msg.textContent = "Account created. You can now log in.";
