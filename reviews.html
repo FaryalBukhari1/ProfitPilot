@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Reviews — ProfitPilot</title>
+  <meta name="description" content="Read real reviews for ProfitPilot. Submit a review after logging in.">
+  <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
+
+  <style>
+    :root{
+      --bg:#f6f8fb;
+      --bg2:#eef2ff;
+      --card:#ffffff;
+      --txt:#0b1220;
+      --muted:#5b6474;
+      --line:rgba(16,24,40,.10);
+      --accent:#0ea5a4;   /* teal */
+      --accent2:#4f46e5;  /* indigo */
+      --shadow:0 10px 30px rgba(16,24,40,.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--txt);
+      background:
+        radial-gradient(900px 500px at 20% 0%, rgba(14,165,164,.18), transparent 55%),
+        radial-gradient(900px 500px at 80% 0%, rgba(79,70,229,.14), transparent 55%),
+        linear-gradient(180deg, var(--bg2), var(--bg));
+    }
+    a{color:var(--accent);text-decoration:none}
+    .wrap{max-width:1100px;margin:18px auto;padding:0 14px}
+    .nav{
+      display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap
+    }
+    .brand{display:flex;gap:10px;align-items:center}
+    .logo{
+      width:40px;height:40px;border-radius:14px;
+      background:linear-gradient(135deg, rgba(14,165,164,.18), rgba(79,70,229,.14));
+      border:1px solid var(--line);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:900;
+    }
+    .pill{
+      padding:8px 10px;border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.7);
+      font-size:12px;color:var(--muted);
+      display:inline-flex;gap:8px;align-items:center
+    }
+    .btn{
+      padding:10px 14px;border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.75);
+      color:var(--txt);
+      display:inline-flex;gap:8px;align-items:center;
+      cursor:pointer;
+      box-shadow:0 4px 16px rgba(16,24,40,.06);
+    }
+    .btn.primary{
+      border-color:rgba(14,165,164,.30);
+      background:rgba(14,165,164,.10);
+    }
+    .hero{
+      margin-top:14px;
+      background:rgba(255,255,255,.78);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px;
+      box-shadow:var(--shadow);
+    }
+    h1{margin:0 0 8px;font-size:26px}
+    p{margin:0;color:var(--muted);line-height:1.6}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+    @media(max-width:960px){.grid{grid-template-columns:1fr}}
+    .card{
+      background:rgba(255,255,255,.82);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px;
+      box-shadow:var(--shadow);
+    }
+    .small{font-size:12px;color:var(--muted);line-height:1.6}
+    .reviews{margin-top:10px}
+    .review{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.65);
+      border-radius:16px;
+      padding:12px;
+      margin-top:10px;
+    }
+    .toprow{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+    .stars{font-weight:900}
+    .name{font-weight:900}
+    footer{margin:14px 2px 0;color:var(--muted);font-size:12px;line-height:1.6}
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="nav">
+    <div class="brand">
+      <div class="logo">PP</div>
+      <div>
+        <div style="font-weight:900">ProfitPilot</div>
+        <div class="pill">Public reviews • Verified app access</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <a class="btn" href="https://ukwebtools.com/">← Ukwebtools</a>
+      <a class="btn" href="index.html">Home</a>
+      <a class="btn" href="login.html">Log in</a>
+      <a class="btn primary" href="app.html">Open app</a>
+    </div>
+  </div>
+
+  <div class="hero">
+    <h1>Reviews</h1>
+    <p>Anyone can read reviews. To submit a review, you’ll need to log in.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+      <span class="pill" id="avgPill">Loading…</span>
+      <a class="btn" href="login.html">Log in to leave a review</a>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div style="font-weight:900">What people say</div>
+      <div class="small">We show approved reviews only. No platform affiliation. No paid endorsements.</div>
+      <div class="reviews" id="list"></div>
+      <div class="small" id="empty" style="margin-top:10px;display:none">No reviews yet. Be the first to leave one.</div>
+    </div>
+
+    <div class="card">
+      <div style="font-weight:900">Want to submit a review?</div>
+      <div class="small">
+        Log in, open the app, and submit your review from the right panel.
+        We publish reviews instantly, but spam/abuse may be removed.
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+        <a class="btn primary" href="login.html">Log in</a>
+        <a class="btn" href="app.html">Open app</a>
+      </div>
+
+      <div style="margin-top:14px" class="small">
+        Links: <a href="https://ukwebtools.com/terms.html">Terms</a> • <a href="https://ukwebtools.com/privacy.html">Privacy</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © <span id="yr"></span> Ukwebtools • ProfitPilot
+  </footer>
+
+</div>
+
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+  const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
+  const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+  document.getElementById("yr").textContent = new Date().getFullYear();
+
+  function stars(n){
+    const s = "★★★★★";
+    return s.slice(0, n) + "☆☆☆☆☆".slice(0, 5-n);
+  }
+
+  const list = document.getElementById("list");
+  const empty = document.getElementById("empty");
+  const avgPill = document.getElementById("avgPill");
+
+  const { data, error } = await supabase
+    .from("reviews")
+    .select("name, rating, category, message, created_at")
+    .eq("approved", true)
+    .order("created_at", { ascending:false })
+    .limit(50);
+
+  if (error){
+    avgPill.textContent = "Unable to load reviews";
+    empty.style.display = "block";
+  } else {
+    if (!data || data.length === 0){
+      avgPill.textContent = "No reviews yet";
+      empty.style.display = "block";
+    } else {
+      const avg = data.reduce((a,r)=>a+(r.rating||0),0)/data.length;
+      avgPill.textContent = `Average ${avg.toFixed(1)} / 5 • ${data.length} review(s)`;
+
+      list.innerHTML = data.map(r => `
+        <div class="review">
+          <div class="toprow">
+            <div class="name">${(r.name || "Anonymous").replaceAll("<","&lt;")}</div>
+            <div class="stars">${stars(Math.max(1, Math.min(5, r.rating||5)))}</div>
+          </div>
+          <div class="small" style="margin-top:6px">
+            ${r.category ? `<span class="pill">${String(r.category).replaceAll("<","&lt;")}</span>` : ""}
+            <span class="pill">${new Date(r.created_at).toLocaleDateString()}</span>
+          </div>
+          <div style="margin-top:8px">${String(r.message || "").replaceAll("<","&lt;")}</div>
+        </div>
+      `).join("");
+    }
+  }
+</script>
+</body>
+</html>
