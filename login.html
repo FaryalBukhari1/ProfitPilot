@@ -52,11 +52,7 @@
 
   document.getElementById("signup").onclick = async () => {
     msg.textContent = "Creating account…";
-    const { error } = await supabase.auth.signUp({
-      email: email.value.trim(),
-      password: password.value
-    });
-    await supabase.auth.signUp({
+    const { error } =  await supabase.auth.signUp({
   email,
   password,
   options: {
