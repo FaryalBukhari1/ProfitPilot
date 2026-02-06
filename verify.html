@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Verify your email — ProfitPilot</title>
+  <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
+  <style>
+    :root{--bg:#0b0f14;--card:#111826;--card2:#0e1521;--txt:#eaf0ff;--muted:#9aa7bd;--line:rgba(255,255,255,.08);--accent:#5eead4;}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui;background:var(--bg);color:var(--txt)}
+    .wrap{max-width:560px;margin:40px auto;padding:0 14px}
+    .card{background:linear-gradient(180deg,rgba(94,234,212,.10),transparent 60%),var(--card);border:1px solid var(--line);border-radius:18px;padding:20px}
+    .pill{display:inline-flex;padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03);font-size:12px;color:var(--muted)}
+    h1{margin:0 0 10px;font-size:22px}
+    p{margin:0;color:var(--muted);line-height:1.6}
+    .btn{margin-top:14px;display:inline-flex;gap:8px;align-items:center;padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03);color:var(--txt);text-decoration:none;cursor:pointer}
+    .btn.primary{border-color:rgba(94,234,212,.35);background:rgba(94,234,212,.12)}
+    .small{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6}
+    input{width:100%;margin-top:10px;padding:12px;border-radius:14px;border:1px solid var(--line);background:var(--card2);color:var(--txt)}
+    a{color:var(--accent);text-decoration:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="pill">Almost there</div>
+      <h1>Verify your email to activate your account</h1>
+      <p>
+        We’ve sent a verification link to your email. Open it to finish signup.
+        If you don’t see it, check your spam/junk folder.
+      </p>
+
+      <div class="small" id="emailLine">Email: —</div>
+
+      <div style="margin-top:12px">
+        <a class="btn primary" href="login.html">Back to login</a>
+      </div>
+
+      <div class="small" style="margin-top:14px">
+        If you used the wrong email, go back and sign up again.
+      </div>
+
+      <div class="small" style="margin-top:10px">
+        Need help? <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // show the email they used, if we stored it
+  const e = localStorage.getItem("pp_pending_email");
+  if (e) document.getElementById("emailLine").textContent = "Email: " + e;
+</script>
+</body>
+</html>
