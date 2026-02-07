@@ -106,7 +106,6 @@
     .k .v{font-size:20px;font-weight:900;margin-top:6px}
     .divider{height:1px;background:var(--line);margin:12px 0}
     .hint{font-size:12px;color:var(--muted)}
-
     footer{margin:14px 2px 0;color:var(--muted);font-size:12px;line-height:1.6}
 
     .overlay{
@@ -145,27 +144,9 @@
     }
     .toast{margin-top:10px;font-size:12px;color:var(--muted)}
 
-    .scenarioItem{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.65);
-      border-radius:16px;
-      padding:10px;
-      margin-top:10px;
-    }
-    .scenarioTop{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
-    .scenarioName{font-weight:900}
-    .miniBtn{
-      padding:8px 10px;border-radius:999px;border:1px solid var(--line);
-      background:rgba(255,255,255,.75);cursor:pointer;
-      font-size:12px;
-      user-select:none;
-    }
-
     .tabs{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-    .tab{padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.70);cursor:pointer;font-size:12px}
+    .tab{padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.70);cursor:pointer;font-size:12px;user-select:none}
     .tab.active{border-color:rgba(14,165,164,.35);background:rgba(14,165,164,.10);font-weight:900}
-
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
   </style>
 </head>
 
@@ -234,17 +215,14 @@
           <input id="fxRate" inputmode="decimal" placeholder="e.g., 1 base = 1.25 selected">
         </div>
       </div>
-      <div class="small">If you enter a rate, we show a converted selling price line. Rate is user-provided.</div>
 
       <div class="divider"></div>
 
-      <!-- Preset -->
       <label>Platform preset</label>
       <select id="preset">
         <option value="manual">Manual (enter fees yourself)</option>
       </select>
 
-      <!-- Inputs -->
       <div class="row">
         <div>
           <label>Selling price</label>
@@ -291,18 +269,12 @@
         </div>
       </div>
 
-      <!-- Reverse -->
       <div id="reverseBox" style="display:none">
         <div class="divider"></div>
         <div class="title" style="margin:0 0 6px;font-size:14px">Reverse mode</div>
-        <div class="small">
-          Enter your target profit. We estimate the selling price required based on your fees and costs.
-          Trial can run reverse mode 3 times total. PRO unlimited.
-        </div>
-
+        <div class="small">Trial can run reverse mode 3 times total. PRO unlimited.</div>
         <label>Target profit</label>
         <input id="targetProfit" inputmode="decimal" placeholder="e.g., 5.00" value="0">
-
         <div class="small" id="reverseUsesLine" style="margin-top:8px">Reverse uses: —</div>
       </div>
 
@@ -323,14 +295,14 @@
 
       <div class="kpi">
         <div class="k">
-          <div class="h" id="profitLabel">Estimated profit</div>
-          <div class="v" id="profitOut">£0.00</div>
-          <div class="hint" id="profitHint">—</div>
+          <div class="h" id="o1h">Estimated profit</div>
+          <div class="v" id="o1v">£0.00</div>
+          <div class="hint" id="o1hint">—</div>
         </div>
         <div class="k">
-          <div class="h" id="marginLabel">Margin</div>
-          <div class="v" id="marginOut">0.0%</div>
-          <div class="hint" id="marginHint">—</div>
+          <div class="h" id="o2h">Margin</div>
+          <div class="v" id="o2v">0.0%</div>
+          <div class="hint" id="o2hint">—</div>
         </div>
       </div>
 
@@ -356,34 +328,17 @@
       </div>
 
       <div class="divider"></div>
-
       <div class="small">
         <b>Disclaimer:</b> Estimates only, not financial/legal/tax advice. Not affiliated with any platform.
-        FX conversion (if used) depends on the exchange rate you enter (no live rates).
+        FX conversion depends on the exchange rate you enter (no live rates).
         See <a href="https://ukwebtools.com/terms.html">Terms</a> and <a href="https://ukwebtools.com/privacy.html">Privacy</a>.
       </div>
     </div>
 
-    <!-- WORKSPACE -->
+    <!-- RIGHT PANEL -->
     <div class="card">
       <div class="title">Your workspace</div>
       <div class="small" id="userLine">Loading account…</div>
-
-      <div class="divider"></div>
-
-      <div class="title" style="margin:0 0 6px">Saved scenarios</div>
-      <div class="small" id="scenarioHint">Trial can save 3 scenarios. PRO saves unlimited.</div>
-
-      <label>Scenario name</label>
-      <input id="scenarioName" placeholder="e.g., Listing test — 19.99">
-
-      <div class="row">
-        <button class="btn primary" id="saveScenarioBtn">Save scenario</button>
-        <button class="btn" id="refreshScenariosBtn">Refresh list</button>
-      </div>
-      <div class="toast" id="scenarioStatus">—</div>
-
-      <div id="scenarioList"></div>
 
       <div class="divider"></div>
 
@@ -445,8 +400,6 @@
         <div class="title">Free Trial</div>
         <ul class="small" style="line-height:1.8;padding-left:16px;margin:8px 0 0">
           <li>5-day access</li>
-          <li>Basic profit & margin</li>
-          <li>Save up to 3 scenarios</li>
           <li>Reverse mode: 3 runs total</li>
         </ul>
       </div>
@@ -455,7 +408,6 @@
         <div class="title">PRO (One-time unlock)</div>
         <ul class="small" style="line-height:1.8;padding-left:16px;margin:8px 0 0">
           <li><b>Unlimited access</b></li>
-          <li><b>Unlimited saved scenarios</b></li>
           <li><b>Unlimited reverse mode</b></li>
           <li><b>Export + share</b></li>
         </ul>
@@ -489,25 +441,25 @@
 
   const BUY_URL = "https://stonevia.gumroad.com/l/goddhg";
   const GUMROAD_REDEEM_FN = "https://xsigsftvfknefpdfsyae.supabase.co/functions/v1/gumroad-redeem";
-  const TRIAL_DAYS = 5;
 
-  const TRIAL_SCENARIO_LIMIT = 3;
+  const TRIAL_DAYS = 5;
   const TRIAL_REVERSE_LIMIT = 3;
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
+  // UI refs
   const accessPill = document.getElementById("accessPill");
   const userLine = document.getElementById("userLine");
   const paywall = document.getElementById("paywall");
-  const buyBtn = document.getElementById("buyBtn");
-  buyBtn.href = BUY_URL;
+  document.getElementById("buyBtn").href = BUY_URL;
   document.getElementById("yr").textContent = new Date().getFullYear();
 
-  function n(v){ const x = parseFloat(String(v).replace(/,/g,"")); return Number.isFinite(x) ? x : 0; }
-  function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
-  function safe(t){ return String(t || "").replaceAll("<","&lt;"); }
+  function showPaywall(show){ paywall.style.display = show ? "flex" : "none"; }
 
-  // Currency symbols (simple, safe)
+  function n(v){ const x = parseFloat(String(v).replace(/,/g,"")); return Number.isFinite(x) ? x : 0; }
+  function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+
+  // Currency
   const CURRENCY_SYMBOL = {
     GBP:"£", USD:"$", EUR:"€", AUD:"$", CAD:"$", NZD:"$",
     AED:"AED ", SAR:"SAR ", PKR:"₨", INR:"₹", TRY:"₺", ZAR:"R ", NGN:"₦", BDT:"৳", LKR:"Rs "
@@ -518,27 +470,28 @@
   const fxOut = document.getElementById("fxOut");
   const fxNote = document.getElementById("fxNote");
 
-  function sym(){
-    const c = currencyEl.value || "GBP";
-    return CURRENCY_SYMBOL[c] || "";
-  }
-  function money(x){
-    const v = Number.isFinite(x) ? x : 0;
-    return sym() + v.toFixed(2);
-  }
-  function pct(x){
-    const v = Number.isFinite(x) ? x : 0;
-    return v.toFixed(1) + "%";
+  function sym(){ return CURRENCY_SYMBOL[currencyEl.value || "GBP"] || ""; }
+  function money(x){ return sym() + (Number.isFinite(x) ? x : 0).toFixed(2); }
+  function pct(x){ return (Number.isFinite(x) ? x : 0).toFixed(1) + "%"; }
+
+  function updateFXLine(sell){
+    const r = n(fxRateEl.value);
+    if (r > 0 && sell > 0){
+      fxRow.style.display = "block";
+      fxOut.textContent = (sell * r).toFixed(2);
+      fxNote.textContent = `Converted using your rate: ${sell.toFixed(2)} × ${r}`;
+    } else {
+      fxRow.style.display = "none";
+    }
   }
 
-  // Presets (examples only)
+  // Presets
   const PRESETS = [
     { id:"manual", name:"Manual (enter fees yourself)", feePct:0, feeFixed:0, adsPct:0, returnPct:0 },
     { id:"ebay_uk_typical", name:"eBay UK (typical example)", feePct:12.8, feeFixed:0.30, adsPct:0, returnPct:3 },
     { id:"etsy_typical", name:"Etsy (typical example)", feePct:9.5, feeFixed:0.20, adsPct:0, returnPct:3 },
     { id:"shopify_card_only", name:"Shopify (card fee example)", feePct:2.0, feeFixed:0.20, adsPct:0, returnPct:2 },
   ];
-
   const presetSel = document.getElementById("preset");
   const feePctEl = document.getElementById("feePct");
   const feeFixEl = document.getElementById("feeFixed");
@@ -551,7 +504,6 @@
     opt.textContent = p.name;
     presetSel.appendChild(opt);
   });
-
   presetSel.value = "manual";
   presetSel.addEventListener("change", ()=>{
     const p = PRESETS.find(x=>x.id===presetSel.value) || PRESETS[0];
@@ -572,46 +524,39 @@
   const targetProfitEl = document.getElementById("targetProfit");
 
   // Outputs
-  const profitLabel = document.getElementById("profitLabel");
-  const marginLabel = document.getElementById("marginLabel");
-  const profitOut = document.getElementById("profitOut");
-  const marginOut = document.getElementById("marginOut");
+  const o1h = document.getElementById("o1h");
+  const o2h = document.getElementById("o2h");
+  const o1v = document.getElementById("o1v");
+  const o2v = document.getElementById("o2v");
+  const o1hint = document.getElementById("o1hint");
+  const o2hint = document.getElementById("o2hint");
   const feesOut = document.getElementById("feesOut");
   const returnOut = document.getElementById("returnOut");
-  const profitHint = document.getElementById("profitHint");
-  const marginHint = document.getElementById("marginHint");
 
-  // Tabs
+  // Mode
   const tabProfit = document.getElementById("tabProfit");
   const tabReverse = document.getElementById("tabReverse");
   const reverseBox = document.getElementById("reverseBox");
   const reverseUsesLine = document.getElementById("reverseUsesLine");
-  let MODE = "profit"; // or "reverse"
+  let MODE = "profit";
 
   function setMode(m){
     MODE = m;
     tabProfit.classList.toggle("active", m==="profit");
     tabReverse.classList.toggle("active", m==="reverse");
     reverseBox.style.display = (m==="reverse") ? "block" : "none";
-    profitLabel.textContent = (m==="reverse") ? "Required selling price" : "Estimated profit";
-    marginLabel.textContent = (m==="reverse") ? "Implied margin" : "Margin";
-    if (m==="reverse") sellPriceEl.placeholder = "Auto (calculated)";
-    else sellPriceEl.placeholder = "0.00";
+
+    if (m === "profit"){
+      o1h.textContent = "Estimated profit";
+      o2h.textContent = "Margin";
+    } else {
+      o1h.textContent = "Required selling price";
+      o2h.textContent = "Implied margin";
+    }
     compute();
   }
   tabProfit.addEventListener("click", ()=>setMode("profit"));
   tabReverse.addEventListener("click", ()=>setMode("reverse"));
-
-  function updateFXLine(sell){
-    const r = n(fxRateEl.value);
-    if (r > 0 && sell > 0){
-      fxRow.style.display = "block";
-      fxOut.textContent = (sell * r).toFixed(2);
-      fxNote.textContent = `Converted selling price using your rate: ${sell.toFixed(2)} × ${r}`;
-    } else {
-      fxRow.style.display = "none";
-    }
-  }
 
   function getFees(sell){
     const feePct = clamp(n(feePctEl.value), 0, 99);
@@ -635,31 +580,31 @@
     const profit = sell - (cost + ship + misc + totalFees);
     const margin = sell > 0 ? (profit / sell) * 100 : 0;
 
-    profitOut.textContent = money(profit);
-    marginOut.textContent = pct(margin);
+    o1v.textContent = money(profit);
+    o2v.textContent = pct(margin);
     feesOut.textContent = money(totalFees);
     returnOut.textContent = money(expectedReturnImpact);
 
     if (sell <= 0){
-      profitHint.textContent = "Enter a selling price.";
-      marginHint.textContent = "—";
-      profitHint.style.color = "var(--muted)";
-      marginHint.style.color = "var(--muted)";
+      o1hint.textContent = "Enter a selling price.";
+      o2hint.textContent = "—";
+      o1hint.style.color = "var(--muted)";
+      o2hint.style.color = "var(--muted)";
     } else if (profit < 0){
-      profitHint.textContent = "Loss on this pricing. Adjust price or costs.";
-      profitHint.style.color = "var(--bad)";
-      marginHint.textContent = margin < 10 ? "Low margin — consider stress testing." : "—";
-      marginHint.style.color = margin < 10 ? "var(--warn)" : "var(--muted)";
+      o1hint.textContent = "Loss on this pricing. Adjust price or costs.";
+      o1hint.style.color = "var(--bad)";
+      o2hint.textContent = "Try reducing costs or increasing price.";
+      o2hint.style.color = "var(--warn)";
     } else if (profit < sell * 0.05){
-      profitHint.textContent = "Thin profit. Small changes can wipe margin.";
-      profitHint.style.color = "var(--warn)";
-      marginHint.textContent = "Consider adding buffer for returns and fees.";
-      marginHint.style.color = "var(--warn)";
+      o1hint.textContent = "Thin profit. Small changes can wipe margin.";
+      o1hint.style.color = "var(--warn)";
+      o2hint.textContent = "Consider building more buffer.";
+      o2hint.style.color = "var(--warn)";
     } else {
-      profitHint.textContent = "Healthy buffer based on inputs.";
-      profitHint.style.color = "var(--ok)";
-      marginHint.textContent = "Looks reasonable for many categories.";
-      marginHint.style.color = "var(--ok)";
+      o1hint.textContent = "Healthy buffer based on inputs.";
+      o1hint.style.color = "var(--ok)";
+      o2hint.textContent = "Looks reasonable for many categories.";
+      o2hint.style.color = "var(--ok)";
     }
 
     updateFXLine(sell);
@@ -685,33 +630,30 @@
   function computeReverse(){
     const target = n(targetProfitEl.value);
     if (target <= 0){
-      profitOut.textContent = money(0);
-      marginOut.textContent = "—";
-      feesOut.textContent = money(0);
-      returnOut.textContent = money(0);
-      profitHint.textContent = "Enter a target profit.";
-      profitHint.style.color = "var(--muted)";
-      marginHint.textContent = "—";
-      marginHint.style.color = "var(--muted)";
+      o1v.textContent = "—";
+      o2v.textContent = "—";
+      o1hint.textContent = "Enter a target profit.";
+      o1hint.style.color = "var(--muted)";
+      o2hint.textContent = "—";
+      o2hint.style.color = "var(--muted)";
       fxRow.style.display = "none";
       return;
     }
 
     const sell = reverseSellPriceForTargetProfit(target);
     if (!sell || !Number.isFinite(sell) || sell <= 0){
-      profitOut.textContent = "—";
-      marginOut.textContent = "—";
-      profitHint.textContent = "Reverse calc failed. Check fee % values (too high).";
-      profitHint.style.color = "var(--bad)";
-      marginHint.textContent = "—";
-      marginHint.style.color = "var(--muted)";
+      o1v.textContent = "—";
+      o2v.textContent = "—";
+      o1hint.textContent = "Reverse calc failed. Check fee % values (too high).";
+      o1hint.style.color = "var(--bad)";
+      o2hint.textContent = "—";
+      o2hint.style.color = "var(--muted)";
       fxRow.style.display = "none";
       return;
     }
 
     sellPriceEl.value = sell.toFixed(2);
 
-    // show implied margin at this sell
     const retPct = clamp(n(retPctEl.value), 0, 99);
     const { totalFees } = getFees(sell);
     const expectedReturnImpact = sell * (retPct/100);
@@ -722,27 +664,23 @@
     const profit = sell - (cost + ship + misc + totalFees);
     const margin = sell > 0 ? (profit / sell) * 100 : 0;
 
-    profitOut.textContent = money(sell);
-    marginOut.textContent = pct(margin);
+    o1v.textContent = money(sell);
+    o2v.textContent = pct(margin);
     feesOut.textContent = money(totalFees);
     returnOut.textContent = money(expectedReturnImpact);
 
-    profitHint.textContent = `Required selling price to target ~${money(target)} profit (estimate).`;
-    profitHint.style.color = "var(--ok)";
-    marginHint.textContent = "Implied margin at the required selling price.";
-    marginHint.style.color = "var(--muted)";
+    o1hint.textContent = `Required selling price to target ~${money(target)} profit (estimate).`;
+    o1hint.style.color = "var(--ok)";
+    o2hint.textContent = "Implied margin at the required selling price.";
+    o2hint.style.color = "var(--muted)";
 
     updateFXLine(sell);
   }
 
-  function compute(){
-    if (MODE === "profit") computeProfit();
-    else computeReverse();
-  }
+  function compute(){ (MODE === "profit") ? computeProfit() : computeReverse(); }
 
-  // Export + Share
+  // Export + share
   const shareStatus = document.getElementById("shareStatus");
-
   function payload(){
     return {
       mode: MODE,
@@ -760,13 +698,11 @@
       targetProfit: targetProfitEl.value
     };
   }
-
   function csvEscape(s){
     const t = String(s ?? "");
     if (/[",\n]/.test(t)) return `"${t.replaceAll('"','""')}"`;
     return t;
   }
-
   function buildCsv(){
     const p = payload();
     const rows = [
@@ -784,14 +720,13 @@
       ["Ads %", p.adsPct],
       ["Return %", p.returnPct],
       ["Target profit (reverse)", p.targetProfit],
-      ["Output 1", document.getElementById("profitLabel").textContent + ": " + document.getElementById("profitOut").textContent],
-      ["Output 2", document.getElementById("marginLabel").textContent + ": " + document.getElementById("marginOut").textContent],
-      ["Total fees+ads", document.getElementById("feesOut").textContent],
-      ["Return sensitivity", document.getElementById("returnOut").textContent],
+      ["Output 1", `${o1h.textContent}: ${o1v.textContent}`],
+      ["Output 2", `${o2h.textContent}: ${o2v.textContent}`],
+      ["Total fees+ads", feesOut.textContent],
+      ["Return sensitivity", returnOut.textContent],
     ];
     return rows.map(r=>r.map(csvEscape).join(",")).join("\n");
   }
-
   function downloadText(filename, text){
     const blob = new Blob([text], {type:"text/plain;charset=utf-8"});
     const url = URL.createObjectURL(blob);
@@ -814,41 +749,31 @@
     compute();
     const p = payload();
     const html = `
-      <html>
-      <head>
-        <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width,initial-scale=1"/>
-        <title>ProfitPilot Export</title>
-        <style>
-          body{font-family:system-ui;margin:24px;color:#0b1220}
-          .h{font-size:20px;font-weight:900;margin-bottom:6px}
-          .m{color:#5b6474;margin-bottom:16px}
-          table{width:100%;border-collapse:collapse}
-          td{border:1px solid rgba(16,24,40,.12);padding:10px;font-size:13px;vertical-align:top}
-          .k{font-weight:800;width:38%}
-          .out{margin-top:16px;padding:12px;border:1px solid rgba(16,24,40,.12);border-radius:12px}
-        </style>
-      </head>
-      <body>
+      <html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+      <title>ProfitPilot Export</title>
+      <style>
+        body{font-family:system-ui;margin:24px;color:#0b1220}
+        .h{font-size:20px;font-weight:900;margin-bottom:6px}
+        .m{color:#5b6474;margin-bottom:16px}
+        table{width:100%;border-collapse:collapse}
+        td{border:1px solid rgba(16,24,40,.12);padding:10px;font-size:13px;vertical-align:top}
+        .k{font-weight:800;width:38%}
+        .out{margin-top:16px;padding:12px;border:1px solid rgba(16,24,40,.12);border-radius:12px}
+      </style></head><body>
         <div class="h">ProfitPilot Export</div>
         <div class="m">Estimates only. Generated: ${new Date().toLocaleString()}</div>
-        <table>
-          ${Object.entries(p).map(([k,v])=>`<tr><td class="k">${k}</td><td>${String(v ?? "")}</td></tr>`).join("")}
-        </table>
+        <table>${Object.entries(p).map(([k,v])=>`<tr><td class="k">${k}</td><td>${String(v ?? "")}</td></tr>`).join("")}</table>
         <div class="out">
-          <div><b>${document.getElementById("profitLabel").textContent}:</b> ${document.getElementById("profitOut").textContent}</div>
-          <div><b>${document.getElementById("marginLabel").textContent}:</b> ${document.getElementById("marginOut").textContent}</div>
-          <div><b>Total fees + ads:</b> ${document.getElementById("feesOut").textContent}</div>
-          <div><b>Return sensitivity:</b> ${document.getElementById("returnOut").textContent}</div>
+          <div><b>${o1h.textContent}:</b> ${o1v.textContent}</div>
+          <div><b>${o2h.textContent}:</b> ${o2v.textContent}</div>
+          <div><b>Total fees + ads:</b> ${feesOut.textContent}</div>
+          <div><b>Return sensitivity:</b> ${returnOut.textContent}</div>
         </div>
         <script>window.onload=()=>window.print()</script>
-      </body>
-      </html>
+      </body></html>
     `;
     const w = window.open("", "_blank");
-    w.document.open();
-    w.document.write(html);
-    w.document.close();
+    w.document.open(); w.document.write(html); w.document.close();
     shareStatus.textContent = "PDF print opened.";
   });
 
@@ -856,25 +781,22 @@
     const bytes = new TextEncoder().encode(str);
     let bin = "";
     bytes.forEach(b=>bin += String.fromCharCode(b));
-    const b64 = btoa(bin).replaceAll("+","-").replaceAll("/","_").replaceAll("=","");
-    return b64;
+    return btoa(bin).replaceAll("+","-").replaceAll("/","_").replaceAll("=","");
   }
 
   document.getElementById("shareBtn").addEventListener("click", ()=>{
     compute();
-    // Gate share to PRO (premium feel). Trial sees a clear reason.
     if (!CURRENT_PROFILE?.paid){
       shareStatus.textContent = "Share link is PRO. Unlock to share scenarios.";
       return;
     }
-    const p = payload();
-    const token = base64urlEncode(JSON.stringify(p));
+    const token = base64urlEncode(JSON.stringify(payload()));
     const url = `${location.origin}/share.html#s=${token}`;
     navigator.clipboard?.writeText(url).catch(()=>{});
     shareStatus.textContent = "Share link copied.";
   });
 
-  // Buttons
+  // Reset
   document.getElementById("resetBtn").addEventListener("click", ()=>{
     [sellPriceEl, productCostEl, shipCostEl, miscCostEl, feePctEl, feeFixEl, adsPctEl, retPctEl, targetProfitEl].forEach(el=>el.value="0");
     fxRateEl.value = "";
@@ -884,16 +806,61 @@
     shareStatus.textContent = "—";
   });
 
-  [sellPriceEl, productCostEl, shipCostEl, miscCostEl, feePctEl, feeFixEl, adsPctEl, retPctEl, targetProfitEl, currencyEl, fxRateEl].forEach(el=>{
-    el.addEventListener("input", ()=>{ if (MODE==="profit") computeProfit(); });
-    el.addEventListener("change", ()=>{ if (MODE==="profit") computeProfit(); });
+  // Reviews submit
+  let selectedStars = 5;
+  const starsRow = document.getElementById("starsRow");
+  const reviewStatus = document.getElementById("reviewStatus");
+
+  function setStars(n){
+    selectedStars = n;
+    [...starsRow.querySelectorAll("button")].forEach(b=>{
+      b.classList.toggle("active", parseInt(b.dataset.star,10) === n);
+    });
+  }
+  setStars(5);
+  starsRow.addEventListener("click", (e)=>{
+    const btn = e.target.closest("button");
+    if (!btn) return;
+    setStars(parseInt(btn.dataset.star,10));
+  });
+
+  document.getElementById("sendReview").addEventListener("click", async ()=>{
+    reviewStatus.textContent = "Submitting…";
+    try{
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Please log in again.");
+      const name = document.getElementById("revName").value.trim();
+      const category = document.getElementById("revCat").value;
+      const message = document.getElementById("revMsg").value.trim();
+      if (!message) throw new Error("Write a short review message.");
+
+      const { error } = await supabase.from("reviews").insert([{
+        user_id: user.id,
+        name: name || null,
+        rating: selectedStars,
+        category,
+        message,
+        approved: true
+      }]);
+
+      if (error) throw error;
+      reviewStatus.textContent = "Thanks! Your review is now public.";
+      document.getElementById("revMsg").value = "";
+    } catch(e){
+      reviewStatus.textContent = e.message || "Failed to submit review.";
+    }
   });
 
   // Auth + access
-  async function requireSession(){
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) { location.href = "login.html"; return null; }
-    return session;
+  let CURRENT_PROFILE = null;
+  let CURRENT_USER = null;
+
+  function daysLeft(trialStartISO){
+    const start = new Date(trialStartISO).getTime();
+    const now = Date.now();
+    const elapsedDays = (now - start) / (1000*60*60*24);
+    const left = TRIAL_DAYS - elapsedDays;
+    return Math.max(0, Math.ceil(left));
   }
 
   async function ensureProfile(userId){
@@ -934,19 +901,6 @@
     return prof;
   }
 
-  function daysLeft(trialStartISO){
-    const start = new Date(trialStartISO).getTime();
-    const now = Date.now();
-    const elapsedDays = (now - start) / (1000*60*60*24);
-    const left = TRIAL_DAYS - elapsedDays;
-    return Math.max(0, Math.ceil(left));
-  }
-
-  function showPaywall(show){ document.getElementById("paywall").style.display = show ? "flex" : "none"; }
-
-  let CURRENT_PROFILE = null;
-  let CURRENT_USER = null;
-
   async function updateAccessUI(profile, email){
     CURRENT_PROFILE = profile;
     userLine.textContent = `Signed in as ${email}`;
@@ -976,12 +930,15 @@
     }
   }
 
-  // ✅ Secure reverse-use consumption (server-side)
+  // ✅ IMPORTANT: use p_limit (matches SQL function)
   async function consumeReverseUse(){
     const { data, error } = await supabase.rpc("consume_reverse_use", { p_limit: TRIAL_REVERSE_LIMIT });
     if (error){
-      if ((error.message || "").includes("limit_reached")) throw new Error(`Trial reverse limit reached (${TRIAL_REVERSE_LIMIT}). Unlock PRO for unlimited reverse mode.`);
-      throw error;
+      const msg = error.message || "";
+      if (msg.toLowerCase().includes("limit_reached")){
+        throw new Error(`Trial reverse limit reached (${TRIAL_REVERSE_LIMIT}). Unlock PRO for unlimited reverse mode.`);
+      }
+      throw new Error(msg || "Reverse limit check failed.");
     }
     const next = Number(data || 0);
     CURRENT_PROFILE.reverse_uses = next;
@@ -992,12 +949,12 @@
   document.getElementById("calcBtn").addEventListener("click", async ()=>{
     try{
       if (MODE === "reverse" && !CURRENT_PROFILE?.paid){
-        await consumeReverseUse(); // blocks after 3, tamper-resistant
+        await consumeReverseUse();
       }
       compute();
     } catch(e){
-      profitHint.textContent = e.message || "Unable to calculate.";
-      profitHint.style.color = "var(--bad)";
+      o1hint.textContent = e.message || "Unable to calculate.";
+      o1hint.style.color = "var(--bad)";
     }
   });
 
@@ -1034,193 +991,6 @@
     }
   });
 
-  // Reviews submit
-  let selectedStars = 5;
-  const starsRow = document.getElementById("starsRow");
-  const reviewStatus = document.getElementById("reviewStatus");
-
-  function setStars(n){
-    selectedStars = n;
-    [...starsRow.querySelectorAll("button")].forEach(b=>{
-      b.classList.toggle("active", parseInt(b.dataset.star,10) === n);
-    });
-  }
-  setStars(5);
-
-  starsRow.addEventListener("click", (e)=>{
-    const btn = e.target.closest("button");
-    if (!btn) return;
-    setStars(parseInt(btn.dataset.star,10));
-  });
-
-  document.getElementById("sendReview").addEventListener("click", async ()=>{
-    reviewStatus.textContent = "Submitting…";
-    try{
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Please log in again.");
-
-      const name = document.getElementById("revName").value.trim();
-      const category = document.getElementById("revCat").value;
-      const message = document.getElementById("revMsg").value.trim();
-      if (!message) throw new Error("Write a short review message.");
-
-      const { error } = await supabase.from("reviews").insert([{
-        user_id: user.id,
-        name: name || null,
-        rating: selectedStars,
-        category,
-        message,
-        approved: true
-      }]);
-
-      if (error) throw error;
-      reviewStatus.textContent = "Thanks! Your review is now public.";
-      document.getElementById("revMsg").value = "";
-    } catch(e){
-      reviewStatus.textContent = e.message || "Failed to submit review.";
-    }
-  });
-
-  // Scenarios (trial 3, pro unlimited)
-  const scenarioNameEl = document.getElementById("scenarioName");
-  const saveScenarioBtn = document.getElementById("saveScenarioBtn");
-  const refreshScenariosBtn = document.getElementById("refreshScenariosBtn");
-  const scenarioStatus = document.getElementById("scenarioStatus");
-  const scenarioList = document.getElementById("scenarioList");
-  const scenarioHint = document.getElementById("scenarioHint");
-
-  function scenarioPayload(){
-    return payload();
-  }
-
-  function applyPayload(p){
-    if (!p) return;
-    currencyEl.value = p.currency || "GBP";
-    fxRateEl.value = p.fxRate || "";
-    presetSel.value = p.preset || "manual";
-    sellPriceEl.value = String(p.sellPrice ?? "0");
-    productCostEl.value = String(p.productCost ?? "0");
-    shipCostEl.value = String(p.shipCost ?? "0");
-    miscCostEl.value = String(p.miscCost ?? "0");
-    feePctEl.value = String(p.feePct ?? "0");
-    feeFixEl.value = String(p.feeFixed ?? "0");
-    adsPctEl.value = String(p.adsPct ?? "0");
-    retPctEl.value = String(p.returnPct ?? "0");
-    targetProfitEl.value = String(p.targetProfit ?? "0");
-    setMode(p.mode === "reverse" ? "reverse" : "profit");
-    compute();
-  }
-
-  async function loadScenarios(){
-    scenarioStatus.textContent = "Loading scenarios…";
-    scenarioList.innerHTML = "";
-
-    const { data, error } = await supabase
-      .from("scenarios")
-      .select("id,name,payload,created_at")
-      .order("created_at", { ascending:false })
-      .limit(10);
-
-    if (error){
-      scenarioStatus.textContent = error.message;
-      return;
-    }
-
-    const count = (data || []).length;
-    if (CURRENT_PROFILE?.paid) scenarioHint.textContent = `PRO: unlimited saved scenarios • Showing latest ${count}`;
-    else scenarioHint.textContent = `Trial: save up to ${TRIAL_SCENARIO_LIMIT} scenarios • You have ${count}/${TRIAL_SCENARIO_LIMIT} (latest shown)`;
-
-    if (!data || data.length === 0){
-      scenarioStatus.textContent = "No saved scenarios yet.";
-      return;
-    }
-
-    scenarioStatus.textContent = "—";
-
-    data.forEach(s=>{
-      const div = document.createElement("div");
-      div.className = "scenarioItem";
-      div.innerHTML = `
-        <div class="scenarioTop">
-          <div>
-            <div class="scenarioName">${safe(s.name)}</div>
-            <div class="small">${new Date(s.created_at).toLocaleString()}</div>
-          </div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="miniBtn" data-act="load" data-id="${s.id}">Load</button>
-            <button class="miniBtn" data-act="del" data-id="${s.id}">Delete</button>
-          </div>
-        </div>
-      `;
-      div.dataset.payload = JSON.stringify(s.payload || {});
-      scenarioList.appendChild(div);
-    });
-  }
-
-  async function trialScenarioCount(){
-    const { data, error } = await supabase.from("scenarios").select("id").limit(50);
-    if (error) throw error;
-    return (data || []).length;
-  }
-
-  saveScenarioBtn.addEventListener("click", async ()=>{
-    scenarioStatus.textContent = "Saving…";
-    try{
-      if (!CURRENT_USER) throw new Error("Please log in again.");
-
-      const name = scenarioNameEl.value.trim() || "Untitled scenario";
-      const p = scenarioPayload();
-
-      if (!CURRENT_PROFILE?.paid){
-        const cnt = await trialScenarioCount();
-        if (cnt >= TRIAL_SCENARIO_LIMIT){
-          scenarioStatus.textContent = `Trial limit reached (${TRIAL_SCENARIO_LIMIT}). Unlock PRO to save unlimited scenarios.`;
-          return;
-        }
-      }
-
-      const { error } = await supabase.from("scenarios").insert([{ user_id: CURRENT_USER.id, name, payload: p }]);
-      if (error) throw error;
-
-      scenarioStatus.textContent = "Saved.";
-      scenarioNameEl.value = "";
-      await loadScenarios();
-    } catch(e){
-      scenarioStatus.textContent = e.message || "Failed to save.";
-    }
-  });
-
-  refreshScenariosBtn.addEventListener("click", loadScenarios);
-
-  scenarioList.addEventListener("click", async (e)=>{
-    const btn = e.target.closest("button");
-    if (!btn) return;
-    const act = btn.dataset.act;
-    const id = btn.dataset.id;
-    const item = btn.closest(".scenarioItem");
-
-    if (act === "load"){
-      try{
-        const p = JSON.parse(item.dataset.payload || "{}");
-        applyPayload(p);
-        scenarioStatus.textContent = "Loaded scenario.";
-      } catch {
-        scenarioStatus.textContent = "Could not load scenario.";
-      }
-    }
-
-    if (act === "del"){
-      if (!confirm("Delete this scenario?")) return;
-      scenarioStatus.textContent = "Deleting…";
-      const { error } = await supabase.from("scenarios").delete().eq("id", id);
-      if (error) scenarioStatus.textContent = error.message;
-      else {
-        scenarioStatus.textContent = "Deleted.";
-        await loadScenarios();
-      }
-    }
-  });
-
   // Logout
   document.getElementById("logoutBtn").addEventListener("click", async ()=>{
     await supabase.auth.signOut();
@@ -1228,26 +998,31 @@
   });
 
   // Boot
-  async function requireSession(){
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) { location.href = "login.html"; return null; }
-    return session;
-  }
-
   async function boot(){
-    const session = await requireSession();
-    if (!session) return;
+    try{
+      accessPill.textContent = "Loading session…";
 
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) { location.href = "login.html"; return; }
-    CURRENT_USER = user;
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) { location.href = "login.html"; return; }
 
-    const profile = await ensureProfile(user.id);
-    await updateAccessUI(profile, user.email || "user");
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) { location.href = "login.html"; return; }
+      CURRENT_USER = user;
 
-    computeProfit();
-    await loadScenarios();
+      const profile = await ensureProfile(user.id);
+      await updateAccessUI(profile, user.email || "user");
+
+      // default compute
+      computeProfit();
+    } catch(e){
+      accessPill.textContent = "Access check failed";
+      accessPill.className = "pill bad";
+      userLine.textContent = (e && e.message) ? e.message : "Unknown error";
+    }
   }
+
+  // init
+  setMode("profit");
   await boot();
 </script>
 </body>
