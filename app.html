@@ -101,7 +101,6 @@
       font-size:12px;line-height:1.6;
     }
 
-    /* Insights + Competitor blocks */
     .panel{
       border:1px solid rgba(79,70,229,.18);
       background:linear-gradient(180deg, rgba(79,70,229,.10), rgba(255,255,255,.72));
@@ -117,10 +116,6 @@
     .tag{
       padding:6px 10px;border-radius:999px;border:1px solid var(--line);
       background:rgba(255,255,255,.82);font-size:12px;color:var(--muted);
-    }
-    .locked{
-      opacity:.92;
-      filter:saturate(.95);
     }
 
     @media print{
@@ -301,14 +296,14 @@
           </div>
         </div>
 
-        <!-- COMPETITOR MODE (manual, PRO + trial limit) -->
+        <!-- COMPETITOR MODE -->
         <div class="panel" id="compBox">
           <div class="pHead">
             <div>
               <div style="font-weight:900">Competitor mode (manual)</div>
-              <div class="small">Enter competitor prices you found yourself. No scraping. Safe & compliant.</div>
+              <div class="small">Enter competitor prices you found yourself. No scraping.</div>
             </div>
-            <span class="tag" id="compStatus">Locked</span>
+            <span class="tag" id="compStatus">Trial limited</span>
           </div>
 
           <div class="small" id="compUsesLine" style="margin-top:6px">Competitor uses: —</div>
@@ -341,6 +336,13 @@
             </div>
           </div>
 
+          <!-- NEW ACTIONS -->
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+            <button class="btn" id="useSuggestedBtn" disabled>Use suggested price</button>
+            <button class="btn" id="saveScenarioBtn">Save scenario (PRO)</button>
+            <span class="pill" id="scenarioToast">—</span>
+          </div>
+
           <div class="pGrid" style="margin-top:10px">
             <div class="pItem"><div class="t">Market reference (median)</div><div class="v" id="compMedian">—</div></div>
             <div class="pItem"><div class="t">Suggested price</div><div class="v" id="compSuggest">—</div><div class="small" id="compWhy">—</div></div>
@@ -349,7 +351,7 @@
           </div>
 
           <ul class="pList" id="compBullets">
-            <li>PRO shows pricing band + floor guardrail.</li>
+            <li>Tip: use “Don’t go below” as your personal floor price.</li>
           </ul>
         </div>
 
@@ -363,7 +365,7 @@
 
         <div id="bulkPasteBox">
           <div class="title" style="margin:0 0 6px;font-size:14px">Paste rows</div>
-          <div class="small">Paste: <b>Sell, Cost, Ship, Misc</b> (comma or tab). Fees use your current fields unless included.</div>
+          <div class="small">Paste: <b>Sell, Cost, Ship, Misc</b> (comma or tab).</div>
           <textarea id="bulkPaste" placeholder="Example:
 12.99, 6.20, 0.00, 0.20
 19.99, 9.50, 0.00, 0.30"></textarea>
@@ -425,7 +427,7 @@
     <div>
       <div class="card" id="proCard">
         <div class="title">PRO features</div>
-        <div class="small">Unlimited reverse + competitor + bulk, PDF export, share links, saved presets, saved history, insights. One-time unlock.</div>
+        <div class="small">Unlimited reverse + competitor + bulk, PDF export, share links, insights, saved scenarios. One-time unlock.</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
           <a class="btn primary" href="https://stonevia.gumroad.com/l/goddhg" target="_blank" rel="noopener">Buy PRO</a>
           <a class="btn" href="reviews.html">See reviews</a>
@@ -433,48 +435,25 @@
       </div>
 
       <div class="card" style="margin-top:14px">
-        <div class="title">Saved calculations (PRO)</div>
-        <div class="small">Save a snapshot, reload later.</div>
+        <div class="title">Saved scenarios (PRO)</div>
+        <div class="small">Saved locally on this device for speed. (PRO-only to save.)</div>
 
-        <label>Saved items</label>
-        <select id="savedSel"><option value="">—</option></select>
+        <label>Saved scenarios</label>
+        <select id="scenarioSel"><option value="">—</option></select>
 
         <div class="row">
-          <button class="btn" id="loadSavedBtn">Load</button>
-          <button class="btn" id="deleteSavedBtn">Delete</button>
+          <button class="btn" id="loadScenarioBtn">Load</button>
+          <button class="btn" id="deleteScenarioBtn">Delete</button>
         </div>
 
         <div class="divider"></div>
 
-        <label>Save as</label>
-        <input id="savedName" placeholder="e.g., eBay £12.99 thin margin">
+        <label>Scenario name</label>
+        <input id="scenarioName" placeholder="e.g., Competitor median £13.49">
 
         <div class="row">
-          <button class="btn primary" id="saveCurrentBtn">Save current</button>
-          <span class="pill" id="savedStatus">—</span>
-        </div>
-      </div>
-
-      <div class="card" style="margin-top:14px">
-        <div class="title">My presets (PRO)</div>
-        <div class="small">Save your own fee presets.</div>
-
-        <label>Saved presets</label>
-        <select id="myPresetSel"><option value="">—</option></select>
-
-        <div class="row">
-          <button class="btn" id="loadMyPresetBtn">Load</button>
-          <button class="btn" id="deleteMyPresetBtn">Delete</button>
-        </div>
-
-        <div class="divider"></div>
-
-        <label>Preset name</label>
-        <input id="myPresetName" placeholder="e.g., eBay UK promoted listings">
-
-        <div class="row">
-          <button class="btn primary" id="saveMyPresetBtn">Save current fees</button>
-          <span class="pill" id="presetStatus">—</span>
+          <button class="btn primary" id="saveScenarioBtn2">Save current (PRO)</button>
+          <span class="pill" id="scenarioStatus">—</span>
         </div>
       </div>
 
@@ -533,7 +512,6 @@
   const reverseUsesLine = document.getElementById("reverseUsesLine");
   const bulkLimitLine = document.getElementById("bulkLimitLine");
   const shareStatus = document.getElementById("shareStatus");
-  const presetStatus = document.getElementById("presetStatus");
   const bulkStatus = document.getElementById("bulkStatus");
   const bulkImportStatus = document.getElementById("bulkImportStatus");
   const importBanner = document.getElementById("importBanner");
@@ -586,6 +564,10 @@
   const compUsesLine = document.getElementById("compUsesLine");
   const runCompBtn = document.getElementById("runCompBtn");
   const compToast = document.getElementById("compToast");
+  const scenarioToast = document.getElementById("scenarioToast");
+  const useSuggestedBtn = document.getElementById("useSuggestedBtn");
+  const saveScenarioBtn = document.getElementById("saveScenarioBtn");
+
   const c1 = document.getElementById("c1");
   const c2 = document.getElementById("c2");
   const c3 = document.getElementById("c3");
@@ -599,7 +581,13 @@
   const compCheck2 = document.getElementById("compCheck2");
   const compBullets = document.getElementById("compBullets");
 
-  document.getElementById("yr").textContent = new Date().getFullYear();
+  // Scenario storage (PRO)
+  const scenarioSel = document.getElementById("scenarioSel");
+  const scenarioName = document.getElementById("scenarioName");
+  const saveScenarioBtn2 = document.getElementById("saveScenarioBtn2");
+  const loadScenarioBtn = document.getElementById("loadScenarioBtn");
+  const deleteScenarioBtn = document.getElementById("deleteScenarioBtn");
+  const scenarioStatus = document.getElementById("scenarioStatus");
 
   // Bulk
   const bulkRunBtn = document.getElementById("bulkRunBtn");
@@ -612,20 +600,6 @@
   const bulkFillExampleBtn = document.getElementById("bulkFillExampleBtn");
   const bulkTbody = document.getElementById("bulkTbody");
 
-  // Saved + presets
-  const savedSel = document.getElementById("savedSel");
-  const savedName = document.getElementById("savedName");
-  const saveCurrentBtn = document.getElementById("saveCurrentBtn");
-  const loadSavedBtn = document.getElementById("loadSavedBtn");
-  const deleteSavedBtn = document.getElementById("deleteSavedBtn");
-  const savedStatus = document.getElementById("savedStatus");
-
-  const myPresetSel = document.getElementById("myPresetSel");
-  const myPresetName = document.getElementById("myPresetName");
-  const saveMyPresetBtn = document.getElementById("saveMyPresetBtn");
-  const loadMyPresetBtn = document.getElementById("loadMyPresetBtn");
-  const deleteMyPresetBtn = document.getElementById("deleteMyPresetBtn");
-
   // Tabs
   const tabProfit = document.getElementById("tabProfit");
   const tabReverse = document.getElementById("tabReverse");
@@ -633,6 +607,8 @@
   const singleBox = document.getElementById("singleBox");
   const reverseBox = document.getElementById("reverseBox");
   const bulkBox = document.getElementById("bulkBox");
+
+  document.getElementById("yr").textContent = new Date().getFullYear();
 
   const CURRENCY_SYMBOL = { GBP:"£", USD:"$", EUR:"€", AUD:"$", CAD:"$", NZD:"$", AED:"AED ", SAR:"SAR ", PKR:"₨", INR:"₹" };
   function sym(){ return CURRENCY_SYMBOL[currencyEl.value || "GBP"] || ""; }
@@ -662,7 +638,17 @@
     } else fxRow.style.display = "none";
   }
 
-  // Example presets
+  function csvEscape(s){ const t = String(s ?? ""); return /[",\n]/.test(t) ? `"${t.replaceAll('"','""')}"` : t; }
+  function downloadText(filename, text){
+    const blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  // ---- Presets (examples) ----
   const PRESETS = [
     { id:"manual", name:"Manual (enter fees yourself)", feePct:0, feeFixed:0, adsPct:0, returnPct:0 },
     { id:"ebay_uk_typical", name:"eBay UK (typical example)", feePct:12.8, feeFixed:0.30, adsPct:0, returnPct:3 },
@@ -690,7 +676,6 @@
   function totalFees(sell, feePct, feeFixed, adsPct){
     return sell * (feePct/100) + feeFixed + sell * (adsPct/100);
   }
-
   function computeRowProfit(sell,cost,ship,misc,feePct,feeFixed,adsPct,returnPct){
     const fees = totalFees(sell, feePct, feeFixed, adsPct);
     const expectedReturnImpact = sell * (returnPct/100);
@@ -752,13 +737,12 @@
       return;
     }
     sellPriceEl.value = sell.toFixed(2);
-    const out = computeProfit();
+    computeProfit();
 
     o1v.textContent = money(sell);
     o1hint.textContent = `Required selling price to target ~${money(target)} profit (estimate).`;
     o2hint.textContent = "Implied margin at that selling price.";
     updateFXLine(sell);
-    return out;
   }
 
   // Modes
@@ -788,7 +772,7 @@
     return computeProfit();
   }
 
-  // Access + profile
+  // ---- Access + profile ----
   let CURRENT_PROFILE = null;
   let CURRENT_USER = null;
 
@@ -834,27 +818,9 @@
   function enableProUI(isPro){
     pdfBtn.disabled = !isPro;
     shareBtn.disabled = !isPro;
-
-    // competitor lock tag
     compStatus.textContent = isPro ? "Unlocked" : "Trial limited";
-    // insights tag
     insStatus.textContent = isPro ? "Unlocked" : "Locked";
-
-    // Right side PRO storage
-    const proOnly = !isPro;
-    document.getElementById("saveCurrentBtn").disabled = proOnly;
-    document.getElementById("loadSavedBtn").disabled = proOnly;
-    document.getElementById("deleteSavedBtn").disabled = proOnly;
-    document.getElementById("savedSel").disabled = proOnly;
-    document.getElementById("savedName").disabled = proOnly;
-
-    document.getElementById("saveMyPresetBtn").disabled = proOnly;
-    document.getElementById("loadMyPresetBtn").disabled = proOnly;
-    document.getElementById("deleteMyPresetBtn").disabled = proOnly;
-    document.getElementById("myPresetSel").disabled = proOnly;
-    document.getElementById("myPresetName").disabled = proOnly;
-
-    presetStatus.textContent = isPro ? "PRO enabled" : "Unlock PRO to use My Presets + Saved history + PDF + Share + Insights + Competitor.";
+    scenarioStatus.textContent = isPro ? "PRO enabled" : "Unlock PRO to save scenarios.";
   }
 
   function updateAccessUI(profile){
@@ -868,6 +834,7 @@
       enableProUI(true);
       refreshBulkLimitLine();
       refreshInsights();
+      refreshScenarioDropdown();
       return;
     }
 
@@ -885,6 +852,7 @@
     }
     refreshBulkLimitLine();
     refreshInsights();
+    refreshScenarioDropdown();
   }
 
   async function consumeReverseUseIfTrial(){
@@ -953,7 +921,7 @@
     compUsesLine.textContent = `Competitor uses: ${next}/${TRIAL_COMP_LIMIT} (Trial)`;
   }
 
-  // Payload + export helpers
+  // Export / Share
   function payload(){
     return {
       mode: MODE,
@@ -974,15 +942,6 @@
       positioning: positioning.value,
       floorBuffer: floorBuffer.value
     };
-  }
-  function csvEscape(s){ const t = String(s ?? ""); return /[",\n]/.test(t) ? `"${t.replaceAll('"','""')}"` : t; }
-  function downloadText(filename, text){
-    const blob = new Blob([text], {type:"text/plain;charset=utf-8"});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url; a.download = filename;
-    document.body.appendChild(a); a.click(); a.remove();
-    URL.revokeObjectURL(url);
   }
 
   document.getElementById("exportCsvBtn").addEventListener("click", ()=>{
@@ -1013,7 +972,7 @@
     shareStatus.textContent="Share link copied.";
   });
 
-  // Calculate button
+  // Calculate
   document.getElementById("calcBtn").addEventListener("click", async ()=>{
     try{
       o1hint.style.color = "";
@@ -1041,37 +1000,23 @@
     setMode("profit");
     refreshInsights();
     compToast.textContent = "—";
+    scenarioToast.textContent = "—";
   });
 
-  // ---- INSIGHTS (PRO) ----
+  // ---- INSIGHTS ----
   function solvePriceForMargin(targetMarginPct){
-    const cost = n(productCostEl.value);
-    const ship = n(shipCostEl.value);
-    const misc = n(miscCostEl.value);
-    const C = cost + ship + misc;
-
-    const feePct = clamp(n(feePctEl.value),0,99);
-    const adsPct = clamp(n(adsPctEl.value),0,99);
-    const pctFees = (feePct + adsPct)/100;
-
+    const C = n(productCostEl.value) + n(shipCostEl.value) + n(miscCostEl.value);
+    const pctFees = (clamp(n(feePctEl.value),0,99) + clamp(n(adsPctEl.value),0,99))/100;
     const fixed = clamp(n(feeFixedEl.value),0,999999);
-
     const m = clamp(targetMarginPct/100, -0.99, 0.95);
     const denom = (1 - pctFees) - m;
     if (denom <= 0.01) return null;
     return (C + fixed) / denom;
   }
   function solveBreakEvenPrice(){
-    const cost = n(productCostEl.value);
-    const ship = n(shipCostEl.value);
-    const misc = n(miscCostEl.value);
-    const C = cost + ship + misc;
-
-    const feePct = clamp(n(feePctEl.value),0,99);
-    const adsPct = clamp(n(adsPctEl.value),0,99);
-    const pctFees = (feePct + adsPct)/100;
+    const C = n(productCostEl.value) + n(shipCostEl.value) + n(miscCostEl.value);
+    const pctFees = (clamp(n(feePctEl.value),0,99) + clamp(n(adsPctEl.value),0,99))/100;
     const fixed = clamp(n(feeFixedEl.value),0,999999);
-
     const denom = 1 - pctFees;
     if (denom <= 0.01) return null;
     return (C + fixed) / denom;
@@ -1079,15 +1024,9 @@
   function maxAffordableAdsPct(){
     const sell = n(sellPriceEl.value);
     if (sell <= 0) return null;
-
-    const cost = n(productCostEl.value);
-    const ship = n(shipCostEl.value);
-    const misc = n(miscCostEl.value);
-    const C = cost + ship + misc;
-
+    const C = n(productCostEl.value) + n(shipCostEl.value) + n(miscCostEl.value);
     const feePct = clamp(n(feePctEl.value),0,99);
     const feeFixed = clamp(n(feeFixedEl.value),0,999999);
-
     const room = sell - (C + sell*(feePct/100) + feeFixed);
     const max = (room / sell) * 100;
     return clamp(max, 0, 99);
@@ -1096,38 +1035,27 @@
     const bullets = [];
     let label = "Balanced";
     let explain = "Looks workable based on your inputs.";
-
     if (profit < 0){
-      label = "High risk";
-      explain = "Pricing below cost + fees.";
+      label = "High risk"; explain = "Pricing below cost + fees.";
       bullets.push("You are losing money on this price. Raise price or reduce costs/fees.");
     } else if (margin < 5){
-      label = "Thin margin";
-      explain = "Small shocks can wipe profit.";
+      label = "Thin margin"; explain = "Small shocks can wipe profit.";
       bullets.push("Margin is very thin. Any fee change, discount, or return can flip to loss.");
     } else if (margin < 10){
-      label = "Tight";
-      explain = "Okay, but sensitive.";
-      bullets.push("Margin is tight. Consider setting a minimum margin target (10–20%).");
+      label = "Tight"; explain = "Okay, but sensitive.";
+      bullets.push("Margin is tight. Consider a minimum margin target (10–20%).");
     } else {
       bullets.push("Margin seems reasonable for many categories (still depends on your business).");
     }
-
-    if (fees > Math.max(0, profit) * 2){
-      bullets.push("Fees + ads are consuming a large share of your profit. Watch promo spend.");
-    }
-    if (returnImpact > Math.max(0, profit) * 0.7){
-      bullets.push("Return sensitivity is high relative to profit. Consider buffer pricing or better QC.");
-    }
+    if (fees > Math.max(0, profit) * 2) bullets.push("Fees + ads consume a large share of profit. Watch promo spend.");
+    if (returnImpact > Math.max(0, profit) * 0.7) bullets.push("Return sensitivity is high relative to profit. Consider buffer pricing or better QC.");
     return { label, explain, bullets };
   }
 
   function refreshInsights(){
     const isPro = !!CURRENT_PROFILE?.paid;
     const sell = n(sellPriceEl.value);
-    const cost = n(productCostEl.value);
-    const ship = n(shipCostEl.value);
-    const misc = n(miscCostEl.value);
+    const C = n(productCostEl.value) + n(shipCostEl.value) + n(miscCostEl.value);
     const feePct = clamp(n(feePctEl.value),0,99);
     const feeFixed = clamp(n(feeFixedEl.value),0,999999);
     const adsPct = clamp(n(adsPctEl.value),0,99);
@@ -1135,7 +1063,7 @@
 
     const fees = totalFees(sell, feePct, feeFixed, adsPct);
     const retImpact = sell * (retPct/100);
-    const profit = sell - (cost + ship + misc + fees);
+    const profit = sell - (C + fees);
     const margin = sell > 0 ? (profit/sell)*100 : 0;
 
     const targetM = clamp(n(targetMarginInput.value), 0, 80);
@@ -1188,7 +1116,8 @@
   refreshInsightsBtn.addEventListener("click", ()=>{ refreshInsights(); insToast.textContent="Updated."; });
   targetMarginInput.addEventListener("input", ()=>refreshInsights());
 
-  // ---- COMPETITOR MODE (manual) ----
+  // ---- COMPETITOR MODE + NEW APPLY/SAVE ----
+  let LAST_COMP_SUGGEST = null; // number
   function median3(a,b,c){
     const arr=[a,b,c].filter(x=>x>0).sort((x,y)=>x-y);
     if (!arr.length) return null;
@@ -1220,6 +1149,10 @@
       why = "Premium (~3%) only if your offer is clearly better (speed, bundle, trust).";
     }
 
+    // store and unlock the apply button
+    LAST_COMP_SUGGEST = suggested;
+    useSuggestedBtn.disabled = false;
+
     compMedian.textContent = money(med);
     compSuggest.textContent = money(suggested);
     compWhy.textContent = why;
@@ -1232,7 +1165,7 @@
     } else {
       compCheck.textContent = "Looks viable";
       compCheck.className = "good";
-      compCheck2.textContent = "Your suggested price stays above the safe floor (based on your inputs).";
+      compCheck2.textContent = "Suggested price stays above the safe floor (based on your inputs).";
     }
 
     const bullets = [];
@@ -1251,15 +1184,128 @@
         if (left <= 0) throw new Error("Trial ended. Unlock PRO to use competitor mode.");
         await consumeCompUseIfTrial();
       }
-      // ensure current calc updated for break-even
       computeProfit();
       refreshInsights();
       runCompetitor();
       compStatus.textContent = CURRENT_PROFILE.paid ? "Unlocked" : "Trial limited";
       compToast.textContent = "Done.";
+      scenarioToast.textContent = "Tip: click “Use suggested price” to apply.";
     } catch(e){
       compToast.textContent = e.message || "Failed.";
     }
+  });
+
+  // NEW: apply suggested price into selling price
+  useSuggestedBtn.addEventListener("click", ()=>{
+    if (!LAST_COMP_SUGGEST || !Number.isFinite(LAST_COMP_SUGGEST)){
+      scenarioToast.textContent = "Run competitor mode first.";
+      return;
+    }
+    sellPriceEl.value = LAST_COMP_SUGGEST.toFixed(2);
+    setMode("profit");
+    computeProfit();
+    refreshInsights();
+    scenarioToast.textContent = "Applied suggested price to Selling price ✅";
+  });
+
+  // ---- Scenario storage (PRO) — stored locally for speed ----
+  function scenarioKey(){ return `pp_scenarios_${CURRENT_USER?.id || "anon"}`; }
+  function loadScenarios(){
+    try{
+      const raw = localStorage.getItem(scenarioKey());
+      const arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr : [];
+    } catch { return []; }
+  }
+  function saveScenarios(arr){
+    localStorage.setItem(scenarioKey(), JSON.stringify(arr));
+  }
+  function refreshScenarioDropdown(){
+    scenarioSel.innerHTML = `<option value="">—</option>`;
+    if (!CURRENT_USER) return;
+    const arr = loadScenarios();
+    arr.forEach((s, idx)=>{
+      const opt = document.createElement("option");
+      opt.value = String(idx);
+      opt.textContent = s.name || `Scenario #${idx+1}`;
+      scenarioSel.appendChild(opt);
+    });
+    scenarioStatus.textContent = CURRENT_PROFILE?.paid ? `${arr.length} saved` : "PRO required to save";
+  }
+
+  function currentScenarioPayload(){
+    return {
+      name: scenarioName.value.trim() || "",
+      created_at: new Date().toISOString(),
+      suggested_price: (LAST_COMP_SUGGEST && Number.isFinite(LAST_COMP_SUGGEST)) ? Number(LAST_COMP_SUGGEST.toFixed(2)) : null,
+      data: payload()
+    };
+  }
+
+  function doSaveScenario(){
+    if (!CURRENT_PROFILE?.paid){
+      scenarioToast.textContent = "Saving scenarios is PRO.";
+      scenarioStatus.textContent = "Unlock PRO to save.";
+      return;
+    }
+    const name = scenarioName.value.trim();
+    if (!name){
+      scenarioToast.textContent = "Write a scenario name first.";
+      return;
+    }
+    const arr = loadScenarios();
+    // keep it clean: limit to 50 scenarios (still unlimited enough)
+    if (arr.length >= 50) arr.shift();
+    arr.push(currentScenarioPayload());
+    saveScenarios(arr);
+    refreshScenarioDropdown();
+    scenarioToast.textContent = "Scenario saved ✅";
+    scenarioStatus.textContent = "Saved.";
+  }
+
+  saveScenarioBtn.addEventListener("click", doSaveScenario);
+  saveScenarioBtn2.addEventListener("click", doSaveScenario);
+
+  loadScenarioBtn.addEventListener("click", ()=>{
+    const idx = Number(scenarioSel.value);
+    const arr = loadScenarios();
+    const s = arr[idx];
+    if (!s){ scenarioStatus.textContent = "Choose a scenario."; return; }
+    const d = s.data || {};
+    if (d.currency) currencyEl.value = d.currency;
+    fxRateEl.value = d.fxRate || "";
+    presetSel.value = d.preset || "manual";
+    sellPriceEl.value = String(d.sellPrice ?? "0");
+    productCostEl.value = String(d.productCost ?? "0");
+    shipCostEl.value = String(d.shipCost ?? "0");
+    miscCostEl.value = String(d.miscCost ?? "0");
+    feePctEl.value = String(d.feePct ?? "0");
+    feeFixedEl.value = String(d.feeFixed ?? "0");
+    adsPctEl.value = String(d.adsPct ?? "0");
+    returnPctEl.value = String(d.returnPct ?? "0");
+    targetProfitEl.value = String(d.targetProfit ?? "0");
+    targetMarginInput.value = String(d.targetMargin ?? "15");
+    c1.value = String(d.c1 ?? "0"); c2.value = String(d.c2 ?? "0"); c3.value = String(d.c3 ?? "0");
+    positioning.value = String(d.positioning ?? "undercut");
+    floorBuffer.value = String(d.floorBuffer ?? "5");
+    LAST_COMP_SUGGEST = (s.suggested_price != null) ? Number(s.suggested_price) : null;
+    useSuggestedBtn.disabled = !(LAST_COMP_SUGGEST && Number.isFinite(LAST_COMP_SUGGEST));
+    setMode(d.mode || "profit");
+    computeProfit();
+    refreshInsights();
+    scenarioStatus.textContent = "Loaded ✅";
+    scenarioToast.textContent = "Scenario loaded.";
+  });
+
+  deleteScenarioBtn.addEventListener("click", ()=>{
+    const idx = Number(scenarioSel.value);
+    const arr = loadScenarios();
+    if (!arr[idx]){ scenarioStatus.textContent="Choose a scenario."; return; }
+    arr.splice(idx,1);
+    saveScenarios(arr);
+    refreshScenarioDropdown();
+    scenarioStatus.textContent="Deleted.";
+    scenarioToast.textContent="Scenario deleted.";
   });
 
   // ---- BULK ----
@@ -1476,7 +1522,7 @@
     refreshBulkLimitLine();
   });
 
-  // Reviews submit (kept as-is)
+  // Reviews
   let selectedStars = 5;
   const starsRow = document.getElementById("starsRow");
   const reviewStatus = document.getElementById("reviewStatus");
@@ -1518,7 +1564,7 @@
     location.href = "login.html";
   });
 
-  // Import from share hash
+  // Share import hash (optional)
   function base64urlDecodeToString(b64url){
     let s = (b64url||"").replace(/-/g, "+").replace(/_/g, "/");
     while (s.length % 4) s += "=";
@@ -1534,7 +1580,6 @@
       const token = decodeURIComponent(m[1]);
       const jsonStr = base64urlDecodeToString(token);
       const data = JSON.parse(jsonStr);
-      // load only safe fields
       if (data.currency) currencyEl.value = data.currency;
       fxRateEl.value = data.fxRate || "";
       presetSel.value = data.preset || "manual";
@@ -1562,6 +1607,10 @@
     history.replaceState(null, "", location.pathname);
   }
 
+  // Calc initial + reactive
+  [sellPriceEl, productCostEl, shipCostEl, miscCostEl, feePctEl, feeFixedEl, adsPctEl, returnPctEl, fxRateEl, currencyEl]
+    .forEach(el=> el.addEventListener("input", ()=>{ computeProfit(); refreshInsights(); }));
+
   // Boot
   (async ()=>{
     try{
@@ -1576,29 +1625,46 @@
       const profile = await ensureProfile(user.id);
       updateAccessUI(profile);
 
-      // bulk initial
+      // bulk initial rows
       clearBulkRows();
       const initialRows = profile.paid ? 5 : TRIAL_BULK_MAX_ROWS;
       for (let i=0;i<initialRows;i++) addBulkRow();
 
-      // stabilize UI
       setMode("profit");
       computeProfit();
       refreshInsights();
-      compStatus.textContent = profile.paid ? "Unlocked" : "Trial limited";
+      refreshScenarioDropdown();
+      useSuggestedBtn.disabled = true;
 
       tryImportFromHash();
 
-      // reactive refresh
-      [sellPriceEl, productCostEl, shipCostEl, miscCostEl, feePctEl, feeFixedEl, adsPctEl, returnPctEl, fxRateEl, currencyEl]
-        .forEach(el=> el.addEventListener("input", ()=>{ computeProfit(); refreshInsights(); }));
-
-      accessPill.textContent = profile.paid ? "Unlocked (PRO)" : accessPill.textContent;
+      // Actions that need profile
+      document.getElementById("calcBtn").disabled = false;
     } catch(e){
       accessPill.textContent="Access check failed";
       accessPill.className="pill bad";
     }
   })();
+
+  // Profit / Reverse helper
+  async function computeReverseWithLimit(){
+    await consumeReverseUseIfTrial();
+    computeReverse();
+    refreshInsights();
+  }
+
+  // Override Calculate for reverse counting
+  document.getElementById("calcBtn").addEventListener("click", async ()=>{
+    try{
+      o1hint.style.color = "";
+      if (MODE==="reverse") await computeReverseWithLimit();
+      else { computeProfit(); refreshInsights(); }
+    } catch(e){
+      o1hint.textContent = e.message || "Error.";
+      o1hint.style.color = "var(--bad)";
+    }
+  });
+
 </script>
 </body>
 </html>
