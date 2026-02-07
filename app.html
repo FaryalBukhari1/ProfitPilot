@@ -122,7 +122,7 @@
     <!-- LEFT -->
     <div class="card" id="calcCard">
       <div class="title">Calculator</div>
-      <div class="small">Profit = normal. Reverse = target profit → required selling price. Bulk = enter multiple items (PRO).</div>
+      <div class="small">Profit = normal. Reverse = target profit → required selling price. Bulk = multiple items (PRO).</div>
 
       <div class="tabs">
         <div class="tab active" id="tabProfit">Profit</div>
@@ -372,6 +372,7 @@
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
+  // UI
   const accessPill = document.getElementById("accessPill");
   const reverseUsesLine = document.getElementById("reverseUsesLine");
   const shareStatus = document.getElementById("shareStatus");
@@ -458,7 +459,7 @@
     } else fxRow.style.display = "none";
   }
 
-  // Example presets
+  // Example presets (reference only)
   const PRESETS = [
     { id:"manual", name:"Manual (enter fees yourself)", feePct:0, feeFixed:0, adsPct:0, returnPct:0 },
     { id:"ebay_uk_typical", name:"eBay UK (typical example)", feePct:12.8, feeFixed:0.30, adsPct:0, returnPct:3 },
@@ -485,7 +486,6 @@
   function totalFees(sell, feePct, feeFixed, adsPct){
     return sell * (feePct/100) + feeFixed + sell * (adsPct/100);
   }
-
   function computeProfitCore(sell,cost,ship,misc,feePct,feeFixed,adsPct,returnPct){
     const fees = totalFees(sell, feePct, feeFixed, adsPct);
     const expectedReturnImpact = sell * (returnPct/100);
@@ -533,26 +533,25 @@
 
   function computeReverse(){
     const target = n(targetProfitEl.value);
-    if (target<=0){ o1v.textContent="—"; o2v.textContent="—"; o1hint.textContent="Enter a target profit."; o2hint.textContent="—"; return; }
+    if (target<=0){
+      o1v.textContent="—"; o2v.textContent="—";
+      o1hint.textContent="Enter a target profit.";
+      o2hint.textContent="—";
+      return;
+    }
     const sell = reverseSellPriceForTargetProfit(target);
-    if (!sell){ o1hint.textContent="Reverse calc failed. Check fee % values."; return; }
+    if (!sell){
+      o1hint.textContent="Reverse calc failed. Check fee % values.";
+      o2hint.textContent="—";
+      return;
+    }
     sellPriceEl.value = sell.toFixed(2);
 
-    const feePct = clamp(n(feePctEl.value),0,99);
-    const feeFixed = clamp(n(feeFixedEl.value),0,999999);
-    const adsPct = clamp(n(adsPctEl.value),0,99);
-    const returnPct = clamp(n(returnPctEl.value),0,99);
-    const cost = n(productCostEl.value);
-    const ship = n(shipCostEl.value);
-    const misc = n(miscCostEl.value);
+    // show implied margin at that sell
+    computeProfit();
 
-    const r = computeProfitCore(sell,cost,ship,misc,feePct,feeFixed,adsPct,returnPct);
-
+    // BUT for reverse mode, headline should show required selling price
     o1v.textContent = money(sell);
-    o2v.textContent = pct(r.margin);
-    feesOut.textContent = money(r.fees);
-    returnOut.textContent = money(r.expectedReturnImpact);
-
     o1hint.textContent = `Required selling price to target ~${money(target)} profit (estimate).`;
     o2hint.textContent = "Implied margin at that selling price.";
     updateFXLine(sell);
@@ -573,6 +572,7 @@
     if (m==="profit"){ o1h.textContent="Estimated profit"; o2h.textContent="Margin"; }
     if (m==="reverse"){ o1h.textContent="Required selling price"; o2h.textContent="Implied margin"; }
     if (m==="bulk"){ bulkStatus.textContent = CURRENT_PROFILE?.paid ? "Add rows, enter values, then Run bulk." : "Unlock PRO to use Bulk mode."; }
+
     compute();
   }
   tabProfit.addEventListener("click", ()=>setMode("profit"));
@@ -616,21 +616,10 @@
     return prof;
   }
 
-  async function consumeReverseUse(){
-    const { data, error } = await supabase.rpc("consume_reverse_use", { p_limit: TRIAL_REVERSE_LIMIT });
-    if (error){
-      const msg = (error.message || "").toLowerCase();
-      if (msg.includes("limit_reached")) throw new Error(`Trial reverse limit reached (${TRIAL_REVERSE_LIMIT}). Unlock PRO for unlimited.`);
-      throw new Error(error.message || "Reverse limit check failed.");
-    }
-    const next = Number(data || 0);
-    CURRENT_PROFILE.reverse_uses = next;
-    reverseUsesLine.textContent = `Reverse uses: ${next}/${TRIAL_REVERSE_LIMIT} (Trial)`;
-  }
-
   function enableProUI(isPro){
     pdfBtn.disabled = !isPro;
     shareBtn.disabled = !isPro;
+
     bulkRunBtn.disabled = !isPro;
     bulkAddRowBtn.disabled = !isPro;
     bulkClearBtn.disabled = !isPro;
@@ -648,6 +637,7 @@
   function updateAccessUI(profile){
     CURRENT_PROFILE = profile;
 
+    // show reverse uses
     if (profile.paid){
       accessPill.textContent = "Unlocked (PRO)";
       accessPill.className = "pill ok";
@@ -657,7 +647,7 @@
     }
 
     enableProUI(false);
-    reverseUsesLine.textContent = `Reverse uses: ${profile.reverse_uses ?? 0}/${TRIAL_REVERSE_LIMIT} (Trial)`;
+    reverseUsesLine.textContent = `Reverse uses: ${(profile.reverse_uses ?? 0)}/${TRIAL_REVERSE_LIMIT} (Trial)`;
 
     const left = daysLeft(profile.trial_start);
     if (left > 0){
@@ -669,10 +659,33 @@
     }
   }
 
-  // Calculate (single)
+  // Reverse trial limiter (NO RPC)
+  async function consumeReverseUseIfTrial(){
+    if (!CURRENT_USER || !CURRENT_PROFILE) throw new Error("Session missing. Refresh and log in again.");
+    if (CURRENT_PROFILE.paid) return; // unlimited
+
+    const used = Number(CURRENT_PROFILE.reverse_uses || 0);
+    if (used >= TRIAL_REVERSE_LIMIT){
+      throw new Error(`Trial reverse limit reached (${TRIAL_REVERSE_LIMIT}). Unlock PRO for unlimited.`);
+    }
+
+    const next = used + 1;
+    const { error } = await supabase
+      .from("profiles")
+      .update({ reverse_uses: next })
+      .eq("id", CURRENT_USER.id);
+
+    if (error) throw new Error(error.message || "Could not update reverse uses.");
+
+    CURRENT_PROFILE.reverse_uses = next;
+    reverseUsesLine.textContent = `Reverse uses: ${next}/${TRIAL_REVERSE_LIMIT} (Trial)`;
+  }
+
+  // Calculate click
   document.getElementById("calcBtn").addEventListener("click", async ()=>{
     try{
-      if (MODE==="reverse" && !CURRENT_PROFILE?.paid) await consumeReverseUse();
+      o1hint.style.color = "";
+      if (MODE==="reverse") await consumeReverseUseIfTrial();
       compute();
     } catch(e){
       o1hint.textContent = e.message || "Error.";
@@ -758,6 +771,10 @@
     return inp;
   }
 
+  function renumberBulkRows(){
+    [...bulkTbody.children].forEach((tr,i)=> tr.children[0].textContent = String(i+1));
+  }
+
   function addBulkRow(initial={}){
     const tr = document.createElement("tr");
 
@@ -774,9 +791,7 @@
     const adsPct = mkCellInput(initial.adsPct ?? adsPctEl.value);
     const retPct = mkCellInput(initial.returnPct ?? returnPctEl.value);
 
-    const inputs = [sell,cost,ship,misc,feePct,feeFixed,adsPct,retPct];
-
-    inputs.forEach(inp=>{
+    [sell,cost,ship,misc,feePct,feeFixed,adsPct,retPct].forEach(inp=>{
       const td = document.createElement("td");
       td.appendChild(inp);
       tr.appendChild(td);
@@ -802,15 +817,9 @@
     actTd.appendChild(delBtn);
     tr.appendChild(actTd);
 
-    // Save references on row for running
     tr._pp = { sell,cost,ship,misc,feePct,feeFixed,adsPct,retPct, profitTd, marginTd };
-
     bulkTbody.appendChild(tr);
     renumberBulkRows();
-  }
-
-  function renumberBulkRows(){
-    [...bulkTbody.children].forEach((tr,i)=> tr.children[0].textContent = String(i+1));
   }
 
   function clearBulkRows(){
@@ -852,10 +861,10 @@
     applyFeesToAll();
   });
 
-  function computeProfitCoreRow(sell,cost,ship,misc,feePct,feeFixed,adsPct,returnPct){
-    const fees = sell * (feePct/100) + feeFixed + sell * (adsPct/100);
-    const profit = sell - (cost + ship + misc + fees);
-    const margin = sell > 0 ? (profit/sell)*100 : 0;
+  function computeRow(sell,cost,ship,misc,feePct,feeFixed,adsPct,returnPct){
+    const fees = sell*(feePct/100) + feeFixed + sell*(adsPct/100);
+    const profit = sell - (cost+ship+misc+fees);
+    const margin = sell>0 ? (profit/sell)*100 : 0;
     return { profit, margin, fees };
   }
 
@@ -864,12 +873,11 @@
       bulkStatus.textContent = "Unlock PRO to run bulk scans.";
       return;
     }
-
     const trs = [...bulkTbody.children];
     if (!trs.length){ bulkStatus.textContent = "Add at least 1 row."; return; }
 
     const out = [];
-    trs.forEach((tr)=>{
+    trs.forEach(tr=>{
       const r = tr._pp;
       const sell = n(r.sell.value);
       const cost = n(r.cost.value);
@@ -880,15 +888,13 @@
       const adsPct = clamp(n(r.adsPct.value),0,99);
       const retPct = clamp(n(r.retPct.value),0,99);
 
-      const res = computeProfitCoreRow(sell,cost,ship,misc,feePct,feeFixed,adsPct,retPct);
-
+      const res = computeRow(sell,cost,ship,misc,feePct,feeFixed,adsPct,retPct);
       r.profitTd.textContent = money(res.profit);
       r.profitTd.className = res.profit >= 0 ? "good" : "bad";
-
       r.marginTd.textContent = pct(res.margin);
       r.marginTd.className = res.margin >= 10 ? "good" : (res.margin < 0 ? "bad" : "");
 
-      out.push({ sell,cost,ship,misc,feePct,feeFixed,adsPct,retPct, profit:res.profit, margin:res.margin, fees:res.fees });
+      out.push({ sell,cost,ship,misc,feePct,feeFixed,adsPct,retPct, fees:res.fees, profit:res.profit, margin:res.margin });
     });
 
     bulkLastRows = out;
@@ -904,9 +910,7 @@
       bulkStatus.textContent = "Run bulk first.";
       return;
     }
-    const rows = [
-      ["sell","cost","ship","misc","feePct","feeFixed","adsPct","returnPct","fees","profit","margin"]
-    ];
+    const rows = [["sell","cost","ship","misc","feePct","feeFixed","adsPct","returnPct","fees","profit","margin"]];
     bulkLastRows.forEach(r=>{
       rows.push([r.sell,r.cost,r.ship,r.misc,r.feePct,r.feeFixed,r.adsPct,r.retPct,r.fees,r.profit,r.margin]);
     });
@@ -978,7 +982,7 @@
     presetStatus.textContent="Deleted.";
   });
 
-  // ---- Reviews submit ----
+  // Reviews submit
   let selectedStars = 5;
   const starsRow = document.getElementById("starsRow");
   const reviewStatus = document.getElementById("reviewStatus");
@@ -1019,25 +1023,6 @@
     location.href = "login.html";
   });
 
-  // Enable PRO UI
-  function enableProUI(isPro){
-    pdfBtn.disabled = !isPro;
-    shareBtn.disabled = !isPro;
-
-    bulkRunBtn.disabled = !isPro;
-    bulkAddRowBtn.disabled = !isPro;
-    bulkClearBtn.disabled = !isPro;
-    bulkApplyFeesBtn.disabled = !isPro;
-    bulkExportBtn.disabled = !isPro;
-
-    presetStatus.textContent = isPro ? "PRO enabled" : "Unlock PRO to use My Presets + PDF + Share + Bulk.";
-    saveMyPresetBtn.disabled = !isPro;
-    loadMyPresetBtn.disabled = !isPro;
-    deleteMyPresetBtn.disabled = !isPro;
-    myPresetSel.disabled = !isPro;
-    myPresetName.disabled = !isPro;
-  }
-
   // Boot
   (async ()=>{
     try{
@@ -1054,16 +1039,16 @@
 
       if (profile.paid) await loadMyPresets();
 
-      // Initialize bulk with 5 rows for PRO users
-      if (profile.paid){
-        clearBulkRows();
-        for (let i=0;i<5;i++) addBulkRow();
-      } else {
-        clearBulkRows();
-      }
+      // Always initialize bulk table (visible), but PRO-gated controls
+      clearBulkRows();
+      const initialRows = profile.paid ? 5 : 3;
+      for (let i=0;i<initialRows;i++) addBulkRow();
 
+      // Default mode
       setMode("profit");
       computeProfit();
+
+      accessPill.textContent = profile.paid ? "Unlocked (PRO)" : accessPill.textContent;
     } catch(e){
       accessPill.textContent="Access check failed";
       accessPill.className="pill bad";
