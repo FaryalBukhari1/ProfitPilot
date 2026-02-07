@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>FAQ — Ukwebtools</title>
+  <meta name="description" content="Frequently asked questions for Ukwebtools and ProfitPilot.">
+  <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
+  <style>
+    :root{--bg:#f7f9fc;--bg2:#eef3ff;--txt:#0b1220;--muted:#5b6474;--card:#fff;--line:rgba(16,24,40,.10);--accent:#0ea5a4;--shadow:0 12px 32px rgba(16,24,40,.08)}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--txt);
+      background:radial-gradient(900px 500px at 20% 0%, rgba(14,165,164,.12), transparent 55%),
+              radial-gradient(900px 500px at 80% 0%, rgba(79,70,229,.10), transparent 55%),
+              linear-gradient(180deg,var(--bg2),var(--bg));}
+    a{color:var(--accent);text-decoration:none}
+    .wrap{max-width:900px;margin:0 auto;padding:28px 16px}
+    .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+    .btn{padding:10px 14px;border-radius:999px;border:1px solid var(--line);background:#fff;box-shadow:0 6px 20px rgba(16,24,40,.06);font-weight:600}
+    .card{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:var(--shadow)}
+    h1{margin:0 0 8px;font-size:28px}
+    p{color:var(--muted);line-height:1.7}
+    details{border:1px solid var(--line);border-radius:14px;padding:14px;background:rgba(255,255,255,.9);margin-top:10px}
+    summary{cursor:pointer;font-weight:800}
+    .small{font-size:12px;color:var(--muted)}
+    footer{margin-top:22px;text-align:center;color:var(--muted);font-size:12px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div style="font-weight:900">Ukwebtools</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <a class="btn" href="index.html">Home</a>
+        <a class="btn" href="privacy.html">Privacy</a>
+        <a class="btn" href="terms.html">Terms</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h1>FAQ</h1>
+      <p>Clear answers. No fluff.</p>
+
+      <details open>
+        <summary>Is ProfitPilot affiliated with eBay/Etsy/Amazon/any platform?</summary>
+        <p>No. ProfitPilot is an independent tool. Platform names may be used only as user reference.</p>
+      </details>
+
+      <details>
+        <summary>Is this financial or legal advice?</summary>
+        <p>No. Outputs are estimates based on your inputs. Use your judgement and consult professionals if needed.</p>
+      </details>
+
+      <details>
+        <summary>How does the free trial work?</summary>
+        <p>You get 5 days of access. Some advanced features are limited during trial (for example reverse pricing and competitor runs).</p>
+      </details>
+
+      <details>
+        <summary>Is PRO a subscription?</summary>
+        <p>No. PRO is a one-time purchase for unlimited access (as listed on the sales page).</p>
+      </details>
+
+      <details>
+        <summary>How do I unlock PRO after purchase?</summary>
+        <p>After purchase, Gumroad sends your license key by email. Paste it into the app unlock section to activate PRO.</p>
+      </details>
+
+      <details>
+        <summary>Why do you require login?</summary>
+        <p>Login is used to keep your trial period and PRO access linked to your account and to reduce abuse.</p>
+      </details>
+
+      <details>
+        <summary>Can I see reviews without logging in?</summary>
+        <p>Yes. The Reviews page is public. Login is only required to submit a review.</p>
+      </details>
+
+      <div class="small" style="margin-top:14px">
+        Still stuck? Email <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a>.
+      </div>
+    </div>
+
+    <footer>© <span id="yr"></span> Ukwebtools</footer>
+  </div>
+
+  <script>
+    document.getElementById("yr").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
