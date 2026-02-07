@@ -113,6 +113,31 @@
       line-height:1.6;
     }
 
+    /* Insights */
+    .ins{
+      border:1px solid rgba(79,70,229,.18);
+      background:linear-gradient(180deg, rgba(79,70,229,.10), rgba(255,255,255,.70));
+      border-radius:16px;
+      padding:12px;
+      margin-top:10px;
+    }
+    .insHead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+    .insGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+    @media(max-width:560px){.insGrid{grid-template-columns:1fr}}
+    .insItem{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.72);
+      border-radius:14px;
+      padding:10px;
+    }
+    .insItem .t{font-size:12px;color:var(--muted)}
+    .insItem .v{font-weight:900;margin-top:6px}
+    .insList{margin:10px 0 0;padding-left:18px;color:var(--muted);line-height:1.6;font-size:12px}
+    .tag{
+      padding:6px 10px;border-radius:999px;border:1px solid var(--line);
+      background:rgba(255,255,255,.78);font-size:12px;color:var(--muted);
+    }
+
     @media print{
       body{background:#fff}
       .nav, #controlsRow, #reviewsCard, #proCard, #logoutBtn, .btn.ghost, .tabs, #bulkTools, #bulkPasteBox, #importBanner {display:none !important}
@@ -256,6 +281,54 @@
             <div class="hint" id="fxNote">—</div>
           </div>
         </div>
+
+        <!-- ✅ INSIGHTS (NEW) -->
+        <div class="ins" id="insightsBox">
+          <div class="insHead">
+            <div>
+              <div style="font-weight:900">Insights (PRO)</div>
+              <div class="small">Decision support based on your inputs (estimates only).</div>
+            </div>
+            <span class="tag" id="insStatus">Locked</span>
+          </div>
+
+          <div class="insGrid">
+            <div class="insItem">
+              <div class="t">Break-even price</div>
+              <div class="v" id="bePrice">—</div>
+            </div>
+            <div class="insItem">
+              <div class="t">Price for target margin</div>
+              <div class="v" id="targetMarginPrice">—</div>
+              <div class="small">Target: <span id="targetMarginVal">15%</span></div>
+            </div>
+            <div class="insItem">
+              <div class="t">Max ads % you can afford</div>
+              <div class="v" id="maxAdsPct">—</div>
+              <div class="small">Keeps profit ≥ 0</div>
+            </div>
+            <div class="insItem">
+              <div class="t">Risk rating</div>
+              <div class="v" id="riskLabel">—</div>
+              <div class="small" id="riskExplain">—</div>
+            </div>
+          </div>
+
+          <ul class="insList" id="insBullets">
+            <li>Unlock PRO to see insights.</li>
+          </ul>
+
+          <div class="row" style="margin-top:10px">
+            <div>
+              <label>Target margin (%)</label>
+              <input id="targetMarginInput" inputmode="decimal" value="15">
+            </div>
+            <div style="display:flex;align-items:end;gap:10px;flex-wrap:wrap">
+              <button class="btn" id="refreshInsightsBtn">Refresh insights</button>
+              <span class="pill" id="insToast">—</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- BULK -->
@@ -328,14 +401,13 @@
     <div>
       <div class="card" id="proCard">
         <div class="title">PRO features</div>
-        <div class="small">Unlimited reverse, bulk unlimited, PDF export, share links, saved presets, saved history. One-time unlock.</div>
+        <div class="small">Unlimited reverse, bulk unlimited, PDF export, share links, saved presets, saved history, insights. One-time unlock.</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
           <a class="btn primary" href="https://stonevia.gumroad.com/l/goddhg" target="_blank" rel="noopener">Buy PRO</a>
           <a class="btn" href="reviews.html">See reviews</a>
         </div>
       </div>
 
-      <!-- ✅ SAVED HISTORY (NEW) -->
       <div class="card" style="margin-top:14px">
         <div class="title">Saved calculations (PRO)</div>
         <div class="small">Save a snapshot, reload it later, or delete it. This is your workspace.</div>
@@ -356,10 +428,6 @@
         <div class="row">
           <button class="btn primary" id="saveCurrentBtn">Save current</button>
           <span class="pill" id="savedStatus">—</span>
-        </div>
-
-        <div class="small" style="margin-top:10px">
-          Tip: Use consistent names like “eBay 12.99”, “Etsy 19.99”, “Wholesale test”.
         </div>
       </div>
 
@@ -383,10 +451,6 @@
         <div class="row">
           <button class="btn primary" id="saveMyPresetBtn">Save current fees</button>
           <span class="pill" id="presetStatus">—</span>
-        </div>
-
-        <div class="small" style="margin-top:10px">
-          Trial users can use example presets only. PRO users can save unlimited presets.
         </div>
       </div>
 
@@ -455,6 +519,20 @@
   const loadSavedBtn = document.getElementById("loadSavedBtn");
   const deleteSavedBtn = document.getElementById("deleteSavedBtn");
   const savedStatus = document.getElementById("savedStatus");
+
+  // Insights UI
+  const insightsBox = document.getElementById("insightsBox");
+  const insStatus = document.getElementById("insStatus");
+  const bePriceEl = document.getElementById("bePrice");
+  const targetMarginPriceEl = document.getElementById("targetMarginPrice");
+  const maxAdsPctEl = document.getElementById("maxAdsPct");
+  const riskLabelEl = document.getElementById("riskLabel");
+  const riskExplainEl = document.getElementById("riskExplain");
+  const insBullets = document.getElementById("insBullets");
+  const targetMarginInput = document.getElementById("targetMarginInput");
+  const targetMarginVal = document.getElementById("targetMarginVal");
+  const refreshInsightsBtn = document.getElementById("refreshInsightsBtn");
+  const insToast = document.getElementById("insToast");
 
   document.getElementById("yr").textContent = new Date().getFullYear();
 
@@ -563,6 +641,7 @@
       returnPctEl.value = String(p.returnPct ?? 0);
     }
     compute();
+    refreshInsights();
   });
 
   function totalFees(sell, feePct, feeFixed, adsPct){
@@ -652,6 +731,7 @@
     if (m==="reverse"){ o1h.textContent="Required selling price"; o2h.textContent="Implied margin"; }
     if (m==="bulk"){ refreshBulkLimitLine(); }
     compute();
+    refreshInsights();
   }
   tabProfit.addEventListener("click", ()=>setMode("profit"));
   tabReverse.addEventListener("click", ()=>setMode("reverse"));
@@ -714,12 +794,16 @@
     savedSel.disabled = !isPro;
     savedName.disabled = !isPro;
 
-    presetStatus.textContent = isPro ? "PRO enabled" : "Unlock PRO to use My Presets + PDF + Share + Saved history.";
+    presetStatus.textContent = isPro ? "PRO enabled" : "Unlock PRO to use My Presets + PDF + Share + Saved history + Insights.";
     saveMyPresetBtn.disabled = !isPro;
     loadMyPresetBtn.disabled = !isPro;
     deleteMyPresetBtn.disabled = !isPro;
     myPresetSel.disabled = !isPro;
     myPresetName.disabled = !isPro;
+
+    // Insights lock state
+    insStatus.textContent = isPro ? "Unlocked" : "Locked";
+    insStatus.className = isPro ? "tag" : "tag";
   }
 
   function updateAccessUI(profile){
@@ -731,6 +815,7 @@
       reverseUsesLine.textContent = "Reverse uses: Unlimited (PRO)";
       enableProUI(true);
       refreshBulkLimitLine();
+      refreshInsights();
       return;
     }
 
@@ -746,6 +831,7 @@
       accessPill.className = "pill bad";
     }
     refreshBulkLimitLine();
+    refreshInsights();
   }
 
   async function consumeReverseUseIfTrial(){
@@ -837,7 +923,8 @@
       feeFixed: feeFixedEl.value,
       adsPct: adsPctEl.value,
       returnPct: returnPctEl.value,
-      targetProfit: targetProfitEl.value
+      targetProfit: targetProfitEl.value,
+      targetMargin: targetMarginInput.value
     };
   }
   function csvEscape(s){ const t = String(s ?? ""); return /[",\n]/.test(t) ? `"${t.replaceAll('"','""')}"` : t; }
@@ -884,6 +971,7 @@
       o1hint.style.color = "";
       if (MODE==="reverse") await consumeReverseUseIfTrial();
       compute();
+      refreshInsights();
     } catch(e){
       o1hint.textContent = e.message || "Error.";
       o1hint.style.color = "var(--bad)";
@@ -898,8 +986,180 @@
     bulkPasteEl.value = "";
     clearBulkRows();
     importBanner.style.display = "none";
+    targetMarginInput.value = "15";
     setMode("profit");
+    refreshInsights();
   });
+
+  // ---- INSIGHTS (PRO) ----
+  function solvePriceForMargin(targetMarginPct){
+    // Solve sell such that profit/sell = m
+    // profit = sell - (C + sell*(fee+ads)% + fixed)
+    // profit = sell*(1 - pct) - (C + fixed)
+    // margin = profit/sell = (1 - pct) - (C + fixed)/sell
+    // => (C+fixed)/sell = (1 - pct) - m  => sell = (C+fixed) / ((1-pct) - m)
+    const cost = n(productCostEl.value);
+    const ship = n(shipCostEl.value);
+    const misc = n(miscCostEl.value);
+    const C = cost + ship + misc;
+
+    const feePct = clamp(n(feePctEl.value),0,99);
+    const adsPct = clamp(n(adsPctEl.value),0,99);
+    const pctFees = (feePct + adsPct)/100;
+
+    const fixed = clamp(n(feeFixedEl.value),0,999999);
+
+    const m = clamp(targetMarginPct/100, -0.99, 0.95);
+    const denom = (1 - pctFees) - m;
+    if (denom <= 0.01) return null;
+    return (C + fixed) / denom;
+  }
+
+  function solveBreakEvenPrice(){
+    const cost = n(productCostEl.value);
+    const ship = n(shipCostEl.value);
+    const misc = n(miscCostEl.value);
+    const C = cost + ship + misc;
+
+    const feePct = clamp(n(feePctEl.value),0,99);
+    const adsPct = clamp(n(adsPctEl.value),0,99);
+    const pctFees = (feePct + adsPct)/100;
+    const fixed = clamp(n(feeFixedEl.value),0,999999);
+
+    const denom = 1 - pctFees;
+    if (denom <= 0.01) return null;
+    return (C + fixed) / denom;
+  }
+
+  function maxAffordableAdsPct(){
+    // Find max ads% such that profit >= 0 at current sell & costs
+    // profit = sell - (C + sell*fee% + fixed + sell*ads%)
+    // => sell*ads% <= sell - (C + sell*fee% + fixed)
+    // => ads% <= [sell - (C + sell*fee% + fixed)] / sell
+    const sell = n(sellPriceEl.value);
+    if (sell <= 0) return null;
+
+    const cost = n(productCostEl.value);
+    const ship = n(shipCostEl.value);
+    const misc = n(miscCostEl.value);
+    const C = cost + ship + misc;
+
+    const feePct = clamp(n(feePctEl.value),0,99);
+    const feeFixed = clamp(n(feeFixedEl.value),0,999999);
+
+    const room = sell - (C + sell*(feePct/100) + feeFixed);
+    const max = (room / sell) * 100;
+    return clamp(max, 0, 99);
+  }
+
+  function riskAssessment(profit, margin, returnImpact, fees){
+    // simple heuristics, labeled as "signals"
+    if (!Number.isFinite(profit) || !Number.isFinite(margin)) return { label:"—", explain:"—", level:"neutral", bullets:[] };
+
+    const bullets = [];
+    let label = "Balanced";
+    let explain = "Looks workable based on your inputs.";
+    let level = "ok";
+
+    if (profit < 0){
+      label = "High risk";
+      explain = "You’re pricing below cost + fees.";
+      level = "bad";
+      bullets.push("You are losing money on this price. Raise price or reduce costs/fees.");
+    } else if (margin < 5){
+      label = "Thin margin";
+      explain = "Small shocks can wipe profit.";
+      level = "warn";
+      bullets.push("Margin is very thin. Any fee change, discount, or return can flip to loss.");
+    } else if (margin < 10){
+      label = "Tight";
+      explain = "Okay, but sensitive.";
+      level = "warn";
+      bullets.push("Margin is tight. Consider setting a minimum margin target (10–20%).");
+    } else {
+      bullets.push("Margin seems reasonable for many categories (still depends on your business).");
+    }
+
+    if (fees > Math.max(0, profit) * 2){
+      bullets.push("Fees + ads are consuming a large share of your profit. Watch promo spend.");
+    }
+    if (returnImpact > Math.max(0, profit) * 0.7){
+      bullets.push("Return sensitivity is high relative to profit. Consider buffer pricing or better QC.");
+    }
+
+    return { label, explain, level, bullets };
+  }
+
+  function refreshInsights(){
+    const isPro = !!CURRENT_PROFILE?.paid;
+    const sell = n(sellPriceEl.value);
+    const cost = n(productCostEl.value);
+    const ship = n(shipCostEl.value);
+    const misc = n(miscCostEl.value);
+    const feePct = clamp(n(feePctEl.value),0,99);
+    const feeFixed = clamp(n(feeFixedEl.value),0,999999);
+    const adsPct = clamp(n(adsPctEl.value),0,99);
+    const retPct = clamp(n(returnPctEl.value),0,99);
+
+    const fees = totalFees(sell, feePct, feeFixed, adsPct);
+    const retImpact = sell * (retPct/100);
+    const profit = sell - (cost + ship + misc + fees);
+    const margin = sell > 0 ? (profit/sell)*100 : 0;
+
+    const targetM = clamp(n(targetMarginInput.value), 0, 80);
+    targetMarginVal.textContent = targetM.toFixed(0) + "%";
+
+    if (!isPro){
+      bePriceEl.textContent = "—";
+      targetMarginPriceEl.textContent = "—";
+      maxAdsPctEl.textContent = "—";
+      riskLabelEl.textContent = "Locked";
+      riskExplainEl.textContent = "Unlock PRO to see insights.";
+      insBullets.innerHTML = `
+        <li>Break-even price</li>
+        <li>Price to hit a target margin</li>
+        <li>Max ads % you can afford</li>
+        <li>Risk signals based on inputs</li>
+      `;
+      insStatus.textContent = "Locked";
+      insToast.textContent = "—";
+      return;
+    }
+
+    insStatus.textContent = "Unlocked";
+
+    const be = solveBreakEvenPrice();
+    bePriceEl.textContent = (be && Number.isFinite(be)) ? money(be) : "—";
+
+    const tm = solvePriceForMargin(targetM);
+    targetMarginPriceEl.textContent = (tm && Number.isFinite(tm)) ? money(tm) : "—";
+
+    const maxAds = maxAffordableAdsPct();
+    maxAdsPctEl.textContent = (maxAds==null) ? "—" : maxAds.toFixed(1) + "%";
+
+    const ra = riskAssessment(profit, margin, retImpact, fees);
+    riskLabelEl.textContent = ra.label;
+    riskExplainEl.textContent = ra.explain;
+
+    // bullets (always include actionable)
+    const bullets = [];
+    if (sell <= 0) bullets.push("Enter a selling price to get meaningful insights.");
+    else {
+      bullets.push(`Break-even is ~${(be && Number.isFinite(be)) ? money(be) : "—"} (profit ≈ 0).`);
+      bullets.push(`To target ${targetM.toFixed(0)}% margin, price is ~${(tm && Number.isFinite(tm)) ? money(tm) : "—"}.`);
+      if (maxAds != null) bullets.push(`Max ads spend before loss: ~${maxAds.toFixed(1)}% (at current price/cost).`);
+      bullets.push(...ra.bullets);
+    }
+    insBullets.innerHTML = bullets.map(x=>`<li>${x}</li>`).join("");
+
+    insToast.textContent = "Updated.";
+  }
+
+  refreshInsightsBtn.addEventListener("click", ()=>{
+    refreshInsights();
+    insToast.textContent = "Updated.";
+  });
+  targetMarginInput.addEventListener("input", ()=>refreshInsights());
 
   // ---- BULK ----
   let bulkLastRows = [];
@@ -1168,6 +1428,7 @@
     presetSel.value = "manual";
     applyFeesToAll();
     compute();
+    refreshInsights();
     presetStatus.textContent="Loaded into fields.";
   });
 
@@ -1182,7 +1443,7 @@
     presetStatus.textContent="Deleted.";
   });
 
-  // ✅ Saved calculations (PRO)
+  // Saved calculations (PRO)
   async function loadSavedCalculations(){
     if (!CURRENT_PROFILE?.paid || !CURRENT_USER) return;
     savedStatus.textContent = "Loading…";
@@ -1224,6 +1485,7 @@
     returnPctEl.value = String(data.returnPct ?? "0");
 
     targetProfitEl.value = String(data.targetProfit ?? "0");
+    if (data.targetMargin != null) targetMarginInput.value = String(data.targetMargin);
 
     const m = (data.mode || "profit");
     if (m === "bulk") setMode("bulk");
@@ -1232,6 +1494,7 @@
 
     applyFeesToAll();
     compute();
+    refreshInsights();
 
     importBanner.style.display = "block";
     importBanner.textContent = "Loaded saved calculation ✅";
@@ -1386,6 +1649,7 @@
 
       setMode("profit");
       computeProfit();
+      refreshInsights();
 
       // PRO data
       if (profile.paid){
@@ -1396,11 +1660,16 @@
       // import share if any
       tryImportFromHash();
 
+      // reactive refresh
+      [sellPriceEl, productCostEl, shipCostEl, miscCostEl, feePctEl, feeFixedEl, adsPctEl, returnPctEl, fxRateEl, currencyEl]
+        .forEach(el=> el.addEventListener("input", ()=>{ computeProfit(); refreshInsights(); }));
+
     } catch(e){
       accessPill.textContent="Access check failed";
       accessPill.className="pill bad";
     }
   })();
+
 </script>
 </body>
 </html>
