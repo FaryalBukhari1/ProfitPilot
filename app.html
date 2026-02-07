@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>ProfitPilot — App</title>
-  <meta name="description" content="ProfitPilot helps sellers estimate profit, fees, and margins. Free trial with one-time PRO unlock.">
+  <meta name="description" content="ProfitPilot helps sellers estimate profit, margin, and fee sensitivity. Free trial with one-time PRO unlock.">
   <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
 
   <style>
@@ -12,7 +12,6 @@
       --bg:#f6f8fb;
       --bg2:#eef2ff;
       --card:#ffffff;
-      --card2:#f3f6ff;
       --txt:#0b1220;
       --muted:#5b6474;
       --line:rgba(16,24,40,.10);
@@ -88,7 +87,7 @@
       padding:12px;
       border-radius:14px;
       border:1px solid var(--line);
-      background:rgba(255,255,255,.85);
+      background:rgba(255,255,255,.88);
       color:var(--txt);
       outline:none;
     }
@@ -270,7 +269,7 @@
       <div class="divider"></div>
 
       <div class="title" style="margin:0 0 6px">Leave a review</div>
-      <div class="small">To keep trust high, reviews are public. Please be respectful — spam/abuse may be removed.</div>
+      <div class="small">Your review is public. Please be respectful — spam/abuse may be removed.</div>
 
       <label>Name (optional)</label>
       <input id="revName" placeholder="e.g., Faryal">
@@ -304,7 +303,6 @@
       <div class="title" style="margin:0 0 6px">Quick links</div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
         <a class="btn" href="reviews.html">Read public reviews</a>
-        <a class="btn" href="login.html">Login</a>
         <a class="btn" href="https://stonevia.gumroad.com/l/goddhg" target="_blank" rel="noopener">Buy PRO</a>
       </div>
     </div>
@@ -319,7 +317,7 @@
     <h2>Unlock ProfitPilot PRO</h2>
     <p class="small">
       Your free trial ended. Unlock PRO with a one-time purchase (no subscription).
-      After purchase, Gumroad emails your license key instantly. Paste it below to unlock.
+      Gumroad emails your license key instantly. Paste it below to unlock.
     </p>
 
     <div class="two">
@@ -380,22 +378,12 @@
   const paywall = document.getElementById("paywall");
   const buyBtn = document.getElementById("buyBtn");
   const logoutBtn = document.getElementById("logoutBtn");
-
   buyBtn.href = BUY_URL;
   document.getElementById("yr").textContent = new Date().getFullYear();
 
-  function n(v){
-    const x = parseFloat(String(v).replace(/,/g,""));
-    return Number.isFinite(x) ? x : 0;
-  }
-  function money(x){
-    const v = Number.isFinite(x) ? x : 0;
-    return "£" + v.toFixed(2);
-  }
-  function pct(x){
-    const v = Number.isFinite(x) ? x : 0;
-    return v.toFixed(1) + "%";
-  }
+  function n(v){ const x = parseFloat(String(v).replace(/,/g,"")); return Number.isFinite(x) ? x : 0; }
+  function money(x){ const v = Number.isFinite(x) ? x : 0; return "£" + v.toFixed(2); }
+  function pct(x){ const v = Number.isFinite(x) ? x : 0; return v.toFixed(1) + "%"; }
   function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
 
   const PRESETS = [
@@ -427,6 +415,7 @@
       adsPctEl.value = String(p.adsPct ?? 0);
       retPctEl.value = String(p.returnPct ?? 0);
     }
+    compute();
   });
 
   const sellPriceEl = document.getElementById("sellPrice");
@@ -551,9 +540,7 @@
     return Math.max(0, Math.ceil(left));
   }
 
-  function showPaywall(show){
-    paywall.style.display = show ? "flex" : "none";
-  }
+  function showPaywall(show){ paywall.style.display = show ? "flex" : "none"; }
 
   async function updateAccessUI(profile, email){
     userLine.textContent = `Signed in as ${email}`;
@@ -639,7 +626,6 @@
       const name = document.getElementById("revName").value.trim();
       const category = document.getElementById("revCat").value;
       const message = document.getElementById("revMsg").value.trim();
-
       if (!message) throw new Error("Write a short review message.");
 
       const { error } = await supabase.from("reviews").insert([{
@@ -659,7 +645,7 @@
     }
   });
 
-  logoutBtn.addEventListener("click", async ()=>{
+  document.getElementById("logoutBtn").addEventListener("click", async ()=>{
     await supabase.auth.signOut();
     location.href = "login.html";
   });
