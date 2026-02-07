@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>ProfitPilot — App</title>
-  <meta name="description" content="ProfitPilot helps sellers estimate profit, margin, fee drag, return sensitivity, and reverse-price for target profit. Trial + one-time PRO unlock.">
+  <meta name="description" content="ProfitPilot helps sellers estimate profit, margin, fee drag, return sensitivity, reverse-price for target profit, export & share scenarios.">
   <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
 
   <style>
@@ -164,6 +164,8 @@
     .tabs{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
     .tab{padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.70);cursor:pointer;font-size:12px}
     .tab.active{border-color:rgba(14,165,164,.35);background:rgba(14,165,164,.10);font-weight:900}
+
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
   </style>
 </head>
 
@@ -193,17 +195,18 @@
     <!-- CALCULATOR -->
     <div class="card">
       <div class="title">Calculator</div>
-      <div class="small">Use “Profit mode” for normal calculation. Use “Reverse mode” to find the selling price required for a target profit.</div>
+      <div class="small">Profit mode = normal calculation. Reverse mode = enter target profit and we estimate the required selling price.</div>
 
       <div class="tabs">
         <div class="tab active" id="tabProfit">Profit mode</div>
         <div class="tab" id="tabReverse">Reverse mode</div>
       </div>
 
-      <!-- Currency -->
       <div class="divider"></div>
+
+      <!-- Currency -->
       <div class="title" style="margin:0 0 6px;font-size:14px">Currency</div>
-      <div class="small">Pick a currency symbol for display. Optional: add your own exchange rate for conversion.</div>
+      <div class="small">Pick a display currency. Optional exchange rate for your own conversion (we don’t provide live FX rates).</div>
 
       <div class="row">
         <div>
@@ -228,10 +231,10 @@
         </div>
         <div>
           <label>Exchange rate (optional)</label>
-          <input id="fxRate" inputmode="decimal" placeholder="e.g., 1 GBP = 1.25 USD">
+          <input id="fxRate" inputmode="decimal" placeholder="e.g., 1 base = 1.25 selected">
         </div>
       </div>
-      <div class="small" id="fxHint">If you enter a rate, we show a converted total as an extra line. Rate is user-provided (no live rates).</div>
+      <div class="small">If you enter a rate, we show a converted selling price line. Rate is user-provided.</div>
 
       <div class="divider"></div>
 
@@ -241,7 +244,7 @@
         <option value="manual">Manual (enter fees yourself)</option>
       </select>
 
-      <!-- Profit inputs (shared) -->
+      <!-- Inputs -->
       <div class="row">
         <div>
           <label>Selling price</label>
@@ -288,7 +291,7 @@
         </div>
       </div>
 
-      <!-- Reverse inputs -->
+      <!-- Reverse -->
       <div id="reverseBox" style="display:none">
         <div class="divider"></div>
         <div class="title" style="margin:0 0 6px;font-size:14px">Reverse mode</div>
@@ -308,6 +311,14 @@
       <div class="row">
         <button class="btn primary" id="calcBtn">Calculate</button>
         <button class="btn" id="resetBtn">Reset to 0</button>
+      </div>
+
+      <!-- Export/Share -->
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+        <button class="btn" id="exportCsvBtn">Export CSV</button>
+        <button class="btn" id="exportPdfBtn">Export PDF</button>
+        <button class="btn" id="shareBtn">Share link</button>
+        <span class="pill" id="shareStatus">—</span>
       </div>
 
       <div class="kpi">
@@ -338,7 +349,7 @@
 
       <div class="kpi" id="fxRow" style="display:none">
         <div class="k" style="grid-column:1 / -1">
-          <div class="h" id="fxLabel">Converted total (user-provided FX)</div>
+          <div class="h">Converted selling price (your FX)</div>
           <div class="v" id="fxOut">—</div>
           <div class="hint" id="fxNote">—</div>
         </div>
@@ -348,7 +359,7 @@
 
       <div class="small">
         <b>Disclaimer:</b> Estimates only, not financial/legal/tax advice. Not affiliated with any platform.
-        FX conversion (if used) depends on the exchange rate you enter (we do not provide live rates).
+        FX conversion (if used) depends on the exchange rate you enter (no live rates).
         See <a href="https://ukwebtools.com/terms.html">Terms</a> and <a href="https://ukwebtools.com/privacy.html">Privacy</a>.
       </div>
     </div>
@@ -364,7 +375,7 @@
       <div class="small" id="scenarioHint">Trial can save 3 scenarios. PRO saves unlimited.</div>
 
       <label>Scenario name</label>
-      <input id="scenarioName" placeholder="e.g., Listing test — £19.99">
+      <input id="scenarioName" placeholder="e.g., Listing test — 19.99">
 
       <div class="row">
         <button class="btn primary" id="saveScenarioBtn">Save scenario</button>
@@ -446,7 +457,7 @@
           <li><b>Unlimited access</b></li>
           <li><b>Unlimited saved scenarios</b></li>
           <li><b>Unlimited reverse mode</b></li>
-          <li><b>Risk & margin signals</b></li>
+          <li><b>Export + share</b></li>
         </ul>
         <div class="pill ok" style="margin-top:10px">One-time purchase • No subscription</div>
       </div>
@@ -550,7 +561,7 @@
       adsPctEl.value = String(p.adsPct ?? 0);
       retPctEl.value = String(p.returnPct ?? 0);
     }
-    computeProfit();
+    compute();
   });
 
   // Inputs
@@ -584,18 +595,24 @@
     reverseBox.style.display = (m==="reverse") ? "block" : "none";
     profitLabel.textContent = (m==="reverse") ? "Required selling price" : "Estimated profit";
     marginLabel.textContent = (m==="reverse") ? "Implied margin" : "Margin";
-    // In reverse mode, user may leave selling price blank; we compute it
-    if (m==="reverse") {
-      sellPriceEl.placeholder = "Auto (calculated)";
-    } else {
-      sellPriceEl.placeholder = "0.00";
-    }
+    if (m==="reverse") sellPriceEl.placeholder = "Auto (calculated)";
+    else sellPriceEl.placeholder = "0.00";
     compute();
   }
   tabProfit.addEventListener("click", ()=>setMode("profit"));
   tabReverse.addEventListener("click", ()=>setMode("reverse"));
 
-  // Shared helpers
+  function updateFXLine(sell){
+    const r = n(fxRateEl.value);
+    if (r > 0 && sell > 0){
+      fxRow.style.display = "block";
+      fxOut.textContent = (sell * r).toFixed(2);
+      fxNote.textContent = `Converted selling price using your rate: ${sell.toFixed(2)} × ${r}`;
+    } else {
+      fxRow.style.display = "none";
+    }
+  }
+
   function getFees(sell){
     const feePct = clamp(n(feePctEl.value), 0, 99);
     const feeFixed = clamp(n(feeFixEl.value), 0, 999999);
@@ -645,25 +662,9 @@
       marginHint.style.color = "var(--ok)";
     }
 
-    updateFXLine({sell, profit, totalFees, expectedReturnImpact});
+    updateFXLine(sell);
   }
 
-  function updateFXLine({sell, profit, totalFees, expectedReturnImpact}){
-    const r = n(fxRateEl.value);
-    if (r > 0){
-      fxRow.style.display = "block";
-      const converted = sell * r;
-      fxOut.textContent = converted.toFixed(2);
-      fxNote.textContent = `Converted selling price using your rate: ${sell.toFixed(2)} × ${r}`;
-    } else {
-      fxRow.style.display = "none";
-    }
-  }
-
-  // Reverse: find selling price for target profit
-  // profit = sell - (costs + (sell*(feePct+adsPct)) + feeFixed)
-  // profit = sell*(1 - pctSum) - (costs + feeFixed)
-  // sell = (profit + costs + feeFixed) / (1 - pctSum)
   function reverseSellPriceForTargetProfit(target){
     const cost = n(productCostEl.value);
     const ship = n(shipCostEl.value);
@@ -677,12 +678,11 @@
     const denom = 1 - pctSum;
     const baseCosts = cost + ship + misc + feeFixed;
 
-    if (denom <= 0.01) return null; // too high fees
-    const sell = (target + baseCosts) / denom;
-    return sell;
+    if (denom <= 0.01) return null;
+    return (target + baseCosts) / denom;
   }
 
-  function computeReverseOnly(){
+  function computeReverse(){
     const target = n(targetProfitEl.value);
     if (target <= 0){
       profitOut.textContent = money(0);
@@ -705,17 +705,16 @@
       profitHint.style.color = "var(--bad)";
       marginHint.textContent = "—";
       marginHint.style.color = "var(--muted)";
+      fxRow.style.display = "none";
       return;
     }
 
-    // set selling price field for transparency (but still compute from it)
     sellPriceEl.value = sell.toFixed(2);
 
-    // Now compute normal outputs at that sell
+    // show implied margin at this sell
     const retPct = clamp(n(retPctEl.value), 0, 99);
     const { totalFees } = getFees(sell);
     const expectedReturnImpact = sell * (retPct/100);
-
     const cost = n(productCostEl.value);
     const ship = n(shipCostEl.value);
     const misc = n(miscCostEl.value);
@@ -728,43 +727,161 @@
     feesOut.textContent = money(totalFees);
     returnOut.textContent = money(expectedReturnImpact);
 
-    profitHint.textContent = `This selling price targets ~${money(target)} profit based on your inputs.`;
+    profitHint.textContent = `Required selling price to target ~${money(target)} profit (estimate).`;
     profitHint.style.color = "var(--ok)";
-    marginHint.textContent = "Margin shown is implied at the required selling price.";
+    marginHint.textContent = "Implied margin at the required selling price.";
     marginHint.style.color = "var(--muted)";
 
-    updateFXLine({sell, profit, totalFees, expectedReturnImpact});
+    updateFXLine(sell);
   }
 
   function compute(){
     if (MODE === "profit") computeProfit();
-    else computeReverseOnly();
+    else computeReverse();
   }
 
-  // UI buttons
-  document.getElementById("calcBtn").addEventListener("click", async ()=>{
-    // If reverse mode, enforce trial reverse limit
-    if (MODE === "reverse"){
-      if (!CURRENT_PROFILE?.paid){
-        const used = CURRENT_PROFILE?.reverse_uses ?? 0;
-        if (used >= TRIAL_REVERSE_LIMIT){
-          profitHint.textContent = `Trial reverse limit reached (${TRIAL_REVERSE_LIMIT}). Unlock PRO for unlimited reverse mode.`;
-          profitHint.style.color = "var(--bad)";
-          return;
-        }
-        // increment reverse uses
-        await incrementReverseUse();
-      }
-    }
+  // Export + Share
+  const shareStatus = document.getElementById("shareStatus");
+
+  function payload(){
+    return {
+      mode: MODE,
+      currency: currencyEl.value,
+      fxRate: fxRateEl.value || "",
+      preset: presetSel.value,
+      sellPrice: sellPriceEl.value,
+      productCost: productCostEl.value,
+      shipCost: shipCostEl.value,
+      miscCost: miscCostEl.value,
+      feePct: feePctEl.value,
+      feeFixed: feeFixEl.value,
+      adsPct: adsPctEl.value,
+      returnPct: retPctEl.value,
+      targetProfit: targetProfitEl.value
+    };
+  }
+
+  function csvEscape(s){
+    const t = String(s ?? "");
+    if (/[",\n]/.test(t)) return `"${t.replaceAll('"','""')}"`;
+    return t;
+  }
+
+  function buildCsv(){
+    const p = payload();
+    const rows = [
+      ["Field","Value"],
+      ["Mode", p.mode],
+      ["Currency", p.currency],
+      ["FX Rate (optional)", p.fxRate],
+      ["Preset", p.preset],
+      ["Selling price", p.sellPrice],
+      ["Product cost", p.productCost],
+      ["Shipping cost", p.shipCost],
+      ["Packaging/misc", p.miscCost],
+      ["Platform fee %", p.feePct],
+      ["Fixed fee", p.feeFixed],
+      ["Ads %", p.adsPct],
+      ["Return %", p.returnPct],
+      ["Target profit (reverse)", p.targetProfit],
+      ["Output 1", document.getElementById("profitLabel").textContent + ": " + document.getElementById("profitOut").textContent],
+      ["Output 2", document.getElementById("marginLabel").textContent + ": " + document.getElementById("marginOut").textContent],
+      ["Total fees+ads", document.getElementById("feesOut").textContent],
+      ["Return sensitivity", document.getElementById("returnOut").textContent],
+    ];
+    return rows.map(r=>r.map(csvEscape).join(",")).join("\n");
+  }
+
+  function downloadText(filename, text){
+    const blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  document.getElementById("exportCsvBtn").addEventListener("click", ()=>{
     compute();
+    downloadText("profitpilot-export.csv", buildCsv());
+    shareStatus.textContent = "CSV exported.";
   });
 
+  document.getElementById("exportPdfBtn").addEventListener("click", ()=>{
+    compute();
+    const p = payload();
+    const html = `
+      <html>
+      <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width,initial-scale=1"/>
+        <title>ProfitPilot Export</title>
+        <style>
+          body{font-family:system-ui;margin:24px;color:#0b1220}
+          .h{font-size:20px;font-weight:900;margin-bottom:6px}
+          .m{color:#5b6474;margin-bottom:16px}
+          table{width:100%;border-collapse:collapse}
+          td{border:1px solid rgba(16,24,40,.12);padding:10px;font-size:13px;vertical-align:top}
+          .k{font-weight:800;width:38%}
+          .out{margin-top:16px;padding:12px;border:1px solid rgba(16,24,40,.12);border-radius:12px}
+        </style>
+      </head>
+      <body>
+        <div class="h">ProfitPilot Export</div>
+        <div class="m">Estimates only. Generated: ${new Date().toLocaleString()}</div>
+        <table>
+          ${Object.entries(p).map(([k,v])=>`<tr><td class="k">${k}</td><td>${String(v ?? "")}</td></tr>`).join("")}
+        </table>
+        <div class="out">
+          <div><b>${document.getElementById("profitLabel").textContent}:</b> ${document.getElementById("profitOut").textContent}</div>
+          <div><b>${document.getElementById("marginLabel").textContent}:</b> ${document.getElementById("marginOut").textContent}</div>
+          <div><b>Total fees + ads:</b> ${document.getElementById("feesOut").textContent}</div>
+          <div><b>Return sensitivity:</b> ${document.getElementById("returnOut").textContent}</div>
+        </div>
+        <script>window.onload=()=>window.print()</script>
+      </body>
+      </html>
+    `;
+    const w = window.open("", "_blank");
+    w.document.open();
+    w.document.write(html);
+    w.document.close();
+    shareStatus.textContent = "PDF print opened.";
+  });
+
+  function base64urlEncode(str){
+    const bytes = new TextEncoder().encode(str);
+    let bin = "";
+    bytes.forEach(b=>bin += String.fromCharCode(b));
+    const b64 = btoa(bin).replaceAll("+","-").replaceAll("/","_").replaceAll("=","");
+    return b64;
+  }
+
+  document.getElementById("shareBtn").addEventListener("click", ()=>{
+    compute();
+    // Gate share to PRO (premium feel). Trial sees a clear reason.
+    if (!CURRENT_PROFILE?.paid){
+      shareStatus.textContent = "Share link is PRO. Unlock to share scenarios.";
+      return;
+    }
+    const p = payload();
+    const token = base64urlEncode(JSON.stringify(p));
+    const url = `${location.origin}/share.html#s=${token}`;
+    navigator.clipboard?.writeText(url).catch(()=>{});
+    shareStatus.textContent = "Share link copied.";
+  });
+
+  // Buttons
   document.getElementById("resetBtn").addEventListener("click", ()=>{
-    [sellPriceEl, productCostEl, shipCostEl, miscCostEl, feePctEl, feeFixEl, adsPctEl, retPctEl, targetProfitEl, fxRateEl].forEach(el=>el.value="0");
+    [sellPriceEl, productCostEl, shipCostEl, miscCostEl, feePctEl, feeFixEl, adsPctEl, retPctEl, targetProfitEl].forEach(el=>el.value="0");
     fxRateEl.value = "";
     presetSel.value = "manual";
     setMode("profit");
     compute();
+    shareStatus.textContent = "—";
   });
 
   [sellPriceEl, productCostEl, shipCostEl, miscCostEl, feePctEl, feeFixEl, adsPctEl, retPctEl, targetProfitEl, currencyEl, fxRateEl].forEach(el=>{
@@ -834,7 +951,6 @@
     CURRENT_PROFILE = profile;
     userLine.textContent = `Signed in as ${email}`;
 
-    // reverse uses line
     if (profile.paid){
       reverseUsesLine.textContent = `Reverse uses: Unlimited (PRO)`;
     } else {
@@ -860,15 +976,30 @@
     }
   }
 
-  async function incrementReverseUse(){
-    // Optimistic increment with update; then refresh profile value
-    const current = CURRENT_PROFILE?.reverse_uses ?? 0;
-    const next = current + 1;
-    const { error } = await supabase.from("profiles").update({ reverse_uses: next }).eq("id", CURRENT_USER.id);
-    if (error) throw error;
+  // ✅ Secure reverse-use consumption (server-side)
+  async function consumeReverseUse(){
+    const { data, error } = await supabase.rpc("consume_reverse_use", { limit: TRIAL_REVERSE_LIMIT });
+    if (error){
+      if ((error.message || "").includes("limit_reached")) throw new Error(`Trial reverse limit reached (${TRIAL_REVERSE_LIMIT}). Unlock PRO for unlimited reverse mode.`);
+      throw error;
+    }
+    const next = Number(data || 0);
     CURRENT_PROFILE.reverse_uses = next;
     reverseUsesLine.textContent = `Reverse uses: ${next}/${TRIAL_REVERSE_LIMIT} (Trial)`;
   }
+
+  // Calculate (with reverse limit)
+  document.getElementById("calcBtn").addEventListener("click", async ()=>{
+    try{
+      if (MODE === "reverse" && !CURRENT_PROFILE?.paid){
+        await consumeReverseUse(); // blocks after 3, tamper-resistant
+      }
+      compute();
+    } catch(e){
+      profitHint.textContent = e.message || "Unable to calculate.";
+      profitHint.style.color = "var(--bad)";
+    }
+  });
 
   // Gumroad redeem
   async function redeemGumroad(licenseKey){
@@ -950,7 +1081,7 @@
     }
   });
 
-  // Scenarios (trial 3, pro unlimited) — unchanged logic, but includes currency/fx/mode/target
+  // Scenarios (trial 3, pro unlimited)
   const scenarioNameEl = document.getElementById("scenarioName");
   const saveScenarioBtn = document.getElementById("saveScenarioBtn");
   const refreshScenariosBtn = document.getElementById("refreshScenariosBtn");
@@ -958,22 +1089,8 @@
   const scenarioList = document.getElementById("scenarioList");
   const scenarioHint = document.getElementById("scenarioHint");
 
-  function getPayload(){
-    return {
-      mode: MODE,
-      currency: currencyEl.value,
-      fxRate: fxRateEl.value,
-      preset: presetSel.value,
-      sellPrice: sellPriceEl.value,
-      productCost: productCostEl.value,
-      shipCost: shipCostEl.value,
-      miscCost: miscCostEl.value,
-      feePct: feePctEl.value,
-      feeFixed: feeFixEl.value,
-      adsPct: adsPctEl.value,
-      returnPct: retPctEl.value,
-      targetProfit: targetProfitEl.value
-    };
+  function scenarioPayload(){
+    return payload();
   }
 
   function applyPayload(p){
@@ -1010,12 +1127,8 @@
     }
 
     const count = (data || []).length;
-
-    if (CURRENT_PROFILE?.paid){
-      scenarioHint.textContent = `PRO: unlimited saved scenarios • Showing latest ${count}`;
-    } else {
-      scenarioHint.textContent = `Trial: save up to ${TRIAL_SCENARIO_LIMIT} scenarios • You have ${count}/${TRIAL_SCENARIO_LIMIT} (latest shown)`;
-    }
+    if (CURRENT_PROFILE?.paid) scenarioHint.textContent = `PRO: unlimited saved scenarios • Showing latest ${count}`;
+    else scenarioHint.textContent = `Trial: save up to ${TRIAL_SCENARIO_LIMIT} scenarios • You have ${count}/${TRIAL_SCENARIO_LIMIT} (latest shown)`;
 
     if (!data || data.length === 0){
       scenarioStatus.textContent = "No saved scenarios yet.";
@@ -1045,10 +1158,7 @@
   }
 
   async function trialScenarioCount(){
-    const { data, error } = await supabase
-      .from("scenarios")
-      .select("id")
-      .limit(50);
+    const { data, error } = await supabase.from("scenarios").select("id").limit(50);
     if (error) throw error;
     return (data || []).length;
   }
@@ -1059,7 +1169,7 @@
       if (!CURRENT_USER) throw new Error("Please log in again.");
 
       const name = scenarioNameEl.value.trim() || "Untitled scenario";
-      const payload = getPayload();
+      const p = scenarioPayload();
 
       if (!CURRENT_PROFILE?.paid){
         const cnt = await trialScenarioCount();
@@ -1069,13 +1179,9 @@
         }
       }
 
-      const { error } = await supabase.from("scenarios").insert([{
-        user_id: CURRENT_USER.id,
-        name,
-        payload
-      }]);
-
+      const { error } = await supabase.from("scenarios").insert([{ user_id: CURRENT_USER.id, name, payload: p }]);
       if (error) throw error;
+
       scenarioStatus.textContent = "Saved.";
       scenarioNameEl.value = "";
       await loadScenarios();
@@ -1095,8 +1201,8 @@
 
     if (act === "load"){
       try{
-        const payload = JSON.parse(item.dataset.payload || "{}");
-        applyPayload(payload);
+        const p = JSON.parse(item.dataset.payload || "{}");
+        applyPayload(p);
         scenarioStatus.textContent = "Loaded scenario.";
       } catch {
         scenarioStatus.textContent = "Could not load scenario.";
@@ -1122,7 +1228,13 @@
   });
 
   // Boot
-  (async function init(){
+  async function requireSession(){
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) { location.href = "login.html"; return null; }
+    return session;
+  }
+
+  async function boot(){
     const session = await requireSession();
     if (!session) return;
 
@@ -1135,7 +1247,8 @@
 
     computeProfit();
     await loadScenarios();
-  })();
+  }
+  await boot();
 </script>
 </body>
 </html>
