@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>ProfitPilot — Profit Calculator for Sellers</title>
-  <meta name="description" content="ProfitPilot helps ecommerce and marketplace sellers estimate profit, fees, and margin. 5-day trial. One-time PRO unlock.">
+  <title>ProfitPilot — Profit & Listing Risk Calculator</title>
+  <meta name="description" content="ProfitPilot helps sellers estimate profit, stress-test margins, and avoid risky pricing. 5-day free access. One-time PRO unlock.">
   <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
 
   <style>
@@ -15,8 +15,8 @@
       --txt:#0b1220;
       --muted:#5b6474;
       --line:rgba(16,24,40,.10);
-      --accent:#0ea5a4;
-      --accent2:#4f46e5;
+      --accent:#0ea5a4;   /* teal */
+      --accent2:#4f46e5;  /* indigo */
       --shadow:0 10px 30px rgba(16,24,40,.08);
     }
     *{box-sizing:border-box}
@@ -31,6 +31,7 @@
     }
     a{color:var(--accent);text-decoration:none}
     .wrap{max-width:1100px;margin:18px auto;padding:0 14px}
+
     .nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
     .brand{display:flex;gap:10px;align-items:center}
     .logo{
@@ -60,6 +61,7 @@
       border-color:rgba(14,165,164,.30);
       background:rgba(14,165,164,.10);
     }
+
     .hero{
       margin-top:14px;
       background:rgba(255,255,255,.78);
@@ -70,6 +72,7 @@
     }
     h1{margin:0 0 8px;font-size:28px}
     p{margin:0;color:var(--muted);line-height:1.6}
+
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
     @media(max-width:960px){.grid{grid-template-columns:1fr}}
     .card{
@@ -80,6 +83,21 @@
       box-shadow:var(--shadow);
     }
     .small{font-size:12px;color:var(--muted);line-height:1.6}
+
+    .features{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+    @media(max-width:960px){.features{grid-template-columns:1fr}}
+    .feat h3{margin:0 0 6px;font-size:16px}
+    .feat p{margin:0;color:var(--muted);line-height:1.6;font-size:13px}
+
+    .review{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.65);
+      border-radius:16px;
+      padding:12px;
+      margin-top:10px;
+    }
+    .toprow{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+    .stars{font-weight:900}
     footer{margin:14px 2px 0;color:var(--muted);font-size:12px;line-height:1.6}
   </style>
 </head>
@@ -91,7 +109,7 @@
       <div class="logo">PP</div>
       <div>
         <div style="font-weight:900">ProfitPilot</div>
-        <div class="pill">5-day trial • One-time PRO unlock</div>
+        <div class="pill">5-day trial • One-time PRO unlock • Independent tool</div>
       </div>
     </div>
     <div style="display:flex;gap:10px;flex-wrap:wrap">
@@ -106,13 +124,32 @@
   <div class="hero">
     <h1>Price smarter. See profit clearly.</h1>
     <p>
-      ProfitPilot estimates profit, fees, and margin for sellers. Use presets or manual inputs.
-      Start with a free trial. Unlock PRO with a one-time purchase (no subscription).
+      ProfitPilot estimates profit, margin, fee impact, and return sensitivity.
+      Start with a free trial. Unlock PRO with a one-time payment (no subscription).
     </p>
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
       <a class="btn primary" href="login.html">Start free trial</a>
       <a class="btn" href="app.html">Open app</a>
       <a class="btn" href="reviews.html">Read reviews</a>
+    </div>
+  </div>
+
+  <div class="features">
+    <div class="card feat">
+      <h3>Not just a fee calculator</h3>
+      <p>See margin pressure, fee drag, and expected return impact in one screen.</p>
+    </div>
+    <div class="card feat">
+      <h3>Built for repeated decisions</h3>
+      <p>Made for sellers who list often and want confident pricing before they scale.</p>
+    </div>
+    <div class="card feat">
+      <h3>Platform-independent</h3>
+      <p>Use presets or manual inputs. Names only (no logos). No affiliation claims.</p>
+    </div>
+    <div class="card feat">
+      <h3>Simple pricing</h3>
+      <p>One-time unlock. No subscription. No hidden limits.</p>
     </div>
   </div>
 
@@ -122,7 +159,7 @@
       <ul class="small" style="line-height:1.9;padding-left:16px;margin:10px 0 0">
         <li>Profit and margin estimates</li>
         <li>Manual input mode</li>
-        <li>Basic platform presets</li>
+        <li>Basic presets</li>
         <li>5-day access</li>
       </ul>
     </div>
@@ -130,21 +167,105 @@
     <div class="card">
       <div style="font-weight:900">PRO unlock adds</div>
       <ul class="small" style="line-height:1.9;padding-left:16px;margin:10px 0 0">
-        <li>Unlimited access</li>
-        <li>Editable fee presets</li>
-        <li>Risk & margin signals</li>
-        <li>Return sensitivity checks</li>
+        <li><b>Unlimited access</b></li>
+        <li><b>Editable fee presets</b></li>
+        <li><b>Risk & margin signals</b></li>
+        <li><b>Return sensitivity checks</b></li>
       </ul>
       <div class="pill" style="margin-top:10px">One-time purchase • No subscription</div>
     </div>
   </div>
 
+  <div class="grid">
+    <div class="card">
+      <div class="toprow">
+        <div>
+          <div style="font-weight:900">What users say</div>
+          <div class="small" id="ratingSummary">Loading…</div>
+        </div>
+        <span class="pill" id="avgPill">—</span>
+      </div>
+      <div id="reviews"></div>
+      <div class="small" style="margin-top:10px">
+        <a href="reviews.html">See all reviews →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="font-weight:900">Ready to try?</div>
+      <div class="small">
+        Create an account to start the 5-day trial.
+        After that, unlock PRO with a one-time purchase and redeem your Gumroad license key.
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+        <a class="btn primary" href="login.html">Start free trial</a>
+        <a class="btn" href="app.html">Open app</a>
+      </div>
+      <div class="small" style="margin-top:12px">
+        <b>Disclaimer:</b> Estimates only, not financial/legal/tax advice. Not affiliated with any platform.
+      </div>
+    </div>
+  </div>
+
   <footer>
-    <div><b>Disclaimer:</b> Estimates only, not financial/legal/tax advice. Not affiliated with any platform.</div>
+    <div><b>Independent tool:</b> Not affiliated with or endorsed by any marketplace, platform, or payment provider.</div>
+    <div><b>Estimates only:</b> Outputs depend on your inputs and assumptions; no profit guarantees.</div>
     <div>© <span id="yr"></span> Ukwebtools • ProfitPilot</div>
   </footer>
 
 </div>
-<script>document.getElementById("yr").textContent = new Date().getFullYear();</script>
+
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+  const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
+  const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  document.getElementById("yr").textContent = new Date().getFullYear();
+
+  function stars(n){
+    const s = "★★★★★";
+    n = Math.max(1, Math.min(5, Math.round(n)));
+    return s.slice(0,n) + "☆☆☆☆☆".slice(0,5-n);
+  }
+  function safe(t){ return String(t || "").replaceAll("<","&lt;"); }
+
+  const ratingSummary = document.getElementById("ratingSummary");
+  const avgPill = document.getElementById("avgPill");
+  const box = document.getElementById("reviews");
+
+  const { data, error } = await supabase
+    .from("reviews")
+    .select("created_at,name,rating,category,message")
+    .eq("approved", true)
+    .order("created_at", { ascending:false })
+    .limit(4);
+
+  if (error || !data){
+    ratingSummary.textContent = "Unable to load reviews.";
+    avgPill.textContent = "—";
+    box.innerHTML = `<div class="small">Try again later.</div>`;
+  } else if (data.length === 0){
+    ratingSummary.textContent = "No reviews yet.";
+    avgPill.textContent = "—";
+    box.innerHTML = `<div class="small">Be the first to review inside the app.</div>`;
+  } else {
+    const avg = data.reduce((a,r)=>a+(r.rating||0),0)/data.length;
+    ratingSummary.textContent = "Average rating (approved reviews)";
+    avgPill.textContent = `${avg.toFixed(1)} / 5 • ${data.length} shown`;
+    box.innerHTML = data.map(r=>`
+      <div class="review">
+        <div class="toprow">
+          <div><b>${safe(r.name || "Anonymous")}</b> <span class="pill">${safe(r.category || "General")}</span></div>
+          <div class="stars">${stars(r.rating||5)}</div>
+        </div>
+        <div class="small" style="margin-top:6px">${new Date(r.created_at).toLocaleDateString()}</div>
+        <div style="margin-top:8px">${safe(r.message || "")}</div>
+      </div>
+    `).join("");
+  }
+</script>
 </body>
 </html>
