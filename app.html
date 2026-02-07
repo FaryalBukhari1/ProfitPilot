@@ -978,7 +978,7 @@
 
   // ✅ Secure reverse-use consumption (server-side)
   async function consumeReverseUse(){
-    const { data, error } = await supabase.rpc("consume_reverse_use", { limit: TRIAL_REVERSE_LIMIT });
+    const { data, error } = await supabase.rpc("consume_reverse_use", { p_limit: TRIAL_REVERSE_LIMIT });
     if (error){
       if ((error.message || "").includes("limit_reached")) throw new Error(`Trial reverse limit reached (${TRIAL_REVERSE_LIMIT}). Unlock PRO for unlimited reverse mode.`);
       throw error;
