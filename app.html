@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>ProfitPilot — App</title>
-  <meta name="description" content="ProfitPilot: profit calculator with reverse pricing, trial limits, export and share.">
+  <meta name="description" content="ProfitPilot: profit calculator with reverse pricing, trial limits, export, share and saved presets.">
   <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
 
   <style>
@@ -58,6 +58,7 @@
     }
     .btn.primary{border-color:rgba(14,165,164,.30);background:rgba(14,165,164,.10)}
     .btn.ghost{background:transparent;box-shadow:none}
+    .btn:disabled{opacity:.55;cursor:not-allowed}
 
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
     @media(max-width:980px){.grid{grid-template-columns:1fr}}
@@ -75,7 +76,7 @@
     @media(max-width:560px){.row{grid-template-columns:1fr}}
 
     label{display:block;font-size:12px;color:var(--muted);margin:10px 0 6px}
-    input,select{
+    input,select,textarea{
       width:100%;
       padding:12px;
       border-radius:14px;
@@ -84,7 +85,8 @@
       color:var(--txt);
       outline:none;
     }
-    input:focus,select:focus{border-color:rgba(14,165,164,.35)}
+    textarea{min-height:90px;resize:vertical}
+    input:focus,select:focus,textarea:focus{border-color:rgba(14,165,164,.35)}
     .divider{height:1px;background:var(--line);margin:12px 0}
 
     .kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
@@ -118,6 +120,14 @@
     }
     .toast{margin-top:10px;font-size:12px;color:var(--muted)}
     footer{margin:14px 2px 0;color:var(--muted);font-size:12px;line-height:1.6}
+
+    /* Print/PDF styling */
+    @media print{
+      body{background:#fff}
+      .nav, #controlsRow, #reviewsCard, #proCard, #logoutBtn, .btn.ghost {display:none !important}
+      .wrap{margin:0;max-width:none}
+      .card{box-shadow:none}
+    }
   </style>
 </head>
 
@@ -144,7 +154,7 @@
   <div class="grid">
 
     <!-- LEFT: CALC -->
-    <div class="card">
+    <div class="card" id="calcCard">
       <div class="title">Calculator</div>
       <div class="small">Profit mode = normal. Reverse mode = target profit → required selling price.</div>
 
@@ -246,13 +256,14 @@
 
       <div class="divider"></div>
 
-      <div class="row">
+      <div class="row" id="controlsRow">
         <button class="btn primary" id="calcBtn">Calculate</button>
         <button class="btn" id="resetBtn">Reset</button>
       </div>
 
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px" id="controlsRow2">
         <button class="btn" id="exportCsvBtn">Export CSV</button>
+        <button class="btn" id="pdfBtn">Export PDF (PRO)</button>
         <button class="btn" id="shareBtn">Share link (PRO)</button>
         <span class="pill" id="shareStatus">—</span>
       </div>
@@ -300,42 +311,84 @@
       </div>
     </div>
 
-    <!-- RIGHT: ACCOUNT + REVIEW -->
-    <div class="card">
-      <div class="title">Your workspace</div>
-      <div class="small" id="userLine">Loading…</div>
+    <!-- RIGHT -->
+    <div>
 
-      <div class="divider"></div>
-
-      <div class="title" style="margin:0 0 6px">Leave a review</div>
-      <div class="small">Reviews publish immediately. Spam/abuse may be removed.</div>
-
-      <label>Name (optional)</label>
-      <input id="revName" placeholder="Name">
-
-      <label>Category</label>
-      <select id="revCat">
-        <option>General</option>
-        <option>UI/UX</option>
-        <option>Accuracy</option>
-        <option>Speed</option>
-        <option>Features</option>
-      </select>
-
-      <label>Rating</label>
-      <div class="stars" style="display:flex;gap:8px;flex-wrap:wrap" id="starsRow">
-        <button type="button" data-star="1">★ 1</button>
-        <button type="button" data-star="2">★ 2</button>
-        <button type="button" data-star="3">★ 3</button>
-        <button type="button" data-star="4">★ 4</button>
-        <button type="button" data-star="5">★ 5</button>
+      <!-- PRO VALUE CARD -->
+      <div class="card" id="proCard">
+        <div class="title">PRO features</div>
+        <div class="small">
+          PRO is a one-time unlock. You get: unlimited reverse, share links, PDF export, and saved presets.
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+          <a class="btn primary" href="https://stonevia.gumroad.com/l/goddhg" target="_blank" rel="noopener">Buy PRO</a>
+          <a class="btn" href="reviews.html">See reviews</a>
+        </div>
       </div>
 
-      <label>Review</label>
-      <input id="revMsg" placeholder="What did you like? What should we improve?">
+      <!-- MY PRESETS -->
+      <div class="card" style="margin-top:14px">
+        <div class="title">My presets (PRO)</div>
+        <div class="small">Save your own fee presets and reuse them instantly.</div>
 
-      <button class="btn primary" id="sendReview">Submit review</button>
-      <div class="toast" id="reviewStatus">—</div>
+        <label>Saved presets</label>
+        <select id="myPresetSel">
+          <option value="">—</option>
+        </select>
+
+        <div class="row">
+          <button class="btn" id="loadMyPresetBtn">Load</button>
+          <button class="btn" id="deleteMyPresetBtn">Delete</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <label>Preset name</label>
+        <input id="myPresetName" placeholder="e.g., eBay UK promoted listings">
+
+        <div class="row">
+          <button class="btn primary" id="saveMyPresetBtn">Save current fees</button>
+          <span class="pill" id="presetStatus">—</span>
+        </div>
+
+        <div class="small" style="margin-top:10px">
+          Trial users can use example presets only. PRO users can save unlimited presets.
+        </div>
+      </div>
+
+      <!-- REVIEWS -->
+      <div class="card" id="reviewsCard" style="margin-top:14px">
+        <div class="title">Leave a review</div>
+        <div class="small">Reviews publish immediately. Spam/abuse may be removed.</div>
+
+        <label>Name (optional)</label>
+        <input id="revName" placeholder="Name">
+
+        <label>Category</label>
+        <select id="revCat">
+          <option>General</option>
+          <option>UI/UX</option>
+          <option>Accuracy</option>
+          <option>Speed</option>
+          <option>Features</option>
+        </select>
+
+        <label>Rating</label>
+        <div class="stars" style="display:flex;gap:8px;flex-wrap:wrap" id="starsRow">
+          <button type="button" data-star="1">★ 1</button>
+          <button type="button" data-star="2">★ 2</button>
+          <button type="button" data-star="3">★ 3</button>
+          <button type="button" data-star="4">★ 4</button>
+          <button type="button" data-star="5">★ 5</button>
+        </div>
+
+        <label>Review</label>
+        <input id="revMsg" placeholder="What did you like? What should we improve?">
+
+        <button class="btn primary" id="sendReview">Submit review</button>
+        <div class="toast" id="reviewStatus">—</div>
+      </div>
+
     </div>
   </div>
 
@@ -353,11 +406,13 @@
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-  // UI refs
   const accessPill = document.getElementById("accessPill");
-  const userLine = document.getElementById("userLine");
+  const userLine = document.getElementById("userLine"); // (not shown now, keep minimal)
   const reverseUsesLine = document.getElementById("reverseUsesLine");
   const shareStatus = document.getElementById("shareStatus");
+  const presetStatus = document.getElementById("presetStatus");
+
+  document.getElementById("yr").textContent = new Date().getFullYear();
 
   // Inputs
   const currencyEl = document.getElementById("currency");
@@ -387,7 +442,11 @@
   const feesOut = document.getElementById("feesOut");
   const returnOut = document.getElementById("returnOut");
 
-  document.getElementById("yr").textContent = new Date().getFullYear();
+  const myPresetSel = document.getElementById("myPresetSel");
+  const myPresetName = document.getElementById("myPresetName");
+  const saveMyPresetBtn = document.getElementById("saveMyPresetBtn");
+  const loadMyPresetBtn = document.getElementById("loadMyPresetBtn");
+  const deleteMyPresetBtn = document.getElementById("deleteMyPresetBtn");
 
   const CURRENCY_SYMBOL = {
     GBP:"£", USD:"$", EUR:"€", AUD:"$", CAD:"$", NZD:"$",
@@ -417,7 +476,7 @@
     }
   }
 
-  // Presets (examples only)
+  // Example presets only (trial & pro)
   const PRESETS = [
     { id:"manual", name:"Manual (enter fees yourself)", feePct:0, feeFixed:0, adsPct:0, returnPct:0 },
     { id:"ebay_uk_typical", name:"eBay UK (typical example)", feePct:12.8, feeFixed:0.30, adsPct:0, returnPct:3 },
@@ -563,6 +622,7 @@
 
   // Access + profile
   let CURRENT_PROFILE = null;
+  let CURRENT_USER = null;
 
   async function ensureProfile(userId){
     const { data: prof, error } = await supabase
@@ -598,7 +658,6 @@
   }
 
   async function consumeReverseUse(){
-    // Must match SQL param name: p_limit
     const { data, error } = await supabase.rpc("consume_reverse_use", { p_limit: TRIAL_REVERSE_LIMIT });
     if (error){
       const msg = (error.message || "").toLowerCase();
@@ -610,16 +669,18 @@
     reverseUsesLine.textContent = `Reverse uses: ${next}/${TRIAL_REVERSE_LIMIT} (Trial)`;
   }
 
-  function updateAccessUI(profile, email){
+  function updateAccessUI(profile){
     CURRENT_PROFILE = profile;
-    userLine.textContent = `Signed in as ${email}`;
 
     if (profile.paid){
       accessPill.textContent = "Unlocked (PRO)";
       accessPill.className = "pill ok";
       reverseUsesLine.textContent = "Reverse uses: Unlimited (PRO)";
+      enableProUI(true);
       return;
     }
+
+    enableProUI(false);
 
     reverseUsesLine.textContent = `Reverse uses: ${profile.reverse_uses ?? 0}/${TRIAL_REVERSE_LIMIT} (Trial)`;
 
@@ -633,7 +694,19 @@
     }
   }
 
-  // Buttons
+  function enableProUI(isPro){
+    document.getElementById("pdfBtn").disabled = !isPro;
+    document.getElementById("shareBtn").disabled = !isPro;
+    saveMyPresetBtn.disabled = !isPro;
+    loadMyPresetBtn.disabled = !isPro;
+    deleteMyPresetBtn.disabled = !isPro;
+    myPresetSel.disabled = !isPro;
+    myPresetName.disabled = !isPro;
+
+    presetStatus.textContent = isPro ? "PRO enabled" : "Unlock PRO to use My Presets + PDF + Share.";
+  }
+
+  // Calculate
   document.getElementById("calcBtn").addEventListener("click", async ()=>{
     try{
       if (MODE === "reverse" && !CURRENT_PROFILE?.paid){
@@ -646,6 +719,7 @@
     }
   });
 
+  // Reset
   document.getElementById("resetBtn").addEventListener("click", ()=>{
     [sellPriceEl, productCostEl, shipCostEl, miscCostEl, feePctEl, feeFixedEl, adsPctEl, returnPctEl, targetProfitEl].forEach(el=>el.value="0");
     fxRateEl.value = "";
@@ -696,7 +770,17 @@
     shareStatus.textContent = "CSV exported.";
   });
 
-  // Share (PRO only)
+  // PDF Export (PRO)
+  document.getElementById("pdfBtn").addEventListener("click", ()=>{
+    if (!CURRENT_PROFILE?.paid){
+      shareStatus.textContent = "PDF is PRO.";
+      return;
+    }
+    shareStatus.textContent = "Preparing PDF…";
+    setTimeout(()=>window.print(), 150);
+  });
+
+  // Share (PRO)
   function base64urlEncode(str){
     const bytes = new TextEncoder().encode(str);
     let bin = "";
@@ -705,13 +789,95 @@
   }
   document.getElementById("shareBtn").addEventListener("click", ()=>{
     if (!CURRENT_PROFILE?.paid){
-      shareStatus.textContent = "Share is PRO. Unlock to share scenarios.";
+      shareStatus.textContent = "Share is PRO.";
       return;
     }
     const token = base64urlEncode(JSON.stringify(payload()));
     const url = `${location.origin}/share.html#s=${token}`;
     navigator.clipboard?.writeText(url).catch(()=>{});
     shareStatus.textContent = "Share link copied.";
+  });
+
+  // ---- My Presets (PRO) ----
+  async function loadMyPresets(){
+    if (!CURRENT_PROFILE?.paid || !CURRENT_USER) return;
+
+    const { data, error } = await supabase
+      .from("user_presets")
+      .select("id,name,fee_pct,fee_fixed,ads_pct,return_pct,created_at")
+      .eq("user_id", CURRENT_USER.id)
+      .order("created_at", { ascending:false });
+
+    if (error){
+      presetStatus.textContent = "Failed to load presets.";
+      return;
+    }
+
+    myPresetSel.innerHTML = `<option value="">—</option>`;
+    (data || []).forEach(p=>{
+      const opt = document.createElement("option");
+      opt.value = p.id;
+      opt.textContent = p.name;
+      opt.dataset.feePct = p.fee_pct;
+      opt.dataset.feeFixed = p.fee_fixed;
+      opt.dataset.adsPct = p.ads_pct;
+      opt.dataset.returnPct = p.return_pct;
+      myPresetSel.appendChild(opt);
+    });
+
+    presetStatus.textContent = `Loaded ${data?.length || 0} preset(s).`;
+  }
+
+  saveMyPresetBtn.addEventListener("click", async ()=>{
+    if (!CURRENT_PROFILE?.paid || !CURRENT_USER) return;
+
+    const name = myPresetName.value.trim();
+    if (!name){ presetStatus.textContent = "Enter a preset name."; return; }
+
+    presetStatus.textContent = "Saving…";
+    const row = {
+      user_id: CURRENT_USER.id,
+      name,
+      fee_pct: clamp(n(feePctEl.value),0,99),
+      fee_fixed: clamp(n(feeFixedEl.value),0,999999),
+      ads_pct: clamp(n(adsPctEl.value),0,99),
+      return_pct: clamp(n(returnPctEl.value),0,99)
+    };
+
+    const { error } = await supabase.from("user_presets").insert([row]);
+    if (error){ presetStatus.textContent = error.message || "Save failed."; return; }
+
+    myPresetName.value = "";
+    await loadMyPresets();
+    presetStatus.textContent = "Saved.";
+  });
+
+  loadMyPresetBtn.addEventListener("click", ()=>{
+    if (!CURRENT_PROFILE?.paid) return;
+    const opt = myPresetSel.options[myPresetSel.selectedIndex];
+    if (!opt || !opt.value){ presetStatus.textContent = "Select a preset."; return; }
+
+    feePctEl.value = String(opt.dataset.feePct ?? 0);
+    feeFixedEl.value = String(opt.dataset.feeFixed ?? 0);
+    adsPctEl.value = String(opt.dataset.adsPct ?? 0);
+    returnPctEl.value = String(opt.dataset.returnPct ?? 0);
+
+    presetSel.value = "manual";
+    compute();
+    presetStatus.textContent = "Loaded into fields.";
+  });
+
+  deleteMyPresetBtn.addEventListener("click", async ()=>{
+    if (!CURRENT_PROFILE?.paid || !CURRENT_USER) return;
+    const id = myPresetSel.value;
+    if (!id){ presetStatus.textContent = "Select a preset."; return; }
+
+    presetStatus.textContent = "Deleting…";
+    const { error } = await supabase.from("user_presets").delete().eq("id", id).eq("user_id", CURRENT_USER.id);
+    if (error){ presetStatus.textContent = error.message || "Delete failed."; return; }
+
+    await loadMyPresets();
+    presetStatus.textContent = "Deleted.";
   });
 
   // Reviews submit
@@ -766,15 +932,20 @@
       const { data: { user } } = await supabase.auth.getUser();
       if (!user){ location.href = "login.html"; return; }
 
+      CURRENT_USER = user;
+
       const profile = await ensureProfile(user.id);
-      updateAccessUI(profile, user.email || "user");
+      updateAccessUI(profile);
+
+      if (profile.paid){
+        await loadMyPresets();
+      }
 
       setMode("profit");
       computeProfit();
     } catch(e){
       accessPill.textContent = "Access check failed";
       accessPill.className = "pill bad";
-      userLine.textContent = e.message || "Unknown error";
     }
   })();
 </script>
