@@ -65,6 +65,7 @@
       width:100%;padding:12px;border-radius:14px;border:1px solid var(--line);
       background:rgba(255,255,255,.92);color:var(--txt);outline:none;
     }
+    textarea{min-height:110px;resize:vertical}
     input:focus,select:focus,textarea:focus{border-color:rgba(14,165,164,.35)}
     .divider{height:1px;background:var(--line);margin:12px 0}
     .kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
@@ -83,16 +84,26 @@
 
     /* Bulk grid */
     .bulkWrap{overflow:auto;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.72)}
-    table{width:100%;border-collapse:collapse;font-size:12px;min-width:920px}
+    table{width:100%;border-collapse:collapse;font-size:12px;min-width:980px}
     th,td{border-bottom:1px solid var(--line);padding:10px;text-align:left;vertical-align:middle}
     th{color:var(--muted);font-weight:800;position:sticky;top:0;background:rgba(255,255,255,.92)}
     td input{padding:10px;border-radius:12px}
     .mini{padding:8px 10px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.92)}
     .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .note{
+      border:1px dashed rgba(16,24,40,.16);
+      background:rgba(255,255,255,.65);
+      border-radius:16px;
+      padding:12px;
+      margin-top:12px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.6;
+    }
 
     @media print{
       body{background:#fff}
-      .nav, #controlsRow, #reviewsCard, #proCard, #logoutBtn, .btn.ghost, .tabs, #bulkTools {display:none !important}
+      .nav, #controlsRow, #reviewsCard, #proCard, #logoutBtn, .btn.ghost, .tabs, #bulkTools, #bulkPasteBox {display:none !important}
       .wrap{margin:0;max-width:none}
       .card{box-shadow:none}
     }
@@ -122,12 +133,12 @@
     <!-- LEFT -->
     <div class="card" id="calcCard">
       <div class="title">Calculator</div>
-      <div class="small">Profit = normal. Reverse = target profit → required selling price. Bulk = multiple items (PRO).</div>
+      <div class="small">Profit = normal. Reverse = target profit → required selling price. Bulk = multiple items (trial limited).</div>
 
       <div class="tabs">
         <div class="tab active" id="tabProfit">Profit</div>
         <div class="tab" id="tabReverse">Reverse</div>
-        <div class="tab" id="tabBulk">Bulk (PRO)</div>
+        <div class="tab" id="tabBulk">Bulk</div>
       </div>
 
       <div class="divider"></div>
@@ -235,14 +246,27 @@
 
       <!-- BULK -->
       <div id="bulkBox" style="display:none">
-        <div class="small">
-          Bulk mode lets you enter multiple items quickly. Use the table below and click <b>Run bulk</b>.
+        <div class="small" id="bulkLimitLine">Loading bulk limits…</div>
+
+        <div class="divider"></div>
+
+        <div id="bulkPasteBox">
+          <div class="title" style="margin:0 0 6px;font-size:14px">Paste rows</div>
+          <div class="small">Paste lines like: <b>Sell, Cost, Ship, Misc</b> (comma or tab separated). Fees will use your current fields unless included.</div>
+          <textarea id="bulkPaste" placeholder="Example:
+12.99, 6.20, 0.00, 0.20
+19.99, 9.50, 0.00, 0.30"></textarea>
+          <div class="actions" style="margin-top:10px">
+            <button class="btn" id="bulkImportBtn">Import into table</button>
+            <button class="btn" id="bulkFillExampleBtn">Fill example</button>
+            <span class="pill" id="bulkImportStatus">—</span>
+          </div>
         </div>
 
         <div class="divider"></div>
 
         <div class="actions" id="bulkTools">
-          <button class="btn primary" id="bulkRunBtn">Run bulk (PRO)</button>
+          <button class="btn primary" id="bulkRunBtn">Run bulk</button>
           <button class="btn" id="bulkAddRowBtn">+ Add row</button>
           <button class="btn" id="bulkClearBtn">Clear rows</button>
           <button class="btn" id="bulkApplyFeesBtn">Apply current fees to all</button>
@@ -272,8 +296,8 @@
           </table>
         </div>
 
-        <div class="small" style="margin-top:10px">
-          Tip: Use “Apply current fees to all” after selecting a preset or setting fees once.
+        <div class="note">
+          <b>Trial rules:</b> max <b>3 rows</b> and <b>1 bulk run per day</b>. PRO is unlimited.
         </div>
       </div>
 
@@ -290,7 +314,7 @@
     <div>
       <div class="card" id="proCard">
         <div class="title">PRO features</div>
-        <div class="small">Unlimited reverse, bulk mode, PDF export, share links, saved presets. One-time unlock.</div>
+        <div class="small">Unlimited reverse, bulk unlimited, PDF export, share links, saved presets. One-time unlock.</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
           <a class="btn primary" href="https://stonevia.gumroad.com/l/goddhg" target="_blank" rel="noopener">Buy PRO</a>
           <a class="btn" href="reviews.html">See reviews</a>
@@ -341,12 +365,12 @@
         </select>
 
         <label>Rating</label>
-        <div class="stars" style="display:flex;gap:8px;flex-wrap:wrap" id="starsRow">
-          <button type="button" data-star="1">★ 1</button>
-          <button type="button" data-star="2">★ 2</button>
-          <button type="button" data-star="3">★ 3</button>
-          <button type="button" data-star="4">★ 4</button>
-          <button type="button" data-star="5">★ 5</button>
+        <div style="display:flex;gap:8px;flex-wrap:wrap" id="starsRow">
+          <button class="btn" type="button" data-star="1">★ 1</button>
+          <button class="btn" type="button" data-star="2">★ 2</button>
+          <button class="btn" type="button" data-star="3">★ 3</button>
+          <button class="btn" type="button" data-star="4">★ 4</button>
+          <button class="btn" type="button" data-star="5">★ 5</button>
         </div>
 
         <label>Review</label>
@@ -369,15 +393,19 @@
 
   const TRIAL_DAYS = 5;
   const TRIAL_REVERSE_LIMIT = 3;
+  const TRIAL_BULK_MAX_ROWS = 3;
+  const TRIAL_BULK_RUNS_PER_DAY = 1;
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
   // UI
   const accessPill = document.getElementById("accessPill");
   const reverseUsesLine = document.getElementById("reverseUsesLine");
+  const bulkLimitLine = document.getElementById("bulkLimitLine");
   const shareStatus = document.getElementById("shareStatus");
   const presetStatus = document.getElementById("presetStatus");
   const bulkStatus = document.getElementById("bulkStatus");
+  const bulkImportStatus = document.getElementById("bulkImportStatus");
 
   document.getElementById("yr").textContent = new Date().getFullYear();
 
@@ -413,11 +441,16 @@
   // Buttons
   const pdfBtn = document.getElementById("pdfBtn");
   const shareBtn = document.getElementById("shareBtn");
+
   const bulkRunBtn = document.getElementById("bulkRunBtn");
   const bulkAddRowBtn = document.getElementById("bulkAddRowBtn");
   const bulkClearBtn = document.getElementById("bulkClearBtn");
   const bulkApplyFeesBtn = document.getElementById("bulkApplyFeesBtn");
   const bulkExportBtn = document.getElementById("bulkExportBtn");
+
+  const bulkPasteEl = document.getElementById("bulkPaste");
+  const bulkImportBtn = document.getElementById("bulkImportBtn");
+  const bulkFillExampleBtn = document.getElementById("bulkFillExampleBtn");
 
   // Bulk table
   const bulkTbody = document.getElementById("bulkTbody");
@@ -443,6 +476,15 @@
   function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
   function money(x){ return sym() + (Number.isFinite(x) ? x : 0).toFixed(2); }
   function pct(x){ return (Number.isFinite(x) ? x : 0).toFixed(1) + "%"; }
+
+  function todayKey(){
+    // YYYY-MM-DD in UTC (good enough for "daily limit")
+    const d = new Date();
+    const y = d.getUTCFullYear();
+    const m = String(d.getUTCMonth()+1).padStart(2,"0");
+    const day = String(d.getUTCDate()).padStart(2,"0");
+    return `${y}-${m}-${day}`;
+  }
 
   function daysLeft(trialStartISO){
     const start = new Date(trialStartISO).getTime();
@@ -547,10 +589,8 @@
     }
     sellPriceEl.value = sell.toFixed(2);
 
-    // show implied margin at that sell
     computeProfit();
 
-    // BUT for reverse mode, headline should show required selling price
     o1v.textContent = money(sell);
     o1hint.textContent = `Required selling price to target ~${money(target)} profit (estimate).`;
     o2hint.textContent = "Implied margin at that selling price.";
@@ -571,8 +611,7 @@
 
     if (m==="profit"){ o1h.textContent="Estimated profit"; o2h.textContent="Margin"; }
     if (m==="reverse"){ o1h.textContent="Required selling price"; o2h.textContent="Implied margin"; }
-    if (m==="bulk"){ bulkStatus.textContent = CURRENT_PROFILE?.paid ? "Add rows, enter values, then Run bulk." : "Unlock PRO to use Bulk mode."; }
-
+    if (m==="bulk"){ refreshBulkLimitLine(); }
     compute();
   }
   tabProfit.addEventListener("click", ()=>setMode("profit"));
@@ -591,58 +630,73 @@
   async function ensureProfile(userId){
     const { data: prof, error } = await supabase
       .from("profiles")
-      .select("id, trial_start, paid, reverse_uses")
+      .select("id, trial_start, paid, reverse_uses, bulk_day, bulk_runs_today")
       .eq("id", userId)
       .maybeSingle();
     if (error) throw error;
 
+    const now = new Date().toISOString();
+    const base = {
+      id:userId,
+      trial_start: prof?.trial_start || now,
+      paid: !!prof?.paid,
+      reverse_uses: prof?.reverse_uses ?? 0,
+      bulk_day: prof?.bulk_day ?? null,
+      bulk_runs_today: prof?.bulk_runs_today ?? 0
+    };
+
     if (!prof){
-      const now = new Date().toISOString();
-      const { error: insErr } = await supabase.from("profiles").insert([{ id:userId, trial_start:now, paid:false, reverse_uses:0 }]);
+      const { error: insErr } = await supabase.from("profiles").insert([base]);
       if (insErr) throw insErr;
-      return { id:userId, trial_start:now, paid:false, reverse_uses:0 };
+      return base;
     }
-    if (!prof.trial_start){
-      const now = new Date().toISOString();
-      const { error: upErr } = await supabase.from("profiles").update({ trial_start: now }).eq("id", userId);
-      if (upErr) throw upErr;
-      prof.trial_start = now;
+
+    // normalize missing fields (safe)
+    const patch = {};
+    if (!prof.trial_start) patch.trial_start = now;
+    if (prof.reverse_uses == null) patch.reverse_uses = 0;
+    if (prof.bulk_runs_today == null) patch.bulk_runs_today = 0;
+    if (prof.bulk_day == null) patch.bulk_day = null;
+
+    if (Object.keys(patch).length){
+      const { error: upErr } = await supabase.from("profiles").update(patch).eq("id", userId);
+      if (upErr){
+        // If columns don't exist, we'll keep working but show a friendly message in bulk mode.
+        // Reverse still works as long as reverse_uses exists.
+      }
+      Object.assign(base, patch);
     }
-    if (prof.reverse_uses == null){
-      const { error: upErr } = await supabase.from("profiles").update({ reverse_uses: 0 }).eq("id", userId);
-      if (upErr) throw upErr;
-      prof.reverse_uses = 0;
-    }
-    return prof;
+    return base;
   }
 
   function enableProUI(isPro){
     pdfBtn.disabled = !isPro;
     shareBtn.disabled = !isPro;
 
-    bulkRunBtn.disabled = !isPro;
-    bulkAddRowBtn.disabled = !isPro;
-    bulkClearBtn.disabled = !isPro;
-    bulkApplyFeesBtn.disabled = !isPro;
-    bulkExportBtn.disabled = !isPro;
-
-    presetStatus.textContent = isPro ? "PRO enabled" : "Unlock PRO to use My Presets + PDF + Share + Bulk.";
+    presetStatus.textContent = isPro ? "PRO enabled" : "Unlock PRO to use My Presets + PDF + Share.";
     saveMyPresetBtn.disabled = !isPro;
     loadMyPresetBtn.disabled = !isPro;
     deleteMyPresetBtn.disabled = !isPro;
     myPresetSel.disabled = !isPro;
     myPresetName.disabled = !isPro;
+
+    // Bulk buttons always visible, but may be limited
+    bulkExportBtn.disabled = false;
+    bulkApplyFeesBtn.disabled = false;
+    bulkClearBtn.disabled = false;
+    bulkAddRowBtn.disabled = false;
+    bulkRunBtn.disabled = false;
   }
 
   function updateAccessUI(profile){
     CURRENT_PROFILE = profile;
 
-    // show reverse uses
     if (profile.paid){
       accessPill.textContent = "Unlocked (PRO)";
       accessPill.className = "pill ok";
       reverseUsesLine.textContent = "Reverse uses: Unlimited (PRO)";
       enableProUI(true);
+      refreshBulkLimitLine();
       return;
     }
 
@@ -657,12 +711,12 @@
       accessPill.textContent = "Trial ended • PRO required";
       accessPill.className = "pill bad";
     }
+    refreshBulkLimitLine();
   }
 
-  // Reverse trial limiter (NO RPC)
   async function consumeReverseUseIfTrial(){
     if (!CURRENT_USER || !CURRENT_PROFILE) throw new Error("Session missing. Refresh and log in again.");
-    if (CURRENT_PROFILE.paid) return; // unlimited
+    if (CURRENT_PROFILE.paid) return;
 
     const used = Number(CURRENT_PROFILE.reverse_uses || 0);
     if (used >= TRIAL_REVERSE_LIMIT){
@@ -679,6 +733,60 @@
 
     CURRENT_PROFILE.reverse_uses = next;
     reverseUsesLine.textContent = `Reverse uses: ${next}/${TRIAL_REVERSE_LIMIT} (Trial)`;
+  }
+
+  function refreshBulkLimitLine(){
+    if (!CURRENT_PROFILE){
+      bulkLimitLine.textContent = "Loading bulk limits…";
+      return;
+    }
+    if (CURRENT_PROFILE.paid){
+      bulkLimitLine.textContent = "PRO: unlimited rows • unlimited runs.";
+      return;
+    }
+
+    const left = daysLeft(CURRENT_PROFILE.trial_start);
+    if (left <= 0){
+      bulkLimitLine.textContent = "Trial ended. Unlock PRO to use Bulk mode.";
+      return;
+    }
+
+    const day = todayKey();
+    const usedToday = (CURRENT_PROFILE.bulk_day === day) ? Number(CURRENT_PROFILE.bulk_runs_today || 0) : 0;
+    const runsLeft = Math.max(0, TRIAL_BULK_RUNS_PER_DAY - usedToday);
+
+    bulkLimitLine.textContent = `Trial: max ${TRIAL_BULK_MAX_ROWS} rows • ${runsLeft}/${TRIAL_BULK_RUNS_PER_DAY} bulk run(s) left today.`;
+  }
+
+  async function consumeBulkRunIfTrial(){
+    if (!CURRENT_USER || !CURRENT_PROFILE) throw new Error("Session missing. Refresh and log in again.");
+    if (CURRENT_PROFILE.paid) return;
+
+    const left = daysLeft(CURRENT_PROFILE.trial_start);
+    if (left <= 0) throw new Error("Trial ended. Unlock PRO to run bulk scans.");
+
+    const day = todayKey();
+    let usedToday = 0;
+    if (CURRENT_PROFILE.bulk_day === day) usedToday = Number(CURRENT_PROFILE.bulk_runs_today || 0);
+
+    if (usedToday >= TRIAL_BULK_RUNS_PER_DAY){
+      throw new Error("Trial bulk limit reached for today. Try again tomorrow or unlock PRO.");
+    }
+
+    const next = usedToday + 1;
+    const { error } = await supabase
+      .from("profiles")
+      .update({ bulk_day: day, bulk_runs_today: next })
+      .eq("id", CURRENT_USER.id);
+
+    if (error){
+      // This usually means columns don't exist. We'll explain clearly.
+      throw new Error("Bulk daily limit storage missing in database. Add columns bulk_day + bulk_runs_today in profiles (I’ll give you SQL).");
+    }
+
+    CURRENT_PROFILE.bulk_day = day;
+    CURRENT_PROFILE.bulk_runs_today = next;
+    refreshBulkLimitLine();
   }
 
   // Calculate click
@@ -699,6 +807,7 @@
     fxRateEl.value = "";
     presetSel.value = "manual";
     shareStatus.textContent = "—";
+    bulkPasteEl.value = "";
     clearBulkRows();
     setMode("profit");
   });
@@ -770,16 +879,23 @@
     inp.value = String(value ?? "0");
     return inp;
   }
-
   function renumberBulkRows(){
     [...bulkTbody.children].forEach((tr,i)=> tr.children[0].textContent = String(i+1));
+  }
+
+  function rowCount(){ return bulkTbody.children.length; }
+
+  function canAddRow(){
+    if (!CURRENT_PROFILE) return false;
+    if (CURRENT_PROFILE.paid) return true;
+    return rowCount() < TRIAL_BULK_MAX_ROWS;
   }
 
   function addBulkRow(initial={}){
     const tr = document.createElement("tr");
 
     const idxTd = document.createElement("td");
-    idxTd.textContent = String(bulkTbody.children.length + 1);
+    idxTd.textContent = String(rowCount() + 1);
     tr.appendChild(idxTd);
 
     const sell = mkCellInput(initial.sell ?? "0");
@@ -795,6 +911,7 @@
       const td = document.createElement("td");
       td.appendChild(inp);
       tr.appendChild(td);
+      inp.addEventListener("input", ()=> previewRow(tr));
     });
 
     const profitTd = document.createElement("td");
@@ -813,6 +930,7 @@
       tr.remove();
       renumberBulkRows();
       bulkStatus.textContent = "Row removed.";
+      refreshBulkLimitLine();
     };
     actTd.appendChild(delBtn);
     tr.appendChild(actTd);
@@ -820,12 +938,14 @@
     tr._pp = { sell,cost,ship,misc,feePct,feeFixed,adsPct,retPct, profitTd, marginTd };
     bulkTbody.appendChild(tr);
     renumberBulkRows();
+    previewRow(tr);
   }
 
   function clearBulkRows(){
     bulkTbody.innerHTML = "";
     bulkLastRows = [];
-    bulkStatus.textContent = CURRENT_PROFILE?.paid ? "Add rows, enter values, then Run bulk." : "Unlock PRO to use Bulk mode.";
+    bulkStatus.textContent = "—";
+    refreshBulkLimitLine();
   }
 
   function applyFeesToAll(){
@@ -841,25 +961,10 @@
       r.feeFixed.value = base.feeFixed;
       r.adsPct.value = base.adsPct;
       r.retPct.value = base.retPct;
+      previewRow(tr);
     });
     bulkStatus.textContent = "Applied current fees to all rows.";
   }
-
-  bulkAddRowBtn.addEventListener("click", ()=>{
-    if (!CURRENT_PROFILE?.paid){ bulkStatus.textContent="Unlock PRO to add rows."; return; }
-    addBulkRow();
-    bulkStatus.textContent = "Row added.";
-  });
-
-  bulkClearBtn.addEventListener("click", ()=>{
-    if (!CURRENT_PROFILE?.paid){ bulkStatus.textContent="Unlock PRO to clear rows."; return; }
-    clearBulkRows();
-  });
-
-  bulkApplyFeesBtn.addEventListener("click", ()=>{
-    if (!CURRENT_PROFILE?.paid){ bulkStatus.textContent="Unlock PRO to apply fees."; return; }
-    applyFeesToAll();
-  });
 
   function computeRow(sell,cost,ship,misc,feePct,feeFixed,adsPct,returnPct){
     const fees = sell*(feePct/100) + feeFixed + sell*(adsPct/100);
@@ -868,44 +973,99 @@
     return { profit, margin, fees };
   }
 
-  bulkRunBtn.addEventListener("click", ()=>{
-    if (!CURRENT_PROFILE?.paid){
-      bulkStatus.textContent = "Unlock PRO to run bulk scans.";
+  function previewRow(tr){
+    if (!tr?._pp) return;
+    const r = tr._pp;
+    const sell = n(r.sell.value);
+    const cost = n(r.cost.value);
+    const ship = n(r.ship.value);
+    const misc = n(r.misc.value);
+    const feePct = clamp(n(r.feePct.value),0,99);
+    const feeFixed = clamp(n(r.feeFixed.value),0,999999);
+    const adsPct = clamp(n(r.adsPct.value),0,99);
+    const retPct = clamp(n(r.retPct.value),0,99);
+
+    const res = computeRow(sell,cost,ship,misc,feePct,feeFixed,adsPct,retPct);
+    r.profitTd.textContent = money(res.profit);
+    r.profitTd.className = res.profit >= 0 ? "good" : "bad";
+    r.marginTd.textContent = pct(res.margin);
+    r.marginTd.className = res.margin >= 10 ? "good" : (res.margin < 0 ? "bad" : "");
+  }
+
+  bulkAddRowBtn.addEventListener("click", ()=>{
+    if (!CURRENT_PROFILE){ bulkStatus.textContent="Loading…"; return; }
+    if (!canAddRow()){
+      bulkStatus.textContent = CURRENT_PROFILE.paid
+        ? "Cannot add row."
+        : `Trial limit: max ${TRIAL_BULK_MAX_ROWS} rows. Unlock PRO for unlimited.`;
       return;
     }
-    const trs = [...bulkTbody.children];
-    if (!trs.length){ bulkStatus.textContent = "Add at least 1 row."; return; }
+    addBulkRow();
+    bulkStatus.textContent = "Row added.";
+    refreshBulkLimitLine();
+  });
 
-    const out = [];
-    trs.forEach(tr=>{
-      const r = tr._pp;
-      const sell = n(r.sell.value);
-      const cost = n(r.cost.value);
-      const ship = n(r.ship.value);
-      const misc = n(r.misc.value);
-      const feePct = clamp(n(r.feePct.value),0,99);
-      const feeFixed = clamp(n(r.feeFixed.value),0,999999);
-      const adsPct = clamp(n(r.adsPct.value),0,99);
-      const retPct = clamp(n(r.retPct.value),0,99);
+  bulkClearBtn.addEventListener("click", ()=>{
+    clearBulkRows();
+    const initial = CURRENT_PROFILE?.paid ? 5 : TRIAL_BULK_MAX_ROWS;
+    for (let i=0;i<initial;i++) addBulkRow();
+    bulkStatus.textContent = "Reset rows.";
+  });
 
-      const res = computeRow(sell,cost,ship,misc,feePct,feeFixed,adsPct,retPct);
-      r.profitTd.textContent = money(res.profit);
-      r.profitTd.className = res.profit >= 0 ? "good" : "bad";
-      r.marginTd.textContent = pct(res.margin);
-      r.marginTd.className = res.margin >= 10 ? "good" : (res.margin < 0 ? "bad" : "");
+  bulkApplyFeesBtn.addEventListener("click", ()=>{
+    applyFeesToAll();
+  });
 
-      out.push({ sell,cost,ship,misc,feePct,feeFixed,adsPct,retPct, fees:res.fees, profit:res.profit, margin:res.margin });
-    });
+  bulkRunBtn.addEventListener("click", async ()=>{
+    try{
+      if (!CURRENT_PROFILE){ bulkStatus.textContent="Loading…"; return; }
 
-    bulkLastRows = out;
-    bulkStatus.textContent = `Processed ${out.length} row(s).`;
+      // trial gating
+      if (!CURRENT_PROFILE.paid){
+        const left = daysLeft(CURRENT_PROFILE.trial_start);
+        if (left <= 0) throw new Error("Trial ended. Unlock PRO to use Bulk mode.");
+
+        if (rowCount() > TRIAL_BULK_MAX_ROWS){
+          throw new Error(`Trial allows max ${TRIAL_BULK_MAX_ROWS} rows. Remove extra rows or unlock PRO.`);
+        }
+
+        await consumeBulkRunIfTrial();
+      }
+
+      const trs = [...bulkTbody.children];
+      if (!trs.length) throw new Error("Add at least 1 row.");
+
+      const out = [];
+      trs.forEach(tr=>{
+        const r = tr._pp;
+        const sell = n(r.sell.value);
+        const cost = n(r.cost.value);
+        const ship = n(r.ship.value);
+        const misc = n(r.misc.value);
+        const feePct = clamp(n(r.feePct.value),0,99);
+        const feeFixed = clamp(n(r.feeFixed.value),0,999999);
+        const adsPct = clamp(n(r.adsPct.value),0,99);
+        const retPct = clamp(n(r.retPct.value),0,99);
+
+        const res = computeRow(sell,cost,ship,misc,feePct,feeFixed,adsPct,retPct);
+        r.profitTd.textContent = money(res.profit);
+        r.profitTd.className = res.profit >= 0 ? "good" : "bad";
+        r.marginTd.textContent = pct(res.margin);
+        r.marginTd.className = res.margin >= 10 ? "good" : (res.margin < 0 ? "bad" : "");
+
+        out.push({ sell,cost,ship,misc,feePct,feeFixed,adsPct,retPct, fees:res.fees, profit:res.profit, margin:res.margin });
+      });
+
+      bulkLastRows = out;
+      bulkStatus.textContent = `Processed ${out.length} row(s).`;
+      refreshBulkLimitLine();
+    } catch(e){
+      bulkStatus.textContent = e.message || "Bulk failed.";
+      refreshBulkLimitLine();
+    }
   });
 
   bulkExportBtn.addEventListener("click", ()=>{
-    if (!CURRENT_PROFILE?.paid){
-      bulkStatus.textContent = "Unlock PRO to export bulk results.";
-      return;
-    }
     if (!bulkLastRows.length){
       bulkStatus.textContent = "Run bulk first.";
       return;
@@ -917,6 +1077,61 @@
     const csv = rows.map(r=>r.map(csvEscape).join(",")).join("\n");
     downloadText("profitpilot-bulk.csv", csv);
     bulkStatus.textContent = "Bulk CSV exported.";
+  });
+
+  // Paste import
+  function parseLines(text){
+    const lines = text.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+    const rows = [];
+    for (const line of lines){
+      const parts = line.includes("\t") ? line.split("\t") : line.split(",");
+      const p = parts.map(x=>x.trim()).filter(x=>x.length>0);
+      if (p.length < 2) continue;
+
+      // Support formats:
+      // 4 cols: sell,cost,ship,misc
+      // 8 cols: sell,cost,ship,misc,feePct,fixed,adsPct,returnPct
+      const row = {
+        sell: p[0] ?? "0",
+        cost: p[1] ?? "0",
+        ship: p[2] ?? "0",
+        misc: p[3] ?? "0",
+        feePct: p[4] ?? feePctEl.value,
+        feeFixed: p[5] ?? feeFixedEl.value,
+        adsPct: p[6] ?? adsPctEl.value,
+        returnPct: p[7] ?? returnPctEl.value
+      };
+      rows.push(row);
+    }
+    return rows;
+  }
+
+  bulkFillExampleBtn.addEventListener("click", ()=>{
+    bulkPasteEl.value = "12.99, 6.20, 0.00, 0.20\n19.99, 9.50, 0.00, 0.30\n29.99, 14.00, 0.00, 0.50";
+    bulkImportStatus.textContent = "Example filled.";
+  });
+
+  bulkImportBtn.addEventListener("click", ()=>{
+    bulkImportStatus.textContent = "Importing…";
+    const rows = parseLines(bulkPasteEl.value || "");
+    if (!rows.length){
+      bulkImportStatus.textContent = "Nothing to import.";
+      return;
+    }
+
+    // Trial row cap
+    const allowed = (CURRENT_PROFILE?.paid) ? rows.length : Math.min(rows.length, TRIAL_BULK_MAX_ROWS);
+    clearBulkRows();
+
+    for (let i=0;i<allowed;i++) addBulkRow(rows[i]);
+
+    if (!CURRENT_PROFILE?.paid && rows.length > allowed){
+      bulkImportStatus.textContent = `Imported ${allowed}. Trial limit is ${TRIAL_BULK_MAX_ROWS} rows.`;
+    } else {
+      bulkImportStatus.textContent = `Imported ${allowed} row(s).`;
+    }
+    bulkStatus.textContent = "Review values, then Run bulk.";
+    refreshBulkLimitLine();
   });
 
   // ---- My presets (PRO) ----
@@ -967,6 +1182,7 @@
     adsPctEl.value = String(opt.dataset.adsPct ?? 0);
     returnPctEl.value = String(opt.dataset.returnPct ?? 0);
     presetSel.value = "manual";
+    applyFeesToAll();
     compute();
     presetStatus.textContent="Loaded into fields.";
   });
@@ -986,10 +1202,12 @@
   let selectedStars = 5;
   const starsRow = document.getElementById("starsRow");
   const reviewStatus = document.getElementById("reviewStatus");
-
-  function setStars(n){
-    selectedStars = n;
-    [...starsRow.querySelectorAll("button")].forEach(b=>b.classList.toggle("active", parseInt(b.dataset.star,10)===n));
+  function setStars(nv){
+    selectedStars = nv;
+    [...starsRow.querySelectorAll("button")].forEach(b=>{
+      b.style.borderColor = (parseInt(b.dataset.star,10)===nv) ? "rgba(14,165,164,.45)" : "rgba(16,24,40,.10)";
+      b.style.background = (parseInt(b.dataset.star,10)===nv) ? "rgba(14,165,164,.10)" : "rgba(255,255,255,.78)";
+    });
   }
   setStars(5);
   starsRow.addEventListener("click",(e)=>{
@@ -1039,16 +1257,13 @@
 
       if (profile.paid) await loadMyPresets();
 
-      // Always initialize bulk table (visible), but PRO-gated controls
+      // Init bulk rows
       clearBulkRows();
-      const initialRows = profile.paid ? 5 : 3;
+      const initialRows = profile.paid ? 5 : TRIAL_BULK_MAX_ROWS;
       for (let i=0;i<initialRows;i++) addBulkRow();
 
-      // Default mode
       setMode("profit");
       computeProfit();
-
-      accessPill.textContent = profile.paid ? "Unlocked (PRO)" : accessPill.textContent;
     } catch(e){
       accessPill.textContent="Access check failed";
       accessPill.className="pill bad";
