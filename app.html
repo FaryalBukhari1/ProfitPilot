@@ -4,23 +4,15 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>ProfitPilot — App</title>
-  <meta name="description" content="ProfitPilot helps sellers estimate profit, margin, fee drag, return sensitivity, reverse-price for target profit, export & share scenarios.">
+  <meta name="description" content="ProfitPilot: profit calculator with reverse pricing, trial limits, export and share.">
   <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
 
   <style>
     :root{
-      --bg:#f6f8fb;
-      --bg2:#eef2ff;
-      --card:#ffffff;
-      --txt:#0b1220;
-      --muted:#5b6474;
-      --line:rgba(16,24,40,.10);
-      --accent:#0ea5a4;
-      --accent2:#4f46e5;
-      --shadow:0 10px 30px rgba(16,24,40,.08);
-      --warn:#f59e0b;
-      --bad:#ef4444;
-      --ok:#0ea5a4;
+      --bg:#f6f8fb; --bg2:#eef2ff; --txt:#0b1220; --muted:#5b6474;
+      --card:rgba(255,255,255,.88); --line:rgba(16,24,40,.10);
+      --accent:#0ea5a4; --accent2:#4f46e5; --shadow:0 10px 30px rgba(16,24,40,.08);
+      --warn:#f59e0b; --bad:#ef4444; --ok:#0ea5a4;
     }
     *{box-sizing:border-box}
     body{
@@ -46,7 +38,7 @@
     .pill{
       padding:8px 10px;border-radius:999px;
       border:1px solid var(--line);
-      background:rgba(255,255,255,.70);
+      background:rgba(255,255,255,.72);
       font-size:12px;color:var(--muted);
       display:inline-flex;gap:8px;align-items:center
     }
@@ -57,7 +49,7 @@
     .btn{
       padding:10px 14px;border-radius:999px;
       border:1px solid var(--line);
-      background:rgba(255,255,255,.75);
+      background:rgba(255,255,255,.78);
       color:var(--txt);
       display:inline-flex;gap:8px;align-items:center;
       cursor:pointer;
@@ -69,8 +61,9 @@
 
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
     @media(max-width:980px){.grid{grid-template-columns:1fr}}
+
     .card{
-      background:rgba(255,255,255,.82);
+      background:var(--card);
       border:1px solid var(--line);
       border-radius:18px;
       padding:16px;
@@ -78,7 +71,6 @@
     }
     .title{font-weight:900;margin:0 0 8px}
     .small{font-size:12px;color:var(--muted);line-height:1.6}
-
     .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     @media(max-width:560px){.row{grid-template-columns:1fr}}
 
@@ -88,50 +80,32 @@
       padding:12px;
       border-radius:14px;
       border:1px solid var(--line);
-      background:rgba(255,255,255,.88);
+      background:rgba(255,255,255,.92);
       color:var(--txt);
       outline:none;
     }
     input:focus,select:focus{border-color:rgba(14,165,164,.35)}
+    .divider{height:1px;background:var(--line);margin:12px 0}
 
     .kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
     @media(max-width:560px){.kpi{grid-template-columns:1fr}}
     .k{
       border:1px solid var(--line);
-      background:rgba(255,255,255,.65);
+      background:rgba(255,255,255,.72);
       border-radius:16px;
       padding:12px;
     }
     .k .h{font-size:12px;color:var(--muted)}
     .k .v{font-size:20px;font-weight:900;margin-top:6px}
-    .divider{height:1px;background:var(--line);margin:12px 0}
     .hint{font-size:12px;color:var(--muted)}
-    footer{margin:14px 2px 0;color:var(--muted);font-size:12px;line-height:1.6}
 
-    .overlay{
-      position:fixed;inset:0;
-      background:rgba(16,24,40,.42);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:14px;
-      z-index:999;
-    }
-    .modal{
-      width:min(760px,100%);
-      background:rgba(255,255,255,.90);
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:18px;
-      box-shadow:var(--shadow);
-    }
-    .modal h2{margin:0 0 8px}
-    .two{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
-    @media(max-width:840px){.two{grid-template-columns:1fr}}
+    .tabs{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .tab{padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.72);cursor:pointer;font-size:12px;user-select:none}
+    .tab.active{border-color:rgba(14,165,164,.35);background:rgba(14,165,164,.10);font-weight:900}
 
     .stars button{
       border:1px solid var(--line);
-      background:rgba(255,255,255,.75);
+      background:rgba(255,255,255,.78);
       color:var(--txt);
       border-radius:999px;
       padding:8px 10px;
@@ -143,10 +117,7 @@
       background:rgba(14,165,164,.10);
     }
     .toast{margin-top:10px;font-size:12px;color:var(--muted)}
-
-    .tabs{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-    .tab{padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.70);cursor:pointer;font-size:12px;user-select:none}
-    .tab.active{border-color:rgba(14,165,164,.35);background:rgba(14,165,164,.10);font-weight:900}
+    footer{margin:14px 2px 0;color:var(--muted);font-size:12px;line-height:1.6}
   </style>
 </head>
 
@@ -163,20 +134,19 @@
     </div>
 
     <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-      <a class="btn ghost" href="https://ukwebtools.com/">← Ukwebtools</a>
       <a class="btn ghost" href="index.html">Home</a>
       <a class="btn ghost" href="reviews.html">Reviews</a>
-      <span class="pill" id="accessPill">Checking access…</span>
+      <span class="pill" id="accessPill">Loading…</span>
       <button class="btn" id="logoutBtn">Log out</button>
     </div>
   </div>
 
   <div class="grid">
 
-    <!-- CALCULATOR -->
+    <!-- LEFT: CALC -->
     <div class="card">
       <div class="title">Calculator</div>
-      <div class="small">Profit mode = normal calculation. Reverse mode = enter target profit and we estimate the required selling price.</div>
+      <div class="small">Profit mode = normal. Reverse mode = target profit → required selling price.</div>
 
       <div class="tabs">
         <div class="tab active" id="tabProfit">Profit mode</div>
@@ -185,29 +155,25 @@
 
       <div class="divider"></div>
 
-      <!-- Currency -->
-      <div class="title" style="margin:0 0 6px;font-size:14px">Currency</div>
-      <div class="small">Pick a display currency. Optional exchange rate for your own conversion (we don’t provide live FX rates).</div>
-
       <div class="row">
         <div>
           <label>Display currency</label>
           <select id="currency">
-            <option value="GBP">GBP (£) — British Pound</option>
-            <option value="USD">USD ($) — US Dollar</option>
-            <option value="EUR">EUR (€) — Euro</option>
-            <option value="AUD">AUD ($) — Australian Dollar</option>
-            <option value="CAD">CAD ($) — Canadian Dollar</option>
-            <option value="NZD">NZD ($) — New Zealand Dollar</option>
-            <option value="AED">AED — UAE Dirham</option>
-            <option value="SAR">SAR — Saudi Riyal</option>
-            <option value="PKR">PKR (₨) — Pakistani Rupee</option>
-            <option value="INR">INR (₹) — Indian Rupee</option>
-            <option value="TRY">TRY (₺) — Turkish Lira</option>
-            <option value="ZAR">ZAR (R) — South African Rand</option>
-            <option value="NGN">NGN (₦) — Nigerian Naira</option>
-            <option value="BDT">BDT (৳) — Bangladeshi Taka</option>
-            <option value="LKR">LKR (Rs) — Sri Lankan Rupee</option>
+            <option value="GBP">GBP (£)</option>
+            <option value="USD">USD ($)</option>
+            <option value="EUR">EUR (€)</option>
+            <option value="AUD">AUD ($)</option>
+            <option value="CAD">CAD ($)</option>
+            <option value="NZD">NZD ($)</option>
+            <option value="AED">AED</option>
+            <option value="SAR">SAR</option>
+            <option value="PKR">PKR (₨)</option>
+            <option value="INR">INR (₹)</option>
+            <option value="TRY">TRY (₺)</option>
+            <option value="ZAR">ZAR (R)</option>
+            <option value="NGN">NGN (₦)</option>
+            <option value="BDT">BDT (৳)</option>
+            <option value="LKR">LKR (Rs)</option>
           </select>
         </div>
         <div>
@@ -226,22 +192,22 @@
       <div class="row">
         <div>
           <label>Selling price</label>
-          <input id="sellPrice" inputmode="decimal" placeholder="0.00" value="0">
+          <input id="sellPrice" inputmode="decimal" value="0">
         </div>
         <div>
           <label>Product cost</label>
-          <input id="productCost" inputmode="decimal" placeholder="0.00" value="0">
+          <input id="productCost" inputmode="decimal" value="0">
         </div>
       </div>
 
       <div class="row">
         <div>
           <label>Shipping cost</label>
-          <input id="shipCost" inputmode="decimal" placeholder="0.00" value="0">
+          <input id="shipCost" inputmode="decimal" value="0">
         </div>
         <div>
           <label>Packaging / misc cost</label>
-          <input id="miscCost" inputmode="decimal" placeholder="0.00" value="0">
+          <input id="miscCost" inputmode="decimal" value="0">
         </div>
       </div>
 
@@ -250,31 +216,31 @@
       <div class="row">
         <div>
           <label>Platform fee (%)</label>
-          <input id="feePct" inputmode="decimal" placeholder="e.g., 12.8" value="0">
+          <input id="feePct" inputmode="decimal" value="0">
         </div>
         <div>
           <label>Fixed fee (per order)</label>
-          <input id="feeFixed" inputmode="decimal" placeholder="0.00" value="0">
+          <input id="feeFixed" inputmode="decimal" value="0">
         </div>
       </div>
 
       <div class="row">
         <div>
           <label>Ads / promo cost (%)</label>
-          <input id="adsPct" inputmode="decimal" placeholder="e.g., 3" value="0">
+          <input id="adsPct" inputmode="decimal" value="0">
         </div>
         <div>
           <label>Return rate (%)</label>
-          <input id="returnPct" inputmode="decimal" placeholder="e.g., 5" value="0">
+          <input id="returnPct" inputmode="decimal" value="0">
         </div>
       </div>
 
       <div id="reverseBox" style="display:none">
         <div class="divider"></div>
         <div class="title" style="margin:0 0 6px;font-size:14px">Reverse mode</div>
-        <div class="small">Trial can run reverse mode 3 times total. PRO unlimited.</div>
+        <div class="small">Trial: 3 reverse calculations total. PRO: unlimited.</div>
         <label>Target profit</label>
-        <input id="targetProfit" inputmode="decimal" placeholder="e.g., 5.00" value="0">
+        <input id="targetProfit" inputmode="decimal" value="0">
         <div class="small" id="reverseUsesLine" style="margin-top:8px">Reverse uses: —</div>
       </div>
 
@@ -282,14 +248,12 @@
 
       <div class="row">
         <button class="btn primary" id="calcBtn">Calculate</button>
-        <button class="btn" id="resetBtn">Reset to 0</button>
+        <button class="btn" id="resetBtn">Reset</button>
       </div>
 
-      <!-- Export/Share -->
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
         <button class="btn" id="exportCsvBtn">Export CSV</button>
-        <button class="btn" id="exportPdfBtn">Export PDF</button>
-        <button class="btn" id="shareBtn">Share link</button>
+        <button class="btn" id="shareBtn">Share link (PRO)</button>
         <span class="pill" id="shareStatus">—</span>
       </div>
 
@@ -310,12 +274,12 @@
         <div class="k">
           <div class="h">Total fees + ads</div>
           <div class="v" id="feesOut">£0.00</div>
-          <div class="hint">Platform fee + fixed fee + ad %</div>
+          <div class="hint">Platform fee + fixed + ads</div>
         </div>
         <div class="k">
           <div class="h">Return sensitivity (expected)</div>
           <div class="v" id="returnOut">£0.00</div>
-          <div class="hint">Expected impact based on return rate</div>
+          <div class="hint">Expected impact from return %</div>
         </div>
       </div>
 
@@ -329,16 +293,17 @@
 
       <div class="divider"></div>
       <div class="small">
-        <b>Disclaimer:</b> Estimates only, not financial/legal/tax advice. Not affiliated with any platform.
-        FX conversion depends on the exchange rate you enter (no live rates).
-        See <a href="https://ukwebtools.com/terms.html">Terms</a> and <a href="https://ukwebtools.com/privacy.html">Privacy</a>.
+        <b>Disclaimer:</b> estimates only (not financial/legal/tax advice). Not affiliated with any platform.
+        FX depends on your entered rate (no live rates). See
+        <a href="https://ukwebtools.com/terms.html" target="_blank" rel="noopener">Terms</a> and
+        <a href="https://ukwebtools.com/privacy.html" target="_blank" rel="noopener">Privacy</a>.
       </div>
     </div>
 
-    <!-- RIGHT PANEL -->
+    <!-- RIGHT: ACCOUNT + REVIEW -->
     <div class="card">
       <div class="title">Your workspace</div>
-      <div class="small" id="userLine">Loading account…</div>
+      <div class="small" id="userLine">Loading…</div>
 
       <div class="divider"></div>
 
@@ -371,66 +336,10 @@
 
       <button class="btn primary" id="sendReview">Submit review</button>
       <div class="toast" id="reviewStatus">—</div>
-
-      <div class="divider"></div>
-
-      <div class="title" style="margin:0 0 6px">Quick links</div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <a class="btn" href="reviews.html">Read public reviews</a>
-        <a class="btn" href="https://stonevia.gumroad.com/l/goddhg" target="_blank" rel="noopener">Buy PRO</a>
-      </div>
     </div>
-
   </div>
 
   <footer>© <span id="yr"></span> Ukwebtools • ProfitPilot</footer>
-</div>
-
-<!-- PAYWALL -->
-<div class="overlay" id="paywall">
-  <div class="modal">
-    <h2>Unlock ProfitPilot PRO</h2>
-    <p class="small">
-      Your free trial ended. Unlock PRO with a one-time purchase (no subscription).
-      Gumroad emails your license key instantly. Paste it below to unlock.
-    </p>
-
-    <div class="two">
-      <div class="card" style="padding:14px;box-shadow:none">
-        <div class="title">Free Trial</div>
-        <ul class="small" style="line-height:1.8;padding-left:16px;margin:8px 0 0">
-          <li>5-day access</li>
-          <li>Reverse mode: 3 runs total</li>
-        </ul>
-      </div>
-
-      <div class="card" style="padding:14px;border-color:rgba(14,165,164,.35);box-shadow:none">
-        <div class="title">PRO (One-time unlock)</div>
-        <ul class="small" style="line-height:1.8;padding-left:16px;margin:8px 0 0">
-          <li><b>Unlimited access</b></li>
-          <li><b>Unlimited reverse mode</b></li>
-          <li><b>Export + share</b></li>
-        </ul>
-        <div class="pill ok" style="margin-top:10px">One-time purchase • No subscription</div>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="row">
-      <a class="btn primary" id="buyBtn" href="https://stonevia.gumroad.com/l/goddhg" target="_blank" rel="noopener">Buy PRO (one-time)</a>
-      <a class="btn" href="reviews.html">See reviews</a>
-    </div>
-
-    <label style="margin-top:12px">Paste Gumroad license key</label>
-    <input id="redeemInput" placeholder="e.g., ABCD-1234-EFGH-5678">
-    <button class="btn primary" id="redeemBtn">Redeem & unlock</button>
-    <div class="toast" id="redeemStatus">—</div>
-
-    <div class="small" style="margin-top:12px">
-      Need help? Email <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a>
-    </div>
-  </div>
 </div>
 
 <script type="module">
@@ -438,9 +347,6 @@
 
   const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
   const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
-
-  const BUY_URL = "https://stonevia.gumroad.com/l/goddhg";
-  const GUMROAD_REDEEM_FN = "https://xsigsftvfknefpdfsyae.supabase.co/functions/v1/gumroad-redeem";
 
   const TRIAL_DAYS = 5;
   const TRIAL_REVERSE_LIMIT = 3;
@@ -450,77 +356,25 @@
   // UI refs
   const accessPill = document.getElementById("accessPill");
   const userLine = document.getElementById("userLine");
-  const paywall = document.getElementById("paywall");
-  document.getElementById("buyBtn").href = BUY_URL;
-  document.getElementById("yr").textContent = new Date().getFullYear();
+  const reverseUsesLine = document.getElementById("reverseUsesLine");
+  const shareStatus = document.getElementById("shareStatus");
 
-  function showPaywall(show){ paywall.style.display = show ? "flex" : "none"; }
-
-  function n(v){ const x = parseFloat(String(v).replace(/,/g,"")); return Number.isFinite(x) ? x : 0; }
-  function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
-
-  // Currency
-  const CURRENCY_SYMBOL = {
-    GBP:"£", USD:"$", EUR:"€", AUD:"$", CAD:"$", NZD:"$",
-    AED:"AED ", SAR:"SAR ", PKR:"₨", INR:"₹", TRY:"₺", ZAR:"R ", NGN:"₦", BDT:"৳", LKR:"Rs "
-  };
+  // Inputs
   const currencyEl = document.getElementById("currency");
   const fxRateEl = document.getElementById("fxRate");
   const fxRow = document.getElementById("fxRow");
   const fxOut = document.getElementById("fxOut");
   const fxNote = document.getElementById("fxNote");
 
-  function sym(){ return CURRENCY_SYMBOL[currencyEl.value || "GBP"] || ""; }
-  function money(x){ return sym() + (Number.isFinite(x) ? x : 0).toFixed(2); }
-  function pct(x){ return (Number.isFinite(x) ? x : 0).toFixed(1) + "%"; }
-
-  function updateFXLine(sell){
-    const r = n(fxRateEl.value);
-    if (r > 0 && sell > 0){
-      fxRow.style.display = "block";
-      fxOut.textContent = (sell * r).toFixed(2);
-      fxNote.textContent = `Converted using your rate: ${sell.toFixed(2)} × ${r}`;
-    } else {
-      fxRow.style.display = "none";
-    }
-  }
-
-  // Presets
-  const PRESETS = [
-    { id:"manual", name:"Manual (enter fees yourself)", feePct:0, feeFixed:0, adsPct:0, returnPct:0 },
-    { id:"ebay_uk_typical", name:"eBay UK (typical example)", feePct:12.8, feeFixed:0.30, adsPct:0, returnPct:3 },
-    { id:"etsy_typical", name:"Etsy (typical example)", feePct:9.5, feeFixed:0.20, adsPct:0, returnPct:3 },
-    { id:"shopify_card_only", name:"Shopify (card fee example)", feePct:2.0, feeFixed:0.20, adsPct:0, returnPct:2 },
-  ];
   const presetSel = document.getElementById("preset");
-  const feePctEl = document.getElementById("feePct");
-  const feeFixEl = document.getElementById("feeFixed");
-  const adsPctEl = document.getElementById("adsPct");
-  const retPctEl = document.getElementById("returnPct");
-
-  PRESETS.forEach(p=>{
-    const opt = document.createElement("option");
-    opt.value = p.id;
-    opt.textContent = p.name;
-    presetSel.appendChild(opt);
-  });
-  presetSel.value = "manual";
-  presetSel.addEventListener("change", ()=>{
-    const p = PRESETS.find(x=>x.id===presetSel.value) || PRESETS[0];
-    if (p.id !== "manual") {
-      feePctEl.value = String(p.feePct ?? 0);
-      feeFixEl.value = String(p.feeFixed ?? 0);
-      adsPctEl.value = String(p.adsPct ?? 0);
-      retPctEl.value = String(p.returnPct ?? 0);
-    }
-    compute();
-  });
-
-  // Inputs
   const sellPriceEl = document.getElementById("sellPrice");
   const productCostEl = document.getElementById("productCost");
   const shipCostEl = document.getElementById("shipCost");
   const miscCostEl = document.getElementById("miscCost");
+  const feePctEl = document.getElementById("feePct");
+  const feeFixedEl = document.getElementById("feeFixed");
+  const adsPctEl = document.getElementById("adsPct");
+  const returnPctEl = document.getElementById("returnPct");
   const targetProfitEl = document.getElementById("targetProfit");
 
   // Outputs
@@ -533,38 +387,68 @@
   const feesOut = document.getElementById("feesOut");
   const returnOut = document.getElementById("returnOut");
 
-  // Mode
-  const tabProfit = document.getElementById("tabProfit");
-  const tabReverse = document.getElementById("tabReverse");
-  const reverseBox = document.getElementById("reverseBox");
-  const reverseUsesLine = document.getElementById("reverseUsesLine");
-  let MODE = "profit";
+  document.getElementById("yr").textContent = new Date().getFullYear();
 
-  function setMode(m){
-    MODE = m;
-    tabProfit.classList.toggle("active", m==="profit");
-    tabReverse.classList.toggle("active", m==="reverse");
-    reverseBox.style.display = (m==="reverse") ? "block" : "none";
+  const CURRENCY_SYMBOL = {
+    GBP:"£", USD:"$", EUR:"€", AUD:"$", CAD:"$", NZD:"$",
+    AED:"AED ", SAR:"SAR ", PKR:"₨", INR:"₹", TRY:"₺", ZAR:"R ", NGN:"₦", BDT:"৳", LKR:"Rs "
+  };
 
-    if (m === "profit"){
-      o1h.textContent = "Estimated profit";
-      o2h.textContent = "Margin";
+  function sym(){ return CURRENCY_SYMBOL[currencyEl.value || "GBP"] || ""; }
+  function n(v){ const x = parseFloat(String(v).replace(/,/g,"")); return Number.isFinite(x) ? x : 0; }
+  function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+  function money(x){ return sym() + (Number.isFinite(x) ? x : 0).toFixed(2); }
+  function pct(x){ return (Number.isFinite(x) ? x : 0).toFixed(1) + "%"; }
+
+  function daysLeft(trialStartISO){
+    const start = new Date(trialStartISO).getTime();
+    const elapsedDays = (Date.now() - start) / (1000*60*60*24);
+    return Math.max(0, Math.ceil(TRIAL_DAYS - elapsedDays));
+  }
+
+  function updateFXLine(sell){
+    const r = n(fxRateEl.value);
+    if (r > 0 && sell > 0){
+      fxRow.style.display = "block";
+      fxOut.textContent = (sell * r).toFixed(2);
+      fxNote.textContent = `Converted using your rate: ${sell.toFixed(2)} × ${r}`;
     } else {
-      o1h.textContent = "Required selling price";
-      o2h.textContent = "Implied margin";
+      fxRow.style.display = "none";
+    }
+  }
+
+  // Presets (examples only)
+  const PRESETS = [
+    { id:"manual", name:"Manual (enter fees yourself)", feePct:0, feeFixed:0, adsPct:0, returnPct:0 },
+    { id:"ebay_uk_typical", name:"eBay UK (typical example)", feePct:12.8, feeFixed:0.30, adsPct:0, returnPct:3 },
+    { id:"etsy_typical", name:"Etsy (typical example)", feePct:9.5, feeFixed:0.20, adsPct:0, returnPct:3 },
+    { id:"shopify_card_only", name:"Shopify (card fee example)", feePct:2.0, feeFixed:0.20, adsPct:0, returnPct:2 },
+  ];
+  PRESETS.forEach(p=>{
+    const opt = document.createElement("option");
+    opt.value = p.id;
+    opt.textContent = p.name;
+    presetSel.appendChild(opt);
+  });
+  presetSel.value = "manual";
+  presetSel.addEventListener("change", ()=>{
+    const p = PRESETS.find(x=>x.id===presetSel.value) || PRESETS[0];
+    if (p.id !== "manual"){
+      feePctEl.value = String(p.feePct ?? 0);
+      feeFixedEl.value = String(p.feeFixed ?? 0);
+      adsPctEl.value = String(p.adsPct ?? 0);
+      returnPctEl.value = String(p.returnPct ?? 0);
     }
     compute();
-  }
-  tabProfit.addEventListener("click", ()=>setMode("profit"));
-  tabReverse.addEventListener("click", ()=>setMode("reverse"));
+  });
 
   function getFees(sell){
     const feePct = clamp(n(feePctEl.value), 0, 99);
-    const feeFixed = clamp(n(feeFixEl.value), 0, 999999);
+    const feeFixed = clamp(n(feeFixedEl.value), 0, 999999);
     const adsPct = clamp(n(adsPctEl.value), 0, 99);
     const platformFee = sell * (feePct/100);
     const adsFee = sell * (adsPct/100);
-    return { totalFees: platformFee + feeFixed + adsFee, feePct, feeFixed, adsPct };
+    return { totalFees: platformFee + feeFixed + adsFee };
   }
 
   function computeProfit(){
@@ -572,7 +456,7 @@
     const cost = n(productCostEl.value);
     const ship = n(shipCostEl.value);
     const misc = n(miscCostEl.value);
-    const retPct = clamp(n(retPctEl.value), 0, 99);
+    const retPct = clamp(n(returnPctEl.value), 0, 99);
 
     const { totalFees } = getFees(sell);
     const expectedReturnImpact = sell * (retPct/100);
@@ -588,23 +472,12 @@
     if (sell <= 0){
       o1hint.textContent = "Enter a selling price.";
       o2hint.textContent = "—";
-      o1hint.style.color = "var(--muted)";
-      o2hint.style.color = "var(--muted)";
     } else if (profit < 0){
-      o1hint.textContent = "Loss on this pricing. Adjust price or costs.";
-      o1hint.style.color = "var(--bad)";
-      o2hint.textContent = "Try reducing costs or increasing price.";
-      o2hint.style.color = "var(--warn)";
-    } else if (profit < sell * 0.05){
-      o1hint.textContent = "Thin profit. Small changes can wipe margin.";
-      o1hint.style.color = "var(--warn)";
-      o2hint.textContent = "Consider building more buffer.";
-      o2hint.style.color = "var(--warn)";
+      o1hint.textContent = "Loss on this pricing.";
+      o2hint.textContent = "Adjust price or costs.";
     } else {
-      o1hint.textContent = "Healthy buffer based on inputs.";
-      o1hint.style.color = "var(--ok)";
-      o2hint.textContent = "Looks reasonable for many categories.";
-      o2hint.style.color = "var(--ok)";
+      o1hint.textContent = "OK (based on your inputs).";
+      o2hint.textContent = "—";
     }
 
     updateFXLine(sell);
@@ -614,17 +487,14 @@
     const cost = n(productCostEl.value);
     const ship = n(shipCostEl.value);
     const misc = n(miscCostEl.value);
-
     const feePct = clamp(n(feePctEl.value), 0, 99);
     const adsPct = clamp(n(adsPctEl.value), 0, 99);
-    const feeFixed = clamp(n(feeFixEl.value), 0, 999999);
+    const feeFixed = clamp(n(feeFixedEl.value), 0, 999999);
 
-    const pctSum = (feePct + adsPct) / 100;
-    const denom = 1 - pctSum;
-    const baseCosts = cost + ship + misc + feeFixed;
-
+    const denom = 1 - ((feePct + adsPct)/100);
     if (denom <= 0.01) return null;
-    return (target + baseCosts) / denom;
+
+    return (target + cost + ship + misc + feeFixed) / denom;
   }
 
   function computeReverse(){
@@ -633,9 +503,7 @@
       o1v.textContent = "—";
       o2v.textContent = "—";
       o1hint.textContent = "Enter a target profit.";
-      o1hint.style.color = "var(--muted)";
       o2hint.textContent = "—";
-      o2hint.style.color = "var(--muted)";
       fxRow.style.display = "none";
       return;
     }
@@ -644,248 +512,76 @@
     if (!sell || !Number.isFinite(sell) || sell <= 0){
       o1v.textContent = "—";
       o2v.textContent = "—";
-      o1hint.textContent = "Reverse calc failed. Check fee % values (too high).";
-      o1hint.style.color = "var(--bad)";
+      o1hint.textContent = "Reverse calc failed. Check fee % values.";
       o2hint.textContent = "—";
-      o2hint.style.color = "var(--muted)";
       fxRow.style.display = "none";
       return;
     }
 
     sellPriceEl.value = sell.toFixed(2);
 
-    const retPct = clamp(n(retPctEl.value), 0, 99);
     const { totalFees } = getFees(sell);
-    const expectedReturnImpact = sell * (retPct/100);
     const cost = n(productCostEl.value);
     const ship = n(shipCostEl.value);
     const misc = n(miscCostEl.value);
-
     const profit = sell - (cost + ship + misc + totalFees);
     const margin = sell > 0 ? (profit / sell) * 100 : 0;
 
     o1v.textContent = money(sell);
     o2v.textContent = pct(margin);
     feesOut.textContent = money(totalFees);
-    returnOut.textContent = money(expectedReturnImpact);
+    returnOut.textContent = money(sell * (clamp(n(returnPctEl.value),0,99)/100));
 
     o1hint.textContent = `Required selling price to target ~${money(target)} profit (estimate).`;
-    o1hint.style.color = "var(--ok)";
-    o2hint.textContent = "Implied margin at the required selling price.";
-    o2hint.style.color = "var(--muted)";
-
+    o2hint.textContent = "Implied margin at that selling price.";
     updateFXLine(sell);
   }
 
-  function compute(){ (MODE === "profit") ? computeProfit() : computeReverse(); }
+  let MODE = "profit";
+  const tabProfit = document.getElementById("tabProfit");
+  const tabReverse = document.getElementById("tabReverse");
+  const reverseBox = document.getElementById("reverseBox");
 
-  // Export + share
-  const shareStatus = document.getElementById("shareStatus");
-  function payload(){
-    return {
-      mode: MODE,
-      currency: currencyEl.value,
-      fxRate: fxRateEl.value || "",
-      preset: presetSel.value,
-      sellPrice: sellPriceEl.value,
-      productCost: productCostEl.value,
-      shipCost: shipCostEl.value,
-      miscCost: miscCostEl.value,
-      feePct: feePctEl.value,
-      feeFixed: feeFixEl.value,
-      adsPct: adsPctEl.value,
-      returnPct: retPctEl.value,
-      targetProfit: targetProfitEl.value
-    };
-  }
-  function csvEscape(s){
-    const t = String(s ?? "");
-    if (/[",\n]/.test(t)) return `"${t.replaceAll('"','""')}"`;
-    return t;
-  }
-  function buildCsv(){
-    const p = payload();
-    const rows = [
-      ["Field","Value"],
-      ["Mode", p.mode],
-      ["Currency", p.currency],
-      ["FX Rate (optional)", p.fxRate],
-      ["Preset", p.preset],
-      ["Selling price", p.sellPrice],
-      ["Product cost", p.productCost],
-      ["Shipping cost", p.shipCost],
-      ["Packaging/misc", p.miscCost],
-      ["Platform fee %", p.feePct],
-      ["Fixed fee", p.feeFixed],
-      ["Ads %", p.adsPct],
-      ["Return %", p.returnPct],
-      ["Target profit (reverse)", p.targetProfit],
-      ["Output 1", `${o1h.textContent}: ${o1v.textContent}`],
-      ["Output 2", `${o2h.textContent}: ${o2v.textContent}`],
-      ["Total fees+ads", feesOut.textContent],
-      ["Return sensitivity", returnOut.textContent],
-    ];
-    return rows.map(r=>r.map(csvEscape).join(",")).join("\n");
-  }
-  function downloadText(filename, text){
-    const blob = new Blob([text], {type:"text/plain;charset=utf-8"});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-  }
-
-  document.getElementById("exportCsvBtn").addEventListener("click", ()=>{
-    compute();
-    downloadText("profitpilot-export.csv", buildCsv());
-    shareStatus.textContent = "CSV exported.";
-  });
-
-  document.getElementById("exportPdfBtn").addEventListener("click", ()=>{
-    compute();
-    const p = payload();
-    const html = `
-      <html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-      <title>ProfitPilot Export</title>
-      <style>
-        body{font-family:system-ui;margin:24px;color:#0b1220}
-        .h{font-size:20px;font-weight:900;margin-bottom:6px}
-        .m{color:#5b6474;margin-bottom:16px}
-        table{width:100%;border-collapse:collapse}
-        td{border:1px solid rgba(16,24,40,.12);padding:10px;font-size:13px;vertical-align:top}
-        .k{font-weight:800;width:38%}
-        .out{margin-top:16px;padding:12px;border:1px solid rgba(16,24,40,.12);border-radius:12px}
-      </style></head><body>
-        <div class="h">ProfitPilot Export</div>
-        <div class="m">Estimates only. Generated: ${new Date().toLocaleString()}</div>
-        <table>${Object.entries(p).map(([k,v])=>`<tr><td class="k">${k}</td><td>${String(v ?? "")}</td></tr>`).join("")}</table>
-        <div class="out">
-          <div><b>${o1h.textContent}:</b> ${o1v.textContent}</div>
-          <div><b>${o2h.textContent}:</b> ${o2v.textContent}</div>
-          <div><b>Total fees + ads:</b> ${feesOut.textContent}</div>
-          <div><b>Return sensitivity:</b> ${returnOut.textContent}</div>
-        </div>
-        <script>window.onload=()=>window.print()</script>
-      </body></html>
-    `;
-    const w = window.open("", "_blank");
-    w.document.open(); w.document.write(html); w.document.close();
-    shareStatus.textContent = "PDF print opened.";
-  });
-
-  function base64urlEncode(str){
-    const bytes = new TextEncoder().encode(str);
-    let bin = "";
-    bytes.forEach(b=>bin += String.fromCharCode(b));
-    return btoa(bin).replaceAll("+","-").replaceAll("/","_").replaceAll("=","");
-  }
-
-  document.getElementById("shareBtn").addEventListener("click", ()=>{
-    compute();
-    if (!CURRENT_PROFILE?.paid){
-      shareStatus.textContent = "Share link is PRO. Unlock to share scenarios.";
-      return;
+  function setMode(m){
+    MODE = m;
+    tabProfit.classList.toggle("active", m==="profit");
+    tabReverse.classList.toggle("active", m==="reverse");
+    reverseBox.style.display = (m==="reverse") ? "block" : "none";
+    if (m==="profit"){
+      o1h.textContent = "Estimated profit";
+      o2h.textContent = "Margin";
+    } else {
+      o1h.textContent = "Required selling price";
+      o2h.textContent = "Implied margin";
     }
-    const token = base64urlEncode(JSON.stringify(payload()));
-    const url = `${location.origin}/share.html#s=${token}`;
-    navigator.clipboard?.writeText(url).catch(()=>{});
-    shareStatus.textContent = "Share link copied.";
-  });
-
-  // Reset
-  document.getElementById("resetBtn").addEventListener("click", ()=>{
-    [sellPriceEl, productCostEl, shipCostEl, miscCostEl, feePctEl, feeFixEl, adsPctEl, retPctEl, targetProfitEl].forEach(el=>el.value="0");
-    fxRateEl.value = "";
-    presetSel.value = "manual";
-    setMode("profit");
     compute();
-    shareStatus.textContent = "—";
-  });
-
-  // Reviews submit
-  let selectedStars = 5;
-  const starsRow = document.getElementById("starsRow");
-  const reviewStatus = document.getElementById("reviewStatus");
-
-  function setStars(n){
-    selectedStars = n;
-    [...starsRow.querySelectorAll("button")].forEach(b=>{
-      b.classList.toggle("active", parseInt(b.dataset.star,10) === n);
-    });
   }
-  setStars(5);
-  starsRow.addEventListener("click", (e)=>{
-    const btn = e.target.closest("button");
-    if (!btn) return;
-    setStars(parseInt(btn.dataset.star,10));
-  });
+  tabProfit.addEventListener("click", ()=>setMode("profit"));
+  tabReverse.addEventListener("click", ()=>setMode("reverse"));
 
-  document.getElementById("sendReview").addEventListener("click", async ()=>{
-    reviewStatus.textContent = "Submitting…";
-    try{
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Please log in again.");
-      const name = document.getElementById("revName").value.trim();
-      const category = document.getElementById("revCat").value;
-      const message = document.getElementById("revMsg").value.trim();
-      if (!message) throw new Error("Write a short review message.");
+  function compute(){ (MODE==="profit") ? computeProfit() : computeReverse(); }
 
-      const { error } = await supabase.from("reviews").insert([{
-        user_id: user.id,
-        name: name || null,
-        rating: selectedStars,
-        category,
-        message,
-        approved: true
-      }]);
-
-      if (error) throw error;
-      reviewStatus.textContent = "Thanks! Your review is now public.";
-      document.getElementById("revMsg").value = "";
-    } catch(e){
-      reviewStatus.textContent = e.message || "Failed to submit review.";
-    }
-  });
-
-  // Auth + access
+  // Access + profile
   let CURRENT_PROFILE = null;
-  let CURRENT_USER = null;
-
-  function daysLeft(trialStartISO){
-    const start = new Date(trialStartISO).getTime();
-    const now = Date.now();
-    const elapsedDays = (now - start) / (1000*60*60*24);
-    const left = TRIAL_DAYS - elapsedDays;
-    return Math.max(0, Math.ceil(left));
-  }
 
   async function ensureProfile(userId){
     const { data: prof, error } = await supabase
       .from("profiles")
-      .select("id, trial_start, paid, plan, reverse_uses")
+      .select("id, trial_start, paid, reverse_uses")
       .eq("id", userId)
       .maybeSingle();
-
     if (error) throw error;
 
-    if (!prof) {
+    if (!prof){
       const now = new Date().toISOString();
       const { error: insErr } = await supabase.from("profiles").insert([{
-        id: userId,
-        trial_start: now,
-        paid: false,
-        plan: "trial",
-        reverse_uses: 0
+        id:userId, trial_start:now, paid:false, reverse_uses:0
       }]);
       if (insErr) throw insErr;
-      return { id:userId, trial_start: now, paid:false, plan:"trial", reverse_uses: 0 };
+      return { id:userId, trial_start:now, paid:false, reverse_uses:0 };
     }
 
-    if (!prof.trial_start) {
+    if (!prof.trial_start){
       const now = new Date().toISOString();
       const { error: upErr } = await supabase.from("profiles").update({ trial_start: now }).eq("id", userId);
       if (upErr) throw upErr;
@@ -901,51 +597,43 @@
     return prof;
   }
 
-  async function updateAccessUI(profile, email){
-    CURRENT_PROFILE = profile;
-    userLine.textContent = `Signed in as ${email}`;
-
-    if (profile.paid){
-      reverseUsesLine.textContent = `Reverse uses: Unlimited (PRO)`;
-    } else {
-      reverseUsesLine.textContent = `Reverse uses: ${profile.reverse_uses ?? 0}/${TRIAL_REVERSE_LIMIT} (Trial)`;
-    }
-
-    if (profile.paid) {
-      accessPill.textContent = "Unlocked (PRO)";
-      accessPill.className = "pill ok";
-      showPaywall(false);
-      return;
-    }
-
-    const left = daysLeft(profile.trial_start);
-    if (left > 0) {
-      accessPill.textContent = `Trial active • ${left} day(s) left`;
-      accessPill.className = "pill warn";
-      showPaywall(false);
-    } else {
-      accessPill.textContent = "Trial ended • PRO required";
-      accessPill.className = "pill bad";
-      showPaywall(true);
-    }
-  }
-
-  // ✅ IMPORTANT: use p_limit (matches SQL function)
   async function consumeReverseUse(){
+    // Must match SQL param name: p_limit
     const { data, error } = await supabase.rpc("consume_reverse_use", { p_limit: TRIAL_REVERSE_LIMIT });
     if (error){
-      const msg = error.message || "";
-      if (msg.toLowerCase().includes("limit_reached")){
-        throw new Error(`Trial reverse limit reached (${TRIAL_REVERSE_LIMIT}). Unlock PRO for unlimited reverse mode.`);
-      }
-      throw new Error(msg || "Reverse limit check failed.");
+      const msg = (error.message || "").toLowerCase();
+      if (msg.includes("limit_reached")) throw new Error(`Trial reverse limit reached (${TRIAL_REVERSE_LIMIT}). Unlock PRO for unlimited.`);
+      throw new Error(error.message || "Reverse limit check failed.");
     }
     const next = Number(data || 0);
     CURRENT_PROFILE.reverse_uses = next;
     reverseUsesLine.textContent = `Reverse uses: ${next}/${TRIAL_REVERSE_LIMIT} (Trial)`;
   }
 
-  // Calculate (with reverse limit)
+  function updateAccessUI(profile, email){
+    CURRENT_PROFILE = profile;
+    userLine.textContent = `Signed in as ${email}`;
+
+    if (profile.paid){
+      accessPill.textContent = "Unlocked (PRO)";
+      accessPill.className = "pill ok";
+      reverseUsesLine.textContent = "Reverse uses: Unlimited (PRO)";
+      return;
+    }
+
+    reverseUsesLine.textContent = `Reverse uses: ${profile.reverse_uses ?? 0}/${TRIAL_REVERSE_LIMIT} (Trial)`;
+
+    const left = daysLeft(profile.trial_start);
+    if (left > 0){
+      accessPill.textContent = `Trial active • ${left} day(s) left`;
+      accessPill.className = "pill warn";
+    } else {
+      accessPill.textContent = "Trial ended • PRO required";
+      accessPill.className = "pill bad";
+    }
+  }
+
+  // Buttons
   document.getElementById("calcBtn").addEventListener("click", async ()=>{
     try{
       if (MODE === "reverse" && !CURRENT_PROFILE?.paid){
@@ -953,41 +641,112 @@
       }
       compute();
     } catch(e){
-      o1hint.textContent = e.message || "Unable to calculate.";
+      o1hint.textContent = e.message || "Error.";
       o1hint.style.color = "var(--bad)";
     }
   });
 
-  // Gumroad redeem
-  async function redeemGumroad(licenseKey){
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) throw new Error("Please log in again.");
+  document.getElementById("resetBtn").addEventListener("click", ()=>{
+    [sellPriceEl, productCostEl, shipCostEl, miscCostEl, feePctEl, feeFixedEl, adsPctEl, returnPctEl, targetProfitEl].forEach(el=>el.value="0");
+    fxRateEl.value = "";
+    presetSel.value = "manual";
+    setMode("profit");
+    shareStatus.textContent = "—";
+  });
 
-    const res = await fetch(GUMROAD_REDEEM_FN, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + session.access_token
-      },
-      body: JSON.stringify({ license_key: licenseKey })
-    });
-
-    const out = await res.json().catch(()=> ({}));
-    if (!res.ok) throw new Error(out.error || "Redeem failed.");
-    return out;
+  // Export CSV
+  function payload(){
+    return {
+      mode: MODE,
+      currency: currencyEl.value,
+      fxRate: fxRateEl.value || "",
+      preset: presetSel.value,
+      sellPrice: sellPriceEl.value,
+      productCost: productCostEl.value,
+      shipCost: shipCostEl.value,
+      miscCost: miscCostEl.value,
+      feePct: feePctEl.value,
+      feeFixed: feeFixedEl.value,
+      adsPct: adsPctEl.value,
+      returnPct: returnPctEl.value,
+      targetProfit: targetProfitEl.value
+    };
   }
+  function csvEscape(s){
+    const t = String(s ?? "");
+    return /[",\n]/.test(t) ? `"${t.replaceAll('"','""')}"` : t;
+  }
+  function downloadText(filename, text){
+    const blob = new Blob([text], {type:"text/plain;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+  document.getElementById("exportCsvBtn").addEventListener("click", ()=>{
+    const p = payload();
+    const rows = Object.entries(p).map(([k,v])=>[k,String(v ?? "")]);
+    rows.unshift(["Field","Value"]);
+    const csv = rows.map(r=>r.map(csvEscape).join(",")).join("\n");
+    downloadText("profitpilot-export.csv", csv);
+    shareStatus.textContent = "CSV exported.";
+  });
 
-  document.getElementById("redeemBtn").addEventListener("click", async ()=>{
-    const redeemStatus = document.getElementById("redeemStatus");
-    redeemStatus.textContent = "Verifying…";
-    try {
-      const key = (document.getElementById("redeemInput").value || "").trim();
-      if (!key) throw new Error("Paste your Gumroad license key.");
-      const out = await redeemGumroad(key);
-      redeemStatus.textContent = out.message || "Unlocked.";
-      setTimeout(()=>location.reload(), 600);
+  // Share (PRO only)
+  function base64urlEncode(str){
+    const bytes = new TextEncoder().encode(str);
+    let bin = "";
+    bytes.forEach(b=>bin += String.fromCharCode(b));
+    return btoa(bin).replaceAll("+","-").replaceAll("/","_").replaceAll("=","");
+  }
+  document.getElementById("shareBtn").addEventListener("click", ()=>{
+    if (!CURRENT_PROFILE?.paid){
+      shareStatus.textContent = "Share is PRO. Unlock to share scenarios.";
+      return;
+    }
+    const token = base64urlEncode(JSON.stringify(payload()));
+    const url = `${location.origin}/share.html#s=${token}`;
+    navigator.clipboard?.writeText(url).catch(()=>{});
+    shareStatus.textContent = "Share link copied.";
+  });
+
+  // Reviews submit
+  let selectedStars = 5;
+  const starsRow = document.getElementById("starsRow");
+  const reviewStatus = document.getElementById("reviewStatus");
+  function setStars(n){
+    selectedStars = n;
+    [...starsRow.querySelectorAll("button")].forEach(b=>b.classList.toggle("active", parseInt(b.dataset.star,10)===n));
+  }
+  setStars(5);
+  starsRow.addEventListener("click",(e)=>{
+    const btn=e.target.closest("button"); if(!btn) return;
+    setStars(parseInt(btn.dataset.star,10));
+  });
+
+  document.getElementById("sendReview").addEventListener("click", async ()=>{
+    reviewStatus.textContent = "Submitting…";
+    try{
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Please log in again.");
+      const name = document.getElementById("revName").value.trim();
+      const category = document.getElementById("revCat").value;
+      const message = document.getElementById("revMsg").value.trim();
+      if (!message) throw new Error("Write a short review message.");
+
+      const { error } = await supabase.from("reviews").insert([{
+        user_id:user.id, name:name||null, rating:selectedStars, category, message, approved:true
+      }]);
+      if (error) throw error;
+
+      reviewStatus.textContent = "Thanks! Your review is public.";
+      document.getElementById("revMsg").value = "";
     } catch(e){
-      redeemStatus.textContent = e.message;
+      reviewStatus.textContent = e.message || "Failed.";
     }
   });
 
@@ -998,32 +757,27 @@
   });
 
   // Boot
-  async function boot(){
+  (async ()=>{
     try{
-      accessPill.textContent = "Loading session…";
-
+      accessPill.textContent = "Checking session…";
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session) { location.href = "login.html"; return; }
+      if (!session){ location.href = "login.html"; return; }
 
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { location.href = "login.html"; return; }
-      CURRENT_USER = user;
+      if (!user){ location.href = "login.html"; return; }
 
       const profile = await ensureProfile(user.id);
-      await updateAccessUI(profile, user.email || "user");
+      updateAccessUI(profile, user.email || "user");
 
-      // default compute
+      setMode("profit");
       computeProfit();
     } catch(e){
       accessPill.textContent = "Access check failed";
       accessPill.className = "pill bad";
-      userLine.textContent = (e && e.message) ? e.message : "Unknown error";
+      userLine.textContent = e.message || "Unknown error";
     }
-  }
-
-  // init
-  setMode("profit");
-  await boot();
+  })();
 </script>
+
 </body>
 </html>
