@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>ProfitPilot — Shared</title>
+  <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
+  <style>
+    :root{
+      --bg:#f6f8fb; --bg2:#eef2ff; --txt:#0b1220; --muted:#5b6474;
+      --card:rgba(255,255,255,.88); --line:rgba(16,24,40,.10);
+      --accent:#0ea5a4; --shadow:0 10px 30px rgba(16,24,40,.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--txt);
+      background:
+        radial-gradient(900px 500px at 20% 0%, rgba(14,165,164,.16), transparent 55%),
+        radial-gradient(900px 500px at 80% 0%, rgba(79,70,229,.12), transparent 55%),
+        linear-gradient(180deg, var(--bg2), var(--bg));
+    }
+    .wrap{max-width:860px;margin:24px auto;padding:0 14px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow)}
+    .pill{display:inline-flex;padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.72);font-size:12px;color:var(--muted)}
+    .btn{padding:10px 14px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.78);color:var(--txt);text-decoration:none;display:inline-flex;gap:8px;align-items:center;cursor:pointer}
+    .btn.primary{border-color:rgba(14,165,164,.30);background:rgba(14,165,164,.10)}
+    .small{font-size:12px;color:var(--muted);line-height:1.6}
+    pre{white-space:pre-wrap;background:rgba(255,255,255,.70);border:1px solid var(--line);border-radius:14px;padding:12px;font-size:12px}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">
+      <div>
+        <div style="font-weight:900;font-size:18px">ProfitPilot</div>
+        <div class="small">Shared calculation snapshot (read-only)</div>
+      </div>
+      <div class="pill" id="status">Loading…</div>
+    </div>
+
+    <div style="margin-top:12px">
+      <a class="btn primary" href="app.html">Open app</a>
+      <a class="btn" href="index.html">Home</a>
+    </div>
+
+    <div style="margin-top:14px" class="small">
+      This page only displays what was shared. Edit values inside the app.
+    </div>
+
+    <div style="margin-top:12px">
+      <pre id="out">—</pre>
+    </div>
+
+    <div class="small">
+      Disclaimer: estimates only. Not financial/legal/tax advice.
+    </div>
+  </div>
+</div>
+
+<script>
+  function decodeBase64Url(b64url){
+    try{
+      const b64 = b64url.replaceAll("-","+").replaceAll("_","/");
+      const pad = b64.length % 4 ? "=".repeat(4 - (b64.length % 4)) : "";
+      const bin = atob(b64 + pad);
+      const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
+      return new TextDecoder().decode(bytes);
+    }catch{ return null; }
+  }
+
+  const status = document.getElementById("status");
+  const out = document.getElementById("out");
+
+  const hash = location.hash || "";
+  const m = hash.match(/s=([^&]+)/);
+  if (!m){
+    status.textContent = "No data";
+    out.textContent = "Missing share token.";
+  } else {
+    const json = decodeBase64Url(m[1]);
+    if (!json){
+      status.textContent = "Invalid token";
+      out.textContent = "Could not decode token.";
+    } else {
+      try{
+        const obj = JSON.parse(json);
+        status.textContent = "Loaded";
+        out.textContent = JSON.stringify(obj, null, 2);
+      }catch{
+        status.textContent = "Invalid data";
+        out.textContent = "Token data is not valid JSON.";
+      }
+    }
+  }
+</script>
+</body>
+</html>
