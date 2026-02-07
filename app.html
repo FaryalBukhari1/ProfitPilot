@@ -82,6 +82,20 @@
     .good{color:var(--ok);font-weight:800}
     .bad{color:var(--bad);font-weight:800}
 
+    /* Import banner */
+    .banner{
+      display:none;
+      margin-top:12px;
+      border:1px solid rgba(14,165,164,.28);
+      background:rgba(14,165,164,.10);
+      border-radius:16px;
+      padding:10px 12px;
+      color:var(--txt);
+      font-size:12px;
+      line-height:1.5;
+    }
+    .banner b{font-weight:900}
+
     /* Bulk grid */
     .bulkWrap{overflow:auto;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.72)}
     table{width:100%;border-collapse:collapse;font-size:12px;min-width:980px}
@@ -103,7 +117,7 @@
 
     @media print{
       body{background:#fff}
-      .nav, #controlsRow, #reviewsCard, #proCard, #logoutBtn, .btn.ghost, .tabs, #bulkTools, #bulkPasteBox {display:none !important}
+      .nav, #controlsRow, #reviewsCard, #proCard, #logoutBtn, .btn.ghost, .tabs, #bulkTools, #bulkPasteBox, #importBanner {display:none !important}
       .wrap{margin:0;max-width:none}
       .card{box-shadow:none}
     }
@@ -127,6 +141,8 @@
       <button class="btn" id="logoutBtn">Log out</button>
     </div>
   </div>
+
+  <div class="banner" id="importBanner">Imported shared calculation ✅</div>
 
   <div class="grid">
 
@@ -406,6 +422,7 @@
   const presetStatus = document.getElementById("presetStatus");
   const bulkStatus = document.getElementById("bulkStatus");
   const bulkImportStatus = document.getElementById("bulkImportStatus");
+  const importBanner = document.getElementById("importBanner");
 
   document.getElementById("yr").textContent = new Date().getFullYear();
 
@@ -461,7 +478,7 @@
   const loadMyPresetBtn = document.getElementById("loadMyPresetBtn");
   const deleteMyPresetBtn = document.getElementById("deleteMyPresetBtn");
 
-  // Mode boxes
+  // Modes boxes
   const tabProfit = document.getElementById("tabProfit");
   const tabReverse = document.getElementById("tabReverse");
   const tabBulk = document.getElementById("tabBulk");
@@ -470,7 +487,6 @@
   const bulkBox = document.getElementById("bulkBox");
 
   const CURRENCY_SYMBOL = { GBP:"£", USD:"$", EUR:"€", AUD:"$", CAD:"$", NZD:"$", AED:"AED ", SAR:"SAR ", PKR:"₨", INR:"₹" };
-
   function sym(){ return CURRENCY_SYMBOL[currencyEl.value || "GBP"] || ""; }
   function n(v){ const x = parseFloat(String(v).replace(/,/g,"")); return Number.isFinite(x) ? x : 0; }
   function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
@@ -478,20 +494,17 @@
   function pct(x){ return (Number.isFinite(x) ? x : 0).toFixed(1) + "%"; }
 
   function todayKey(){
-    // YYYY-MM-DD in UTC (good enough for "daily limit")
     const d = new Date();
     const y = d.getUTCFullYear();
     const m = String(d.getUTCMonth()+1).padStart(2,"0");
     const day = String(d.getUTCDate()).padStart(2,"0");
     return `${y}-${m}-${day}`;
   }
-
   function daysLeft(trialStartISO){
     const start = new Date(trialStartISO).getTime();
     const elapsedDays = (Date.now() - start) / (1000*60*60*24);
     return Math.max(0, Math.ceil(TRIAL_DAYS - elapsedDays));
   }
-
   function updateFXLine(sell){
     const r = n(fxRateEl.value);
     if (r > 0 && sell > 0){
@@ -501,7 +514,7 @@
     } else fxRow.style.display = "none";
   }
 
-  // Example presets (reference only)
+  // Example presets
   const PRESETS = [
     { id:"manual", name:"Manual (enter fees yourself)", feePct:0, feeFixed:0, adsPct:0, returnPct:0 },
     { id:"ebay_uk_typical", name:"eBay UK (typical example)", feePct:12.8, feeFixed:0.30, adsPct:0, returnPct:3 },
@@ -528,7 +541,7 @@
   function totalFees(sell, feePct, feeFixed, adsPct){
     return sell * (feePct/100) + feeFixed + sell * (adsPct/100);
   }
-  function computeProfitCore(sell,cost,ship,misc,feePct,feeFixed,adsPct,returnPct){
+  function computeRowProfit(sell,cost,ship,misc,feePct,feeFixed,adsPct,returnPct){
     const fees = totalFees(sell, feePct, feeFixed, adsPct);
     const expectedReturnImpact = sell * (returnPct/100);
     const profit = sell - (cost + ship + misc + fees);
@@ -546,7 +559,7 @@
     const adsPct = clamp(n(adsPctEl.value),0,99);
     const returnPct = clamp(n(returnPctEl.value),0,99);
 
-    const r = computeProfitCore(sell,cost,ship,misc,feePct,feeFixed,adsPct,returnPct);
+    const r = computeRowProfit(sell,cost,ship,misc,feePct,feeFixed,adsPct,returnPct);
 
     o1v.textContent = money(r.profit);
     o2v.textContent = pct(r.margin);
@@ -588,7 +601,6 @@
       return;
     }
     sellPriceEl.value = sell.toFixed(2);
-
     computeProfit();
 
     o1v.textContent = money(sell);
@@ -651,7 +663,6 @@
       return base;
     }
 
-    // normalize missing fields (safe)
     const patch = {};
     if (!prof.trial_start) patch.trial_start = now;
     if (prof.reverse_uses == null) patch.reverse_uses = 0;
@@ -660,10 +671,7 @@
 
     if (Object.keys(patch).length){
       const { error: upErr } = await supabase.from("profiles").update(patch).eq("id", userId);
-      if (upErr){
-        // If columns don't exist, we'll keep working but show a friendly message in bulk mode.
-        // Reverse still works as long as reverse_uses exists.
-      }
+      if (upErr){ /* ok */ }
       Object.assign(base, patch);
     }
     return base;
@@ -679,13 +687,6 @@
     deleteMyPresetBtn.disabled = !isPro;
     myPresetSel.disabled = !isPro;
     myPresetName.disabled = !isPro;
-
-    // Bulk buttons always visible, but may be limited
-    bulkExportBtn.disabled = false;
-    bulkApplyFeesBtn.disabled = false;
-    bulkClearBtn.disabled = false;
-    bulkAddRowBtn.disabled = false;
-    bulkRunBtn.disabled = false;
   }
 
   function updateAccessUI(profile){
@@ -780,8 +781,7 @@
       .eq("id", CURRENT_USER.id);
 
     if (error){
-      // This usually means columns don't exist. We'll explain clearly.
-      throw new Error("Bulk daily limit storage missing in database. Add columns bulk_day + bulk_runs_today in profiles (I’ll give you SQL).");
+      throw new Error("Bulk daily limit storage missing in database. Add columns bulk_day + bulk_runs_today in profiles.");
     }
 
     CURRENT_PROFILE.bulk_day = day;
@@ -809,6 +809,7 @@
     shareStatus.textContent = "—";
     bulkPasteEl.value = "";
     clearBulkRows();
+    importBanner.style.display = "none";
     setMode("profit");
   });
 
@@ -882,9 +883,7 @@
   function renumberBulkRows(){
     [...bulkTbody.children].forEach((tr,i)=> tr.children[0].textContent = String(i+1));
   }
-
   function rowCount(){ return bulkTbody.children.length; }
-
   function canAddRow(){
     if (!CURRENT_PROFILE) return false;
     if (CURRENT_PROFILE.paid) return true;
@@ -914,13 +913,8 @@
       inp.addEventListener("input", ()=> previewRow(tr));
     });
 
-    const profitTd = document.createElement("td");
-    profitTd.textContent = "—";
-    tr.appendChild(profitTd);
-
-    const marginTd = document.createElement("td");
-    marginTd.textContent = "—";
-    tr.appendChild(marginTd);
+    const profitTd = document.createElement("td"); profitTd.textContent = "—"; tr.appendChild(profitTd);
+    const marginTd = document.createElement("td"); marginTd.textContent = "—"; tr.appendChild(marginTd);
 
     const actTd = document.createElement("td");
     const delBtn = document.createElement("button");
@@ -949,18 +943,12 @@
   }
 
   function applyFeesToAll(){
-    const base = {
-      feePct: feePctEl.value,
-      feeFixed: feeFixedEl.value,
-      adsPct: adsPctEl.value,
-      retPct: returnPctEl.value
-    };
     [...bulkTbody.children].forEach(tr=>{
       const r = tr._pp;
-      r.feePct.value = base.feePct;
-      r.feeFixed.value = base.feeFixed;
-      r.adsPct.value = base.adsPct;
-      r.retPct.value = base.retPct;
+      r.feePct.value = feePctEl.value;
+      r.feeFixed.value = feeFixedEl.value;
+      r.adsPct.value = adsPctEl.value;
+      r.retPct.value = returnPctEl.value;
       previewRow(tr);
     });
     bulkStatus.textContent = "Applied current fees to all rows.";
@@ -995,9 +983,7 @@
   bulkAddRowBtn.addEventListener("click", ()=>{
     if (!CURRENT_PROFILE){ bulkStatus.textContent="Loading…"; return; }
     if (!canAddRow()){
-      bulkStatus.textContent = CURRENT_PROFILE.paid
-        ? "Cannot add row."
-        : `Trial limit: max ${TRIAL_BULK_MAX_ROWS} rows. Unlock PRO for unlimited.`;
+      bulkStatus.textContent = `Trial limit: max ${TRIAL_BULK_MAX_ROWS} rows. Unlock PRO for unlimited.`;
       return;
     }
     addBulkRow();
@@ -1012,23 +998,16 @@
     bulkStatus.textContent = "Reset rows.";
   });
 
-  bulkApplyFeesBtn.addEventListener("click", ()=>{
-    applyFeesToAll();
-  });
+  bulkApplyFeesBtn.addEventListener("click", ()=>applyFeesToAll());
 
   bulkRunBtn.addEventListener("click", async ()=>{
     try{
       if (!CURRENT_PROFILE){ bulkStatus.textContent="Loading…"; return; }
 
-      // trial gating
       if (!CURRENT_PROFILE.paid){
         const left = daysLeft(CURRENT_PROFILE.trial_start);
         if (left <= 0) throw new Error("Trial ended. Unlock PRO to use Bulk mode.");
-
-        if (rowCount() > TRIAL_BULK_MAX_ROWS){
-          throw new Error(`Trial allows max ${TRIAL_BULK_MAX_ROWS} rows. Remove extra rows or unlock PRO.`);
-        }
-
+        if (rowCount() > TRIAL_BULK_MAX_ROWS) throw new Error(`Trial allows max ${TRIAL_BULK_MAX_ROWS} rows.`);
         await consumeBulkRunIfTrial();
       }
 
@@ -1066,20 +1045,14 @@
   });
 
   bulkExportBtn.addEventListener("click", ()=>{
-    if (!bulkLastRows.length){
-      bulkStatus.textContent = "Run bulk first.";
-      return;
-    }
+    if (!bulkLastRows.length){ bulkStatus.textContent = "Run bulk first."; return; }
     const rows = [["sell","cost","ship","misc","feePct","feeFixed","adsPct","returnPct","fees","profit","margin"]];
-    bulkLastRows.forEach(r=>{
-      rows.push([r.sell,r.cost,r.ship,r.misc,r.feePct,r.feeFixed,r.adsPct,r.retPct,r.fees,r.profit,r.margin]);
-    });
+    bulkLastRows.forEach(r=> rows.push([r.sell,r.cost,r.ship,r.misc,r.feePct,r.feeFixed,r.adsPct,r.retPct,r.fees,r.profit,r.margin]));
     const csv = rows.map(r=>r.map(csvEscape).join(",")).join("\n");
     downloadText("profitpilot-bulk.csv", csv);
     bulkStatus.textContent = "Bulk CSV exported.";
   });
 
-  // Paste import
   function parseLines(text){
     const lines = text.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
     const rows = [];
@@ -1087,11 +1060,7 @@
       const parts = line.includes("\t") ? line.split("\t") : line.split(",");
       const p = parts.map(x=>x.trim()).filter(x=>x.length>0);
       if (p.length < 2) continue;
-
-      // Support formats:
-      // 4 cols: sell,cost,ship,misc
-      // 8 cols: sell,cost,ship,misc,feePct,fixed,adsPct,returnPct
-      const row = {
+      rows.push({
         sell: p[0] ?? "0",
         cost: p[1] ?? "0",
         ship: p[2] ?? "0",
@@ -1100,8 +1069,7 @@
         feeFixed: p[5] ?? feeFixedEl.value,
         adsPct: p[6] ?? adsPctEl.value,
         returnPct: p[7] ?? returnPctEl.value
-      };
-      rows.push(row);
+      });
     }
     return rows;
   }
@@ -1114,22 +1082,16 @@
   bulkImportBtn.addEventListener("click", ()=>{
     bulkImportStatus.textContent = "Importing…";
     const rows = parseLines(bulkPasteEl.value || "");
-    if (!rows.length){
-      bulkImportStatus.textContent = "Nothing to import.";
-      return;
-    }
+    if (!rows.length){ bulkImportStatus.textContent = "Nothing to import."; return; }
 
-    // Trial row cap
     const allowed = (CURRENT_PROFILE?.paid) ? rows.length : Math.min(rows.length, TRIAL_BULK_MAX_ROWS);
     clearBulkRows();
-
     for (let i=0;i<allowed;i++) addBulkRow(rows[i]);
 
-    if (!CURRENT_PROFILE?.paid && rows.length > allowed){
-      bulkImportStatus.textContent = `Imported ${allowed}. Trial limit is ${TRIAL_BULK_MAX_ROWS} rows.`;
-    } else {
-      bulkImportStatus.textContent = `Imported ${allowed} row(s).`;
-    }
+    bulkImportStatus.textContent = (!CURRENT_PROFILE?.paid && rows.length > allowed)
+      ? `Imported ${allowed}. Trial limit is ${TRIAL_BULK_MAX_ROWS} rows.`
+      : `Imported ${allowed} row(s).`;
+
     bulkStatus.textContent = "Review values, then Run bulk.";
     refreshBulkLimitLine();
   });
@@ -1241,6 +1203,66 @@
     location.href = "login.html";
   });
 
+  // ---- IMPORT FROM SHARE ----
+  function base64urlDecodeToString(b64url){
+    let s = (b64url||"").replace(/-/g, "+").replace(/_/g, "/");
+    while (s.length % 4) s += "=";
+    const bin = atob(s);
+    const bytes = new Uint8Array([...bin].map(ch => ch.charCodeAt(0)));
+    return new TextDecoder().decode(bytes);
+  }
+
+  function applyImportedData(data){
+    // Defensive: only fill known fields
+    if (data.currency) currencyEl.value = data.currency;
+    fxRateEl.value = data.fxRate || "";
+
+    presetSel.value = data.preset || "manual";
+
+    sellPriceEl.value = String(data.sellPrice ?? "0");
+    productCostEl.value = String(data.productCost ?? "0");
+    shipCostEl.value = String(data.shipCost ?? "0");
+    miscCostEl.value = String(data.miscCost ?? "0");
+
+    feePctEl.value = String(data.feePct ?? "0");
+    feeFixedEl.value = String(data.feeFixed ?? "0");
+    adsPctEl.value = String(data.adsPct ?? "0");
+    returnPctEl.value = String(data.returnPct ?? "0");
+
+    targetProfitEl.value = String(data.targetProfit ?? "0");
+
+    const m = (data.mode || "profit");
+    if (m === "bulk") setMode("bulk");
+    else if (m === "reverse") setMode("reverse");
+    else setMode("profit");
+
+    compute();
+
+    importBanner.style.display = "block";
+    importBanner.textContent = "Imported shared calculation ✅";
+    setTimeout(()=>{ importBanner.style.display = "none"; }, 5500);
+
+    // clean the hash so refresh doesn't keep re-importing
+    history.replaceState(null, "", location.pathname);
+  }
+
+  function tryImportFromHash(){
+    const h = location.hash || "";
+    const m = h.match(/[#&]import=([^&]+)/);
+    if (!m) return;
+    try{
+      const token = decodeURIComponent(m[1]);
+      const jsonStr = base64urlDecodeToString(token);
+      const data = JSON.parse(jsonStr);
+      applyImportedData(data);
+    } catch(e){
+      importBanner.style.display = "block";
+      importBanner.textContent = "Import failed (invalid link).";
+      setTimeout(()=>{ importBanner.style.display = "none"; }, 7000);
+      history.replaceState(null, "", location.pathname);
+    }
+  }
+
   // Boot
   (async ()=>{
     try{
@@ -1264,6 +1286,10 @@
 
       setMode("profit");
       computeProfit();
+
+      // Import if present
+      tryImportFromHash();
+
     } catch(e){
       accessPill.textContent="Access check failed";
       accessPill.className="pill bad";
