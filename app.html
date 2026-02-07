@@ -45,6 +45,7 @@
       background:rgba(255,255,255,.78);color:var(--txt);
       display:inline-flex;gap:8px;align-items:center;cursor:pointer;
       box-shadow:0 4px 16px rgba(16,24,40,.06);user-select:none;
+      white-space:nowrap;
     }
     .btn.primary{border-color:rgba(14,165,164,.30);background:rgba(14,165,164,.10)}
     .btn.ghost{background:transparent;box-shadow:none}
@@ -64,7 +65,6 @@
       width:100%;padding:12px;border-radius:14px;border:1px solid var(--line);
       background:rgba(255,255,255,.92);color:var(--txt);outline:none;
     }
-    textarea{min-height:120px;resize:vertical}
     input:focus,select:focus,textarea:focus{border-color:rgba(14,165,164,.35)}
     .divider{height:1px;background:var(--line);margin:12px 0}
     .kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
@@ -76,16 +76,23 @@
     .tabs{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
     .tab{padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.72);cursor:pointer;font-size:12px;user-select:none}
     .tab.active{border-color:rgba(14,165,164,.35);background:rgba(14,165,164,.10);font-weight:900}
-    table{width:100%;border-collapse:collapse;margin-top:10px;font-size:12px}
-    th,td{border-bottom:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}
-    th{color:var(--muted);font-weight:700}
-    .good{color:var(--ok);font-weight:800}
-    .bad{color:var(--bad);font-weight:800}
     .toast{margin-top:10px;font-size:12px;color:var(--muted)}
     footer{margin:14px 2px 0;color:var(--muted);font-size:12px;line-height:1.6}
+    .good{color:var(--ok);font-weight:800}
+    .bad{color:var(--bad);font-weight:800}
+
+    /* Bulk grid */
+    .bulkWrap{overflow:auto;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.72)}
+    table{width:100%;border-collapse:collapse;font-size:12px;min-width:920px}
+    th,td{border-bottom:1px solid var(--line);padding:10px;text-align:left;vertical-align:middle}
+    th{color:var(--muted);font-weight:800;position:sticky;top:0;background:rgba(255,255,255,.92)}
+    td input{padding:10px;border-radius:12px}
+    .mini{padding:8px 10px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.92)}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+
     @media print{
       body{background:#fff}
-      .nav, #controlsRow, #reviewsCard, #proCard, #logoutBtn, .btn.ghost {display:none !important}
+      .nav, #controlsRow, #reviewsCard, #proCard, #logoutBtn, .btn.ghost, .tabs, #bulkTools {display:none !important}
       .wrap{margin:0;max-width:none}
       .card{box-shadow:none}
     }
@@ -115,7 +122,7 @@
     <!-- LEFT -->
     <div class="card" id="calcCard">
       <div class="title">Calculator</div>
-      <div class="small">Profit = normal. Reverse = target profit → required selling price. Bulk = scan many items (PRO).</div>
+      <div class="small">Profit = normal. Reverse = target profit → required selling price. Bulk = enter multiple items (PRO).</div>
 
       <div class="tabs">
         <div class="tab active" id="tabProfit">Profit</div>
@@ -147,6 +154,7 @@
         </div>
       </div>
 
+      <!-- SINGLE -->
       <div id="singleBox">
         <div class="divider"></div>
 
@@ -228,21 +236,45 @@
       <!-- BULK -->
       <div id="bulkBox" style="display:none">
         <div class="small">
-          Paste one item per line. Format:
-          <b>price,cost,ship,misc,feePct,fixed,adsPct,returnPct</b>
-          <br>Example: <code>19.99,7.50,2.80,0.30,12.8,0.30,2.0,3</code>
+          Bulk mode lets you enter multiple items quickly. Use the table below and click <b>Run bulk</b>.
         </div>
 
-        <label>Bulk input</label>
-        <textarea id="bulkInput" placeholder="19.99,7.50,2.80,0.30,12.8,0.30,2.0,3"></textarea>
+        <div class="divider"></div>
 
-        <div class="row">
+        <div class="actions" id="bulkTools">
           <button class="btn primary" id="bulkRunBtn">Run bulk (PRO)</button>
+          <button class="btn" id="bulkAddRowBtn">+ Add row</button>
+          <button class="btn" id="bulkClearBtn">Clear rows</button>
+          <button class="btn" id="bulkApplyFeesBtn">Apply current fees to all</button>
           <button class="btn" id="bulkExportBtn">Export bulk CSV</button>
+          <span class="pill" id="bulkStatus">—</span>
         </div>
 
-        <div class="toast" id="bulkStatus">—</div>
-        <div id="bulkTableWrap"></div>
+        <div style="margin-top:10px" class="bulkWrap">
+          <table id="bulkTable">
+            <thead>
+              <tr>
+                <th style="width:56px">#</th>
+                <th>Sell</th>
+                <th>Cost</th>
+                <th>Ship</th>
+                <th>Misc</th>
+                <th>Fee %</th>
+                <th>Fixed</th>
+                <th>Ads %</th>
+                <th>Return %</th>
+                <th>Profit</th>
+                <th>Margin</th>
+                <th style="width:90px">Action</th>
+              </tr>
+            </thead>
+            <tbody id="bulkTbody"></tbody>
+          </table>
+        </div>
+
+        <div class="small" style="margin-top:10px">
+          Tip: Use “Apply current fees to all” after selecting a preset or setting fees once.
+        </div>
       </div>
 
       <div class="divider"></div>
@@ -344,16 +376,15 @@
   const reverseUsesLine = document.getElementById("reverseUsesLine");
   const shareStatus = document.getElementById("shareStatus");
   const presetStatus = document.getElementById("presetStatus");
+  const bulkStatus = document.getElementById("bulkStatus");
 
   document.getElementById("yr").textContent = new Date().getFullYear();
 
+  // Inputs
   const currencyEl = document.getElementById("currency");
   const fxRateEl = document.getElementById("fxRate");
-  const fxRow = document.getElementById("fxRow");
-  const fxOut = document.getElementById("fxOut");
-  const fxNote = document.getElementById("fxNote");
-
   const presetSel = document.getElementById("preset");
+
   const sellPriceEl = document.getElementById("sellPrice");
   const productCostEl = document.getElementById("productCost");
   const shipCostEl = document.getElementById("shipCost");
@@ -364,6 +395,7 @@
   const returnPctEl = document.getElementById("returnPct");
   const targetProfitEl = document.getElementById("targetProfit");
 
+  // Outputs
   const o1h = document.getElementById("o1h");
   const o2h = document.getElementById("o2h");
   const o1v = document.getElementById("o1v");
@@ -373,30 +405,38 @@
   const feesOut = document.getElementById("feesOut");
   const returnOut = document.getElementById("returnOut");
 
+  const fxRow = document.getElementById("fxRow");
+  const fxOut = document.getElementById("fxOut");
+  const fxNote = document.getElementById("fxNote");
+
+  // Buttons
+  const pdfBtn = document.getElementById("pdfBtn");
+  const shareBtn = document.getElementById("shareBtn");
+  const bulkRunBtn = document.getElementById("bulkRunBtn");
+  const bulkAddRowBtn = document.getElementById("bulkAddRowBtn");
+  const bulkClearBtn = document.getElementById("bulkClearBtn");
+  const bulkApplyFeesBtn = document.getElementById("bulkApplyFeesBtn");
+  const bulkExportBtn = document.getElementById("bulkExportBtn");
+
+  // Bulk table
+  const bulkTbody = document.getElementById("bulkTbody");
+
   const myPresetSel = document.getElementById("myPresetSel");
   const myPresetName = document.getElementById("myPresetName");
   const saveMyPresetBtn = document.getElementById("saveMyPresetBtn");
   const loadMyPresetBtn = document.getElementById("loadMyPresetBtn");
   const deleteMyPresetBtn = document.getElementById("deleteMyPresetBtn");
 
+  // Mode boxes
   const tabProfit = document.getElementById("tabProfit");
   const tabReverse = document.getElementById("tabReverse");
   const tabBulk = document.getElementById("tabBulk");
-
   const singleBox = document.getElementById("singleBox");
   const reverseBox = document.getElementById("reverseBox");
   const bulkBox = document.getElementById("bulkBox");
 
-  const bulkInput = document.getElementById("bulkInput");
-  const bulkRunBtn = document.getElementById("bulkRunBtn");
-  const bulkExportBtn = document.getElementById("bulkExportBtn");
-  const bulkStatus = document.getElementById("bulkStatus");
-  const bulkTableWrap = document.getElementById("bulkTableWrap");
-
-  const pdfBtn = document.getElementById("pdfBtn");
-  const shareBtn = document.getElementById("shareBtn");
-
   const CURRENCY_SYMBOL = { GBP:"£", USD:"$", EUR:"€", AUD:"$", CAD:"$", NZD:"$", AED:"AED ", SAR:"SAR ", PKR:"₨", INR:"₹" };
+
   function sym(){ return CURRENCY_SYMBOL[currencyEl.value || "GBP"] || ""; }
   function n(v){ const x = parseFloat(String(v).replace(/,/g,"")); return Number.isFinite(x) ? x : 0; }
   function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
@@ -442,18 +482,16 @@
     compute();
   });
 
-  function getFees(sell, feePct, feeFixed, adsPct){
-    const platformFee = sell * (feePct/100);
-    const adsFee = sell * (adsPct/100);
-    return platformFee + feeFixed + adsFee;
+  function totalFees(sell, feePct, feeFixed, adsPct){
+    return sell * (feePct/100) + feeFixed + sell * (adsPct/100);
   }
 
   function computeProfitCore(sell,cost,ship,misc,feePct,feeFixed,adsPct,returnPct){
-    const totalFees = getFees(sell, feePct, feeFixed, adsPct);
+    const fees = totalFees(sell, feePct, feeFixed, adsPct);
     const expectedReturnImpact = sell * (returnPct/100);
-    const profit = sell - (cost + ship + misc + totalFees);
+    const profit = sell - (cost + ship + misc + fees);
     const margin = sell > 0 ? (profit/sell)*100 : 0;
-    return { profit, margin, totalFees, expectedReturnImpact };
+    return { profit, margin, fees, expectedReturnImpact };
   }
 
   function computeProfit(){
@@ -470,7 +508,7 @@
 
     o1v.textContent = money(r.profit);
     o2v.textContent = pct(r.margin);
-    feesOut.textContent = money(r.totalFees);
+    feesOut.textContent = money(r.fees);
     returnOut.textContent = money(r.expectedReturnImpact);
 
     if (sell<=0){ o1hint.textContent="Enter a selling price."; o2hint.textContent="—"; }
@@ -487,6 +525,7 @@
     const feePct = clamp(n(feePctEl.value),0,99);
     const adsPct = clamp(n(adsPctEl.value),0,99);
     const feeFixed = clamp(n(feeFixedEl.value),0,999999);
+
     const denom = 1 - ((feePct + adsPct)/100);
     if (denom <= 0.01) return null;
     return (target + cost + ship + misc + feeFixed) / denom;
@@ -508,10 +547,12 @@
     const misc = n(miscCostEl.value);
 
     const r = computeProfitCore(sell,cost,ship,misc,feePct,feeFixed,adsPct,returnPct);
+
     o1v.textContent = money(sell);
     o2v.textContent = pct(r.margin);
-    feesOut.textContent = money(r.totalFees);
+    feesOut.textContent = money(r.fees);
     returnOut.textContent = money(r.expectedReturnImpact);
+
     o1hint.textContent = `Required selling price to target ~${money(target)} profit (estimate).`;
     o2hint.textContent = "Implied margin at that selling price.";
     updateFXLine(sell);
@@ -524,13 +565,14 @@
     tabProfit.classList.toggle("active", m==="profit");
     tabReverse.classList.toggle("active", m==="reverse");
     tabBulk.classList.toggle("active", m==="bulk");
+
     singleBox.style.display = (m==="bulk") ? "none" : "block";
     bulkBox.style.display = (m==="bulk") ? "block" : "none";
     reverseBox.style.display = (m==="reverse") ? "block" : "none";
 
     if (m==="profit"){ o1h.textContent="Estimated profit"; o2h.textContent="Margin"; }
     if (m==="reverse"){ o1h.textContent="Required selling price"; o2h.textContent="Implied margin"; }
-    if (m==="bulk"){ /* no single KPIs */ }
+    if (m==="bulk"){ bulkStatus.textContent = CURRENT_PROFILE?.paid ? "Add rows, enter values, then Run bulk." : "Unlock PRO to use Bulk mode."; }
     compute();
   }
   tabProfit.addEventListener("click", ()=>setMode("profit"));
@@ -590,13 +632,12 @@
     pdfBtn.disabled = !isPro;
     shareBtn.disabled = !isPro;
     bulkRunBtn.disabled = !isPro;
-    if (!isPro){
-      bulkStatus.textContent = "Unlock PRO to use Bulk mode.";
-    } else {
-      bulkStatus.textContent = "Paste lines and run.";
-    }
+    bulkAddRowBtn.disabled = !isPro;
+    bulkClearBtn.disabled = !isPro;
+    bulkApplyFeesBtn.disabled = !isPro;
+    bulkExportBtn.disabled = !isPro;
+
     presetStatus.textContent = isPro ? "PRO enabled" : "Unlock PRO to use My Presets + PDF + Share + Bulk.";
-    // Presets controls
     saveMyPresetBtn.disabled = !isPro;
     loadMyPresetBtn.disabled = !isPro;
     deleteMyPresetBtn.disabled = !isPro;
@@ -606,6 +647,7 @@
 
   function updateAccessUI(profile){
     CURRENT_PROFILE = profile;
+
     if (profile.paid){
       accessPill.textContent = "Unlocked (PRO)";
       accessPill.className = "pill ok";
@@ -613,14 +655,21 @@
       enableProUI(true);
       return;
     }
+
     enableProUI(false);
     reverseUsesLine.textContent = `Reverse uses: ${profile.reverse_uses ?? 0}/${TRIAL_REVERSE_LIMIT} (Trial)`;
+
     const left = daysLeft(profile.trial_start);
-    if (left > 0){ accessPill.textContent = `Trial active • ${left} day(s) left`; accessPill.className = "pill warn"; }
-    else { accessPill.textContent = "Trial ended • PRO required"; accessPill.className = "pill bad"; }
+    if (left > 0){
+      accessPill.textContent = `Trial active • ${left} day(s) left`;
+      accessPill.className = "pill warn";
+    } else {
+      accessPill.textContent = "Trial ended • PRO required";
+      accessPill.className = "pill bad";
+    }
   }
 
-  // Buttons
+  // Calculate (single)
   document.getElementById("calcBtn").addEventListener("click", async ()=>{
     try{
       if (MODE==="reverse" && !CURRENT_PROFILE?.paid) await consumeReverseUse();
@@ -631,14 +680,13 @@
     }
   });
 
+  // Reset
   document.getElementById("resetBtn").addEventListener("click", ()=>{
     [sellPriceEl, productCostEl, shipCostEl, miscCostEl, feePctEl, feeFixedEl, adsPctEl, returnPctEl, targetProfitEl].forEach(el=>el.value="0");
     fxRateEl.value = "";
     presetSel.value = "manual";
     shareStatus.textContent = "—";
-    bulkInput.value = "";
-    bulkTableWrap.innerHTML = "";
-    bulkStatus.textContent = CURRENT_PROFILE?.paid ? "Paste lines and run." : "Unlock PRO to use Bulk mode.";
+    clearBulkRows();
     setMode("profit");
   });
 
@@ -699,45 +747,116 @@
     shareStatus.textContent="Share link copied.";
   });
 
-  // Bulk mode
+  // ---- BULK TABLE MODE ----
   let bulkLastRows = [];
-  function parseLine(line){
-    const parts = line.split(",").map(x=>x.trim());
-    if (parts.length < 2) return null;
-    const [sell,cost,ship,misc,feePct,feeFixed,adsPct,retPct] = parts;
-    return {
-      sell:n(sell), cost:n(cost), ship:n(ship||0), misc:n(misc||0),
-      feePct: clamp(n(feePct||feePctEl.value),0,99),
-      feeFixed: clamp(n(feeFixed||feeFixedEl.value),0,999999),
-      adsPct: clamp(n(adsPct||adsPctEl.value),0,99),
-      returnPct: clamp(n(retPct||returnPctEl.value),0,99)
-    };
+
+  function mkCellInput(value="0"){
+    const inp = document.createElement("input");
+    inp.className = "mini";
+    inp.inputMode = "decimal";
+    inp.value = String(value ?? "0");
+    return inp;
   }
 
-  function renderBulkTable(rows){
-    if (!rows.length){ bulkTableWrap.innerHTML=""; return; }
-    const html = `
-      <table>
-        <thead>
-          <tr>
-            <th>#</th><th>Sell</th><th>Cost</th><th>Fees</th><th>Profit</th><th>Margin</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${rows.map((r,i)=>`
-            <tr>
-              <td>${i+1}</td>
-              <td>${money(r.sell)}</td>
-              <td>${money(r.cost + r.ship + r.misc)}</td>
-              <td>${money(r.totalFees)}</td>
-              <td class="${r.profit>=0?'good':'bad'}">${money(r.profit)}</td>
-              <td class="${r.margin>=10?'good':(r.margin>=0?'':'bad')}">${pct(r.margin)}</td>
-            </tr>
-          `).join("")}
-        </tbody>
-      </table>
-    `;
-    bulkTableWrap.innerHTML = html;
+  function addBulkRow(initial={}){
+    const tr = document.createElement("tr");
+
+    const idxTd = document.createElement("td");
+    idxTd.textContent = String(bulkTbody.children.length + 1);
+    tr.appendChild(idxTd);
+
+    const sell = mkCellInput(initial.sell ?? "0");
+    const cost = mkCellInput(initial.cost ?? "0");
+    const ship = mkCellInput(initial.ship ?? "0");
+    const misc = mkCellInput(initial.misc ?? "0");
+    const feePct = mkCellInput(initial.feePct ?? feePctEl.value);
+    const feeFixed = mkCellInput(initial.feeFixed ?? feeFixedEl.value);
+    const adsPct = mkCellInput(initial.adsPct ?? adsPctEl.value);
+    const retPct = mkCellInput(initial.returnPct ?? returnPctEl.value);
+
+    const inputs = [sell,cost,ship,misc,feePct,feeFixed,adsPct,retPct];
+
+    inputs.forEach(inp=>{
+      const td = document.createElement("td");
+      td.appendChild(inp);
+      tr.appendChild(td);
+    });
+
+    const profitTd = document.createElement("td");
+    profitTd.textContent = "—";
+    tr.appendChild(profitTd);
+
+    const marginTd = document.createElement("td");
+    marginTd.textContent = "—";
+    tr.appendChild(marginTd);
+
+    const actTd = document.createElement("td");
+    const delBtn = document.createElement("button");
+    delBtn.className = "btn";
+    delBtn.textContent = "Remove";
+    delBtn.onclick = ()=>{
+      tr.remove();
+      renumberBulkRows();
+      bulkStatus.textContent = "Row removed.";
+    };
+    actTd.appendChild(delBtn);
+    tr.appendChild(actTd);
+
+    // Save references on row for running
+    tr._pp = { sell,cost,ship,misc,feePct,feeFixed,adsPct,retPct, profitTd, marginTd };
+
+    bulkTbody.appendChild(tr);
+    renumberBulkRows();
+  }
+
+  function renumberBulkRows(){
+    [...bulkTbody.children].forEach((tr,i)=> tr.children[0].textContent = String(i+1));
+  }
+
+  function clearBulkRows(){
+    bulkTbody.innerHTML = "";
+    bulkLastRows = [];
+    bulkStatus.textContent = CURRENT_PROFILE?.paid ? "Add rows, enter values, then Run bulk." : "Unlock PRO to use Bulk mode.";
+  }
+
+  function applyFeesToAll(){
+    const base = {
+      feePct: feePctEl.value,
+      feeFixed: feeFixedEl.value,
+      adsPct: adsPctEl.value,
+      retPct: returnPctEl.value
+    };
+    [...bulkTbody.children].forEach(tr=>{
+      const r = tr._pp;
+      r.feePct.value = base.feePct;
+      r.feeFixed.value = base.feeFixed;
+      r.adsPct.value = base.adsPct;
+      r.retPct.value = base.retPct;
+    });
+    bulkStatus.textContent = "Applied current fees to all rows.";
+  }
+
+  bulkAddRowBtn.addEventListener("click", ()=>{
+    if (!CURRENT_PROFILE?.paid){ bulkStatus.textContent="Unlock PRO to add rows."; return; }
+    addBulkRow();
+    bulkStatus.textContent = "Row added.";
+  });
+
+  bulkClearBtn.addEventListener("click", ()=>{
+    if (!CURRENT_PROFILE?.paid){ bulkStatus.textContent="Unlock PRO to clear rows."; return; }
+    clearBulkRows();
+  });
+
+  bulkApplyFeesBtn.addEventListener("click", ()=>{
+    if (!CURRENT_PROFILE?.paid){ bulkStatus.textContent="Unlock PRO to apply fees."; return; }
+    applyFeesToAll();
+  });
+
+  function computeProfitCoreRow(sell,cost,ship,misc,feePct,feeFixed,adsPct,returnPct){
+    const fees = sell * (feePct/100) + feeFixed + sell * (adsPct/100);
+    const profit = sell - (cost + ship + misc + fees);
+    const margin = sell > 0 ? (profit/sell)*100 : 0;
+    return { profit, margin, fees };
   }
 
   bulkRunBtn.addEventListener("click", ()=>{
@@ -745,25 +864,35 @@
       bulkStatus.textContent = "Unlock PRO to run bulk scans.";
       return;
     }
-    const lines = bulkInput.value.split("\n").map(x=>x.trim()).filter(Boolean);
-    if (!lines.length){ bulkStatus.textContent="Paste at least 1 line."; return; }
+
+    const trs = [...bulkTbody.children];
+    if (!trs.length){ bulkStatus.textContent = "Add at least 1 row."; return; }
 
     const out = [];
-    lines.forEach((ln, idx)=>{
-      const parsed = parseLine(ln);
-      if (!parsed) return;
-      const r = computeProfitCore(parsed.sell, parsed.cost, parsed.ship, parsed.misc, parsed.feePct, parsed.feeFixed, parsed.adsPct, parsed.returnPct);
-      out.push({
-        ...parsed,
-        totalFees: r.totalFees,
-        profit: r.profit,
-        margin: r.margin
-      });
+    trs.forEach((tr)=>{
+      const r = tr._pp;
+      const sell = n(r.sell.value);
+      const cost = n(r.cost.value);
+      const ship = n(r.ship.value);
+      const misc = n(r.misc.value);
+      const feePct = clamp(n(r.feePct.value),0,99);
+      const feeFixed = clamp(n(r.feeFixed.value),0,999999);
+      const adsPct = clamp(n(r.adsPct.value),0,99);
+      const retPct = clamp(n(r.retPct.value),0,99);
+
+      const res = computeProfitCoreRow(sell,cost,ship,misc,feePct,feeFixed,adsPct,retPct);
+
+      r.profitTd.textContent = money(res.profit);
+      r.profitTd.className = res.profit >= 0 ? "good" : "bad";
+
+      r.marginTd.textContent = pct(res.margin);
+      r.marginTd.className = res.margin >= 10 ? "good" : (res.margin < 0 ? "bad" : "");
+
+      out.push({ sell,cost,ship,misc,feePct,feeFixed,adsPct,retPct, profit:res.profit, margin:res.margin, fees:res.fees });
     });
 
     bulkLastRows = out;
-    bulkStatus.textContent = `Processed ${out.length} item(s).`;
-    renderBulkTable(out);
+    bulkStatus.textContent = `Processed ${out.length} row(s).`;
   });
 
   bulkExportBtn.addEventListener("click", ()=>{
@@ -776,17 +905,17 @@
       return;
     }
     const rows = [
-      ["sell","cost","ship","misc","feePct","feeFixed","adsPct","returnPct","totalFees","profit","margin"]
+      ["sell","cost","ship","misc","feePct","feeFixed","adsPct","returnPct","fees","profit","margin"]
     ];
     bulkLastRows.forEach(r=>{
-      rows.push([r.sell,r.cost,r.ship,r.misc,r.feePct,r.feeFixed,r.adsPct,r.returnPct,r.totalFees,r.profit,r.margin]);
+      rows.push([r.sell,r.cost,r.ship,r.misc,r.feePct,r.feeFixed,r.adsPct,r.retPct,r.fees,r.profit,r.margin]);
     });
     const csv = rows.map(r=>r.map(csvEscape).join(",")).join("\n");
     downloadText("profitpilot-bulk.csv", csv);
     bulkStatus.textContent = "Bulk CSV exported.";
   });
 
-  // My presets (PRO)
+  // ---- My presets (PRO) ----
   async function loadMyPresets(){
     if (!CURRENT_PROFILE?.paid || !CURRENT_USER) return;
     const { data, error } = await supabase
@@ -849,10 +978,11 @@
     presetStatus.textContent="Deleted.";
   });
 
-  // Reviews submit (quick & safe)
+  // ---- Reviews submit ----
   let selectedStars = 5;
   const starsRow = document.getElementById("starsRow");
   const reviewStatus = document.getElementById("reviewStatus");
+
   function setStars(n){
     selectedStars = n;
     [...starsRow.querySelectorAll("button")].forEach(b=>b.classList.toggle("active", parseInt(b.dataset.star,10)===n));
@@ -862,6 +992,7 @@
     const btn=e.target.closest("button"); if(!btn) return;
     setStars(parseInt(btn.dataset.star,10));
   });
+
   document.getElementById("sendReview").addEventListener("click", async ()=>{
     reviewStatus.textContent="Submitting…";
     try{
@@ -888,6 +1019,25 @@
     location.href = "login.html";
   });
 
+  // Enable PRO UI
+  function enableProUI(isPro){
+    pdfBtn.disabled = !isPro;
+    shareBtn.disabled = !isPro;
+
+    bulkRunBtn.disabled = !isPro;
+    bulkAddRowBtn.disabled = !isPro;
+    bulkClearBtn.disabled = !isPro;
+    bulkApplyFeesBtn.disabled = !isPro;
+    bulkExportBtn.disabled = !isPro;
+
+    presetStatus.textContent = isPro ? "PRO enabled" : "Unlock PRO to use My Presets + PDF + Share + Bulk.";
+    saveMyPresetBtn.disabled = !isPro;
+    loadMyPresetBtn.disabled = !isPro;
+    deleteMyPresetBtn.disabled = !isPro;
+    myPresetSel.disabled = !isPro;
+    myPresetName.disabled = !isPro;
+  }
+
   // Boot
   (async ()=>{
     try{
@@ -903,6 +1053,14 @@
       updateAccessUI(profile);
 
       if (profile.paid) await loadMyPresets();
+
+      // Initialize bulk with 5 rows for PRO users
+      if (profile.paid){
+        clearBulkRows();
+        for (let i=0;i<5;i++) addBulkRow();
+      } else {
+        clearBulkRows();
+      }
 
       setMode("profit");
       computeProfit();
