@@ -4,98 +4,101 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>ProfitPilot — App</title>
-  <meta name="description" content="ProfitPilot helps sellers estimate profit, margin, and cost sensitivity. Free trial with one-time PRO unlock.">
+  <meta name="description" content="ProfitPilot helps sellers estimate profit, fees, and margins. Free trial with one-time PRO unlock.">
   <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
 
   <style>
     :root{
-      --bg:#0b0f14;
-      --card:#111826;
-      --card2:#0e1521;
-      --txt:#eaf0ff;
-      --muted:#9aa7bd;
-      --line:rgba(255,255,255,.08);
-      --accent:#5eead4;
-      --warn:#fbbf24;
-      --bad:#fb7185;
-      --ok:#5eead4;
+      --bg:#f6f8fb;
+      --bg2:#eef2ff;
+      --card:#ffffff;
+      --card2:#f3f6ff;
+      --txt:#0b1220;
+      --muted:#5b6474;
+      --line:rgba(16,24,40,.10);
+      --accent:#0ea5a4;
+      --accent2:#4f46e5;
+      --shadow:0 10px 30px rgba(16,24,40,.08);
+      --warn:#f59e0b;
+      --bad:#ef4444;
+      --ok:#0ea5a4;
     }
     *{box-sizing:border-box}
     body{
       margin:0;
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      background:
-        radial-gradient(900px 500px at 20% 0%,rgba(94,234,212,.10),transparent 55%),
-        radial-gradient(900px 500px at 80% 0%,rgba(99,102,241,.10),transparent 55%),
-        var(--bg);
       color:var(--txt);
+      background:
+        radial-gradient(900px 500px at 20% 0%, rgba(14,165,164,.16), transparent 55%),
+        radial-gradient(900px 500px at 80% 0%, rgba(79,70,229,.12), transparent 55%),
+        linear-gradient(180deg, var(--bg2), var(--bg));
     }
     a{color:var(--accent);text-decoration:none}
     .wrap{max-width:1100px;margin:18px auto;padding:0 14px}
-    .nav{
-      display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap
-    }
+    .nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
     .brand{display:flex;gap:10px;align-items:center}
     .logo{
       width:40px;height:40px;border-radius:14px;
-      background:rgba(94,234,212,.12);
-      border:1px solid rgba(94,234,212,.25);
+      background:linear-gradient(135deg, rgba(14,165,164,.18), rgba(79,70,229,.14));
+      border:1px solid var(--line);
       display:flex;align-items:center;justify-content:center;
       font-weight:900;
     }
     .pill{
       padding:8px 10px;border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.03);
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.70);
       font-size:12px;color:var(--muted);
       display:inline-flex;gap:8px;align-items:center
     }
-    .pill.ok{border-color:rgba(94,234,212,.35);background:rgba(94,234,212,.10);color:var(--txt)}
-    .pill.warn{border-color:rgba(251,191,36,.35);background:rgba(251,191,36,.08);color:var(--txt)}
-    .pill.bad{border-color:rgba(251,113,133,.35);background:rgba(251,113,133,.08);color:var(--txt)}
+    .pill.ok{border-color:rgba(14,165,164,.30);background:rgba(14,165,164,.10);color:var(--txt)}
+    .pill.warn{border-color:rgba(245,158,11,.30);background:rgba(245,158,11,.10);color:var(--txt)}
+    .pill.bad{border-color:rgba(239,68,68,.30);background:rgba(239,68,68,.10);color:var(--txt)}
+
     .btn{
       padding:10px 14px;border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.03);
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.75);
       color:var(--txt);
       display:inline-flex;gap:8px;align-items:center;
       cursor:pointer;
+      box-shadow:0 4px 16px rgba(16,24,40,.06);
     }
-    .btn.primary{
-      border-color:rgba(94,234,212,.35);
-      background:rgba(94,234,212,.12);
-    }
-    .btn.ghost{background:transparent}
+    .btn.primary{border-color:rgba(14,165,164,.30);background:rgba(14,165,164,.10)}
+    .btn.ghost{background:transparent;box-shadow:none}
+
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
     @media(max-width:980px){.grid{grid-template-columns:1fr}}
     .card{
-      background:var(--card);
+      background:rgba(255,255,255,.82);
       border:1px solid var(--line);
       border-radius:18px;
       padding:16px;
+      box-shadow:var(--shadow);
     }
     .title{font-weight:900;margin:0 0 8px}
     .small{font-size:12px;color:var(--muted);line-height:1.6}
+
     .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     @media(max-width:560px){.row{grid-template-columns:1fr}}
+
     label{display:block;font-size:12px;color:var(--muted);margin:10px 0 6px}
     input,select{
       width:100%;
       padding:12px;
       border-radius:14px;
       border:1px solid var(--line);
-      background:var(--card2);
+      background:rgba(255,255,255,.85);
       color:var(--txt);
       outline:none;
     }
-    input:focus,select:focus{border-color:rgba(94,234,212,.35)}
-    .kpi{
-      display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px
-    }
+    input:focus,select:focus{border-color:rgba(14,165,164,.35)}
+
+    .kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
     @media(max-width:560px){.kpi{grid-template-columns:1fr}}
     .k{
       border:1px solid var(--line);
-      background:rgba(255,255,255,.03);
+      background:rgba(255,255,255,.65);
       border-radius:16px;
       padding:12px;
     }
@@ -104,9 +107,10 @@
     .divider{height:1px;background:var(--line);margin:12px 0}
     .hint{font-size:12px;color:var(--muted)}
     footer{margin:14px 2px 0;color:var(--muted);font-size:12px;line-height:1.6}
+
     .overlay{
       position:fixed;inset:0;
-      background:rgba(0,0,0,.62);
+      background:rgba(16,24,40,.42);
       display:none;
       align-items:center;
       justify-content:center;
@@ -114,69 +118,58 @@
       z-index:999;
     }
     .modal{
-      width:min(680px,100%);
-      background:linear-gradient(180deg,rgba(94,234,212,.10),transparent 60%),var(--card);
+      width:min(760px,100%);
+      background:rgba(255,255,255,.90);
       border:1px solid var(--line);
       border-radius:18px;
       padding:18px;
+      box-shadow:var(--shadow);
     }
     .modal h2{margin:0 0 8px}
     .two{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
     @media(max-width:840px){.two{grid-template-columns:1fr}}
-    .review{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.03);
-      border-radius:16px;
-      padding:12px;
-      margin-top:10px;
-    }
     .stars button{
       border:1px solid var(--line);
-      background:rgba(255,255,255,.03);
+      background:rgba(255,255,255,.75);
       color:var(--txt);
       border-radius:999px;
       padding:8px 10px;
       cursor:pointer;
     }
     .stars button.active{
-      border-color:rgba(94,234,212,.45);
-      background:rgba(94,234,212,.12);
+      border-color:rgba(14,165,164,.35);
+      background:rgba(14,165,164,.10);
     }
-    .toast{
-      margin-top:10px;
-      font-size:12px;
-      color:var(--muted);
-    }
+    .toast{margin-top:10px;font-size:12px;color:var(--muted)}
   </style>
 </head>
 
 <body>
 <div class="wrap">
 
-  <!-- NAV -->
   <div class="nav">
     <div class="brand">
       <div class="logo">PP</div>
       <div>
         <div style="font-weight:900">ProfitPilot</div>
-        <div class="pill">Independent tool • estimates only</div>
+        <div class="pill">Estimates only • Independent tool</div>
       </div>
     </div>
 
     <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
       <a class="btn ghost" href="https://ukwebtools.com/">← Ukwebtools</a>
+      <a class="btn ghost" href="index.html">Home</a>
+      <a class="btn ghost" href="reviews.html">Reviews</a>
       <span class="pill" id="accessPill">Checking access…</span>
       <button class="btn" id="logoutBtn">Log out</button>
     </div>
   </div>
 
-  <!-- MAIN -->
   <div class="grid">
 
-    <!-- CALCULATOR -->
     <div class="card">
       <div class="title">Profit calculator</div>
-      <div class="small">Choose a preset or enter values manually. Outputs are estimates based on your inputs.</div>
+      <div class="small">Pick a preset or enter values manually. Outputs are estimates based on your inputs.</div>
 
       <label>Platform preset</label>
       <select id="preset">
@@ -265,12 +258,11 @@
       <div class="divider"></div>
 
       <div class="small">
-        <b>Disclaimer:</b> ProfitPilot provides estimates based on user inputs. Results are not guaranteed and are not financial, legal, or tax advice.
-        Not affiliated with any marketplace or platform. See <a href="https://ukwebtools.com/terms.html">Terms</a> and <a href="https://ukwebtools.com/privacy.html">Privacy</a>.
+        <b>Disclaimer:</b> Estimates only, not financial/legal/tax advice. Not affiliated with any platform.
+        See <a href="https://ukwebtools.com/terms.html">Terms</a> and <a href="https://ukwebtools.com/privacy.html">Privacy</a>.
       </div>
     </div>
 
-    <!-- PRO / REVIEWS -->
     <div class="card">
       <div class="title">Your workspace</div>
       <div class="small" id="userLine">Loading account…</div>
@@ -278,7 +270,7 @@
       <div class="divider"></div>
 
       <div class="title" style="margin:0 0 6px">Leave a review</div>
-      <div class="small">Your review appears publicly after submission. Please be respectful — spam or abuse may be removed.</div>
+      <div class="small">To keep trust high, reviews are public. Please be respectful — spam/abuse may be removed.</div>
 
       <label>Name (optional)</label>
       <input id="revName" placeholder="e.g., Faryal">
@@ -311,21 +303,17 @@
 
       <div class="title" style="margin:0 0 6px">Quick links</div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <a class="btn" href="https://profitpilot.ukwebtools.com/">Landing page</a>
-        <a class="btn" href="https://profitpilot.ukwebtools.com/login.html">Login</a>
+        <a class="btn" href="reviews.html">Read public reviews</a>
+        <a class="btn" href="login.html">Login</a>
         <a class="btn" href="https://stonevia.gumroad.com/l/goddhg" target="_blank" rel="noopener">Buy PRO</a>
       </div>
     </div>
 
   </div>
 
-  <footer>
-    © <span id="yr"></span> Ukwebtools • ProfitPilot
-  </footer>
-
+  <footer>© <span id="yr"></span> Ukwebtools • ProfitPilot</footer>
 </div>
 
-<!-- PAYWALL OVERLAY -->
 <div class="overlay" id="paywall">
   <div class="modal">
     <h2>Unlock ProfitPilot PRO</h2>
@@ -335,7 +323,7 @@
     </p>
 
     <div class="two">
-      <div class="card" style="padding:14px">
+      <div class="card" style="padding:14px;box-shadow:none">
         <div class="title">Free Trial</div>
         <ul class="small" style="line-height:1.8;padding-left:16px;margin:8px 0 0">
           <li>5-day access</li>
@@ -344,7 +332,7 @@
         </ul>
       </div>
 
-      <div class="card" style="padding:14px;border-color:rgba(94,234,212,.45)">
+      <div class="card" style="padding:14px;border-color:rgba(14,165,164,.35);box-shadow:none">
         <div class="title">PRO (One-time unlock)</div>
         <ul class="small" style="line-height:1.8;padding-left:16px;margin:8px 0 0">
           <li><b>Unlimited access</b></li>
@@ -361,7 +349,7 @@
 
     <div class="row">
       <a class="btn primary" id="buyBtn" href="https://stonevia.gumroad.com/l/goddhg" target="_blank" rel="noopener">Buy PRO (one-time)</a>
-      <a class="btn" href="https://ukwebtools.com/terms.html" target="_blank" rel="noopener">Terms</a>
+      <a class="btn" href="reviews.html">See reviews</a>
     </div>
 
     <label style="margin-top:12px">Paste Gumroad license key</label>
@@ -378,21 +366,15 @@
 <script type="module">
   import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-  // ✅ Your Supabase public credentials (safe for frontend)
   const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
   const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
 
-  // Gumroad buy link
   const BUY_URL = "https://stonevia.gumroad.com/l/goddhg";
-
-  // Edge Function that verifies Gumroad key + binds to one user
   const GUMROAD_REDEEM_FN = "https://xsigsftvfknefpdfsyae.supabase.co/functions/v1/gumroad-redeem";
-
   const TRIAL_DAYS = 5;
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-  // UI refs
   const accessPill = document.getElementById("accessPill");
   const userLine = document.getElementById("userLine");
   const paywall = document.getElementById("paywall");
@@ -400,7 +382,6 @@
   const logoutBtn = document.getElementById("logoutBtn");
 
   buyBtn.href = BUY_URL;
-
   document.getElementById("yr").textContent = new Date().getFullYear();
 
   function n(v){
@@ -415,9 +396,8 @@
     const v = Number.isFinite(x) ? x : 0;
     return v.toFixed(1) + "%";
   }
-  function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
+  function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
 
-  // Presets (names only — no logos)
   const PRESETS = [
     { id:"manual", name:"Manual (enter fees yourself)", feePct:0, feeFixed:0, adsPct:0, returnPct:0 },
     { id:"ebay_uk_typical", name:"eBay UK (typical example)", feePct:12.8, feeFixed:0.30, adsPct:0, returnPct:3 },
@@ -431,7 +411,6 @@
   const adsPctEl = document.getElementById("adsPct");
   const retPctEl = document.getElementById("returnPct");
 
-  // Populate presets
   PRESETS.forEach(p=>{
     const opt = document.createElement("option");
     opt.value = p.id;
@@ -450,7 +429,6 @@
     }
   });
 
-  // Calculator
   const sellPriceEl = document.getElementById("sellPrice");
   const productCostEl = document.getElementById("productCost");
   const shipCostEl = document.getElementById("shipCost");
@@ -478,7 +456,6 @@
     const adsFee = sell * (adsPct/100);
     const totalFees = platformFee + feeFixed + adsFee;
 
-    // Expected return sensitivity: simple expected value approximation
     const expectedReturnImpact = sell * (retPct/100);
 
     const profit = sell - (cost + ship + misc + totalFees);
@@ -489,10 +466,11 @@
     feesOut.textContent = money(totalFees);
     returnOut.textContent = money(expectedReturnImpact);
 
-    // Simple risk hints (not guarantees)
     if (sell <= 0) {
       profitHint.textContent = "Enter a selling price.";
       marginHint.textContent = "—";
+      profitHint.style.color = "var(--muted)";
+      marginHint.style.color = "var(--muted)";
       return;
     }
 
@@ -525,24 +503,17 @@
     presetSel.value = "manual";
     compute();
   });
-
-  // Convenience: live update on input changes
   [sellPriceEl, productCostEl, shipCostEl, miscCostEl, feePctEl, feeFixEl, adsPctEl, retPctEl].forEach(el=>{
-    el.addEventListener("input", ()=>{ /* light live */ compute(); });
+    el.addEventListener("input", compute);
   });
 
-  // Auth + Access enforcement
   async function requireSession(){
     const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      location.href = "login.html";
-      return null;
-    }
+    if (!session) { location.href = "login.html"; return null; }
     return session;
   }
 
   async function ensureProfile(userId){
-    // Create profile row if missing
     const { data: prof, error } = await supabase
       .from("profiles")
       .select("id, trial_start, paid, plan")
@@ -563,7 +534,6 @@
       return { id:userId, trial_start: now, paid:false, plan:"trial" };
     }
 
-    // Ensure trial_start exists
     if (!prof.trial_start) {
       const now = new Date().toISOString();
       const { error: upErr } = await supabase.from("profiles").update({ trial_start: now }).eq("id", userId);
@@ -607,7 +577,6 @@
     }
   }
 
-  // Gumroad redeem via Edge Function (binds key to this user only)
   async function redeemGumroad(licenseKey){
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) throw new Error("Please log in again.");
@@ -637,14 +606,12 @@
       if (!key) throw new Error("Paste your Gumroad license key.");
       const out = await redeemGumroad(key);
       redeemStatus.textContent = out.message || "Unlocked.";
-      // Reload to refresh paid state
       setTimeout(()=>location.reload(), 600);
     } catch(e){
       redeemStatus.textContent = e.message;
     }
   });
 
-  // Reviews
   let selectedStars = 5;
   const starsRow = document.getElementById("starsRow");
   const reviewStatus = document.getElementById("reviewStatus");
@@ -666,11 +633,8 @@
   document.getElementById("sendReview").addEventListener("click", async ()=>{
     reviewStatus.textContent = "Submitting…";
     try{
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) throw new Error("Please log in again.");
-
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("No user session.");
+      if (!user) throw new Error("Please log in again.");
 
       const name = document.getElementById("revName").value.trim();
       const category = document.getElementById("revCat").value;
@@ -695,28 +659,20 @@
     }
   });
 
-  // Logout
   logoutBtn.addEventListener("click", async ()=>{
     await supabase.auth.signOut();
     location.href = "login.html";
   });
 
-  // Boot
   (async function init(){
     const session = await requireSession();
     if (!session) return;
 
-    // Get user
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) { location.href = "login.html"; return; }
 
-    // Ensure profile row exists
     const profile = await ensureProfile(user.id);
-
-    // Update UI access state
     await updateAccessUI(profile, user.email || "user");
-
-    // Run initial compute
     compute();
   })();
 </script>
