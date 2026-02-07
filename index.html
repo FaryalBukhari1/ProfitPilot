@@ -3,435 +3,216 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>ProfitPilot — Listing Profit & Risk Calculator</title>
-  <meta name="description" content="ProfitPilot helps sellers estimate profit, test margins, reverse-price for target profit, and bulk scan listings. 5-day trial + one-time PRO unlock.">
+  <title>ProfitPilot — Smarter Pricing & Profit Calculator</title>
+  <meta name="description" content="ProfitPilot helps sellers calculate profit, reverse price for target profit, compare competitors, and analyze bulk listings. Free trial. One-time PRO unlock.">
   <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="ProfitPilot — Listing Profit & Risk Calculator">
-  <meta property="og:description" content="Estimate profit, stress-test margins, reverse-price for target profit, and bulk scan listings. 5-day trial + one-time PRO unlock.">
-  <meta property="og:type" content="website">
-
   <style>
     :root{
-      --bg:#f6f8fb;
-      --bg2:#eef2ff;
-      --txt:#0b1220;
-      --muted:#5b6474;
-      --card:rgba(255,255,255,.90);
-      --line:rgba(16,24,40,.10);
-      --accent:#0ea5a4;
-      --accent2:#4f46e5;
-      --shadow:0 10px 30px rgba(16,24,40,.08);
-      --ok:#0ea5a4;
-      --warn:#f59e0b;
-      --bad:#ef4444;
+      --bg:#f7f9fc; --bg2:#eef3ff; --txt:#0b1220; --muted:#5b6474;
+      --card:#ffffff; --line:rgba(16,24,40,.08);
+      --accent:#0ea5a4; --accent2:#4f46e5;
+      --shadow:0 12px 32px rgba(16,24,40,.08);
     }
     *{box-sizing:border-box}
     body{
-      margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--txt);
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--txt);
       background:
-        radial-gradient(900px 500px at 20% 0%, rgba(14,165,164,.16), transparent 55%),
+        radial-gradient(900px 500px at 20% 0%, rgba(14,165,164,.14), transparent 55%),
         radial-gradient(900px 500px at 80% 0%, rgba(79,70,229,.12), transparent 55%),
         linear-gradient(180deg, var(--bg2), var(--bg));
     }
-    a{color:var(--accent);text-decoration:none}
-    .wrap{max-width:1100px;margin:22px auto;padding:0 14px}
-    .nav{
-      display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap
-    }
-    .brand{display:flex;gap:10px;align-items:center}
+    a{text-decoration:none;color:inherit}
+    .wrap{max-width:1100px;margin:0 auto;padding:28px 16px}
+    .nav{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .brand{display:flex;align-items:center;gap:10px}
     .logo{
       width:42px;height:42px;border-radius:14px;
-      background:linear-gradient(135deg, rgba(14,165,164,.18), rgba(79,70,229,.14));
+      background:linear-gradient(135deg, rgba(14,165,164,.18), rgba(79,70,229,.16));
       border:1px solid var(--line);
       display:flex;align-items:center;justify-content:center;
       font-weight:900;
     }
-    .pill{
-      padding:8px 10px;border-radius:999px;border:1px solid var(--line);
-      background:rgba(255,255,255,.75);font-size:12px;color:var(--muted);
-      display:inline-flex;gap:8px;align-items:center
-    }
     .btn{
-      padding:10px 14px;border-radius:999px;border:1px solid var(--line);
-      background:rgba(255,255,255,.78);color:var(--txt);
-      display:inline-flex;gap:8px;align-items:center;cursor:pointer;
-      box-shadow:0 4px 16px rgba(16,24,40,.06);
-      white-space:nowrap;
+      padding:12px 16px;border-radius:999px;border:1px solid var(--line);
+      background:#fff;cursor:pointer;
+      box-shadow:0 6px 20px rgba(16,24,40,.06);
+      font-weight:600;
     }
     .btn.primary{
-      border-color:rgba(14,165,164,.30);
-      background:rgba(14,165,164,.10);
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#fff;border:none;
     }
-    .btn.ghost{background:transparent;box-shadow:none}
-    .hero{
-      margin-top:16px;
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:22px;
-      padding:22px;
-      box-shadow:var(--shadow);
-      position:relative;
-      overflow:hidden;
+    .hero{margin-top:60px;text-align:center}
+    .hero h1{
+      font-size:40px;line-height:1.15;margin:0;
+      letter-spacing:-.02em;
     }
-    .hero:before{
-      content:"";
-      position:absolute;inset:-2px;
-      background:radial-gradient(700px 340px at 15% 10%, rgba(14,165,164,.18), transparent 60%),
-                 radial-gradient(700px 340px at 85% 0%, rgba(79,70,229,.14), transparent 60%);
-      pointer-events:none;
+    .hero p{
+      max-width:680px;margin:16px auto 0;
+      font-size:17px;color:var(--muted);line-height:1.6;
     }
-    .hero > *{position:relative}
-    h1{margin:0 0 8px;font-size:34px;letter-spacing:-.02em}
-    @media(max-width:560px){h1{font-size:28px}}
-    .lead{margin:0;color:var(--muted);line-height:1.6;max-width:70ch}
-    .ctaRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;align-items:center}
-    .grid{
-      display:grid;grid-template-columns:1.1fr .9fr;gap:14px;margin-top:14px
+    .heroActions{
+      margin-top:28px;display:flex;gap:14px;
+      justify-content:center;flex-wrap:wrap;
     }
-    @media(max-width:980px){.grid{grid-template-columns:1fr}}
     .card{
       background:var(--card);
       border:1px solid var(--line);
       border-radius:18px;
-      padding:16px;
+      padding:22px;
       box-shadow:var(--shadow);
     }
-    .title{font-weight:900;margin:0 0 8px}
-    .small{font-size:12px;color:var(--muted);line-height:1.6}
-    .list{margin:10px 0 0;padding-left:18px;color:var(--muted);line-height:1.8}
-    .kpis{
-      display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:16px;margin-top:50px;
     }
-    @media(max-width:560px){.kpis{grid-template-columns:1fr}}
-    .k{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.75);
-      border-radius:16px;
-      padding:12px;
+    .card h3{margin:0 0 6px}
+    .card p{margin:0;color:var(--muted);line-height:1.6;font-size:14px}
+    .section{margin-top:70px}
+    .section h2{
+      text-align:center;margin:0;font-size:28px;
     }
-    .k .h{font-size:12px;color:var(--muted)}
-    .k .v{font-size:18px;font-weight:900;margin-top:6px}
-    .section{margin-top:14px}
-    .section h2{margin:0 0 8px;font-size:20px}
-    .two{
-      display:grid;grid-template-columns:1fr 1fr;gap:14px
+    .section p.lead{
+      text-align:center;margin:12px auto 0;
+      max-width:720px;color:var(--muted);
     }
-    @media(max-width:980px){.two{grid-template-columns:1fr}}
-    .plan{
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:16px;
-      background:rgba(255,255,255,.78);
-    }
-    .plan.pro{border-color:rgba(14,165,164,.28);background:linear-gradient(180deg, rgba(14,165,164,.10), rgba(255,255,255,.78))}
-    .tag{
-      display:inline-flex;padding:6px 10px;border-radius:999px;border:1px solid var(--line);
-      background:rgba(255,255,255,.78);font-size:12px;color:var(--muted)
+    .pricing{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:18px;margin-top:36px;
     }
     .price{
-      font-size:26px;font-weight:1000;letter-spacing:-.02em;margin:8px 0 6px
+      font-size:36px;font-weight:900;margin:12px 0;
     }
-    .sub{font-size:12px;color:var(--muted);margin:0}
-    .hr{height:1px;background:var(--line);margin:12px 0}
-    .faq{display:grid;gap:10px}
-    details{
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:12px;
-      background:rgba(255,255,255,.78);
-    }
-    summary{cursor:pointer;font-weight:800}
-    details p{margin:8px 0 0;color:var(--muted);line-height:1.6}
-    .reviews{display:grid;gap:10px;margin-top:10px}
-    .review{
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:12px;
-      background:rgba(255,255,255,.78);
-    }
-    .meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
-    .stars{font-weight:900}
+    .list{margin:12px 0 0;padding-left:18px;color:var(--muted);line-height:1.6;font-size:14px}
     footer{
-      margin:14px 2px 0;color:var(--muted);
-      font-size:12px;line-height:1.6
-    }
-    code{
-      background:rgba(79,70,229,.08);
-      border:1px solid rgba(79,70,229,.14);
-      padding:2px 6px;border-radius:10px;
-      font-size:12px
-    }
-    .note{
-      border:1px dashed rgba(16,24,40,.16);
-      background:rgba(255,255,255,.65);
-      border-radius:16px;
-      padding:12px;
-      margin-top:12px;
+      margin-top:80px;
+      padding:30px 16px;
+      border-top:1px solid var(--line);
       color:var(--muted);
-      font-size:12px;
-      line-height:1.6;
+      font-size:13px;
+      text-align:center;
     }
   </style>
 </head>
 <body>
+
 <div class="wrap">
 
   <!-- NAV -->
   <div class="nav">
     <div class="brand">
       <div class="logo">PP</div>
-      <div>
-        <div style="font-weight:900">ProfitPilot</div>
-        <div class="pill">by Ukwebtools • Independent calculator</div>
-      </div>
+      <strong>ProfitPilot</strong>
     </div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-      <a class="btn ghost" href="https://ukwebtools.com/">← Ukwebtools</a>
+    <div style="display:flex;gap:10px">
       <a class="btn" href="reviews.html">Reviews</a>
-      <a class="btn" href="login.html">Log in</a>
-      <a class="btn primary" href="app.html">Open app</a>
+      <a class="btn primary" href="login.html">Open app</a>
     </div>
   </div>
 
   <!-- HERO -->
   <div class="hero">
-    <div class="pill">5-day free trial • one-time PRO unlock • no subscriptions</div>
-    <h1>Price smarter. Protect your margin. Scale with confidence.</h1>
-    <p class="lead">
-      ProfitPilot is a seller-first calculator that goes beyond basic fees:
-      <b>profit & margin</b>, <b>reverse pricing</b> (target profit → selling price),
-      <b>bulk scans</b>, and <b>export/share</b> — so you can decide fast without guessing.
+    <h1>Price smarter.  
+      <br>Know your profit before you list.</h1>
+
+    <p>
+      ProfitPilot is a clean, practical calculator for sellers who want to price confidently —
+      not guess. Calculate profit, reverse-price for a target margin, compare competitors,
+      and analyze multiple listings in one place.
     </p>
 
-    <div class="ctaRow">
+    <div class="heroActions">
       <a class="btn primary" href="login.html">Start free trial</a>
-      <a class="btn" id="buyBtn" href="https://stonevia.gumroad.com/l/goddhg" target="_blank" rel="noopener">Buy PRO (one-time)</a>
-      <span class="pill">No platform logos • names for reference only</span>
-    </div>
-
-    <div class="kpis">
-      <div class="k">
-        <div class="h">What you can do</div>
-        <div class="v">Profit + Reverse + Bulk</div>
-      </div>
-      <div class="k">
-        <div class="h">Best for</div>
-        <div class="v">eBay • Etsy • Shopify • More</div>
-      </div>
-    </div>
-
-    <div class="note">
-      <b>Important:</b> ProfitPilot provides estimates based on your inputs. Results can vary and are not guaranteed.
-      This tool is not financial, legal, or tax advice. Not affiliated with marketplaces or payment providers.
+      <a class="btn" href="app.html">Go to calculator</a>
     </div>
   </div>
 
-  <!-- WHY / DIFFERENT -->
+  <!-- FEATURES -->
   <div class="grid">
     <div class="card">
-      <div class="title">Why ProfitPilot is different</div>
-      <ul class="list">
-        <li><b>Reverse pricing</b>: enter your target profit → get the required selling price (trial limited, PRO unlimited)</li>
-        <li><b>Bulk mode</b>: scan multiple listings in one go (PRO)</li>
-        <li><b>Editable fee presets</b>: start from examples, then tune to your reality</li>
-        <li><b>Export + share</b>: keep records, send pricing to a teammate (PRO)</li>
-        <li><b>Clean UX</b>: fast, mobile-friendly, distraction-free</li>
-      </ul>
-      <div class="small" style="margin-top:10px">
-        We avoid platform logos. If platform names appear, they’re used only as reference with no endorsement or affiliation.
-      </div>
+      <h3>Profit & margin clarity</h3>
+      <p>Instantly see profit, margin, fees, and return sensitivity before you list.</p>
     </div>
-
     <div class="card">
-      <div class="title">Perfect for sellers who…</div>
-      <ul class="list">
-        <li>keep guessing fees and then wonder why profit disappears</li>
-        <li>need a target profit and want the price instantly</li>
-        <li>run thin margins and want stress-testing</li>
-        <li>list frequently and want repeatable decisions</li>
-        <li>want something simple, trustworthy, and fast</li>
-      </ul>
-      <div class="hr"></div>
-      <div class="small"><b>Tip:</b> Start the trial, run your 3 reverse checks, then decide if PRO saves you time.</div>
+      <h3>Reverse pricing</h3>
+      <p>Enter your target profit and let ProfitPilot calculate the selling price for you.</p>
+    </div>
+    <div class="card">
+      <h3>Competitor comparison</h3>
+      <p>Manually compare market prices and get a safe, realistic price suggestion.</p>
+    </div>
+    <div class="card">
+      <h3>Bulk analysis</h3>
+      <p>Analyze multiple products in a table — perfect for catalog or sourcing decisions.</p>
+    </div>
+  </div>
+
+  <!-- WHO IT’S FOR -->
+  <div class="section">
+    <h2>Who is ProfitPilot for?</h2>
+    <p class="lead">
+      Built for people who sell online and care about sustainable profit —
+      not hype or shortcuts.
+    </p>
+
+    <div class="grid">
+      <div class="card"><p>• eBay & marketplace sellers</p></div>
+      <div class="card"><p>• Dropshippers & resellers</p></div>
+      <div class="card"><p>• Small e-commerce brands</p></div>
+      <div class="card"><p>• Anyone pricing products manually</p></div>
     </div>
   </div>
 
   <!-- PRICING -->
   <div class="section">
-    <h2>Pricing</h2>
-    <div class="two">
-      <div class="plan">
-        <span class="tag">Free Trial</span>
+    <h2>Simple pricing</h2>
+    <p class="lead">No subscription. No lock-in. Upgrade only if it helps you.</p>
+
+    <div class="pricing">
+      <div class="card">
+        <h3>Free trial</h3>
         <div class="price">£0</div>
-        <p class="sub">5 days of access</p>
-        <div class="hr"></div>
         <ul class="list">
-          <li>Profit & margin calculator</li>
-          <li>Editable example presets</li>
-          <li><b>Reverse pricing: 3 uses total</b></li>
-          <li>Great for testing accuracy and fit</li>
+          <li>Profit calculator</li>
+          <li>3 reverse pricing runs</li>
+          <li>Limited bulk & competitor tools</li>
+          <li>5-day access</li>
         </ul>
-        <div class="ctaRow">
-          <a class="btn primary" href="login.html">Start trial</a>
-          <a class="btn" href="app.html">Open app</a>
-        </div>
       </div>
 
-      <div class="plan pro">
-        <span class="tag">PRO (One-time unlock)</span>
+      <div class="card" style="border:2px solid var(--accent)">
+        <h3>PRO — one-time</h3>
         <div class="price">£7.99</div>
-        <p class="sub">No subscription • pay once</p>
-        <div class="hr"></div>
         <ul class="list">
-          <li><b>Unlimited reverse pricing</b></li>
-          <li><b>Bulk mode</b> (scan many items)</li>
-          <li><b>PDF export</b> + <b>Share links</b></li>
-          <li><b>Save your own presets</b> (repeatable)</li>
-          <li>Designed for active sellers</li>
+          <li>Unlimited reverse pricing</li>
+          <li>Unlimited bulk & competitor analysis</li>
+          <li>Save scenarios & share links</li>
+          <li>Export (CSV & PDF)</li>
+          <li>Lifetime access</li>
         </ul>
-        <div class="ctaRow">
-          <a class="btn primary" id="buyBtn2" href="https://stonevia.gumroad.com/l/goddhg" target="_blank" rel="noopener">Buy PRO</a>
-          <a class="btn" href="login.html">Log in</a>
-        </div>
-        <div class="small" style="margin-top:10px">
-          After purchase, Gumroad emails your license key instantly. Redeem inside the app to unlock.
+        <div style="margin-top:14px">
+          <a class="btn primary" href="https://stonevia.gumroad.com/l/goddhg" target="_blank">Unlock PRO</a>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- TRUST / SECURITY -->
-  <div class="section">
-    <h2>Trust & safety</h2>
-    <div class="grid" style="grid-template-columns:1fr 1fr 1fr">
-      <div class="card">
-        <div class="title">No dark patterns</div>
-        <div class="small">Trial is clear. PRO is a one-time purchase. No hidden subscriptions.</div>
-      </div>
-      <div class="card">
-        <div class="title">Privacy-minded</div>
-        <div class="small">You can browse reviews publicly. Login is required only to use the app & submit reviews.</div>
-      </div>
-      <div class="card">
-        <div class="title">Independent</div>
-        <div class="small">Not affiliated with marketplaces. Platform names are used only as references.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- REVIEWS PREVIEW -->
-  <div class="section">
-    <h2>Recent reviews</h2>
-    <div class="small" id="ratingSummary">Loading…</div>
-    <div class="reviews" id="reviews"></div>
-    <div class="ctaRow">
-      <a class="btn" href="reviews.html">See all reviews</a>
-      <a class="btn primary" href="login.html">Log in to leave a review</a>
-    </div>
-  </div>
-
-  <!-- FAQ -->
-  <div class="section">
-    <h2>FAQ</h2>
-    <div class="faq">
-      <details>
-        <summary>Is this affiliated with eBay/Etsy/Shopify?</summary>
-        <p>No. ProfitPilot is an independent tool. Platform names (if shown) are for reference only; no endorsement or affiliation is claimed.</p>
-      </details>
-      <details>
-        <summary>Does ProfitPilot use live currency exchange rates?</summary>
-        <p>No live FX. You can optionally enter your own exchange rate inside the app for quick conversions. This keeps the tool simple and avoids inaccurate “live rate” promises.</p>
-      </details>
-      <details>
-        <summary>What happens after the 5-day trial ends?</summary>
-        <p>You’ll be asked to unlock PRO (one-time purchase) to continue. Your account remains; you can unlock later anytime.</p>
-      </details>
-      <details>
-        <summary>How does PRO unlock work?</summary>
-        <p>After purchase, Gumroad emails a license key instantly. You paste it inside the app to unlock PRO features.</p>
-      </details>
-      <details>
-        <summary>Are the results guaranteed?</summary>
-        <p>No. Outputs are estimates based on your inputs and assumptions (fees, returns, ads). Use it as decision support, not as a guarantee of profit.</p>
-      </details>
-    </div>
-
-    <div class="note">
-      Links: <a href="https://ukwebtools.com/terms.html" target="_blank" rel="noopener">Terms</a> •
-      <a href="https://ukwebtools.com/privacy.html" target="_blank" rel="noopener">Privacy</a> •
-      Support: <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a>
-    </div>
-  </div>
-
+  <!-- FOOTER -->
   <footer>
-    <div><b>Independent tool:</b> Not affiliated with or endorsed by any marketplace, platform, or payment provider.</div>
-    <div><b>Estimates only:</b> outputs depend on user inputs and assumptions; no profit guarantees.</div>
+    © <span id="yr"></span> Ukwebtools • ProfitPilot  
+    <br>
+    <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · support@ukwebtools.com
   </footer>
 
 </div>
 
-<script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
-  // Supabase public credentials (safe for frontend)
-  const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
-  const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
-
-  const GUMROAD_URL = "https://stonevia.gumroad.com/l/goddhg";
-  document.getElementById("buyBtn").href = GUMROAD_URL;
-  document.getElementById("buyBtn2").href = GUMROAD_URL;
-
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
-
-  function stars(n){
-    n = Math.max(0, Math.min(5, Math.round(n)));
-    return "★".repeat(n) + "☆".repeat(5-n);
-  }
-
-  async function loadReviews(){
-    const { data, error } = await supabase
-      .from("reviews")
-      .select("created_at,name,rating,category,message")
-      .eq("approved", true)
-      .order("created_at", { ascending: false })
-      .limit(4);
-
-    const box = document.getElementById("reviews");
-    const summary = document.getElementById("ratingSummary");
-
-    if (error){
-      summary.textContent = "Reviews temporarily unavailable.";
-      box.innerHTML = "";
-      return;
-    }
-
-    if (!data || data.length === 0){
-      summary.textContent = "No reviews yet. Be the first to leave feedback.";
-      box.innerHTML = "";
-      return;
-    }
-
-    const avg = data.reduce((s,x)=>s+x.rating,0)/data.length;
-    summary.textContent = `Average rating: ${avg.toFixed(1)} ${stars(avg)} (recent reviews)`;
-
-    box.innerHTML = "";
-    data.forEach(r=>{
-      const div = document.createElement("div");
-      div.className = "review";
-      div.innerHTML = `
-        <div class="meta">
-          <div class="stars">${stars(r.rating)} <span class="pill">${(r.category||"General")}</span></div>
-          <div class="small">${new Date(r.created_at).toLocaleDateString()}</div>
-        </div>
-        <div class="small" style="margin-top:8px"><b>${(r.name || "Anonymous")}</b> — ${r.message}</div>
-      `;
-      box.appendChild(div);
-    });
-  }
-
-  loadReviews();
+<script>
+  document.getElementById("yr").textContent = new Date().getFullYear();
 </script>
+
 </body>
 </html>
