@@ -95,7 +95,7 @@
       <div class="logo">PP</div>
       <div>
         <div style="font-weight:900">ProfitPilot</div>
-        <div class="pill">Public reviews • Approved only</div>
+        <div class="pill">Public reviews • No login needed to read</div>
       </div>
     </div>
     <div style="display:flex;gap:10px;flex-wrap:wrap">
@@ -109,7 +109,10 @@
 
   <div class="hero">
     <h1>Reviews</h1>
-    <p>Anyone can read reviews. To submit a review, log in and use the review box inside the app.</p>
+    <p>
+      Anyone can read reviews. To submit a review, log in and use the review box inside the app.
+      Reviews publish immediately; spam/abuse may be removed.
+    </p>
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
       <span class="pill" id="avgPill">Loading…</span>
       <a class="btn primary" href="login.html">Log in to review</a>
@@ -119,8 +122,8 @@
 
   <div class="grid">
     <div class="card">
-      <div style="font-weight:900">All approved reviews</div>
-      <div class="small">Spam/abuse may be removed. We don’t edit review content.</div>
+      <div style="font-weight:900">All reviews</div>
+      <div class="small">We don’t edit review text. We remove only spam/abuse.</div>
       <div id="list"></div>
       <div class="small" id="empty" style="margin-top:10px;display:none">No reviews yet.</div>
     </div>
@@ -128,7 +131,7 @@
     <div class="card">
       <div style="font-weight:900">Leave a review</div>
       <div class="small">
-        For trust, reviews are public. To submit, log in → open app → “Leave a review”.
+        Log in → open the app → “Leave a review”.
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
         <a class="btn primary" href="login.html">Log in</a>
