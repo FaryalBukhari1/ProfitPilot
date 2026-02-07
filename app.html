@@ -4,9 +4,8 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>ProfitPilot — App</title>
-  <meta name="description" content="ProfitPilot: profit calculator with reverse pricing, trial limits, export, share and saved presets.">
+  <meta name="description" content="ProfitPilot: profit calculator with reverse pricing, bulk mode, trial limits, export, share and saved presets.">
   <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
-
   <style>
     :root{
       --bg:#f6f8fb; --bg2:#eef2ff; --txt:#0b1220; --muted:#5b6474;
@@ -16,9 +15,7 @@
     }
     *{box-sizing:border-box}
     body{
-      margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      color:var(--txt);
+      margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--txt);
       background:
         radial-gradient(900px 500px at 20% 0%, rgba(14,165,164,.16), transparent 55%),
         radial-gradient(900px 500px at 80% 0%, rgba(79,70,229,.12), transparent 55%),
@@ -36,92 +33,56 @@
       font-weight:900;
     }
     .pill{
-      padding:8px 10px;border-radius:999px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.72);
-      font-size:12px;color:var(--muted);
+      padding:8px 10px;border-radius:999px;border:1px solid var(--line);
+      background:rgba(255,255,255,.72);font-size:12px;color:var(--muted);
       display:inline-flex;gap:8px;align-items:center
     }
     .pill.ok{border-color:rgba(14,165,164,.30);background:rgba(14,165,164,.10);color:var(--txt)}
     .pill.warn{border-color:rgba(245,158,11,.30);background:rgba(245,158,11,.10);color:var(--txt)}
     .pill.bad{border-color:rgba(239,68,68,.30);background:rgba(239,68,68,.10);color:var(--txt)}
-
     .btn{
-      padding:10px 14px;border-radius:999px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.78);
-      color:var(--txt);
-      display:inline-flex;gap:8px;align-items:center;
-      cursor:pointer;
-      box-shadow:0 4px 16px rgba(16,24,40,.06);
-      user-select:none;
+      padding:10px 14px;border-radius:999px;border:1px solid var(--line);
+      background:rgba(255,255,255,.78);color:var(--txt);
+      display:inline-flex;gap:8px;align-items:center;cursor:pointer;
+      box-shadow:0 4px 16px rgba(16,24,40,.06);user-select:none;
     }
     .btn.primary{border-color:rgba(14,165,164,.30);background:rgba(14,165,164,.10)}
     .btn.ghost{background:transparent;box-shadow:none}
     .btn:disabled{opacity:.55;cursor:not-allowed}
-
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
     @media(max-width:980px){.grid{grid-template-columns:1fr}}
-
     .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:16px;
-      box-shadow:var(--shadow);
+      background:var(--card);border:1px solid var(--line);
+      border-radius:18px;padding:16px;box-shadow:var(--shadow);
     }
     .title{font-weight:900;margin:0 0 8px}
     .small{font-size:12px;color:var(--muted);line-height:1.6}
     .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     @media(max-width:560px){.row{grid-template-columns:1fr}}
-
     label{display:block;font-size:12px;color:var(--muted);margin:10px 0 6px}
     input,select,textarea{
-      width:100%;
-      padding:12px;
-      border-radius:14px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.92);
-      color:var(--txt);
-      outline:none;
+      width:100%;padding:12px;border-radius:14px;border:1px solid var(--line);
+      background:rgba(255,255,255,.92);color:var(--txt);outline:none;
     }
-    textarea{min-height:90px;resize:vertical}
+    textarea{min-height:120px;resize:vertical}
     input:focus,select:focus,textarea:focus{border-color:rgba(14,165,164,.35)}
     .divider{height:1px;background:var(--line);margin:12px 0}
-
     .kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
     @media(max-width:560px){.kpi{grid-template-columns:1fr}}
-    .k{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.72);
-      border-radius:16px;
-      padding:12px;
-    }
+    .k{border:1px solid var(--line);background:rgba(255,255,255,.72);border-radius:16px;padding:12px}
     .k .h{font-size:12px;color:var(--muted)}
     .k .v{font-size:20px;font-weight:900;margin-top:6px}
     .hint{font-size:12px;color:var(--muted)}
-
     .tabs{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
     .tab{padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.72);cursor:pointer;font-size:12px;user-select:none}
     .tab.active{border-color:rgba(14,165,164,.35);background:rgba(14,165,164,.10);font-weight:900}
-
-    .stars button{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.78);
-      color:var(--txt);
-      border-radius:999px;
-      padding:8px 10px;
-      cursor:pointer;
-      user-select:none;
-    }
-    .stars button.active{
-      border-color:rgba(14,165,164,.35);
-      background:rgba(14,165,164,.10);
-    }
+    table{width:100%;border-collapse:collapse;margin-top:10px;font-size:12px}
+    th,td{border-bottom:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}
+    th{color:var(--muted);font-weight:700}
+    .good{color:var(--ok);font-weight:800}
+    .bad{color:var(--bad);font-weight:800}
     .toast{margin-top:10px;font-size:12px;color:var(--muted)}
     footer{margin:14px 2px 0;color:var(--muted);font-size:12px;line-height:1.6}
-
-    /* Print/PDF styling */
     @media print{
       body{background:#fff}
       .nav, #controlsRow, #reviewsCard, #proCard, #logoutBtn, .btn.ghost {display:none !important}
@@ -130,7 +91,6 @@
     }
   </style>
 </head>
-
 <body>
 <div class="wrap">
 
@@ -142,7 +102,6 @@
         <div class="pill">Estimates only • Independent tool</div>
       </div>
     </div>
-
     <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
       <a class="btn ghost" href="index.html">Home</a>
       <a class="btn ghost" href="reviews.html">Reviews</a>
@@ -153,14 +112,15 @@
 
   <div class="grid">
 
-    <!-- LEFT: CALC -->
+    <!-- LEFT -->
     <div class="card" id="calcCard">
       <div class="title">Calculator</div>
-      <div class="small">Profit mode = normal. Reverse mode = target profit → required selling price.</div>
+      <div class="small">Profit = normal. Reverse = target profit → required selling price. Bulk = scan many items (PRO).</div>
 
       <div class="tabs">
-        <div class="tab active" id="tabProfit">Profit mode</div>
-        <div class="tab" id="tabReverse">Reverse mode</div>
+        <div class="tab active" id="tabProfit">Profit</div>
+        <div class="tab" id="tabReverse">Reverse</div>
+        <div class="tab" id="tabBulk">Bulk (PRO)</div>
       </div>
 
       <div class="divider"></div>
@@ -179,11 +139,6 @@
             <option value="SAR">SAR</option>
             <option value="PKR">PKR (₨)</option>
             <option value="INR">INR (₹)</option>
-            <option value="TRY">TRY (₺)</option>
-            <option value="ZAR">ZAR (R)</option>
-            <option value="NGN">NGN (₦)</option>
-            <option value="BDT">BDT (৳)</option>
-            <option value="LKR">LKR (Rs)</option>
           </select>
         </div>
         <div>
@@ -192,114 +147,102 @@
         </div>
       </div>
 
-      <div class="divider"></div>
-
-      <label>Platform preset</label>
-      <select id="preset">
-        <option value="manual">Manual (enter fees yourself)</option>
-      </select>
-
-      <div class="row">
-        <div>
-          <label>Selling price</label>
-          <input id="sellPrice" inputmode="decimal" value="0">
-        </div>
-        <div>
-          <label>Product cost</label>
-          <input id="productCost" inputmode="decimal" value="0">
-        </div>
-      </div>
-
-      <div class="row">
-        <div>
-          <label>Shipping cost</label>
-          <input id="shipCost" inputmode="decimal" value="0">
-        </div>
-        <div>
-          <label>Packaging / misc cost</label>
-          <input id="miscCost" inputmode="decimal" value="0">
-        </div>
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="row">
-        <div>
-          <label>Platform fee (%)</label>
-          <input id="feePct" inputmode="decimal" value="0">
-        </div>
-        <div>
-          <label>Fixed fee (per order)</label>
-          <input id="feeFixed" inputmode="decimal" value="0">
-        </div>
-      </div>
-
-      <div class="row">
-        <div>
-          <label>Ads / promo cost (%)</label>
-          <input id="adsPct" inputmode="decimal" value="0">
-        </div>
-        <div>
-          <label>Return rate (%)</label>
-          <input id="returnPct" inputmode="decimal" value="0">
-        </div>
-      </div>
-
-      <div id="reverseBox" style="display:none">
+      <div id="singleBox">
         <div class="divider"></div>
-        <div class="title" style="margin:0 0 6px;font-size:14px">Reverse mode</div>
-        <div class="small">Trial: 3 reverse calculations total. PRO: unlimited.</div>
-        <label>Target profit</label>
-        <input id="targetProfit" inputmode="decimal" value="0">
-        <div class="small" id="reverseUsesLine" style="margin-top:8px">Reverse uses: —</div>
+
+        <label>Platform preset</label>
+        <select id="preset">
+          <option value="manual">Manual (enter fees yourself)</option>
+        </select>
+
+        <div class="row">
+          <div><label>Selling price</label><input id="sellPrice" inputmode="decimal" value="0"></div>
+          <div><label>Product cost</label><input id="productCost" inputmode="decimal" value="0"></div>
+        </div>
+        <div class="row">
+          <div><label>Shipping cost</label><input id="shipCost" inputmode="decimal" value="0"></div>
+          <div><label>Packaging / misc</label><input id="miscCost" inputmode="decimal" value="0"></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="row">
+          <div><label>Platform fee (%)</label><input id="feePct" inputmode="decimal" value="0"></div>
+          <div><label>Fixed fee</label><input id="feeFixed" inputmode="decimal" value="0"></div>
+        </div>
+        <div class="row">
+          <div><label>Ads (%)</label><input id="adsPct" inputmode="decimal" value="0"></div>
+          <div><label>Return rate (%)</label><input id="returnPct" inputmode="decimal" value="0"></div>
+        </div>
+
+        <div id="reverseBox" style="display:none">
+          <div class="divider"></div>
+          <div class="title" style="margin:0 0 6px;font-size:14px">Reverse mode</div>
+          <div class="small">Trial: 3 reverse calculations total. PRO: unlimited.</div>
+          <label>Target profit</label>
+          <input id="targetProfit" inputmode="decimal" value="0">
+          <div class="small" id="reverseUsesLine" style="margin-top:8px">Reverse uses: —</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="row" id="controlsRow">
+          <button class="btn primary" id="calcBtn">Calculate</button>
+          <button class="btn" id="resetBtn">Reset</button>
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+          <button class="btn" id="exportCsvBtn">Export CSV</button>
+          <button class="btn" id="pdfBtn">Export PDF (PRO)</button>
+          <button class="btn" id="shareBtn">Share link (PRO)</button>
+          <span class="pill" id="shareStatus">—</span>
+        </div>
+
+        <div class="kpi">
+          <div class="k">
+            <div class="h" id="o1h">Estimated profit</div>
+            <div class="v" id="o1v">£0.00</div>
+            <div class="hint" id="o1hint">—</div>
+          </div>
+          <div class="k">
+            <div class="h" id="o2h">Margin</div>
+            <div class="v" id="o2v">0.0%</div>
+            <div class="hint" id="o2hint">—</div>
+          </div>
+        </div>
+
+        <div class="kpi">
+          <div class="k"><div class="h">Total fees + ads</div><div class="v" id="feesOut">£0.00</div><div class="hint">Platform fee + fixed + ads</div></div>
+          <div class="k"><div class="h">Return sensitivity (expected)</div><div class="v" id="returnOut">£0.00</div><div class="hint">Expected impact from return %</div></div>
+        </div>
+
+        <div class="kpi" id="fxRow" style="display:none">
+          <div class="k" style="grid-column:1 / -1">
+            <div class="h">Converted selling price (your FX)</div>
+            <div class="v" id="fxOut">—</div>
+            <div class="hint" id="fxNote">—</div>
+          </div>
+        </div>
       </div>
 
-      <div class="divider"></div>
-
-      <div class="row" id="controlsRow">
-        <button class="btn primary" id="calcBtn">Calculate</button>
-        <button class="btn" id="resetBtn">Reset</button>
-      </div>
-
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px" id="controlsRow2">
-        <button class="btn" id="exportCsvBtn">Export CSV</button>
-        <button class="btn" id="pdfBtn">Export PDF (PRO)</button>
-        <button class="btn" id="shareBtn">Share link (PRO)</button>
-        <span class="pill" id="shareStatus">—</span>
-      </div>
-
-      <div class="kpi">
-        <div class="k">
-          <div class="h" id="o1h">Estimated profit</div>
-          <div class="v" id="o1v">£0.00</div>
-          <div class="hint" id="o1hint">—</div>
+      <!-- BULK -->
+      <div id="bulkBox" style="display:none">
+        <div class="small">
+          Paste one item per line. Format:
+          <b>price,cost,ship,misc,feePct,fixed,adsPct,returnPct</b>
+          <br>Example: <code>19.99,7.50,2.80,0.30,12.8,0.30,2.0,3</code>
         </div>
-        <div class="k">
-          <div class="h" id="o2h">Margin</div>
-          <div class="v" id="o2v">0.0%</div>
-          <div class="hint" id="o2hint">—</div>
-        </div>
-      </div>
 
-      <div class="kpi">
-        <div class="k">
-          <div class="h">Total fees + ads</div>
-          <div class="v" id="feesOut">£0.00</div>
-          <div class="hint">Platform fee + fixed + ads</div>
-        </div>
-        <div class="k">
-          <div class="h">Return sensitivity (expected)</div>
-          <div class="v" id="returnOut">£0.00</div>
-          <div class="hint">Expected impact from return %</div>
-        </div>
-      </div>
+        <label>Bulk input</label>
+        <textarea id="bulkInput" placeholder="19.99,7.50,2.80,0.30,12.8,0.30,2.0,3"></textarea>
 
-      <div class="kpi" id="fxRow" style="display:none">
-        <div class="k" style="grid-column:1 / -1">
-          <div class="h">Converted selling price (your FX)</div>
-          <div class="v" id="fxOut">—</div>
-          <div class="hint" id="fxNote">—</div>
+        <div class="row">
+          <button class="btn primary" id="bulkRunBtn">Run bulk (PRO)</button>
+          <button class="btn" id="bulkExportBtn">Export bulk CSV</button>
         </div>
+
+        <div class="toast" id="bulkStatus">—</div>
+        <div id="bulkTableWrap"></div>
       </div>
 
       <div class="divider"></div>
@@ -313,28 +256,21 @@
 
     <!-- RIGHT -->
     <div>
-
-      <!-- PRO VALUE CARD -->
       <div class="card" id="proCard">
         <div class="title">PRO features</div>
-        <div class="small">
-          PRO is a one-time unlock. You get: unlimited reverse, share links, PDF export, and saved presets.
-        </div>
+        <div class="small">Unlimited reverse, bulk mode, PDF export, share links, saved presets. One-time unlock.</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
           <a class="btn primary" href="https://stonevia.gumroad.com/l/goddhg" target="_blank" rel="noopener">Buy PRO</a>
           <a class="btn" href="reviews.html">See reviews</a>
         </div>
       </div>
 
-      <!-- MY PRESETS -->
       <div class="card" style="margin-top:14px">
         <div class="title">My presets (PRO)</div>
         <div class="small">Save your own fee presets and reuse them instantly.</div>
 
         <label>Saved presets</label>
-        <select id="myPresetSel">
-          <option value="">—</option>
-        </select>
+        <select id="myPresetSel"><option value="">—</option></select>
 
         <div class="row">
           <button class="btn" id="loadMyPresetBtn">Load</button>
@@ -356,7 +292,6 @@
         </div>
       </div>
 
-      <!-- REVIEWS -->
       <div class="card" id="reviewsCard" style="margin-top:14px">
         <div class="title">Leave a review</div>
         <div class="small">Reviews publish immediately. Spam/abuse may be removed.</div>
@@ -388,7 +323,6 @@
         <button class="btn primary" id="sendReview">Submit review</button>
         <div class="toast" id="reviewStatus">—</div>
       </div>
-
     </div>
   </div>
 
@@ -407,14 +341,12 @@
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
   const accessPill = document.getElementById("accessPill");
-  const userLine = document.getElementById("userLine"); // (not shown now, keep minimal)
   const reverseUsesLine = document.getElementById("reverseUsesLine");
   const shareStatus = document.getElementById("shareStatus");
   const presetStatus = document.getElementById("presetStatus");
 
   document.getElementById("yr").textContent = new Date().getFullYear();
 
-  // Inputs
   const currencyEl = document.getElementById("currency");
   const fxRateEl = document.getElementById("fxRate");
   const fxRow = document.getElementById("fxRow");
@@ -432,7 +364,6 @@
   const returnPctEl = document.getElementById("returnPct");
   const targetProfitEl = document.getElementById("targetProfit");
 
-  // Outputs
   const o1h = document.getElementById("o1h");
   const o2h = document.getElementById("o2h");
   const o1v = document.getElementById("o1v");
@@ -448,11 +379,24 @@
   const loadMyPresetBtn = document.getElementById("loadMyPresetBtn");
   const deleteMyPresetBtn = document.getElementById("deleteMyPresetBtn");
 
-  const CURRENCY_SYMBOL = {
-    GBP:"£", USD:"$", EUR:"€", AUD:"$", CAD:"$", NZD:"$",
-    AED:"AED ", SAR:"SAR ", PKR:"₨", INR:"₹", TRY:"₺", ZAR:"R ", NGN:"₦", BDT:"৳", LKR:"Rs "
-  };
+  const tabProfit = document.getElementById("tabProfit");
+  const tabReverse = document.getElementById("tabReverse");
+  const tabBulk = document.getElementById("tabBulk");
 
+  const singleBox = document.getElementById("singleBox");
+  const reverseBox = document.getElementById("reverseBox");
+  const bulkBox = document.getElementById("bulkBox");
+
+  const bulkInput = document.getElementById("bulkInput");
+  const bulkRunBtn = document.getElementById("bulkRunBtn");
+  const bulkExportBtn = document.getElementById("bulkExportBtn");
+  const bulkStatus = document.getElementById("bulkStatus");
+  const bulkTableWrap = document.getElementById("bulkTableWrap");
+
+  const pdfBtn = document.getElementById("pdfBtn");
+  const shareBtn = document.getElementById("shareBtn");
+
+  const CURRENCY_SYMBOL = { GBP:"£", USD:"$", EUR:"€", AUD:"$", CAD:"$", NZD:"$", AED:"AED ", SAR:"SAR ", PKR:"₨", INR:"₹" };
   function sym(){ return CURRENCY_SYMBOL[currencyEl.value || "GBP"] || ""; }
   function n(v){ const x = parseFloat(String(v).replace(/,/g,"")); return Number.isFinite(x) ? x : 0; }
   function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
@@ -471,12 +415,10 @@
       fxRow.style.display = "block";
       fxOut.textContent = (sell * r).toFixed(2);
       fxNote.textContent = `Converted using your rate: ${sell.toFixed(2)} × ${r}`;
-    } else {
-      fxRow.style.display = "none";
-    }
+    } else fxRow.style.display = "none";
   }
 
-  // Example presets only (trial & pro)
+  // Example presets
   const PRESETS = [
     { id:"manual", name:"Manual (enter fees yourself)", feePct:0, feeFixed:0, adsPct:0, returnPct:0 },
     { id:"ebay_uk_typical", name:"eBay UK (typical example)", feePct:12.8, feeFixed:0.30, adsPct:0, returnPct:3 },
@@ -485,8 +427,7 @@
   ];
   PRESETS.forEach(p=>{
     const opt = document.createElement("option");
-    opt.value = p.id;
-    opt.textContent = p.name;
+    opt.value = p.id; opt.textContent = p.name;
     presetSel.appendChild(opt);
   });
   presetSel.value = "manual";
@@ -501,13 +442,18 @@
     compute();
   });
 
-  function getFees(sell){
-    const feePct = clamp(n(feePctEl.value), 0, 99);
-    const feeFixed = clamp(n(feeFixedEl.value), 0, 999999);
-    const adsPct = clamp(n(adsPctEl.value), 0, 99);
+  function getFees(sell, feePct, feeFixed, adsPct){
     const platformFee = sell * (feePct/100);
     const adsFee = sell * (adsPct/100);
-    return { totalFees: platformFee + feeFixed + adsFee };
+    return platformFee + feeFixed + adsFee;
+  }
+
+  function computeProfitCore(sell,cost,ship,misc,feePct,feeFixed,adsPct,returnPct){
+    const totalFees = getFees(sell, feePct, feeFixed, adsPct);
+    const expectedReturnImpact = sell * (returnPct/100);
+    const profit = sell - (cost + ship + misc + totalFees);
+    const margin = sell > 0 ? (profit/sell)*100 : 0;
+    return { profit, margin, totalFees, expectedReturnImpact };
   }
 
   function computeProfit(){
@@ -515,29 +461,21 @@
     const cost = n(productCostEl.value);
     const ship = n(shipCostEl.value);
     const misc = n(miscCostEl.value);
-    const retPct = clamp(n(returnPctEl.value), 0, 99);
+    const feePct = clamp(n(feePctEl.value),0,99);
+    const feeFixed = clamp(n(feeFixedEl.value),0,999999);
+    const adsPct = clamp(n(adsPctEl.value),0,99);
+    const returnPct = clamp(n(returnPctEl.value),0,99);
 
-    const { totalFees } = getFees(sell);
-    const expectedReturnImpact = sell * (retPct/100);
+    const r = computeProfitCore(sell,cost,ship,misc,feePct,feeFixed,adsPct,returnPct);
 
-    const profit = sell - (cost + ship + misc + totalFees);
-    const margin = sell > 0 ? (profit / sell) * 100 : 0;
+    o1v.textContent = money(r.profit);
+    o2v.textContent = pct(r.margin);
+    feesOut.textContent = money(r.totalFees);
+    returnOut.textContent = money(r.expectedReturnImpact);
 
-    o1v.textContent = money(profit);
-    o2v.textContent = pct(margin);
-    feesOut.textContent = money(totalFees);
-    returnOut.textContent = money(expectedReturnImpact);
-
-    if (sell <= 0){
-      o1hint.textContent = "Enter a selling price.";
-      o2hint.textContent = "—";
-    } else if (profit < 0){
-      o1hint.textContent = "Loss on this pricing.";
-      o2hint.textContent = "Adjust price or costs.";
-    } else {
-      o1hint.textContent = "OK (based on your inputs).";
-      o2hint.textContent = "—";
-    }
+    if (sell<=0){ o1hint.textContent="Enter a selling price."; o2hint.textContent="—"; }
+    else if (r.profit<0){ o1hint.textContent="Loss on this pricing."; o2hint.textContent="Adjust price or costs."; }
+    else { o1hint.textContent="OK (based on your inputs)."; o2hint.textContent="—"; }
 
     updateFXLine(sell);
   }
@@ -546,79 +484,63 @@
     const cost = n(productCostEl.value);
     const ship = n(shipCostEl.value);
     const misc = n(miscCostEl.value);
-    const feePct = clamp(n(feePctEl.value), 0, 99);
-    const adsPct = clamp(n(adsPctEl.value), 0, 99);
-    const feeFixed = clamp(n(feeFixedEl.value), 0, 999999);
-
+    const feePct = clamp(n(feePctEl.value),0,99);
+    const adsPct = clamp(n(adsPctEl.value),0,99);
+    const feeFixed = clamp(n(feeFixedEl.value),0,999999);
     const denom = 1 - ((feePct + adsPct)/100);
     if (denom <= 0.01) return null;
-
     return (target + cost + ship + misc + feeFixed) / denom;
   }
 
   function computeReverse(){
     const target = n(targetProfitEl.value);
-    if (target <= 0){
-      o1v.textContent = "—";
-      o2v.textContent = "—";
-      o1hint.textContent = "Enter a target profit.";
-      o2hint.textContent = "—";
-      fxRow.style.display = "none";
-      return;
-    }
-
+    if (target<=0){ o1v.textContent="—"; o2v.textContent="—"; o1hint.textContent="Enter a target profit."; o2hint.textContent="—"; return; }
     const sell = reverseSellPriceForTargetProfit(target);
-    if (!sell || !Number.isFinite(sell) || sell <= 0){
-      o1v.textContent = "—";
-      o2v.textContent = "—";
-      o1hint.textContent = "Reverse calc failed. Check fee % values.";
-      o2hint.textContent = "—";
-      fxRow.style.display = "none";
-      return;
-    }
-
+    if (!sell){ o1hint.textContent="Reverse calc failed. Check fee % values."; return; }
     sellPriceEl.value = sell.toFixed(2);
 
-    const { totalFees } = getFees(sell);
+    const feePct = clamp(n(feePctEl.value),0,99);
+    const feeFixed = clamp(n(feeFixedEl.value),0,999999);
+    const adsPct = clamp(n(adsPctEl.value),0,99);
+    const returnPct = clamp(n(returnPctEl.value),0,99);
     const cost = n(productCostEl.value);
     const ship = n(shipCostEl.value);
     const misc = n(miscCostEl.value);
-    const profit = sell - (cost + ship + misc + totalFees);
-    const margin = sell > 0 ? (profit / sell) * 100 : 0;
 
+    const r = computeProfitCore(sell,cost,ship,misc,feePct,feeFixed,adsPct,returnPct);
     o1v.textContent = money(sell);
-    o2v.textContent = pct(margin);
-    feesOut.textContent = money(totalFees);
-    returnOut.textContent = money(sell * (clamp(n(returnPctEl.value),0,99)/100));
-
+    o2v.textContent = pct(r.margin);
+    feesOut.textContent = money(r.totalFees);
+    returnOut.textContent = money(r.expectedReturnImpact);
     o1hint.textContent = `Required selling price to target ~${money(target)} profit (estimate).`;
     o2hint.textContent = "Implied margin at that selling price.";
     updateFXLine(sell);
   }
 
+  // Modes
   let MODE = "profit";
-  const tabProfit = document.getElementById("tabProfit");
-  const tabReverse = document.getElementById("tabReverse");
-  const reverseBox = document.getElementById("reverseBox");
-
   function setMode(m){
     MODE = m;
     tabProfit.classList.toggle("active", m==="profit");
     tabReverse.classList.toggle("active", m==="reverse");
+    tabBulk.classList.toggle("active", m==="bulk");
+    singleBox.style.display = (m==="bulk") ? "none" : "block";
+    bulkBox.style.display = (m==="bulk") ? "block" : "none";
     reverseBox.style.display = (m==="reverse") ? "block" : "none";
-    if (m==="profit"){
-      o1h.textContent = "Estimated profit";
-      o2h.textContent = "Margin";
-    } else {
-      o1h.textContent = "Required selling price";
-      o2h.textContent = "Implied margin";
-    }
+
+    if (m==="profit"){ o1h.textContent="Estimated profit"; o2h.textContent="Margin"; }
+    if (m==="reverse"){ o1h.textContent="Required selling price"; o2h.textContent="Implied margin"; }
+    if (m==="bulk"){ /* no single KPIs */ }
     compute();
   }
   tabProfit.addEventListener("click", ()=>setMode("profit"));
   tabReverse.addEventListener("click", ()=>setMode("reverse"));
+  tabBulk.addEventListener("click", ()=>setMode("bulk"));
 
-  function compute(){ (MODE==="profit") ? computeProfit() : computeReverse(); }
+  function compute(){
+    if (MODE==="profit") computeProfit();
+    if (MODE==="reverse") computeReverse();
+  }
 
   // Access + profile
   let CURRENT_PROFILE = null;
@@ -634,26 +556,21 @@
 
     if (!prof){
       const now = new Date().toISOString();
-      const { error: insErr } = await supabase.from("profiles").insert([{
-        id:userId, trial_start:now, paid:false, reverse_uses:0
-      }]);
+      const { error: insErr } = await supabase.from("profiles").insert([{ id:userId, trial_start:now, paid:false, reverse_uses:0 }]);
       if (insErr) throw insErr;
       return { id:userId, trial_start:now, paid:false, reverse_uses:0 };
     }
-
     if (!prof.trial_start){
       const now = new Date().toISOString();
       const { error: upErr } = await supabase.from("profiles").update({ trial_start: now }).eq("id", userId);
       if (upErr) throw upErr;
       prof.trial_start = now;
     }
-
     if (prof.reverse_uses == null){
       const { error: upErr } = await supabase.from("profiles").update({ reverse_uses: 0 }).eq("id", userId);
       if (upErr) throw upErr;
       prof.reverse_uses = 0;
     }
-
     return prof;
   }
 
@@ -669,9 +586,26 @@
     reverseUsesLine.textContent = `Reverse uses: ${next}/${TRIAL_REVERSE_LIMIT} (Trial)`;
   }
 
+  function enableProUI(isPro){
+    pdfBtn.disabled = !isPro;
+    shareBtn.disabled = !isPro;
+    bulkRunBtn.disabled = !isPro;
+    if (!isPro){
+      bulkStatus.textContent = "Unlock PRO to use Bulk mode.";
+    } else {
+      bulkStatus.textContent = "Paste lines and run.";
+    }
+    presetStatus.textContent = isPro ? "PRO enabled" : "Unlock PRO to use My Presets + PDF + Share + Bulk.";
+    // Presets controls
+    saveMyPresetBtn.disabled = !isPro;
+    loadMyPresetBtn.disabled = !isPro;
+    deleteMyPresetBtn.disabled = !isPro;
+    myPresetSel.disabled = !isPro;
+    myPresetName.disabled = !isPro;
+  }
+
   function updateAccessUI(profile){
     CURRENT_PROFILE = profile;
-
     if (profile.paid){
       accessPill.textContent = "Unlocked (PRO)";
       accessPill.className = "pill ok";
@@ -679,39 +613,17 @@
       enableProUI(true);
       return;
     }
-
     enableProUI(false);
-
     reverseUsesLine.textContent = `Reverse uses: ${profile.reverse_uses ?? 0}/${TRIAL_REVERSE_LIMIT} (Trial)`;
-
     const left = daysLeft(profile.trial_start);
-    if (left > 0){
-      accessPill.textContent = `Trial active • ${left} day(s) left`;
-      accessPill.className = "pill warn";
-    } else {
-      accessPill.textContent = "Trial ended • PRO required";
-      accessPill.className = "pill bad";
-    }
+    if (left > 0){ accessPill.textContent = `Trial active • ${left} day(s) left`; accessPill.className = "pill warn"; }
+    else { accessPill.textContent = "Trial ended • PRO required"; accessPill.className = "pill bad"; }
   }
 
-  function enableProUI(isPro){
-    document.getElementById("pdfBtn").disabled = !isPro;
-    document.getElementById("shareBtn").disabled = !isPro;
-    saveMyPresetBtn.disabled = !isPro;
-    loadMyPresetBtn.disabled = !isPro;
-    deleteMyPresetBtn.disabled = !isPro;
-    myPresetSel.disabled = !isPro;
-    myPresetName.disabled = !isPro;
-
-    presetStatus.textContent = isPro ? "PRO enabled" : "Unlock PRO to use My Presets + PDF + Share.";
-  }
-
-  // Calculate
+  // Buttons
   document.getElementById("calcBtn").addEventListener("click", async ()=>{
     try{
-      if (MODE === "reverse" && !CURRENT_PROFILE?.paid){
-        await consumeReverseUse();
-      }
+      if (MODE==="reverse" && !CURRENT_PROFILE?.paid) await consumeReverseUse();
       compute();
     } catch(e){
       o1hint.textContent = e.message || "Error.";
@@ -719,16 +631,18 @@
     }
   });
 
-  // Reset
   document.getElementById("resetBtn").addEventListener("click", ()=>{
     [sellPriceEl, productCostEl, shipCostEl, miscCostEl, feePctEl, feeFixedEl, adsPctEl, returnPctEl, targetProfitEl].forEach(el=>el.value="0");
     fxRateEl.value = "";
     presetSel.value = "manual";
-    setMode("profit");
     shareStatus.textContent = "—";
+    bulkInput.value = "";
+    bulkTableWrap.innerHTML = "";
+    bulkStatus.textContent = CURRENT_PROFILE?.paid ? "Paste lines and run." : "Unlock PRO to use Bulk mode.";
+    setMode("profit");
   });
 
-  // Export CSV
+  // CSV export (single)
   function payload(){
     return {
       mode: MODE,
@@ -746,19 +660,13 @@
       targetProfit: targetProfitEl.value
     };
   }
-  function csvEscape(s){
-    const t = String(s ?? "");
-    return /[",\n]/.test(t) ? `"${t.replaceAll('"','""')}"` : t;
-  }
+  function csvEscape(s){ const t = String(s ?? ""); return /[",\n]/.test(t) ? `"${t.replaceAll('"','""')}"` : t; }
   function downloadText(filename, text){
     const blob = new Blob([text], {type:"text/plain;charset=utf-8"});
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
     URL.revokeObjectURL(url);
   }
   document.getElementById("exportCsvBtn").addEventListener("click", ()=>{
@@ -770,71 +678,138 @@
     shareStatus.textContent = "CSV exported.";
   });
 
-  // PDF Export (PRO)
-  document.getElementById("pdfBtn").addEventListener("click", ()=>{
-    if (!CURRENT_PROFILE?.paid){
-      shareStatus.textContent = "PDF is PRO.";
-      return;
-    }
-    shareStatus.textContent = "Preparing PDF…";
+  // PDF export (PRO)
+  pdfBtn.addEventListener("click", ()=>{
+    if (!CURRENT_PROFILE?.paid){ shareStatus.textContent="PDF is PRO."; return; }
+    shareStatus.textContent="Preparing PDF…";
     setTimeout(()=>window.print(), 150);
   });
 
   // Share (PRO)
   function base64urlEncode(str){
     const bytes = new TextEncoder().encode(str);
-    let bin = "";
-    bytes.forEach(b=>bin += String.fromCharCode(b));
+    let bin=""; bytes.forEach(b=>bin+=String.fromCharCode(b));
     return btoa(bin).replaceAll("+","-").replaceAll("/","_").replaceAll("=","");
   }
-  document.getElementById("shareBtn").addEventListener("click", ()=>{
-    if (!CURRENT_PROFILE?.paid){
-      shareStatus.textContent = "Share is PRO.";
-      return;
-    }
+  shareBtn.addEventListener("click", ()=>{
+    if (!CURRENT_PROFILE?.paid){ shareStatus.textContent="Share is PRO."; return; }
     const token = base64urlEncode(JSON.stringify(payload()));
     const url = `${location.origin}/share.html#s=${token}`;
     navigator.clipboard?.writeText(url).catch(()=>{});
-    shareStatus.textContent = "Share link copied.";
+    shareStatus.textContent="Share link copied.";
   });
 
-  // ---- My Presets (PRO) ----
+  // Bulk mode
+  let bulkLastRows = [];
+  function parseLine(line){
+    const parts = line.split(",").map(x=>x.trim());
+    if (parts.length < 2) return null;
+    const [sell,cost,ship,misc,feePct,feeFixed,adsPct,retPct] = parts;
+    return {
+      sell:n(sell), cost:n(cost), ship:n(ship||0), misc:n(misc||0),
+      feePct: clamp(n(feePct||feePctEl.value),0,99),
+      feeFixed: clamp(n(feeFixed||feeFixedEl.value),0,999999),
+      adsPct: clamp(n(adsPct||adsPctEl.value),0,99),
+      returnPct: clamp(n(retPct||returnPctEl.value),0,99)
+    };
+  }
+
+  function renderBulkTable(rows){
+    if (!rows.length){ bulkTableWrap.innerHTML=""; return; }
+    const html = `
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>Sell</th><th>Cost</th><th>Fees</th><th>Profit</th><th>Margin</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map((r,i)=>`
+            <tr>
+              <td>${i+1}</td>
+              <td>${money(r.sell)}</td>
+              <td>${money(r.cost + r.ship + r.misc)}</td>
+              <td>${money(r.totalFees)}</td>
+              <td class="${r.profit>=0?'good':'bad'}">${money(r.profit)}</td>
+              <td class="${r.margin>=10?'good':(r.margin>=0?'':'bad')}">${pct(r.margin)}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    `;
+    bulkTableWrap.innerHTML = html;
+  }
+
+  bulkRunBtn.addEventListener("click", ()=>{
+    if (!CURRENT_PROFILE?.paid){
+      bulkStatus.textContent = "Unlock PRO to run bulk scans.";
+      return;
+    }
+    const lines = bulkInput.value.split("\n").map(x=>x.trim()).filter(Boolean);
+    if (!lines.length){ bulkStatus.textContent="Paste at least 1 line."; return; }
+
+    const out = [];
+    lines.forEach((ln, idx)=>{
+      const parsed = parseLine(ln);
+      if (!parsed) return;
+      const r = computeProfitCore(parsed.sell, parsed.cost, parsed.ship, parsed.misc, parsed.feePct, parsed.feeFixed, parsed.adsPct, parsed.returnPct);
+      out.push({
+        ...parsed,
+        totalFees: r.totalFees,
+        profit: r.profit,
+        margin: r.margin
+      });
+    });
+
+    bulkLastRows = out;
+    bulkStatus.textContent = `Processed ${out.length} item(s).`;
+    renderBulkTable(out);
+  });
+
+  bulkExportBtn.addEventListener("click", ()=>{
+    if (!CURRENT_PROFILE?.paid){
+      bulkStatus.textContent = "Unlock PRO to export bulk results.";
+      return;
+    }
+    if (!bulkLastRows.length){
+      bulkStatus.textContent = "Run bulk first.";
+      return;
+    }
+    const rows = [
+      ["sell","cost","ship","misc","feePct","feeFixed","adsPct","returnPct","totalFees","profit","margin"]
+    ];
+    bulkLastRows.forEach(r=>{
+      rows.push([r.sell,r.cost,r.ship,r.misc,r.feePct,r.feeFixed,r.adsPct,r.returnPct,r.totalFees,r.profit,r.margin]);
+    });
+    const csv = rows.map(r=>r.map(csvEscape).join(",")).join("\n");
+    downloadText("profitpilot-bulk.csv", csv);
+    bulkStatus.textContent = "Bulk CSV exported.";
+  });
+
+  // My presets (PRO)
   async function loadMyPresets(){
     if (!CURRENT_PROFILE?.paid || !CURRENT_USER) return;
-
     const { data, error } = await supabase
       .from("user_presets")
       .select("id,name,fee_pct,fee_fixed,ads_pct,return_pct,created_at")
       .eq("user_id", CURRENT_USER.id)
       .order("created_at", { ascending:false });
-
-    if (error){
-      presetStatus.textContent = "Failed to load presets.";
-      return;
-    }
-
+    if (error){ presetStatus.textContent="Failed to load presets."; return; }
     myPresetSel.innerHTML = `<option value="">—</option>`;
-    (data || []).forEach(p=>{
+    (data||[]).forEach(p=>{
       const opt = document.createElement("option");
-      opt.value = p.id;
-      opt.textContent = p.name;
-      opt.dataset.feePct = p.fee_pct;
-      opt.dataset.feeFixed = p.fee_fixed;
-      opt.dataset.adsPct = p.ads_pct;
-      opt.dataset.returnPct = p.return_pct;
+      opt.value=p.id; opt.textContent=p.name;
+      opt.dataset.feePct=p.fee_pct; opt.dataset.feeFixed=p.fee_fixed; opt.dataset.adsPct=p.ads_pct; opt.dataset.returnPct=p.return_pct;
       myPresetSel.appendChild(opt);
     });
-
-    presetStatus.textContent = `Loaded ${data?.length || 0} preset(s).`;
+    presetStatus.textContent = `Loaded ${data?.length||0} preset(s).`;
   }
 
   saveMyPresetBtn.addEventListener("click", async ()=>{
     if (!CURRENT_PROFILE?.paid || !CURRENT_USER) return;
-
     const name = myPresetName.value.trim();
-    if (!name){ presetStatus.textContent = "Enter a preset name."; return; }
-
-    presetStatus.textContent = "Saving…";
+    if (!name){ presetStatus.textContent="Enter a preset name."; return; }
+    presetStatus.textContent="Saving…";
     const row = {
       user_id: CURRENT_USER.id,
       name,
@@ -843,44 +818,38 @@
       ads_pct: clamp(n(adsPctEl.value),0,99),
       return_pct: clamp(n(returnPctEl.value),0,99)
     };
-
     const { error } = await supabase.from("user_presets").insert([row]);
-    if (error){ presetStatus.textContent = error.message || "Save failed."; return; }
-
-    myPresetName.value = "";
+    if (error){ presetStatus.textContent=error.message||"Save failed."; return; }
+    myPresetName.value="";
     await loadMyPresets();
-    presetStatus.textContent = "Saved.";
+    presetStatus.textContent="Saved.";
   });
 
   loadMyPresetBtn.addEventListener("click", ()=>{
     if (!CURRENT_PROFILE?.paid) return;
     const opt = myPresetSel.options[myPresetSel.selectedIndex];
-    if (!opt || !opt.value){ presetStatus.textContent = "Select a preset."; return; }
-
+    if (!opt || !opt.value){ presetStatus.textContent="Select a preset."; return; }
     feePctEl.value = String(opt.dataset.feePct ?? 0);
     feeFixedEl.value = String(opt.dataset.feeFixed ?? 0);
     adsPctEl.value = String(opt.dataset.adsPct ?? 0);
     returnPctEl.value = String(opt.dataset.returnPct ?? 0);
-
     presetSel.value = "manual";
     compute();
-    presetStatus.textContent = "Loaded into fields.";
+    presetStatus.textContent="Loaded into fields.";
   });
 
   deleteMyPresetBtn.addEventListener("click", async ()=>{
     if (!CURRENT_PROFILE?.paid || !CURRENT_USER) return;
     const id = myPresetSel.value;
-    if (!id){ presetStatus.textContent = "Select a preset."; return; }
-
-    presetStatus.textContent = "Deleting…";
+    if (!id){ presetStatus.textContent="Select a preset."; return; }
+    presetStatus.textContent="Deleting…";
     const { error } = await supabase.from("user_presets").delete().eq("id", id).eq("user_id", CURRENT_USER.id);
-    if (error){ presetStatus.textContent = error.message || "Delete failed."; return; }
-
+    if (error){ presetStatus.textContent=error.message||"Delete failed."; return; }
     await loadMyPresets();
-    presetStatus.textContent = "Deleted.";
+    presetStatus.textContent="Deleted.";
   });
 
-  // Reviews submit
+  // Reviews submit (quick & safe)
   let selectedStars = 5;
   const starsRow = document.getElementById("starsRow");
   const reviewStatus = document.getElementById("reviewStatus");
@@ -893,9 +862,8 @@
     const btn=e.target.closest("button"); if(!btn) return;
     setStars(parseInt(btn.dataset.star,10));
   });
-
   document.getElementById("sendReview").addEventListener("click", async ()=>{
-    reviewStatus.textContent = "Submitting…";
+    reviewStatus.textContent="Submitting…";
     try{
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Please log in again.");
@@ -903,16 +871,14 @@
       const category = document.getElementById("revCat").value;
       const message = document.getElementById("revMsg").value.trim();
       if (!message) throw new Error("Write a short review message.");
-
       const { error } = await supabase.from("reviews").insert([{
         user_id:user.id, name:name||null, rating:selectedStars, category, message, approved:true
       }]);
       if (error) throw error;
-
-      reviewStatus.textContent = "Thanks! Your review is public.";
-      document.getElementById("revMsg").value = "";
+      reviewStatus.textContent="Thanks! Your review is public.";
+      document.getElementById("revMsg").value="";
     } catch(e){
-      reviewStatus.textContent = e.message || "Failed.";
+      reviewStatus.textContent=e.message||"Failed.";
     }
   });
 
@@ -925,30 +891,26 @@
   // Boot
   (async ()=>{
     try{
-      accessPill.textContent = "Checking session…";
+      accessPill.textContent="Checking session…";
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session){ location.href = "login.html"; return; }
+      if (!session){ location.href="login.html"; return; }
 
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user){ location.href = "login.html"; return; }
-
+      if (!user){ location.href="login.html"; return; }
       CURRENT_USER = user;
 
       const profile = await ensureProfile(user.id);
       updateAccessUI(profile);
 
-      if (profile.paid){
-        await loadMyPresets();
-      }
+      if (profile.paid) await loadMyPresets();
 
       setMode("profit");
       computeProfit();
     } catch(e){
-      accessPill.textContent = "Access check failed";
-      accessPill.className = "pill bad";
+      accessPill.textContent="Access check failed";
+      accessPill.className="pill bad";
     }
   })();
 </script>
-
 </body>
 </html>
