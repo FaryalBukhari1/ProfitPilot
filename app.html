@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>ProfitPilot — App</title>
-  <meta name="description" content="ProfitPilot helps sellers estimate profit, margin, and fee sensitivity. Free trial with one-time PRO unlock.">
+  <meta name="description" content="ProfitPilot helps sellers estimate profit, margin, fee drag, and return sensitivity. Trial + one-time PRO unlock.">
   <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
 
   <style>
@@ -127,6 +127,7 @@
     .modal h2{margin:0 0 8px}
     .two{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
     @media(max-width:840px){.two{grid-template-columns:1fr}}
+
     .stars button{
       border:1px solid var(--line);
       background:rgba(255,255,255,.75);
@@ -140,6 +141,21 @@
       background:rgba(14,165,164,.10);
     }
     .toast{margin-top:10px;font-size:12px;color:var(--muted)}
+
+    .scenarioItem{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.65);
+      border-radius:16px;
+      padding:10px;
+      margin-top:10px;
+    }
+    .scenarioTop{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+    .scenarioName{font-weight:900}
+    .miniBtn{
+      padding:8px 10px;border-radius:999px;border:1px solid var(--line);
+      background:rgba(255,255,255,.75);cursor:pointer;
+      font-size:12px;
+    }
   </style>
 </head>
 
@@ -268,8 +284,24 @@
 
       <div class="divider"></div>
 
+      <div class="title" style="margin:0 0 6px">Saved scenarios</div>
+      <div class="small" id="scenarioHint">Trial can save 3 scenarios. PRO saves unlimited.</div>
+
+      <label>Scenario name</label>
+      <input id="scenarioName" placeholder="e.g., eBay listing — £19.99 test">
+
+      <div class="row">
+        <button class="btn primary" id="saveScenarioBtn">Save scenario</button>
+        <button class="btn" id="refreshScenariosBtn">Refresh list</button>
+      </div>
+      <div class="toast" id="scenarioStatus">—</div>
+
+      <div id="scenarioList"></div>
+
+      <div class="divider"></div>
+
       <div class="title" style="margin:0 0 6px">Leave a review</div>
-      <div class="small">Your review is public. Please be respectful — spam/abuse may be removed.</div>
+      <div class="small">Reviews publish immediately. Spam/abuse may be removed.</div>
 
       <label>Name (optional)</label>
       <input id="revName" placeholder="e.g., Faryal">
@@ -326,7 +358,7 @@
         <ul class="small" style="line-height:1.8;padding-left:16px;margin:8px 0 0">
           <li>5-day access</li>
           <li>Basic profit & margin</li>
-          <li>Good for testing</li>
+          <li>Save up to 3 scenarios</li>
         </ul>
       </div>
 
@@ -334,10 +366,9 @@
         <div class="title">PRO (One-time unlock)</div>
         <ul class="small" style="line-height:1.8;padding-left:16px;margin:8px 0 0">
           <li><b>Unlimited access</b></li>
-          <li><b>Editable fee presets</b></li>
+          <li><b>Unlimited saved scenarios</b></li>
           <li><b>Risk & margin signals</b></li>
           <li><b>Return sensitivity checks</b></li>
-          <li><b>Built for repeated decisions</b></li>
         </ul>
         <div class="pill ok" style="margin-top:10px">One-time purchase • No subscription</div>
       </div>
@@ -371,6 +402,9 @@
   const GUMROAD_REDEEM_FN = "https://xsigsftvfknefpdfsyae.supabase.co/functions/v1/gumroad-redeem";
   const TRIAL_DAYS = 5;
 
+  // Scenario limits
+  const TRIAL_SCENARIO_LIMIT = 3;
+
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
   const accessPill = document.getElementById("accessPill");
@@ -385,6 +419,7 @@
   function money(x){ const v = Number.isFinite(x) ? x : 0; return "£" + v.toFixed(2); }
   function pct(x){ const v = Number.isFinite(x) ? x : 0; return v.toFixed(1) + "%"; }
   function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+  function safe(t){ return String(t || "").replaceAll("<","&lt;"); }
 
   const PRESETS = [
     { id:"manual", name:"Manual (enter fees yourself)", feePct:0, feeFixed:0, adsPct:0, returnPct:0 },
@@ -429,6 +464,34 @@
   const returnOut = document.getElementById("returnOut");
   const profitHint = document.getElementById("profitHint");
   const marginHint = document.getElementById("marginHint");
+
+  function getPayload(){
+    return {
+      preset: presetSel.value,
+      sellPrice: sellPriceEl.value,
+      productCost: productCostEl.value,
+      shipCost: shipCostEl.value,
+      miscCost: miscCostEl.value,
+      feePct: feePctEl.value,
+      feeFixed: feeFixEl.value,
+      adsPct: adsPctEl.value,
+      returnPct: retPctEl.value
+    };
+  }
+
+  function applyPayload(p){
+    if (!p) return;
+    presetSel.value = p.preset || "manual";
+    sellPriceEl.value = String(p.sellPrice ?? "0");
+    productCostEl.value = String(p.productCost ?? "0");
+    shipCostEl.value = String(p.shipCost ?? "0");
+    miscCostEl.value = String(p.miscCost ?? "0");
+    feePctEl.value = String(p.feePct ?? "0");
+    feeFixEl.value = String(p.feeFixed ?? "0");
+    adsPctEl.value = String(p.adsPct ?? "0");
+    retPctEl.value = String(p.returnPct ?? "0");
+    compute();
+  }
 
   function compute(){
     const sell = n(sellPriceEl.value);
@@ -542,7 +605,11 @@
 
   function showPaywall(show){ paywall.style.display = show ? "flex" : "none"; }
 
+  let CURRENT_PROFILE = null;
+  let CURRENT_USER = null;
+
   async function updateAccessUI(profile, email){
+    CURRENT_PROFILE = profile;
     userLine.textContent = `Signed in as ${email}`;
 
     if (profile.paid) {
@@ -599,6 +666,7 @@
     }
   });
 
+  // Reviews
   let selectedStars = 5;
   const starsRow = document.getElementById("starsRow");
   const reviewStatus = document.getElementById("reviewStatus");
@@ -645,6 +713,136 @@
     }
   });
 
+  // Scenarios (Trial: 3, PRO: unlimited)
+  const scenarioNameEl = document.getElementById("scenarioName");
+  const saveScenarioBtn = document.getElementById("saveScenarioBtn");
+  const refreshScenariosBtn = document.getElementById("refreshScenariosBtn");
+  const scenarioStatus = document.getElementById("scenarioStatus");
+  const scenarioList = document.getElementById("scenarioList");
+  const scenarioHint = document.getElementById("scenarioHint");
+
+  async function loadScenarios(){
+    scenarioStatus.textContent = "Loading scenarios…";
+    scenarioList.innerHTML = "";
+
+    const { data, error } = await supabase
+      .from("scenarios")
+      .select("id,name,payload,created_at")
+      .order("created_at", { ascending:false })
+      .limit(10);
+
+    if (error){
+      scenarioStatus.textContent = error.message;
+      return;
+    }
+
+    const count = (data || []).length;
+
+    if (CURRENT_PROFILE?.paid){
+      scenarioHint.textContent = `PRO: unlimited saved scenarios • Showing latest ${count}`;
+    } else {
+      scenarioHint.textContent = `Trial: save up to ${TRIAL_SCENARIO_LIMIT} scenarios • You have ${count}/${TRIAL_SCENARIO_LIMIT} (latest shown)`;
+    }
+
+    if (!data || data.length === 0){
+      scenarioStatus.textContent = "No saved scenarios yet.";
+      return;
+    }
+
+    scenarioStatus.textContent = "—";
+
+    data.forEach(s=>{
+      const div = document.createElement("div");
+      div.className = "scenarioItem";
+      div.innerHTML = `
+        <div class="scenarioTop">
+          <div>
+            <div class="scenarioName">${safe(s.name)}</div>
+            <div class="small">${new Date(s.created_at).toLocaleString()}</div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="miniBtn" data-act="load" data-id="${s.id}">Load</button>
+            <button class="miniBtn" data-act="del" data-id="${s.id}">Delete</button>
+          </div>
+        </div>
+      `;
+      div.dataset.payload = JSON.stringify(s.payload || {});
+      scenarioList.appendChild(div);
+    });
+  }
+
+  async function trialScenarioCount(){
+    const { data, error } = await supabase
+      .from("scenarios")
+      .select("id")
+      .limit(50);
+    if (error) throw error;
+    return (data || []).length;
+  }
+
+  saveScenarioBtn.addEventListener("click", async ()=>{
+    scenarioStatus.textContent = "Saving…";
+    try{
+      if (!CURRENT_USER) throw new Error("Please log in again.");
+
+      const name = scenarioNameEl.value.trim() || "Untitled scenario";
+      const payload = getPayload();
+
+      if (!CURRENT_PROFILE?.paid){
+        const cnt = await trialScenarioCount();
+        if (cnt >= TRIAL_SCENARIO_LIMIT){
+          scenarioStatus.textContent = `Trial limit reached (${TRIAL_SCENARIO_LIMIT}). Unlock PRO to save unlimited scenarios.`;
+          return;
+        }
+      }
+
+      const { error } = await supabase.from("scenarios").insert([{
+        user_id: CURRENT_USER.id,
+        name,
+        payload
+      }]);
+
+      if (error) throw error;
+      scenarioStatus.textContent = "Saved.";
+      scenarioNameEl.value = "";
+      await loadScenarios();
+    } catch(e){
+      scenarioStatus.textContent = e.message || "Failed to save.";
+    }
+  });
+
+  refreshScenariosBtn.addEventListener("click", loadScenarios);
+
+  scenarioList.addEventListener("click", async (e)=>{
+    const btn = e.target.closest("button");
+    if (!btn) return;
+    const act = btn.dataset.act;
+    const id = btn.dataset.id;
+    const item = btn.closest(".scenarioItem");
+
+    if (act === "load"){
+      try{
+        const payload = JSON.parse(item.dataset.payload || "{}");
+        applyPayload(payload);
+        scenarioStatus.textContent = "Loaded scenario.";
+      } catch {
+        scenarioStatus.textContent = "Could not load scenario.";
+      }
+    }
+
+    if (act === "del"){
+      if (!confirm("Delete this scenario?")) return;
+      scenarioStatus.textContent = "Deleting…";
+      const { error } = await supabase.from("scenarios").delete().eq("id", id);
+      if (error) scenarioStatus.textContent = error.message;
+      else {
+        scenarioStatus.textContent = "Deleted.";
+        await loadScenarios();
+      }
+    }
+  });
+
+  // Logout
   document.getElementById("logoutBtn").addEventListener("click", async ()=>{
     await supabase.auth.signOut();
     location.href = "login.html";
@@ -656,10 +854,13 @@
 
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) { location.href = "login.html"; return; }
+    CURRENT_USER = user;
 
     const profile = await ensureProfile(user.id);
     await updateAccessUI(profile, user.email || "user");
+
     compute();
+    await loadScenarios();
   })();
 </script>
 </body>
