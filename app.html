@@ -82,7 +82,6 @@
     .good{color:var(--ok);font-weight:800}
     .bad{color:var(--bad);font-weight:800}
 
-    /* Import banner */
     .banner{
       display:none;
       margin-top:12px;
@@ -96,7 +95,6 @@
     }
     .banner b{font-weight:900}
 
-    /* Bulk grid */
     .bulkWrap{overflow:auto;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.72)}
     table{width:100%;border-collapse:collapse;font-size:12px;min-width:980px}
     th,td{border-bottom:1px solid var(--line);padding:10px;text-align:left;vertical-align:middle}
@@ -268,7 +266,7 @@
 
         <div id="bulkPasteBox">
           <div class="title" style="margin:0 0 6px;font-size:14px">Paste rows</div>
-          <div class="small">Paste lines like: <b>Sell, Cost, Ship, Misc</b> (comma or tab separated). Fees will use your current fields unless included.</div>
+          <div class="small">Paste lines like: <b>Sell, Cost, Ship, Misc</b> (comma or tab separated). Fees use your current fields unless included.</div>
           <textarea id="bulkPaste" placeholder="Example:
 12.99, 6.20, 0.00, 0.20
 19.99, 9.50, 0.00, 0.30"></textarea>
@@ -330,10 +328,38 @@
     <div>
       <div class="card" id="proCard">
         <div class="title">PRO features</div>
-        <div class="small">Unlimited reverse, bulk unlimited, PDF export, share links, saved presets. One-time unlock.</div>
+        <div class="small">Unlimited reverse, bulk unlimited, PDF export, share links, saved presets, saved history. One-time unlock.</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
           <a class="btn primary" href="https://stonevia.gumroad.com/l/goddhg" target="_blank" rel="noopener">Buy PRO</a>
           <a class="btn" href="reviews.html">See reviews</a>
+        </div>
+      </div>
+
+      <!-- ✅ SAVED HISTORY (NEW) -->
+      <div class="card" style="margin-top:14px">
+        <div class="title">Saved calculations (PRO)</div>
+        <div class="small">Save a snapshot, reload it later, or delete it. This is your workspace.</div>
+
+        <label>Saved items</label>
+        <select id="savedSel"><option value="">—</option></select>
+
+        <div class="row">
+          <button class="btn" id="loadSavedBtn">Load</button>
+          <button class="btn" id="deleteSavedBtn">Delete</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <label>Save as</label>
+        <input id="savedName" placeholder="e.g., eBay £12.99 thin margin">
+
+        <div class="row">
+          <button class="btn primary" id="saveCurrentBtn">Save current</button>
+          <span class="pill" id="savedStatus">—</span>
+        </div>
+
+        <div class="small" style="margin-top:10px">
+          Tip: Use consistent names like “eBay 12.99”, “Etsy 19.99”, “Wholesale test”.
         </div>
       </div>
 
@@ -414,7 +440,6 @@
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-  // UI
   const accessPill = document.getElementById("accessPill");
   const reverseUsesLine = document.getElementById("reverseUsesLine");
   const bulkLimitLine = document.getElementById("bulkLimitLine");
@@ -424,9 +449,15 @@
   const bulkImportStatus = document.getElementById("bulkImportStatus");
   const importBanner = document.getElementById("importBanner");
 
+  const savedSel = document.getElementById("savedSel");
+  const savedName = document.getElementById("savedName");
+  const saveCurrentBtn = document.getElementById("saveCurrentBtn");
+  const loadSavedBtn = document.getElementById("loadSavedBtn");
+  const deleteSavedBtn = document.getElementById("deleteSavedBtn");
+  const savedStatus = document.getElementById("savedStatus");
+
   document.getElementById("yr").textContent = new Date().getFullYear();
 
-  // Inputs
   const currencyEl = document.getElementById("currency");
   const fxRateEl = document.getElementById("fxRate");
   const presetSel = document.getElementById("preset");
@@ -441,7 +472,6 @@
   const returnPctEl = document.getElementById("returnPct");
   const targetProfitEl = document.getElementById("targetProfit");
 
-  // Outputs
   const o1h = document.getElementById("o1h");
   const o2h = document.getElementById("o2h");
   const o1v = document.getElementById("o1v");
@@ -455,7 +485,6 @@
   const fxOut = document.getElementById("fxOut");
   const fxNote = document.getElementById("fxNote");
 
-  // Buttons
   const pdfBtn = document.getElementById("pdfBtn");
   const shareBtn = document.getElementById("shareBtn");
 
@@ -469,7 +498,6 @@
   const bulkImportBtn = document.getElementById("bulkImportBtn");
   const bulkFillExampleBtn = document.getElementById("bulkFillExampleBtn");
 
-  // Bulk table
   const bulkTbody = document.getElementById("bulkTbody");
 
   const myPresetSel = document.getElementById("myPresetSel");
@@ -478,7 +506,6 @@
   const loadMyPresetBtn = document.getElementById("loadMyPresetBtn");
   const deleteMyPresetBtn = document.getElementById("deleteMyPresetBtn");
 
-  // Modes boxes
   const tabProfit = document.getElementById("tabProfit");
   const tabReverse = document.getElementById("tabReverse");
   const tabBulk = document.getElementById("tabBulk");
@@ -681,7 +708,13 @@
     pdfBtn.disabled = !isPro;
     shareBtn.disabled = !isPro;
 
-    presetStatus.textContent = isPro ? "PRO enabled" : "Unlock PRO to use My Presets + PDF + Share.";
+    saveCurrentBtn.disabled = !isPro;
+    loadSavedBtn.disabled = !isPro;
+    deleteSavedBtn.disabled = !isPro;
+    savedSel.disabled = !isPro;
+    savedName.disabled = !isPro;
+
+    presetStatus.textContent = isPro ? "PRO enabled" : "Unlock PRO to use My Presets + PDF + Share + Saved history.";
     saveMyPresetBtn.disabled = !isPro;
     loadMyPresetBtn.disabled = !isPro;
     deleteMyPresetBtn.disabled = !isPro;
@@ -789,31 +822,7 @@
     refreshBulkLimitLine();
   }
 
-  // Calculate click
-  document.getElementById("calcBtn").addEventListener("click", async ()=>{
-    try{
-      o1hint.style.color = "";
-      if (MODE==="reverse") await consumeReverseUseIfTrial();
-      compute();
-    } catch(e){
-      o1hint.textContent = e.message || "Error.";
-      o1hint.style.color = "var(--bad)";
-    }
-  });
-
-  // Reset
-  document.getElementById("resetBtn").addEventListener("click", ()=>{
-    [sellPriceEl, productCostEl, shipCostEl, miscCostEl, feePctEl, feeFixedEl, adsPctEl, returnPctEl, targetProfitEl].forEach(el=>el.value="0");
-    fxRateEl.value = "";
-    presetSel.value = "manual";
-    shareStatus.textContent = "—";
-    bulkPasteEl.value = "";
-    clearBulkRows();
-    importBanner.style.display = "none";
-    setMode("profit");
-  });
-
-  // CSV export (single)
+  // Payload + export helpers
   function payload(){
     return {
       mode: MODE,
@@ -840,6 +849,7 @@
     document.body.appendChild(a); a.click(); a.remove();
     URL.revokeObjectURL(url);
   }
+
   document.getElementById("exportCsvBtn").addEventListener("click", ()=>{
     const p = payload();
     const rows = Object.entries(p).map(([k,v])=>[k,String(v ?? "")]);
@@ -849,14 +859,12 @@
     shareStatus.textContent = "CSV exported.";
   });
 
-  // PDF export (PRO)
   pdfBtn.addEventListener("click", ()=>{
     if (!CURRENT_PROFILE?.paid){ shareStatus.textContent="PDF is PRO."; return; }
     shareStatus.textContent="Preparing PDF…";
     setTimeout(()=>window.print(), 150);
   });
 
-  // Share (PRO)
   function base64urlEncode(str){
     const bytes = new TextEncoder().encode(str);
     let bin=""; bytes.forEach(b=>bin+=String.fromCharCode(b));
@@ -870,9 +878,31 @@
     shareStatus.textContent="Share link copied.";
   });
 
-  // ---- BULK TABLE MODE ----
-  let bulkLastRows = [];
+  // Calculate
+  document.getElementById("calcBtn").addEventListener("click", async ()=>{
+    try{
+      o1hint.style.color = "";
+      if (MODE==="reverse") await consumeReverseUseIfTrial();
+      compute();
+    } catch(e){
+      o1hint.textContent = e.message || "Error.";
+      o1hint.style.color = "var(--bad)";
+    }
+  });
 
+  document.getElementById("resetBtn").addEventListener("click", ()=>{
+    [sellPriceEl, productCostEl, shipCostEl, miscCostEl, feePctEl, feeFixedEl, adsPctEl, returnPctEl, targetProfitEl].forEach(el=>el.value="0");
+    fxRateEl.value = "";
+    presetSel.value = "manual";
+    shareStatus.textContent = "—";
+    bulkPasteEl.value = "";
+    clearBulkRows();
+    importBanner.style.display = "none";
+    setMode("profit");
+  });
+
+  // ---- BULK ----
+  let bulkLastRows = [];
   function mkCellInput(value="0"){
     const inp = document.createElement("input");
     inp.className = "mini";
@@ -880,19 +910,15 @@
     inp.value = String(value ?? "0");
     return inp;
   }
-  function renumberBulkRows(){
-    [...bulkTbody.children].forEach((tr,i)=> tr.children[0].textContent = String(i+1));
-  }
+  function renumberBulkRows(){ [...bulkTbody.children].forEach((tr,i)=> tr.children[0].textContent = String(i+1)); }
   function rowCount(){ return bulkTbody.children.length; }
   function canAddRow(){
     if (!CURRENT_PROFILE) return false;
     if (CURRENT_PROFILE.paid) return true;
     return rowCount() < TRIAL_BULK_MAX_ROWS;
   }
-
   function addBulkRow(initial={}){
     const tr = document.createElement("tr");
-
     const idxTd = document.createElement("td");
     idxTd.textContent = String(rowCount() + 1);
     tr.appendChild(idxTd);
@@ -934,14 +960,12 @@
     renumberBulkRows();
     previewRow(tr);
   }
-
   function clearBulkRows(){
     bulkTbody.innerHTML = "";
     bulkLastRows = [];
     bulkStatus.textContent = "—";
     refreshBulkLimitLine();
   }
-
   function applyFeesToAll(){
     [...bulkTbody.children].forEach(tr=>{
       const r = tr._pp;
@@ -953,14 +977,12 @@
     });
     bulkStatus.textContent = "Applied current fees to all rows.";
   }
-
   function computeRow(sell,cost,ship,misc,feePct,feeFixed,adsPct,returnPct){
     const fees = sell*(feePct/100) + feeFixed + sell*(adsPct/100);
     const profit = sell - (cost+ship+misc+fees);
     const margin = sell>0 ? (profit/sell)*100 : 0;
     return { profit, margin, fees };
   }
-
   function previewRow(tr){
     if (!tr?._pp) return;
     const r = tr._pp;
@@ -1160,6 +1182,122 @@
     presetStatus.textContent="Deleted.";
   });
 
+  // ✅ Saved calculations (PRO)
+  async function loadSavedCalculations(){
+    if (!CURRENT_PROFILE?.paid || !CURRENT_USER) return;
+    savedStatus.textContent = "Loading…";
+    const { data, error } = await supabase
+      .from("saved_calculations")
+      .select("id,name,created_at,payload")
+      .eq("user_id", CURRENT_USER.id)
+      .order("created_at", { ascending:false })
+      .limit(30);
+    if (error){
+      savedStatus.textContent = "Failed to load saved history.";
+      return;
+    }
+    savedSel.innerHTML = `<option value="">—</option>`;
+    (data||[]).forEach(item=>{
+      const opt = document.createElement("option");
+      opt.value = item.id;
+      const d = new Date(item.created_at).toLocaleDateString();
+      opt.textContent = `${item.name} • ${d}`;
+      opt.dataset.payload = JSON.stringify(item.payload || {});
+      savedSel.appendChild(opt);
+    });
+    savedStatus.textContent = `Loaded ${data?.length||0} saved item(s).`;
+  }
+
+  function applyImportedData(data){
+    if (data.currency) currencyEl.value = data.currency;
+    fxRateEl.value = data.fxRate || "";
+    presetSel.value = data.preset || "manual";
+
+    sellPriceEl.value = String(data.sellPrice ?? "0");
+    productCostEl.value = String(data.productCost ?? "0");
+    shipCostEl.value = String(data.shipCost ?? "0");
+    miscCostEl.value = String(data.miscCost ?? "0");
+
+    feePctEl.value = String(data.feePct ?? "0");
+    feeFixedEl.value = String(data.feeFixed ?? "0");
+    adsPctEl.value = String(data.adsPct ?? "0");
+    returnPctEl.value = String(data.returnPct ?? "0");
+
+    targetProfitEl.value = String(data.targetProfit ?? "0");
+
+    const m = (data.mode || "profit");
+    if (m === "bulk") setMode("bulk");
+    else if (m === "reverse") setMode("reverse");
+    else setMode("profit");
+
+    applyFeesToAll();
+    compute();
+
+    importBanner.style.display = "block";
+    importBanner.textContent = "Loaded saved calculation ✅";
+    setTimeout(()=>{ importBanner.style.display = "none"; }, 5000);
+  }
+
+  saveCurrentBtn.addEventListener("click", async ()=>{
+    if (!CURRENT_PROFILE?.paid || !CURRENT_USER){
+      savedStatus.textContent = "PRO only.";
+      return;
+    }
+    const name = savedName.value.trim();
+    if (!name){
+      savedStatus.textContent = "Write a name first.";
+      return;
+    }
+    savedStatus.textContent = "Saving…";
+    const { error } = await supabase
+      .from("saved_calculations")
+      .insert([{ user_id: CURRENT_USER.id, name, payload: payload() }]);
+    if (error){
+      savedStatus.textContent = error.message || "Save failed.";
+      return;
+    }
+    savedName.value = "";
+    await loadSavedCalculations();
+    savedStatus.textContent = "Saved ✅";
+  });
+
+  loadSavedBtn.addEventListener("click", ()=>{
+    if (!CURRENT_PROFILE?.paid) return;
+    const opt = savedSel.options[savedSel.selectedIndex];
+    if (!opt || !opt.value){
+      savedStatus.textContent = "Select a saved item.";
+      return;
+    }
+    try{
+      const data = JSON.parse(opt.dataset.payload || "{}");
+      applyImportedData(data);
+      savedStatus.textContent = "Loaded ✅";
+    } catch(e){
+      savedStatus.textContent = "Load failed.";
+    }
+  });
+
+  deleteSavedBtn.addEventListener("click", async ()=>{
+    if (!CURRENT_PROFILE?.paid || !CURRENT_USER) return;
+    const id = savedSel.value;
+    if (!id){
+      savedStatus.textContent = "Select a saved item.";
+      return;
+    }
+    savedStatus.textContent = "Deleting…";
+    const { error } = await supabase
+      .from("saved_calculations")
+      .delete()
+      .eq("id", id)
+      .eq("user_id", CURRENT_USER.id);
+    if (error){
+      savedStatus.textContent = error.message || "Delete failed.";
+      return;
+    }
+    await loadSavedCalculations();
+    savedStatus.textContent = "Deleted.";
+  });
+
   // Reviews submit
   let selectedStars = 5;
   const starsRow = document.getElementById("starsRow");
@@ -1197,13 +1335,12 @@
     }
   });
 
-  // Logout
   document.getElementById("logoutBtn").addEventListener("click", async ()=>{
     await supabase.auth.signOut();
     location.href = "login.html";
   });
 
-  // ---- IMPORT FROM SHARE ----
+  // Import from share hash
   function base64urlDecodeToString(b64url){
     let s = (b64url||"").replace(/-/g, "+").replace(/_/g, "/");
     while (s.length % 4) s += "=";
@@ -1211,41 +1348,6 @@
     const bytes = new Uint8Array([...bin].map(ch => ch.charCodeAt(0)));
     return new TextDecoder().decode(bytes);
   }
-
-  function applyImportedData(data){
-    // Defensive: only fill known fields
-    if (data.currency) currencyEl.value = data.currency;
-    fxRateEl.value = data.fxRate || "";
-
-    presetSel.value = data.preset || "manual";
-
-    sellPriceEl.value = String(data.sellPrice ?? "0");
-    productCostEl.value = String(data.productCost ?? "0");
-    shipCostEl.value = String(data.shipCost ?? "0");
-    miscCostEl.value = String(data.miscCost ?? "0");
-
-    feePctEl.value = String(data.feePct ?? "0");
-    feeFixedEl.value = String(data.feeFixed ?? "0");
-    adsPctEl.value = String(data.adsPct ?? "0");
-    returnPctEl.value = String(data.returnPct ?? "0");
-
-    targetProfitEl.value = String(data.targetProfit ?? "0");
-
-    const m = (data.mode || "profit");
-    if (m === "bulk") setMode("bulk");
-    else if (m === "reverse") setMode("reverse");
-    else setMode("profit");
-
-    compute();
-
-    importBanner.style.display = "block";
-    importBanner.textContent = "Imported shared calculation ✅";
-    setTimeout(()=>{ importBanner.style.display = "none"; }, 5500);
-
-    // clean the hash so refresh doesn't keep re-importing
-    history.replaceState(null, "", location.pathname);
-  }
-
   function tryImportFromHash(){
     const h = location.hash || "";
     const m = h.match(/[#&]import=([^&]+)/);
@@ -1259,8 +1361,8 @@
       importBanner.style.display = "block";
       importBanner.textContent = "Import failed (invalid link).";
       setTimeout(()=>{ importBanner.style.display = "none"; }, 7000);
-      history.replaceState(null, "", location.pathname);
     }
+    history.replaceState(null, "", location.pathname);
   }
 
   // Boot
@@ -1277,9 +1379,7 @@
       const profile = await ensureProfile(user.id);
       updateAccessUI(profile);
 
-      if (profile.paid) await loadMyPresets();
-
-      // Init bulk rows
+      // init bulk rows
       clearBulkRows();
       const initialRows = profile.paid ? 5 : TRIAL_BULK_MAX_ROWS;
       for (let i=0;i<initialRows;i++) addBulkRow();
@@ -1287,7 +1387,13 @@
       setMode("profit");
       computeProfit();
 
-      // Import if present
+      // PRO data
+      if (profile.paid){
+        await loadMyPresets();
+        await loadSavedCalculations();
+      }
+
+      // import share if any
       tryImportFromHash();
 
     } catch(e){
