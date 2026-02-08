@@ -3,203 +3,383 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>How to use ProfitPilot — Help</title>
-  <meta name="description" content="Step-by-step help guide for ProfitPilot: Profit calculator, reverse pricing, competitor check, bulk mode, export, and PRO unlock.">
+  <title>How to Use — ProfitPilot</title>
+  <meta name="description" content="Learn how to use ProfitPilot: Profit mode, Reverse pricing, Bulk table, competitor mode, insights, export, and sharing.">
   <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
+  <meta name="robots" content="index,follow">
 
   <style>
     :root{
-      --bg:#f7f9fc; --bg2:#eef3ff;
+      --bg:#f6f8fb; --bg2:#eef2ff;
       --txt:#0b1220; --muted:#5b6474;
-      --card:#ffffff; --line:rgba(16,24,40,.10);
+      --card:rgba(255,255,255,.92); --line:rgba(16,24,40,.10);
       --accent:#0ea5a4; --accent2:#4f46e5;
-      --shadow:0 14px 36px rgba(16,24,40,.08);
-      --shadow2:0 8px 22px rgba(16,24,40,.06);
+      --shadow:0 12px 34px rgba(16,24,40,.10);
+      --soft:rgba(14,165,164,.10);
+      --soft2:rgba(79,70,229,.10);
+      --warn:rgba(245,158,11,.14);
+      --ok:rgba(14,165,164,.14);
     }
     *{box-sizing:border-box}
     body{
-      margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      color:var(--txt);
+      margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--txt);
       background:
-        radial-gradient(900px 520px at 16% 0%, rgba(14,165,164,.14), transparent 55%),
-        radial-gradient(900px 520px at 84% 0%, rgba(79,70,229,.12), transparent 55%),
-        linear-gradient(180deg,var(--bg2),var(--bg));
+        radial-gradient(900px 520px at 20% 0%, rgba(14,165,164,.16), transparent 55%),
+        radial-gradient(900px 520px at 80% 0%, rgba(79,70,229,.12), transparent 55%),
+        linear-gradient(180deg, var(--bg2), var(--bg));
     }
-    a{color:var(--accent);text-decoration:none;font-weight:800}
-    .wrap{max-width:980px;margin:0 auto;padding:22px 16px 70px}
-    @media (min-width:900px){.wrap{padding:26px 22px 80px}}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:1120px;margin:0 auto;padding:22px 16px 70px}
+    @media (min-width:900px){.wrap{padding:26px 22px 84px}}
 
-    .btn{
-      padding:10px 14px;border-radius:999px;border:1px solid var(--line);
-      background:#fff;box-shadow:var(--shadow2);
-      font-weight:800;font-size:14px;
-      display:inline-flex;gap:8px;align-items:center;
-      color:var(--txt);text-decoration:none;
+    .nav{
+      display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+      position:sticky;top:0;z-index:60;padding:14px 0;
+      backdrop-filter:blur(10px);
     }
+    .nav::before{
+      content:"";position:absolute;inset:0;
+      background:rgba(246,248,251,.72);
+      border-bottom:1px solid rgba(16,24,40,.08);
+      z-index:-1;border-radius:18px;
+    }
+    .brand{display:flex;gap:12px;align-items:center;padding:10px 12px}
+    .logo{
+      width:42px;height:42px;border-radius:16px;
+      background:linear-gradient(135deg, rgba(14,165,164,.22), rgba(79,70,229,.18));
+      border:1px solid rgba(16,24,40,.10);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:1000;letter-spacing:-.02em;
+      box-shadow:0 10px 24px rgba(16,24,40,.08);
+      user-select:none;
+    }
+    .brand b{font-weight:1000;letter-spacing:-.02em}
+    .sub{font-size:12px;color:var(--muted);margin-top:2px}
+    .right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .btn{
+      padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
+      background:rgba(255,255,255,.86);color:var(--txt);
+      display:inline-flex;gap:8px;align-items:center;cursor:pointer;
+      box-shadow:0 8px 18px rgba(16,24,40,.06);
+      white-space:nowrap;font-weight:900;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(0)}
+    .btn.ghost{background:transparent;box-shadow:none}
     .btn.primary{
       border:none;color:#fff;
-      background:linear-gradient(135deg,var(--accent),var(--accent2));
-      box-shadow:0 16px 34px rgba(79,70,229,.16);
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow:0 18px 34px rgba(79,70,229,.18);
     }
-    .nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:8px 0}
-    .left,.right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .btn.active{
+      border-color:rgba(14,165,164,.35);
+      background:rgba(14,165,164,.10);
+    }
+    .chip{
+      padding:9px 12px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
+      background:rgba(255,255,255,.76);color:rgba(16,24,40,.72);
+      font-size:12px;font-weight:900;display:none;
+    }
 
-    .card{
+    .crumbs{
+      margin:10px 2px 0;
+      font-size:12.5px;color:rgba(16,24,40,.62);
+      display:flex;gap:6px;flex-wrap:wrap;align-items:center;
+    }
+    .crumbs a{color:rgba(14,165,164,.95);font-weight:900}
+    .sep{opacity:.55}
+
+    .hero{
       margin-top:14px;
-      background:rgba(255,255,255,.80);
-      border:1px solid var(--line);
-      border-radius:20px;
-      padding:18px;
+      background:linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.82));
+      border:1px solid rgba(16,24,40,.10);
+      border-radius:24px;
       box-shadow:var(--shadow);
+      padding:20px;
+      position:relative;
+      overflow:hidden;
     }
-    h1{margin:0;font-size:30px;letter-spacing:-.02em;line-height:1.15}
-    .lead{margin:10px 0 0;color:var(--muted);line-height:1.75}
-    h2{margin:22px 0 8px;font-size:18px;letter-spacing:-.01em}
-    p,li{color:var(--muted);line-height:1.75}
-    ul{margin:8px 0 0;padding-left:18px}
-    .pill{
-      display:inline-flex;gap:8px;align-items:center;
-      padding:8px 10px;border-radius:999px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.75);
-      color:rgba(16,24,40,.70);
-      font-size:12px;font-weight:800;
+    .hero::after{
+      content:"";position:absolute;inset:-40px -60px auto auto;width:260px;height:260px;border-radius:999px;
+      background:radial-gradient(circle at 30% 30%, rgba(14,165,164,.18), transparent 60%),
+                 radial-gradient(circle at 70% 70%, rgba(79,70,229,.18), transparent 60%);
+      filter:blur(2px);
     }
-    .k{
-      display:grid;gap:10px;
-      grid-template-columns:1fr 1fr;
+    h1{margin:0;font-size:28px;line-height:1.15;letter-spacing:-.03em;font-weight:1000}
+    .lead{margin-top:10px;color:rgba(16,24,40,.70);line-height:1.7;font-size:14.5px}
+
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+    @media(max-width:980px){.grid{grid-template-columns:1fr}}
+    .card{
+      background:rgba(255,255,255,.90);
+      border:1px solid rgba(16,24,40,.10);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+    .kicker{font-size:12px;color:rgba(16,24,40,.56);font-weight:1000;text-transform:uppercase;letter-spacing:.12em}
+    .title{margin:8px 0 8px;font-weight:1000;letter-spacing:-.02em;font-size:16px}
+    .small{font-size:12.8px;color:rgba(16,24,40,.68);line-height:1.75}
+    ul{margin:10px 0 0;padding-left:18px;color:rgba(16,24,40,.68);line-height:1.75;font-size:13px}
+    li{margin:6px 0}
+    code{
+      background:rgba(16,24,40,.06);
+      border:1px solid rgba(16,24,40,.10);
+      padding:2px 6px;border-radius:10px;
+      font-size:12.5px;
+    }
+    .callout{
       margin-top:12px;
+      border:1px solid rgba(16,24,40,.10);
+      border-radius:18px;
+      padding:12px;
+      background:rgba(255,255,255,.82);
     }
-    @media(max-width:760px){.k{grid-template-columns:1fr}}
-    .mini{
-      background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;
-      box-shadow:var(--shadow2);
-    }
-    .mini b{color:var(--txt)}
+    .callout.ok{background:linear-gradient(180deg, var(--ok), rgba(255,255,255,.86))}
+    .callout.warn{background:linear-gradient(180deg, var(--warn), rgba(255,255,255,.86))}
+    .hr{height:1px;background:rgba(16,24,40,.10);margin:14px 0}
     footer{
-      margin-top:20px;padding-top:14px;border-top:1px solid var(--line);
-      text-align:center;color:var(--muted);font-size:12.5px;line-height:1.7;
+      margin-top:18px;
+      color:rgba(16,24,40,.58);
+      font-size:12.5px;line-height:1.7;
     }
   </style>
+
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"BreadcrumbList",
+    "itemListElement":[
+      {"@type":"ListItem","position":1,"name":"Ukwebtools","item":"https://ukwebtools.com/"},
+      {"@type":"ListItem","position":2,"name":"ProfitPilot","item":"https://profitpilot.ukwebtools.com/"},
+      {"@type":"ListItem","position":3,"name":"How to use","item":"https://profitpilot.ukwebtools.com/help.html"}
+    ]
+  }
+  </script>
 </head>
+
 <body>
   <div class="wrap">
 
-    <!-- CONSISTENT NAV -->
-    <div class="nav">
-      <div class="left">
-        <a class="btn" href="https://ukwebtools.com/">← Ukwebtools</a>
+    <!-- NAV -->
+    <div class="nav" role="navigation" aria-label="Primary">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">UK</div>
+        <div>
+          <div><b>ProfitPilot</b></div>
+          <div class="sub">Help & instructions</div>
+        </div>
+      </div>
+
+      <div class="right">
+        <a class="btn ghost" href="https://ukwebtools.com/">← Ukwebtools</a>
         <a class="btn" href="index.html">Home</a>
         <a class="btn" href="reviews.html">Reviews</a>
         <a class="btn" href="privacy.html">Privacy</a>
         <a class="btn" href="terms.html">Terms</a>
+        <a class="btn active" href="help.html">How to use</a>
+        <span class="chip" id="userChip">—</span>
+        <a class="btn primary" id="openBtn" href="login.html">Start free trial</a>
+        <a class="btn" id="logoutBtn" href="#" style="display:none">Log out</a>
       </div>
-      <div class="right">
+    </div>
+
+    <div class="crumbs" aria-label="Breadcrumb">
+      <a href="https://ukwebtools.com/">Ukwebtools</a>
+      <span class="sep">›</span>
+      <a href="index.html">ProfitPilot</a>
+      <span class="sep">›</span>
+      <span>How to use</span>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+      <h1>How to use ProfitPilot</h1>
+      <div class="lead">
+        ProfitPilot is a decision tool: it helps you estimate profit/margin, reverse-calculate a required price,
+        and run bulk checks quickly — based on <b>your own inputs</b>.
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
         <a class="btn primary" href="app.html">Open app</a>
-        <a class="btn" href="login.html">Log in</a>
+        <a class="btn" href="login.html">Log in / Sign up</a>
       </div>
     </div>
 
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:flex-end">
-        <div>
-          <h1>How to use ProfitPilot</h1>
-          <p class="lead">
-            This guide shows you exactly how to get accurate results (and avoid common mistakes).
-          </p>
+    <!-- SECTION 1 -->
+    <div class="grid">
+      <div class="card">
+        <div class="kicker">Step 1</div>
+        <div class="title">Choose currency + optional FX</div>
+        <div class="small">
+          In the app, choose a display currency. If you sell in one currency but buy in another,
+          enter an exchange rate manually (no live rates).
         </div>
-        <span class="pill">Estimates only • Not advice</span>
-      </div>
-
-      <h2>Before you start (important)</h2>
-      <ul>
-        <li>Use realistic numbers. Most “wrong results” come from unrealistic input assumptions.</li>
-        <li>If you’re unsure about a fee %, use a preset as a starting point, then adjust.</li>
-        <li>Always include hidden costs: packaging, labels, returns allowance, ad spend if you use it.</li>
-      </ul>
-
-      <h2>1) Profit Calculator (core)</h2>
-      <div class="k">
-        <div class="mini">
-          <b>Step-by-step</b>
-          <ul>
-            <li>Choose a <b>platform preset</b> (or Manual).</li>
-            <li>Enter <b>Selling price</b> and <b>Product cost</b>.</li>
-            <li>Add <b>Shipping</b> + <b>Packaging/Misc</b>.</li>
-            <li>Adjust <b>Platform fee %</b> and <b>Fixed fee</b> if needed.</li>
-            <li>Click <b>Calculate</b>.</li>
-          </ul>
-        </div>
-        <div class="mini">
-          <b>What to look at</b>
-          <ul>
-            <li><b>Profit</b> — money left after all costs & fees.</li>
-            <li><b>Margin</b> — profit as % of selling price.</li>
-            <li><b>Fees + ads</b> — your “platform tax”.</li>
-            <li><b>Return sensitivity</b> — expected impact if returns happen.</li>
-          </ul>
+        <div class="callout ok">
+          <div class="small"><b>Tip:</b> If you don’t need conversion, leave FX empty.</div>
         </div>
       </div>
 
-      <h2>2) Reverse Pricing (target profit → selling price)</h2>
-      <p>
-        Use this when you know what profit you want and you want the calculator to tell you the selling price needed.
-      </p>
-      <ul>
-        <li>Enter your <b>product cost</b> and other costs.</li>
-        <li>Set fee % and fixed fee (or use a preset).</li>
-        <li>Enter your <b>target profit</b>.</li>
-        <li>ProfitPilot outputs the <b>minimum selling price</b> required to hit that profit.</li>
-      </ul>
-      <p><b>Tip:</b> If the suggested price is too high vs market, the product may not be viable at your cost.</p>
-
-      <h2>3) Competitor Comparison (market check)</h2>
-      <ul>
-        <li>Add competitor prices you see in the market.</li>
-        <li>ProfitPilot shows a safe range and highlights when your required price is above market.</li>
-        <li>This prevents “listing something that can’t profit” before you waste time.</li>
-      </ul>
-
-      <h2>4) Bulk Mode (table analysis)</h2>
-      <ul>
-        <li>Use bulk when you’re checking multiple products fast.</li>
-        <li>Fill rows with: price, cost, shipping, fees.</li>
-        <li>Export results to CSV to keep records and compare suppliers.</li>
-      </ul>
-
-      <h2>Export & Share</h2>
-      <ul>
-        <li><b>Export</b> downloads your results (useful for bookkeeping or supplier comparisons).</li>
-        <li><b>Share</b> creates a shareable summary (useful for partner decisions).</li>
-      </ul>
-
-      <h2>Trial vs PRO</h2>
-      <ul>
-        <li><b>Trial</b> lets you test the tool (some advanced actions limited).</li>
-        <li><b>PRO</b> is one-time unlock: unlimited reverse, competitor checks, bulk, and exports.</li>
-      </ul>
-
-      <h2>Common mistakes (and quick fixes)</h2>
-      <ul>
-        <li><b>Profit looks too high:</b> you forgot fees, ads, or packaging.</li>
-        <li><b>Profit looks negative:</b> your selling price is too low OR fees are too high OR cost is too high.</li>
-        <li><b>Numbers seem weird:</b> ensure you didn’t type commas incorrectly (e.g. 1,000.50 is ok).</li>
-      </ul>
-
-      <h2>Need help?</h2>
-      <p>Email: <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a></p>
-
-      <footer>
-        © <span id="yr"></span> Ukwebtools • ProfitPilot<br/>
-        Independent tool • Estimates only • Not financial, legal, or tax advice.
-      </footer>
+      <div class="card">
+        <div class="kicker">Step 2</div>
+        <div class="title">Pick a preset or manual</div>
+        <div class="small">
+          Presets are examples. You can always override values manually.
+          The output is only as accurate as the fee/return assumptions you enter.
+        </div>
+        <div class="callout warn">
+          <div class="small"><b>Important:</b> Presets are not “official fees”. They’re reference examples.</div>
+        </div>
+      </div>
     </div>
 
+    <!-- SECTION 2 -->
+    <div class="grid">
+      <div class="card">
+        <div class="kicker">Mode</div>
+        <div class="title">Profit mode (default)</div>
+        <div class="small">
+          Fill in:
+          <ul>
+            <li><b>Selling price</b></li>
+            <li><b>Product cost</b> + shipping + packaging/misc</li>
+            <li><b>Fee %</b>, fixed fee, ads %, return rate %</li>
+          </ul>
+          Then press <code>Calculate</code>.
+        </div>
+        <div class="callout ok">
+          <div class="small"><b>Read the KPIs:</b> Profit + margin are your key decision numbers. Fees/ads shows the bleed.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="kicker">Mode</div>
+        <div class="title">Reverse mode (target profit → required price)</div>
+        <div class="small">
+          Use this when you know the profit you want per order.
+          Enter a <b>Target profit</b> and ProfitPilot estimates the selling price required to hit it.
+        </div>
+        <div class="callout warn">
+          <div class="small">
+            <b>Trial limitation:</b> Reverse mode is limited during trial (so users taste it).
+            PRO unlock gives unlimited reverse calculations.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3 -->
+    <div class="grid">
+      <div class="card">
+        <div class="kicker">Mode</div>
+        <div class="title">Bulk mode (table)</div>
+        <div class="small">
+          Bulk mode is for quickly checking many product ideas.
+          You can:
+          <ul>
+            <li>Add rows and type values into the table</li>
+            <li>Paste rows (Sell, Cost, Ship, Misc) then import</li>
+            <li>Apply current fees to all rows</li>
+            <li>Run bulk to compute profit/margin per row</li>
+            <li>Export bulk CSV</li>
+          </ul>
+        </div>
+        <div class="callout ok">
+          <div class="small"><b>Best practice:</b> Use Bulk to shortlist winners, then open Profit mode for deeper analysis.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="kicker">Feature</div>
+        <div class="title">Insights (PRO)</div>
+        <div class="small">
+          Insights are decision signals to reduce bad listings:
+          <ul>
+            <li>Break-even price</li>
+            <li>Price to hit target margin</li>
+            <li>Max ads % you can afford before loss</li>
+            <li>Risk hints based on margin sensitivity</li>
+          </ul>
+        </div>
+        <div class="callout warn">
+          <div class="small"><b>Note:</b> These are not guarantees — they’re estimates from your inputs.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4 -->
+    <div class="grid">
+      <div class="card">
+        <div class="kicker">Feature</div>
+        <div class="title">Export & sharing</div>
+        <div class="small">
+          Export helps you keep records or share a calculation:
+          <ul>
+            <li>CSV export (useful for analysis)</li>
+            <li>PDF export (print-friendly; PRO)</li>
+            <li>Share link (PRO)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="kicker">Reviews</div>
+        <div class="title">Leave feedback (public)</div>
+        <div class="small">
+          Reviews are visible publicly on <a href="reviews.html">Reviews</a>.
+          To submit or edit your review, log in and use the review box inside the app.
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+          <a class="btn" href="reviews.html">See reviews</a>
+          <a class="btn primary" href="app.html">Open app</a>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="hr"></div>
+      <div><b>Independent tool:</b> ProfitPilot is not affiliated with or endorsed by any marketplace, platform, or payment provider.</div>
+      <div><b>Estimates only:</b> outputs depend on your inputs and assumptions; no profit guarantees. Not financial/legal/tax advice.</div>
+      <div style="margin-top:6px">© <span id="yr"></span> Ukwebtools • ProfitPilot</div>
+    </footer>
   </div>
 
-  <script>
-    document.getElementById("yr").textContent = new Date().getFullYear();
-  </script>
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+  const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
+  const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  document.getElementById("yr").textContent = new Date().getFullYear();
+
+  const userChip = document.getElementById("userChip");
+  const openBtn = document.getElementById("openBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  async function refreshAuthUI(){
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user?.email){
+      userChip.style.display = "inline-flex";
+      userChip.textContent = session.user.email;
+      openBtn.textContent = "Open app";
+      openBtn.href = "app.html";
+      logoutBtn.style.display = "inline-flex";
+    } else {
+      userChip.style.display = "none";
+      openBtn.textContent = "Start free trial";
+      openBtn.href = "login.html";
+      logoutBtn.style.display = "none";
+    }
+  }
+  logoutBtn.addEventListener("click", async (e)=>{
+    e.preventDefault();
+    await supabase.auth.signOut();
+    location.href = "help.html";
+  });
+
+  await refreshAuthUI();
+  supabase.auth.onAuthStateChange(()=>refreshAuthUI());
+</script>
 </body>
 </html>
