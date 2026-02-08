@@ -22,10 +22,9 @@
       --card:rgba(255,255,255,.92); --line:rgba(16,24,40,.10);
       --accent:#0ea5a4; --accent2:#4f46e5;
       --shadow:0 10px 30px rgba(16,24,40,.08);
-      --shadow2:0 16px 44px rgba(16,24,40,.10);
+      --shadow2:0 18px 54px rgba(16,24,40,.10);
       --radius:18px;
     }
-
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
     body{
@@ -37,15 +36,9 @@
         radial-gradient(900px 520px at 80% 0%, rgba(79,70,229,.10), transparent 55%),
         linear-gradient(180deg, var(--bg2), var(--bg));
     }
-
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
-
-    :focus-visible{
-      outline:3px solid rgba(79,70,229,.55);
-      outline-offset:3px;
-      border-radius:10px;
-    }
+    :focus-visible{outline:3px solid rgba(79,70,229,.55);outline-offset:3px;border-radius:10px}
 
     .skip{
       position:absolute;left:-9999px;top:10px;
@@ -58,17 +51,18 @@
 
     .wrap{max-width:1150px;margin:18px auto;padding:0 14px}
 
-    /* NAV */
-    .topbar{
+    /* HEADER NAV (clean + minimal) */
+    header.sitebar{
+      position:sticky; top:10px; z-index:50;
       background:rgba(255,255,255,.78);
       border:1px solid var(--line);
       border-radius:18px;
       padding:12px;
       box-shadow:var(--shadow);
       backdrop-filter: blur(10px);
-      position:sticky; top:10px; z-index:50;
     }
     .navrow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+    .leftgroup{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
     .brand{display:flex;align-items:center;gap:10px;min-width:220px}
     .logo{
       width:40px;height:40px;border-radius:14px;
@@ -81,9 +75,7 @@
     .brandtitle{font-weight:1000; line-height:1.05}
     .brandsub{font-size:12px;color:var(--muted);font-weight:700;margin-top:3px}
 
-    .navlinks{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center;flex:1}
-    .navactions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:flex-end}
-
+    nav.primarylinks{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .btn{
       padding:10px 14px;border-radius:999px;border:1px solid var(--line);
       background:rgba(255,255,255,.92);color:var(--txt);
@@ -92,6 +84,7 @@
       display:inline-flex;gap:8px;align-items:center;white-space:nowrap;
       transition:transform .08s ease;
       cursor:pointer;
+      user-select:none;
     }
     .btn:hover{transform:translateY(-1px);text-decoration:none}
     .btn:active{transform:translateY(0)}
@@ -105,15 +98,17 @@
       border-color:rgba(14,165,164,.30);
       background:rgba(14,165,164,.08);
     }
+
+    .actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .chip{
       padding:10px 14px;border-radius:999px;border:1px solid var(--line);
       background:rgba(255,255,255,.75);color:rgba(16,24,40,.70);
-      font-weight:900;display:none;max-width:260px;
+      font-weight:900;display:none;max-width:280px;
       overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
     }
 
     /* HERO */
-    .hero{
+    main.hero{
       margin-top:14px;
       background:linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.70));
       border:1px solid var(--line);
@@ -123,14 +118,13 @@
       position:relative;
       overflow:hidden;
     }
-    .hero::after{
+    main.hero::after{
       content:"";position:absolute;inset:-60px -80px auto auto;width:320px;height:320px;border-radius:999px;
       background:radial-gradient(circle at 30% 30%, rgba(14,165,164,.18), transparent 60%),
                  radial-gradient(circle at 70% 70%, rgba(79,70,229,.16), transparent 60%);
       filter:blur(2px);
       pointer-events:none;
     }
-
     h1{margin:0;font-size:32px;letter-spacing:-.6px;line-height:1.12}
     .lead{
       margin:10px 0 0;
@@ -139,10 +133,8 @@
       font-weight:650;
       max-width:960px
     }
-
     .heroActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
     .heroFine{margin-top:10px;color:rgba(16,24,40,.62);font-size:12.7px;line-height:1.7}
-
     .pillrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
     .pill{
       display:inline-flex;gap:8px;align-items:center;
@@ -201,22 +193,50 @@
     }
     .stars{font-weight:1000;letter-spacing:.8px}
 
-    footer{
-      margin:16px 2px 0;
+    /* FOOTER (all secondary links go here) */
+    footer.sitefooter{
+      margin:16px 0 18px;
+      padding:16px 14px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:rgba(255,255,255,.78);
+      box-shadow:var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .footTop{
+      display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:flex-start;
+    }
+    .footBrand b{font-weight:1000}
+    .footBrand .mut{color:rgba(16,24,40,.62);font-size:12.5px;line-height:1.7;margin-top:6px;max-width:720px}
+    .footLinks{
+      display:grid;grid-template-columns:repeat(2, minmax(160px, 1fr));
+      gap:10px 18px;
+    }
+    @media(max-width:700px){.footLinks{grid-template-columns:1fr}}
+    .footLinks a{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 10px;border-radius:12px;
+      border:1px solid rgba(16,24,40,.08);
+      background:rgba(255,255,255,.70);
+      color:rgba(16,24,40,.78);
+      font-weight:900;
+    }
+    .footLinks a:hover{text-decoration:none;transform:translateY(-1px)}
+    .footBottom{
+      margin-top:12px;
+      padding-top:12px;
+      border-top:1px solid var(--line);
       color:rgba(16,24,40,.62);
       font-size:12.5px;
       line-height:1.75;
-      padding:6px 0 18px;
+      display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;
     }
-    .footrow{
-      display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center
-    }
-    .footlinks{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
 
     @media (prefers-reduced-motion: reduce){
       html{scroll-behavior:auto}
       .btn{transition:none}
       .btn:hover{transform:none}
+      .footLinks a:hover{transform:none}
     }
   </style>
 </head>
@@ -226,26 +246,27 @@
 
   <div class="wrap">
 
-    <!-- NAV -->
-    <header class="topbar" role="navigation" aria-label="Primary">
+    <!-- CLEAN HEADER NAV (main nav only) -->
+    <header class="sitebar" role="navigation" aria-label="Primary">
       <div class="navrow">
-        <div class="brand">
-          <div class="logo" aria-hidden="true">PP</div>
-          <div>
-            <div class="brandtitle">ProfitPilot</div>
-            <div class="brandsub">Independent tool by Ukwebtools</div>
+        <div class="leftgroup">
+          <div class="brand" aria-label="ProfitPilot">
+            <div class="logo" aria-hidden="true">PP</div>
+            <div>
+              <div class="brandtitle">ProfitPilot</div>
+              <div class="brandsub">Independent tool by Ukwebtools</div>
+            </div>
           </div>
+
+          <nav class="primarylinks" aria-label="Main">
+            <a class="btn ghost" href="https://ukwebtools.com/" rel="nofollow">← Ukwebtools</a>
+            <a class="btn active" href="index.html" aria-current="page">Home</a>
+            <a class="btn" href="pricing.html">Pricing</a>
+            <a class="btn" href="reviews.html">Reviews</a>
+          </nav>
         </div>
 
-        <div class="navlinks" aria-label="Site">
-          <a class="btn ghost" href="https://ukwebtools.com/" rel="nofollow">← Ukwebtools</a>
-          <a class="btn active" href="index.html" aria-current="page">Home</a>
-          <a class="btn" href="pricing.html">Pricing</a>
-          <a class="btn" href="reviews.html">Reviews</a>
-          <a class="btn" href="help.html informing you now? wait, check: not allowed"> </a>
-        </div>
-
-        <div class="navactions" aria-label="Account">
+        <div class="actions" aria-label="Account">
           <span class="chip" id="userChip">—</span>
           <a class="btn primary" id="primaryCta" href="login.html">Start free trial</a>
           <a class="btn" id="logoutBtn" href="#" style="display:none">Log out</a>
@@ -405,14 +426,35 @@
       </aside>
     </div>
 
-    <footer>
-      <div class="divider"></div>
-      <div class="footrow">
-        <div>© <span id="yr"></span> Ukwebtools • ProfitPilot</div>
-        <div class="footlinks">
+    <!-- FOOTER (everything secondary goes here) -->
+    <footer class="sitefooter" role="contentinfo">
+      <div class="footTop">
+        <div class="footBrand">
+          <b>ProfitPilot</b>
+          <div class="mut">
+            Independent tool by Ukwebtools. Estimates only — outputs depend on your inputs; no profit guarantees.
+            Not financial/legal/tax advice.
+          </div>
+        </div>
+
+        <div class="footLinks" aria-label="Footer links">
+          <a href="app.html">Open app</a>
+          <a href="help.html">How to use</a>
+          <a href="faq.html">FAQ</a>
+          <a href="pricing.html">Pricing</a>
+          <a href="reviews.html">Reviews</a>
           <a href="privacy.html">Privacy</a>
           <a href="terms.html">Terms</a>
           <a href="refunds.html">Refund Policy</a>
+          <a href="login.html">Log in</a>
+          <a href="signup.html">Sign up</a>
+        </div>
+      </div>
+
+      <div class="footBottom">
+        <div>© <span id="yr"></span> Ukwebtools • ProfitPilot</div>
+        <div>
+          Support: <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a>
         </div>
       </div>
     </footer>
@@ -509,7 +551,7 @@
 
     const { count, error: countErr } = await supabase
       .from("reviews")
-      .select("*", { count: "exact", head: true });
+      .select("id", { count: "exact", head: true });
 
     const { data, error } = await supabase
       .from("reviews")
