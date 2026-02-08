@@ -4,429 +4,391 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>ProfitPilot — Listing Profit & Pricing Calculator</title>
-  <meta name="description" content="ProfitPilot helps sellers estimate profit, reverse-price for target profit, run bulk checks, and make safer pricing decisions. Start a free trial. One-time PRO unlock.">
+  <meta name="description" content="ProfitPilot helps you estimate profit & margin, reverse-calculate target selling price, and run bulk checks. 5-day free trial. One-time PRO unlock.">
   <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
-  <meta name="robots" content="index,follow">
-  <meta property="og:title" content="ProfitPilot — Listing Profit & Pricing Calculator">
-  <meta property="og:description" content="Estimate profit, reverse-price for target profit, and run bulk checks. Free trial + one-time PRO unlock.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://profitpilot.ukwebtools.com/">
 
   <style>
     :root{
-      --bg:#f6f8fb; --bg2:#eef2ff;
-      --txt:#0b1220; --muted:#5b6474;
+      --bg:#f6f8fb; --bg2:#eef2ff; --txt:#0b1220; --muted:#5b6474;
       --card:rgba(255,255,255,.92); --line:rgba(16,24,40,.10);
       --accent:#0ea5a4; --accent2:#4f46e5;
-      --shadow:0 12px 34px rgba(16,24,40,.10);
-      --soft:rgba(14,165,164,.10);
-      --soft2:rgba(79,70,229,.10);
+      --shadow:0 10px 30px rgba(16,24,40,.08);
+      --shadow2:0 16px 40px rgba(16,24,40,.10);
     }
     *{box-sizing:border-box}
     body{
       margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--txt);
       background:
-        radial-gradient(900px 520px at 20% 0%, rgba(14,165,164,.16), transparent 55%),
-        radial-gradient(900px 520px at 80% 0%, rgba(79,70,229,.12), transparent 55%),
+        radial-gradient(900px 500px at 20% 0%, rgba(14,165,164,.14), transparent 55%),
+        radial-gradient(900px 500px at 80% 0%, rgba(79,70,229,.10), transparent 55%),
         linear-gradient(180deg, var(--bg2), var(--bg));
     }
     a{color:var(--accent);text-decoration:none}
-    a:hover{text-decoration:underline}
-    .wrap{max-width:1120px;margin:0 auto;padding:22px 16px 70px}
-    @media (min-width:900px){.wrap{padding:26px 22px 84px}}
+    .wrap{max-width:1150px;margin:18px auto;padding:0 14px}
 
-    /* --- MAIN PAGE NAV (kept as-is) --- */
-    .nav{
-      display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
-      position:sticky;top:0;z-index:60;padding:14px 0;
-      backdrop-filter:blur(10px);
+    /* NAV */
+    .topbar{
+      background:rgba(255,255,255,.78);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:12px;
+      box-shadow:var(--shadow);
+      backdrop-filter: blur(10px);
+      position:sticky; top:10px; z-index:50;
     }
-    .nav::before{
-      content:"";position:absolute;inset:0;
-      background:rgba(246,248,251,.72);
-      border-bottom:1px solid rgba(16,24,40,.08);
-      z-index:-1;border-radius:18px;
-    }
-    .brand{display:flex;gap:12px;align-items:center;padding:10px 12px}
+    .navrow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:10px}
     .logo{
-      width:42px;height:42px;border-radius:16px;
-      background:linear-gradient(135deg, rgba(14,165,164,.22), rgba(79,70,229,.18));
-      border:1px solid rgba(16,24,40,.10);
+      width:40px;height:40px;border-radius:14px;
+      background:linear-gradient(135deg, rgba(14,165,164,.20), rgba(79,70,229,.16));
+      border:1px solid var(--line);
       display:flex;align-items:center;justify-content:center;
-      font-weight:1000;letter-spacing:-.02em;
-      box-shadow:0 10px 24px rgba(16,24,40,.08);
-      user-select:none;
+      font-weight:1000; letter-spacing:.4px;
     }
-    .brand b{font-weight:1000;letter-spacing:-.02em}
-    .sub{font-size:12px;color:var(--muted);margin-top:2px}
-    .right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .brandtitle{font-weight:1000; line-height:1.1}
+    .brandsub{font-size:12px;color:var(--muted);font-weight:700;margin-top:2px}
+    .nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .btn{
-      padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
-      background:rgba(255,255,255,.86);color:var(--txt);
-      display:inline-flex;gap:8px;align-items:center;cursor:pointer;
+      padding:10px 14px;border-radius:999px;border:1px solid var(--line);
+      background:rgba(255,255,255,.92);color:var(--txt);
+      font-weight:900;
       box-shadow:0 8px 18px rgba(16,24,40,.06);
-      white-space:nowrap;font-weight:900;
+      display:inline-flex;gap:8px;align-items:center;white-space:nowrap;
+      transition:transform .08s ease;
+      cursor:pointer;
     }
     .btn:hover{transform:translateY(-1px)}
-    .btn:active{transform:translateY(0)}
-    .btn.ghost{background:transparent;box-shadow:none}
     .btn.primary{
       border:none;color:#fff;
-      background:linear-gradient(135deg, var(--accent), var(--accent2));
-      box-shadow:0 18px 34px rgba(79,70,229,.18);
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      box-shadow:0 16px 34px rgba(79,70,229,.16);
     }
-    .btn.active{
-      border-color:rgba(14,165,164,.35);
-      background:rgba(14,165,164,.10);
+    .btn.ghost{background:transparent;box-shadow:none}
+    .active{
+      border-color:rgba(14,165,164,.30);
+      background:rgba(14,165,164,.08);
     }
     .chip{
-      padding:9px 12px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
-      background:rgba(255,255,255,.76);color:rgba(16,24,40,.72);
-      font-size:12px;font-weight:900;display:none;
+      padding:10px 14px;border-radius:999px;border:1px solid var(--line);
+      background:rgba(255,255,255,.75);color:rgba(16,24,40,.70);
+      font-weight:900;display:none;max-width:280px;overflow:hidden;text-overflow:ellipsis;
     }
-
     .crumbs{
-      margin:10px 2px 0;
-      font-size:12.5px;color:rgba(16,24,40,.62);
+      margin-top:10px;font-size:12.5px;color:rgba(16,24,40,.62);
       display:flex;gap:6px;flex-wrap:wrap;align-items:center;
     }
     .crumbs a{color:rgba(14,165,164,.95);font-weight:900}
     .sep{opacity:.55}
 
+    /* HERO */
     .hero{
       margin-top:14px;
-      background:linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.82));
-      border:1px solid rgba(16,24,40,.10);
-      border-radius:24px;
-      box-shadow:var(--shadow);
-      padding:20px;
-      overflow:hidden;
-      position:relative;
+      background:linear-gradient(180deg, rgba(14,165,164,.10), rgba(255,255,255,.70));
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:18px;
+      box-shadow:var(--shadow2);
     }
-    .hero::after{
-      content:"";position:absolute;inset:-40px -60px auto auto;width:260px;height:260px;border-radius:999px;
-      background:radial-gradient(circle at 30% 30%, rgba(14,165,164,.18), transparent 60%),
-                 radial-gradient(circle at 70% 70%, rgba(79,70,229,.18), transparent 60%);
-      filter:blur(2px);
-    }
-    .hgrid{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;align-items:stretch}
-    @media(max-width:980px){.hgrid{grid-template-columns:1fr}}
-    h1{
-      margin:0;font-size:30px;line-height:1.15;
-      letter-spacing:-.03em;font-weight:1000;
-    }
-    .lead{margin-top:10px;color:rgba(16,24,40,.70);line-height:1.7;font-size:14.5px}
+    h1{margin:0;font-size:30px;letter-spacing:-.3px}
+    .lead{margin:8px 0 0;color:var(--muted);line-height:1.7;font-weight:650;max-width:900px}
     .cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
-    .pillrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .pillrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
     .pill{
-      padding:8px 10px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
-      background:rgba(255,255,255,.76);font-size:12px;color:rgba(16,24,40,.68);font-weight:900;
-      display:inline-flex;gap:8px;align-items:center
+      display:inline-flex;gap:8px;align-items:center;
+      padding:8px 10px;border-radius:999px;border:1px solid var(--line);
+      background:rgba(255,255,255,.70);
+      color:var(--muted);font-size:12px;font-weight:800;
+      white-space:nowrap;
     }
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+
+    /* GRID */
+    .grid{display:grid;grid-template-columns:1.25fr .75fr;gap:14px;margin-top:14px}
     @media(max-width:980px){.grid{grid-template-columns:1fr}}
     .card{
-      background:rgba(255,255,255,.90);
-      border:1px solid rgba(16,24,40,.10);
-      border-radius:22px;
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px;
       box-shadow:var(--shadow);
-      padding:18px;
     }
-    .kicker{font-size:12px;color:rgba(16,24,40,.56);font-weight:1000;text-transform:uppercase;letter-spacing:.12em}
-    .title{margin:8px 0 8px;font-weight:1000;letter-spacing:-.02em;font-size:16px}
-    .small{font-size:12.8px;color:rgba(16,24,40,.68);line-height:1.75}
-    ul{margin:10px 0 0;padding-left:18px;color:rgba(16,24,40,.68);line-height:1.75;font-size:13px}
-    li{margin:6px 0}
-    .split{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
-    @media(max-width:680px){.split{grid-template-columns:1fr}}
-    .tag{
-      padding:7px 10px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
-      background:rgba(255,255,255,.82);font-size:12px;color:rgba(16,24,40,.62);font-weight:900;
-      display:inline-flex;gap:8px;align-items:center
+    .title{font-weight:1000;margin:0 0 8px}
+    .small{font-size:12px;color:var(--muted);line-height:1.7}
+    .list{margin:10px 0 0;padding-left:18px;color:var(--muted);line-height:1.8;font-size:12.5px}
+    .kgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+    @media(max-width:560px){.kgrid{grid-template-columns:1fr}}
+    .k{
+      border:1px solid var(--line);background:rgba(255,255,255,.72);
+      border-radius:16px;padding:12px;
     }
-    .price{
-      display:flex;align-items:flex-end;justify-content:space-between;gap:10px;flex-wrap:wrap;
-      margin-top:10px;padding:12px;border-radius:18px;border:1px solid rgba(16,24,40,.10);
-      background:linear-gradient(180deg, rgba(14,165,164,.10), rgba(255,255,255,.86));
-    }
-    .price b{font-size:18px;font-weight:1000}
-    .muted{color:rgba(16,24,40,.62);font-size:12.5px;line-height:1.6}
-    .reviews{display:grid;gap:12px;margin-top:12px}
+    .k .h{font-size:12px;color:var(--muted);font-weight:900}
+    .k .v{margin-top:6px;font-size:18px;font-weight:1000}
+
+    /* REVIEWS */
+    .reviews{display:grid;gap:10px;margin-top:10px}
     .review{
-      border:1px solid rgba(16,24,40,.10);
-      background:rgba(255,255,255,.84);
-      border-radius:18px;padding:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.78);
+      border-radius:16px;
+      padding:12px;
     }
-    .meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
-    .stars{font-weight:1000}
+    .meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+    .tag{
+      padding:6px 10px;border-radius:999px;border:1px solid var(--line);
+      background:rgba(255,255,255,.90);color:var(--muted);font-size:12px;font-weight:900;
+    }
+    .stars{font-weight:1000;letter-spacing:.8px}
+    .divider{height:1px;background:var(--line);margin:12px 0}
+
     footer{
-      margin-top:18px;
-      color:rgba(16,24,40,.58);
-      font-size:12.5px;line-height:1.7;
+      margin:14px 2px 0;color:var(--muted);font-size:12px;line-height:1.7;
+      padding-bottom:18px;
     }
-    .hr{height:1px;background:rgba(16,24,40,.10);margin:14px 0}
   </style>
-
-  <!-- Breadcrumb schema -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"BreadcrumbList",
-    "itemListElement":[
-      {"@type":"ListItem","position":1,"name":"Ukwebtools","item":"https://ukwebtools.com/"},
-      {"@type":"ListItem","position":2,"name":"ProfitPilot","item":"https://profitpilot.ukwebtools.com/"}
-    ]
-  }
-  </script>
-
-  <!-- FAQ schema -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"FAQPage",
-    "mainEntity":[
-      {
-        "@type":"Question",
-        "name":"Is ProfitPilot affiliated with eBay, Etsy, Shopify, or any marketplace?",
-        "acceptedAnswer":{"@type":"Answer","text":"No. ProfitPilot is an independent tool. Platform names may be used for reference only and do not imply endorsement or affiliation."}
-      },
-      {
-        "@type":"Question",
-        "name":"Is PRO a subscription?",
-        "acceptedAnswer":{"@type":"Answer","text":"No. PRO is a one-time purchase unlock."}
-      },
-      {
-        "@type":"Question",
-        "name":"Are the results guaranteed?",
-        "acceptedAnswer":{"@type":"Answer","text":"No. Outputs are estimates based on the values you enter. They are not financial, legal, or tax advice."}
-      }
-    ]
-  }
-  </script>
 </head>
 
 <body>
   <div class="wrap">
 
     <!-- NAV -->
-    <div class="nav" role="navigation" aria-label="Primary">
-      <div class="brand">
-        <div class="logo" aria-hidden="true">UK</div>
-        <div>
-          <div><b>ProfitPilot</b></div>
-          <div class="sub">Profit & pricing decisions — without guesswork</div>
+    <div class="topbar">
+      <div class="navrow">
+        <div class="brand">
+          <div class="logo">PP</div>
+          <div>
+            <div class="brandtitle">ProfitPilot</div>
+            <div class="brandsub">by Ukwebtools • independent tool</div>
+          </div>
+        </div>
+
+        <div class="nav">
+          <a class="btn ghost" href="https://ukwebtools.com/">← Ukwebtools</a>
+          <a class="btn active" href="index.html">Home</a>
+          <a class="btn" href="pricing.html">Pricing</a>
+          <a class="btn" href="reviews.html">Reviews</a>
+          <a class="btn" href="help.html">How to use</a>
+          <a class="btn" href="privacy.html">Privacy</a>
+          <a class="btn" href="terms.html">Terms</a>
+
+          <span class="chip" id="userChip">Signed in</span>
+          <a class="btn primary" id="authBtn" href="login.html">Start free trial</a>
+          <a class="btn" id="logoutBtn" href="#" style="display:none">Log out</a>
         </div>
       </div>
 
-      <div class="right">
-        <a class="btn ghost" href="https://ukwebtools.com/">← Ukwebtools</a>
-        <a class="btn active" href="index.html">Home</a>
-        <a class="btn" href="pricing.html">Pricing</a>
-        <a class="btn" href="reviews.html">Reviews</a>
-        <a class="btn" href="help.html">How to use</a>
-        <a class="btn" href="privacy.html">Privacy</a>
-        <a class="btn" href="terms.html">Terms</a>
-        <span class="chip" id="userChip">—</span>
-        <a class="btn primary" id="openBtn" href="login.html">Start free trial</a>
-        <a class="btn" id="logoutBtn" href="#" style="display:none">Log out</a>
+      <!-- Breadcrumbs -->
+      <div class="crumbs" aria-label="Breadcrumb">
+        <a href="https://ukwebtools.com/">Ukwebtools</a>
+        <span class="sep">›</span>
+        <span>ProfitPilot</span>
       </div>
-    </div>
 
-    <div class="crumbs" aria-label="Breadcrumb">
-      <a href="https://ukwebtools.com/">Ukwebtools</a>
-      <span class="sep">›</span>
-      <span>ProfitPilot</span>
+      <!-- SEO JSON-LD breadcrumbs -->
+      <script type="application/ld+json">
+      {
+        "@context":"https://schema.org",
+        "@type":"BreadcrumbList",
+        "itemListElement":[
+          {"@type":"ListItem","position":1,"name":"Ukwebtools","item":"https://ukwebtools.com/"},
+          {"@type":"ListItem","position":2,"name":"ProfitPilot","item":"https://profitpilot.ukwebtools.com/index.html"}
+        ]
+      }
+      </script>
     </div>
 
     <!-- HERO -->
     <div class="hero">
-      <div class="hgrid">
-        <div>
-          <h1>Price smarter. Protect your margin. Scale with confidence.</h1>
-          <div class="lead">
-            ProfitPilot helps you estimate profit and margin, reverse-calculate the selling price you need for a target profit,
-            and run bulk checks across multiple products — all from your own inputs.
+      <h1>Price smarter. Protect your margin. Scale with confidence.</h1>
+      <p class="lead">
+        ProfitPilot helps you estimate profit and margin, reverse-calculate the selling price you need for a target profit,
+        and run bulk checks across multiple products — all from your own inputs.
+      </p>
+
+      <div class="cta">
+        <a class="btn primary" href="login.html" id="startBtn">Start free trial</a>
+        <a class="btn" href="pricing.html">View pricing</a>
+        <a class="btn" href="app.html" id="openAppBtn">Open app</a>
+        <a class="btn" href="help.html">How to use</a>
+      </div>
+
+      <div class="pillrow">
+        <span class="pill">5-day trial</span>
+        <span class="pill">One-time PRO unlock</span>
+        <span class="pill">No subscriptions</span>
+        <span class="pill">No scraping • your inputs only</span>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT -->
+      <div class="card">
+        <div class="title">How it works (30 seconds)</div>
+        <ul class="list">
+          <li>Choose a currency + optional FX (manual rate).</li>
+          <li>Enter price, costs, fees, ads, and return assumptions.</li>
+          <li>See profit, margin, break-even, and simple risk hints.</li>
+          <li>Use <b>Reverse</b> for target profit → required selling price.</li>
+          <li>Use <b>Bulk</b> table to check multiple listings fast.</li>
+        </ul>
+
+        <div class="divider"></div>
+
+        <div class="title">Why sellers keep it open</div>
+        <div class="kgrid">
+          <div class="k">
+            <div class="h">Not just a fee calculator</div>
+            <div class="v">Decision-focused</div>
+            <div class="small">Break-even, reverse pricing, bulk checks, sensitivity hints.</div>
+          </div>
+          <div class="k">
+            <div class="h">Built for trust</div>
+            <div class="v">Transparent</div>
+            <div class="small">No “guaranteed profit” claims. You control assumptions.</div>
+          </div>
+          <div class="k">
+            <div class="h">Platform-neutral</div>
+            <div class="v">Independent</div>
+            <div class="small">Platform names (if shown) are for reference only. No affiliation claimed.</div>
+          </div>
+          <div class="k">
+            <div class="h">Simple pricing</div>
+            <div class="v">One-time unlock</div>
+            <div class="small">Trial first, then unlock PRO once. No subscriptions.</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="title">Trial vs PRO</div>
+        <div class="kgrid">
+          <div class="k">
+            <div class="h">Trial</div>
+            <div class="v">Try before you buy</div>
+            <ul class="list" style="margin-top:8px">
+              <li>Profit mode: unlimited</li>
+              <li>Reverse: limited “taste test”</li>
+              <li>Bulk: limited rows/runs</li>
+            </ul>
+          </div>
+          <div class="k" style="border-color:rgba(14,165,164,.28);background:rgba(14,165,164,.06)">
+            <div class="h">PRO</div>
+            <div class="v">Unlimited decision tools</div>
+            <ul class="list" style="margin-top:8px">
+              <li>Unlimited Reverse + Bulk</li>
+              <li>Insights (break-even, target margin price, risk hints)</li>
+              <li>Export/share (where enabled)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="small">
+          <b>Disclaimer:</b> Independent tool. Not affiliated with or endorsed by any marketplace, platform, or payment provider.
+          Estimates only: outputs depend on your inputs and assumptions; no profit guarantees. This is not financial, legal, or tax advice.
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div>
+        <div class="card">
+          <div class="title">PRO unlock</div>
+          <div class="small">
+            PRO is a <b>one-time purchase</b> unlock. No subscriptions.
+            (We will switch checkout provider to Paddle; your access stays tied to your account.)
           </div>
 
-          <!-- ✅ UPDATED CTA: added Pricing button + kept clean hierarchy -->
+          <div class="divider"></div>
+
+          <div class="k">
+            <div class="h">Current price</div>
+            <div class="v" id="priceLine">£7.99</div>
+            <div class="small">See full limits and comparison on the Pricing page.</div>
+          </div>
+
+          <div class="cta" style="margin-top:12px">
+            <a class="btn primary" id="buyBtn" href="#" target="_blank" rel="noopener">Buy PRO</a>
+            <a class="btn" href="pricing.html">See pricing & limits</a>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <div class="title">Public feedback</div>
+          <div class="small" id="ratingSummary">Loading…</div>
+
+          <div class="reviews" id="reviews">
+            <div class="small">Loading reviews…</div>
+          </div>
+
+          <div class="divider"></div>
+
           <div class="cta">
-            <a class="btn primary" href="login.html">Start free trial</a>
-            <a class="btn" href="pricing.html">View pricing</a>
-            <a class="btn ghost" href="app.html">Open app</a>
-            <a class="btn ghost" href="help.html">How to use</a>
+            <a class="btn" href="reviews.html">See all reviews</a>
+            <a class="btn" href="app.html">Log in to submit/edit review</a>
           </div>
 
-          <div class="pillrow">
-            <span class="pill">Trial available</span>
-            <span class="pill">One-time PRO unlock</span>
-            <span class="pill">No subscriptions</span>
-          </div>
-        </div>
-
-        <div class="card" style="margin:0">
-          <div class="kicker">In 30 seconds</div>
-          <div class="title">How it works</div>
-          <ul>
-            <li>Choose a currency + optional FX</li>
-            <li>Enter price, costs, fees, returns</li>
-            <li>See profit, margin, break-even & risk hints</li>
-            <li>Use Reverse for target profit</li>
-            <li>Use Bulk table for multiple products</li>
-          </ul>
-
-          <!-- ✅ UPDATED: added “See full pricing & limits” link under price -->
-          <div class="price">
-            <div>
-              <div class="muted">PRO is a one-time purchase unlock.</div>
-              <b id="proPrice">£7.99</b>
-              <div class="small"><a href="pricing.html">See full pricing & limits</a></div>
-            </div>
-            <a class="btn primary" id="buyBtn" href="https://stonevia.gumroad.com/l/goddhg" target="_blank" rel="noopener">Buy PRO</a>
+          <div class="small" style="margin-top:10px">
+            You can <b>view</b> reviews without logging in. To submit or edit a review, log in from the app.
           </div>
         </div>
       </div>
     </div>
 
-    <!-- VALUE -->
-    <div class="grid">
-      <div class="card">
-        <div class="kicker">Why sellers keep it open</div>
-        <div class="title">Not just a fee calculator</div>
-        <div class="small">
-          Most calculators stop at fees. ProfitPilot focuses on decision-making:
-          break-even, reverse pricing, bulk checks, and sensitivity signals — based on your inputs.
-        </div>
-        <div class="split">
-          <span class="tag">Reverse pricing</span>
-          <span class="tag">Bulk table</span>
-          <span class="tag">Break-even</span>
-          <span class="tag">Risk hints</span>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="kicker">Designed for trust</div>
-        <div class="title">Clean, independent, and transparent</div>
-        <div class="small">
-          We don’t use platform logos. Names (if shown) are for reference only.
-          No scraping. No “guaranteed profit” claims. You control the assumptions.
-        </div>
-        <ul>
-          <li>Inputs and outputs are clear (no hidden math)</li>
-          <li>Estimates only — results depend on your data</li>
-          <li>PRO is one-time unlock (no subscription)</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- TRIAL VS PRO -->
-    <div class="grid">
-      <div class="card">
-        <div class="kicker">Trial</div>
-        <div class="title">Try before you buy</div>
-        <div class="small">
-          Enough to validate the workflow and feel the product value.
-        </div>
-        <ul>
-          <li>Profit mode: unlimited</li>
-          <li>Reverse mode: limited usage (taste test)</li>
-          <li>Bulk mode: limited rows/runs</li>
-          <li>See how presets + manual inputs work</li>
-        </ul>
-        <div class="cta">
-          <a class="btn primary" href="login.html">Start free trial</a>
-          <a class="btn" href="pricing.html">View pricing</a>
-          <a class="btn" href="help.html">How to use</a>
-        </div>
-      </div>
-
-      <div class="card" style="border-color:rgba(14,165,164,.35);background:linear-gradient(180deg, rgba(14,165,164,.08), rgba(255,255,255,.92));">
-        <div class="kicker">PRO</div>
-        <div class="title">Unlock unlimited decision tools</div>
-        <div class="small">
-          PRO is for active sellers who price repeatedly and need fast, confident checks.
-        </div>
-        <ul>
-          <li>Unlimited Reverse + Bulk</li>
-          <li>Insights (break-even, target margin price, risk hints)</li>
-          <li>Export & share features (where enabled)</li>
-          <li>One-time purchase (no subscription)</li>
-        </ul>
-        <div class="price">
-          <div>
-            <div class="muted">One-time unlock.</div>
-            <b id="proPrice2">£7.99</b>
-            <div class="small"><a href="pricing.html">Compare Trial vs PRO</a></div>
-          </div>
-          <a class="btn primary" href="https://stonevia.gumroad.com/l/goddhg" target="_blank" rel="noopener">Buy PRO</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- REVIEWS PREVIEW -->
-    <div class="card" style="margin-top:16px">
-      <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-end">
-        <div>
-          <div class="kicker">Public feedback</div>
-          <div class="title" style="margin-bottom:0">Recent reviews</div>
-          <div class="small" id="ratingSummary">Loading reviews…</div>
-        </div>
-        <a class="btn" href="reviews.html">See all reviews</a>
-      </div>
-
-      <div class="reviews" id="reviews"></div>
-
-      <div class="hr"></div>
-
-      <div class="small">
-        You can view reviews without logging in. To submit a review, log in from the app.
-      </div>
-    </div>
-
-    <!-- FOOTER -->
     <footer>
-      <div class="hr"></div>
-      <div><b>Independent tool:</b> ProfitPilot is not affiliated with or endorsed by any marketplace, platform, or payment provider.</div>
-      <div><b>Estimates only:</b> outputs depend on your inputs and assumptions; no profit guarantees. This is not financial, legal, or tax advice.</div>
-      <div style="margin-top:6px">© <span id="yr"></span> Ukwebtools • ProfitPilot</div>
+      © <span id="yr"></span> Ukwebtools • ProfitPilot
     </footer>
-
   </div>
 
 <script type="module">
   import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-  // ✅ Your Supabase public credentials
+  // ✅ Supabase public credentials (safe for frontend)
   const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
   const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-  const BUY_URL = "https://stonevia.gumroad.com/l/goddhg";
-  document.getElementById("buyBtn").href = BUY_URL;
+  // ✅ Checkout link (swap to Paddle later by changing only this)
+  const CHECKOUT_URL = "https://stonevia.gumroad.com/l/goddhg";
+  document.getElementById("buyBtn").href = CHECKOUT_URL;
 
   document.getElementById("yr").textContent = new Date().getFullYear();
 
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
-
-  // Auth chip (nice touch)
+  // --- Auth UI (fixes wrong Log out showing to logged-out users) ---
   const userChip = document.getElementById("userChip");
-  const openBtn = document.getElementById("openBtn");
+  const authBtn = document.getElementById("authBtn");
   const logoutBtn = document.getElementById("logoutBtn");
+  const startBtn = document.getElementById("startBtn");
+  const openAppBtn = document.getElementById("openAppBtn");
 
   async function refreshAuthUI(){
     const { data: { session } } = await supabase.auth.getSession();
-    if (session?.user?.email){
+    const email = session?.user?.email;
+
+    if (email){
       userChip.style.display = "inline-flex";
-      userChip.textContent = session.user.email;
-      openBtn.textContent = "Open app";
-      openBtn.href = "app.html";
+      userChip.textContent = email;
+
+      authBtn.style.display = "none";
       logoutBtn.style.display = "inline-flex";
+
+      // If signed in, “Start free trial” button becomes “Open app”
+      startBtn.textContent = "Open app";
+      startBtn.href = "app.html";
+      openAppBtn.style.display = "inline-flex";
     } else {
       userChip.style.display = "none";
-      openBtn.textContent = "Start free trial";
-      openBtn.href = "login.html";
+
+      authBtn.style.display = "inline-flex";
+      authBtn.textContent = "Start free trial";
+      authBtn.href = "login.html";
+
       logoutBtn.style.display = "none";
+
+      startBtn.textContent = "Start free trial";
+      startBtn.href = "login.html";
+      openAppBtn.style.display = "inline-flex";
     }
   }
+
   logoutBtn.addEventListener("click", async (e)=>{
     e.preventDefault();
     await supabase.auth.signOut();
@@ -434,38 +396,43 @@
   });
 
   await refreshAuthUI();
-  supabase.auth.onAuthStateChange(()=>refreshAuthUI());
+  supabase.auth.onAuthStateChange(() => refreshAuthUI());
 
-  // Reviews preview (public)
+  // --- Reviews (public, no login required) ---
   function stars(n){
-    const r = Math.max(0, Math.min(5, Math.round(n)));
-    return "★".repeat(r) + "☆".repeat(5-r);
+    n = Math.max(0, Math.min(5, Math.round(n)));
+    return "★".repeat(n) + "☆".repeat(5-n);
   }
 
   async function loadReviews(){
+    const summary = document.getElementById("ratingSummary");
+    const box = document.getElementById("reviews");
+
+    // Count all reviews (public)
+    const { count, error: countErr } = await supabase
+      .from("reviews")
+      .select("*", { count: "exact", head: true });
+
+    // Fetch latest reviews
     const { data, error } = await supabase
       .from("reviews")
       .select("created_at,name,rating,category,message")
-      .order("created_at", { ascending:false })
+      .order("created_at", { ascending: false })
       .limit(6);
 
-    const box = document.getElementById("reviews");
-    const sum = document.getElementById("ratingSummary");
-
-    if (error){
-      sum.textContent = "Reviews unavailable right now.";
-      box.innerHTML = `<div class="small">Try again later.</div>`;
+    if (countErr || error){
+      summary.textContent = "Could not load reviews right now.";
+      box.innerHTML = `<div class="small">If this keeps happening, check Supabase RLS for public read on <b>reviews</b>.</div>`;
       return;
     }
+
+    const total = count || 0;
+    summary.textContent = total ? `${total} public review(s)` : "No reviews yet";
 
     if (!data || data.length === 0){
-      sum.textContent = "No reviews yet.";
-      box.innerHTML = `<div class="small">Be the first to leave feedback inside the app.</div>`;
+      box.innerHTML = `<div class="small">Be the first to leave a review (log in from the app).</div>`;
       return;
     }
-
-    const avg = data.reduce((s,x)=>s + (x.rating||0), 0) / data.length;
-    sum.textContent = `Average rating: ${avg.toFixed(1)} ${stars(avg)}`;
 
     box.innerHTML = "";
     data.forEach(r=>{
@@ -473,10 +440,13 @@
       div.className = "review";
       div.innerHTML = `
         <div class="meta">
-          <div class="stars">${stars(r.rating || 0)} <span class="tag">${(r.category || "General")}</span></div>
-          <div class="muted">${new Date(r.created_at).toLocaleDateString()}</div>
+          <div class="stars">${stars(r.rating)}</div>
+          <span class="tag">${(r.category || "General")}</span>
+          <span class="small">${new Date(r.created_at).toLocaleDateString()}</span>
         </div>
-        <div class="small" style="margin-top:8px"><b>${(r.name || "Anonymous")}</b> — ${r.message || ""}</div>
+        <div class="small" style="margin-top:8px">
+          <b>${(r.name || "Anonymous")}</b> — ${String(r.message || "").replaceAll("<","&lt;").replaceAll(">","&gt;")}
+        </div>
       `;
       box.appendChild(div);
     });
