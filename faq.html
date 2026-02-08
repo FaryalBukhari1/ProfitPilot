@@ -1,447 +1,66 @@
-<!-- PROFITPILOT: UNIVERSAL NAV + BREADCRUMBS (includes Pricing) -->
-<style>
-  .pp-navwrap{max-width:1200px;margin:0 auto;padding:14px 16px;position:relative;z-index:60}
-  .pp-nav{
-    display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
-    background:rgba(255,255,255,.72);border:1px solid rgba(16,24,40,.10);
-    border-radius:18px;padding:12px 12px;backdrop-filter:blur(10px);
-    box-shadow:0 10px 30px rgba(16,24,40,.08);
-  }
-  .pp-left,.pp-right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-  .pp-btn{
-    padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
-    background:rgba(255,255,255,.90);font-weight:900;text-decoration:none;color:#0b1220;
-    box-shadow:0 8px 18px rgba(16,24,40,.06);
-    display:inline-flex;gap:8px;align-items:center;white-space:nowrap;
-  }
-  .pp-btn:hover{transform:translateY(-1px)}
-  .pp-btn:active{transform:translateY(0)}
-  .pp-primary{
-    border:none;color:#fff;
-    background:linear-gradient(135deg,#0ea5a4,#4f46e5);
-    box-shadow:0 14px 28px rgba(79,70,229,.16);
-  }
-  .pp-active{
-    border-color:rgba(14,165,164,.35);
-    background:rgba(14,165,164,.10);
-  }
-  .pp-user{
-    padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
-    background:rgba(255,255,255,.70);
-    color:rgba(16,24,40,.72);
-    font-weight:900;
-    display:none;
-    max-width:320px;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-  }
-  .pp-crumbs{
-    margin-top:10px;
-    font-size:12.5px;
-    color:rgba(16,24,40,.62);
-    display:flex;gap:6px;flex-wrap:wrap;align-items:center;
-  }
-  .pp-crumbs a{color:rgba(14,165,164,.95);font-weight:900;text-decoration:none}
-  .pp-sep{opacity:.55}
-</style>
-
-<div class="pp-navwrap" role="navigation" aria-label="Primary">
-  <div class="pp-nav">
-    <!-- LEFT -->
-    <div class="pp-left">
-      <a class="pp-btn" href="https://ukwebtools.com/" data-nav="ukwebtools">← Ukwebtools</a>
-      <a class="pp-btn" href="index.html" data-nav="home">Home</a>
-      <a class="pp-btn" href="app.html" data-nav="app">App</a>
-      <a class="pp-btn" href="pricing.html" data-nav="pricing">Pricing</a>
-      <a class="pp-btn" href="reviews.html" data-nav="reviews">Reviews</a>
-      <a class="pp-btn" href="help.html" data-nav="help">How to use</a>
-      <a class="pp-btn" href="privacy.html" data-nav="privacy">Privacy</a>
-      <a class="pp-btn" href="terms.html" data-nav="terms">Terms</a>
-    </div>
-
-    <!-- RIGHT -->
-    <div class="pp-right">
-      <span class="pp-user" id="ppUserChip">—</span>
-      <a class="pp-btn pp-primary" id="ppAuthBtn" href="login.html">Log in</a>
-      <a class="pp-btn" id="ppLogoutBtn" href="#" style="display:none">Log out</a>
-    </div>
-  </div>
-
-  <!-- Visible Breadcrumbs -->
-  <div class="pp-crumbs" aria-label="Breadcrumb">
-    <a href="https://ukwebtools.com/">Ukwebtools</a>
-    <span class="pp-sep">›</span>
-    <a href="index.html">ProfitPilot</a>
-    <span class="pp-sep">›</span>
-    <span id="ppCrumbCurrent">Page</span>
-  </div>
-
-  <!-- JSON-LD Breadcrumbs for SEO -->
-  <script id="ppBreadcrumbJson" type="application/ld+json"></script>
-</div>
-
-<script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
-  // ✅ YOUR REAL VALUES (already safe for frontend)
-  const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
-  const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
-
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
-
-  // ---------- Active page highlighting ----------
-  const path = (location.pathname.split("/").pop() || "index.html").toLowerCase();
-  const map = {
-    "index.html":"home",
-    "app.html":"app",
-    "pricing.html":"pricing",
-    "reviews.html":"reviews",
-    "help.html":"help",
-    "privacy.html":"privacy",
-    "terms.html":"terms",
-    "login.html":"login",
-    "reset.html":"reset",
-    "verify.html":"verify"
-  };
-  const activeKey = map[path] || "home";
-
-  document.querySelectorAll(".pp-btn[data-nav]").forEach(a=>{
-    const key = a.getAttribute("data-nav");
-    if (key === activeKey) a.classList.add("pp-active");
-  });
-
-  // ---------- Breadcrumb text + JSON-LD ----------
-  const titles = {
-    home:"Home",
-    app:"App",
-    pricing:"Pricing",
-    reviews:"Reviews",
-    help:"How to use",
-    privacy:"Privacy",
-    terms:"Terms",
-    login:"Log in",
-    reset:"Reset password",
-    verify:"Verify email"
-  };
-  const currentTitle = titles[activeKey] || "Page";
-  const crumbEl = document.getElementById("ppCrumbCurrent");
-  if (crumbEl) crumbEl.textContent = currentTitle;
-
-  const base = "https://profitpilot.ukwebtools.com/";
-  const crumbItems = [
-    { name:"Ukwebtools", item:"https://ukwebtools.com/" },
-    { name:"ProfitPilot", item: base + "index.html" },
-    { name: currentTitle, item: base + path }
-  ];
-
-  const jsonEl = document.getElementById("ppBreadcrumbJson");
-  if (jsonEl){
-    jsonEl.textContent = JSON.stringify({
-      "@context":"https://schema.org",
-      "@type":"BreadcrumbList",
-      "itemListElement": crumbItems.map((c,i)=>({
-        "@type":"ListItem",
-        "position": i+1,
-        "name": c.name,
-        "item": c.item
-      }))
-    });
-  }
-
-  // ---------- Auth state: show email + logout ----------
-  const userChip = document.getElementById("ppUserChip");
-  const authBtn = document.getElementById("ppAuthBtn");
-  const logoutBtn = document.getElementById("ppLogoutBtn");
-
-  async function refreshAuthUI(){
-    const { data: { session } } = await supabase.auth.getSession();
-
-    if (session?.user?.email){
-      userChip.style.display = "inline-flex";
-      userChip.textContent = session.user.email;
-      authBtn.style.display = "none";
-      logoutBtn.style.display = "inline-flex";
-    } else {
-      userChip.style.display = "none";
-      authBtn.style.display = "inline-flex";
-      logoutBtn.style.display = "none";
-      authBtn.textContent = "Log in";
-      authBtn.setAttribute("href","login.html");
-    }
-  }
-
-  logoutBtn?.addEventListener("click", async (e)=>{
-    e.preventDefault();
-    await supabase.auth.signOut();
-    location.href = "login.html";
-  });
-
-  await refreshAuthUI();
-  supabase.auth.onAuthStateChange(()=>refreshAuthUI());
-</script>
-<!-- END PROFITPILOT NAV -->
-
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>FAQ — Ukwebtools</title>
-  <meta name="description" content="Frequently asked questions for Ukwebtools and ProfitPilot.">
-  <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
-  <style>
-    :root{--bg:#f7f9fc;--bg2:#eef3ff;--txt:#0b1220;--muted:#5b6474;--card:#fff;--line:rgba(16,24,40,.10);--accent:#0ea5a4;--shadow:0 12px 32px rgba(16,24,40,.08)}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--txt);
-      background:radial-gradient(900px 500px at 20% 0%, rgba(14,165,164,.12), transparent 55%),
-              radial-gradient(900px 500px at 80% 0%, rgba(79,70,229,.10), transparent 55%),
-              linear-gradient(180deg,var(--bg2),var(--bg));}
-    a{color:var(--accent);text-decoration:none}
-    .wrap{max-width:900px;margin:0 auto;padding:28px 16px}
-    .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-    .btn{padding:10px 14px;border-radius:999px;border:1px solid var(--line);background:#fff;box-shadow:0 6px 20px rgba(16,24,40,.06);font-weight:600}
-    .card{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:var(--shadow)}
-    h1{margin:0 0 8px;font-size:28px}
-    p{color:var(--muted);line-height:1.7}
-    details{border:1px solid var(--line);border-radius:14px;padding:14px;background:rgba(255,255,255,.9);margin-top:10px}
-    summary{cursor:pointer;font-weight:800}
-    .small{font-size:12px;color:var(--muted)}
-    footer{margin-top:22px;text-align:center;color:var(--muted);font-size:12px}
-  </style>
+  <meta charset="utf-8">
+  <title>ProfitPilot — FAQ</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="wrap">
-    <div class="top">
-      <div style="font-weight:900">Ukwebtools</div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <a class="btn" href="index.html">Home</a>
-        <a class="btn" href="privacy.html">Privacy</a>
-        <a class="btn" href="terms.html">Terms</a>
-      </div>
-    </div>
+  <header>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/reviews.html">Reviews</a>
+      <a href="/login.html">Login</a>
+    </nav>
+  </header>
 
-    <div class="card">
-      <h1>FAQ</h1>
-      <p>Clear answers. No fluff.</p>
+  <main class="wrap">
+    <h1>Frequently Asked Questions</h1>
 
-      <details open>
-        <summary>Is ProfitPilot affiliated with eBay/Etsy/Amazon/any platform?</summary>
-        <p>No. ProfitPilot is an independent tool. Platform names may be used only as user reference.</p>
-      </details>
+    <section>
+      <h2>General</h2>
+      <p><strong>Is ProfitPilot affiliated with eBay, Etsy, Amazon or any marketplace?</strong><br>
+      No. ProfitPilot is an independent profit and pricing calculator. Marketplace names are shown only for user reference.</p>
 
-      <details>
-        <summary>Is this financial or legal advice?</summary>
-        <p>No. Outputs are estimates based on your inputs. Use your judgement and consult professionals if needed.</p>
-      </details>
+      <p><strong>Is this financial or legal advice?</strong><br>
+      No. All outputs are estimates based on your inputs. Estimates are for decision-making purposes only — consult professionals if needed.</p>
 
-      <details>
-        <summary>How does the free trial work?</summary>
-        <p>You get 5 days of access. Some advanced features are limited during trial (for example reverse pricing and competitor runs).</p>
-      </details>
+      <p><strong>Why do I need to log in?</strong><br>
+      Login links your trial and PRO status to your account and prevents abuse. You can use some tools without logging in, but PRO features require it.</p>
+    </section>
 
-      <details>
-        <summary>Is PRO a subscription?</summary>
-        <p>No. PRO is a one-time purchase for unlimited access (as listed on the sales page).</p>
-      </details>
+    <section>
+      <h2>Free Trial & PRO</h2>
+      <p><strong>How does the free trial work?</strong><br>
+      You get a 5-day trial period. During trial some advanced features (e.g., reverse pricing, competitor mode, bulk) are limited.</p>
 
-      <details>
-        <summary>How do I unlock PRO after purchase?</summary>
-        <p>After purchase, Gumroad sends your license key by email. Paste it into the app unlock section to activate PRO.</p>
-      </details>
+      <p><strong>Is PRO a subscription?</strong><br>
+      No. PRO is a one-time purchase that unlocks unlimited access to all advanced features.</p>
 
-      <details>
-        <summary>Why do you require login?</summary>
-        <p>Login is used to keep your trial period and PRO access linked to your account and to reduce abuse.</p>
-      </details>
+      <p><strong>How do I unlock PRO after purchase?</strong><br>
+      After purchase, PRO access is automatically granted to your logged-in account. If you switch devices or log out, simply log back in — the app will recognise your PRO status.</p>
 
-      <details>
-        <summary>Can I see reviews without logging in?</summary>
-        <p>Yes. The Reviews page is public. Login is only required to submit a review.</p>
-      </details>
+      <p><strong>Why am I seeing an amount higher than the listed price at checkout?</strong><br>
+      Paddle, our payment partner, may add VAT/sales tax where required by law. Paddle handles all tax compliance automatically on your behalf. :contentReference[oaicite:0]{index=0}</p>
+    </section>
 
-      <div class="small" style="margin-top:14px">
-        Still stuck? Email <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a>.
-      </div>
-    </div>
+    <section>
+      <h2>Using the App</h2>
+      <p><strong>What features are included in the free version?</strong><br>
+      The free version includes basic profit and margin calculation and a short trial of advanced modes. Full features require PRO.</p>
 
-    <footer>© <span id="yr"></span> Ukwebtools</footer>
-  </div>
+      <p><strong>Can I see reviews without logging in?</strong><br>
+      Yes. The Reviews page is public. Login is required to submit a review.</p>
 
-  <script>
-    document.getElementById("yr").textContent = new Date().getFullYear();
-  </script>
+      <p><strong>Still stuck?</strong><br>
+      Email <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a> and we’ll help.</p>
+    </section>
+  </main>
+
+  <footer>
+    © ProfitPilot • Estimated results only.
+  </footer>
 </body>
 </html>
-<!-- PROFITPILOT: UNIVERSAL NAV + BREADCRUMBS -->
-<style>
-  /* Keep styles scoped to nav so it won't break your existing CSS */
-  .pp-navwrap{max-width:1200px;margin:0 auto;padding:14px 16px;position:relative;z-index:50}
-  .pp-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-  .pp-left,.pp-right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-  .pp-btn{
-    padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
-    background:#fff;font-weight:800;text-decoration:none;color:#0b1220;
-    box-shadow:0 8px 18px rgba(16,24,40,.06);
-    display:inline-flex;gap:8px;align-items:center;
-  }
-  .pp-btn:hover{transform:translateY(-1px)}
-  .pp-btn:active{transform:translateY(0)}
-  .pp-primary{
-    border:none;color:#fff;
-    background:linear-gradient(135deg,#0ea5a4,#4f46e5);
-    box-shadow:0 14px 28px rgba(79,70,229,.16);
-  }
-  .pp-active{
-    border-color:rgba(14,165,164,.35);
-    background:rgba(14,165,164,.08);
-  }
-  .pp-crumbs{
-    margin-top:10px;
-    font-size:12.5px;
-    color:rgba(16,24,40,.62);
-    display:flex;gap:6px;flex-wrap:wrap;align-items:center;
-  }
-  .pp-crumbs a{color:rgba(14,165,164,.95);font-weight:800;text-decoration:none}
-  .pp-sep{opacity:.55}
-  .pp-user{
-    padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
-    background:rgba(255,255,255,.75);
-    color:rgba(16,24,40,.72);
-    font-weight:800;
-    display:none;
-  }
-</style>
-
-<div class="pp-navwrap" role="navigation" aria-label="Primary">
-  <div class="pp-nav">
-    <!-- LEFT -->
-    <div class="pp-left">
-      <a class="pp-btn" href="https://ukwebtools.com/" data-nav="ukwebtools">← Ukwebtools</a>
-      <a class="pp-btn" href="index.html" data-nav="home">Home</a>
-      <a class="pp-btn" href="reviews.html" data-nav="reviews">Reviews</a>
-      <a class="pp-btn" href="privacy.html" data-nav="privacy">Privacy</a>
-      <a class="pp-btn" href="terms.html" data-nav="terms">Terms</a>
-      <a class="pp-btn" href="faq.html" data-nav="faq">FAQ</a>
-    </div>
-
-    <!-- RIGHT -->
-    <div class="pp-right">
-      <span class="pp-user" id="ppUserChip">Signed in</span>
-      <a class="pp-btn pp-primary" id="ppAuthBtn" href="login.html">Log in</a>
-      <a class="pp-btn" id="ppLogoutBtn" href="#" style="display:none">Log out</a>
-    </div>
-  </div>
-
-  <!-- Visible Breadcrumbs -->
-  <div class="pp-crumbs" aria-label="Breadcrumb">
-    <a href="https://ukwebtools.com/">Ukwebtools</a>
-    <span class="pp-sep">›</span>
-    <a href="index.html">ProfitPilot</a>
-    <span class="pp-sep">›</span>
-    <span id="ppCrumbCurrent">Page</span>
-  </div>
-
-  <!-- JSON-LD Breadcrumbs for SEO -->
-  <script id="ppBreadcrumbJson" type="application/ld+json"></script>
-</div>
-
-<script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
-  // ✅ REPLACE THESE TWO:
-  const SUPABASE_URL = "PASTE_YOUR_SUPABASE_URL_HERE";
-  const SUPABASE_ANON = "PASTE_YOUR_SUPABASE_ANON_KEY_HERE";
-
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
-
-  // ---------- Active page highlighting ----------
-  const path = (location.pathname.split("/").pop() || "index.html").toLowerCase();
-  const map = {
-    "index.html":"home",
-    "reviews.html":"reviews",
-    "privacy.html":"privacy",
-    "terms.html":"terms",
-    "faq.html":"faq",
-    "login.html":"login",
-    "app.html":"app",
-    "reset.html":"reset",
-    "verify.html":"verify"
-  };
-  const activeKey = map[path] || "home";
-
-  // Highlight matching nav item if present
-  document.querySelectorAll(".pp-btn[data-nav]").forEach(a=>{
-    const key = a.getAttribute("data-nav");
-    if (key === activeKey) a.classList.add("pp-active");
-  });
-
-  // ---------- Breadcrumb text + JSON-LD ----------
-  const titles = {
-    home:"Home",
-    reviews:"Reviews",
-    privacy:"Privacy",
-    terms:"Terms",
-    faq:"FAQ",
-    login:"Log in",
-    app:"App",
-    reset:"Reset password",
-    verify:"Verify email"
-  };
-  const currentTitle = titles[activeKey] || "Page";
-  document.getElementById("ppCrumbCurrent").textContent = currentTitle;
-
-  const base = "https://profitpilot.ukwebtools.com/";
-  const crumbItems = [
-    { name:"Ukwebtools", item:"https://ukwebtools.com/" },
-    { name:"ProfitPilot", item: base + "index.html" },
-    { name: currentTitle, item: base + path }
-  ];
-
-  document.getElementById("ppBreadcrumbJson").textContent = JSON.stringify({
-    "@context":"https://schema.org",
-    "@type":"BreadcrumbList",
-    "itemListElement": crumbItems.map((c,i)=>({
-      "@type":"ListItem",
-      "position": i+1,
-      "name": c.name,
-      "item": c.item
-    }))
-  });
-
-  // ---------- Auth state: show email + logout ----------
-  const userChip = document.getElementById("ppUserChip");
-  const authBtn = document.getElementById("ppAuthBtn");
-  const logoutBtn = document.getElementById("ppLogoutBtn");
-
-  async function refreshAuthUI(){
-    const { data: { session } } = await supabase.auth.getSession();
-
-    if (session?.user?.email){
-      userChip.style.display = "inline-flex";
-      userChip.textContent = session.user.email;
-      authBtn.style.display = "none";
-      logoutBtn.style.display = "inline-flex";
-      // Make the "Home" button still go to landing; optional: direct logged-in users to app
-      // If you want Home button to open app when logged in, uncomment:
-      // document.querySelector('[data-nav="home"]').setAttribute("href","app.html");
-    } else {
-      userChip.style.display = "none";
-      authBtn.style.display = "inline-flex";
-      logoutBtn.style.display = "none";
-      authBtn.textContent = "Log in";
-      authBtn.setAttribute("href","login.html");
-    }
-  }
-
-  logoutBtn.addEventListener("click", async (e)=>{
-    e.preventDefault();
-    await supabase.auth.signOut();
-    location.href = "login.html";
-  });
-
-  // initial + live updates
-  await refreshAuthUI();
-  supabase.auth.onAuthStateChange(() => refreshAuthUI());
-</script>
-<!-- END PROFITPILOT NAV -->
