@@ -3,10 +3,17 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Privacy — ProfitPilot</title>
-  <meta name="description" content="Privacy policy for ProfitPilot by Ukwebtools.">
+  <title>Privacy Policy — ProfitPilot</title>
+  <meta name="description" content="Privacy policy for ProfitPilot by Ukwebtools. Learn what data we collect, why we collect it, and your rights.">
   <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
   <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://profitpilot.ukwebtools.com/privacy.html">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Privacy Policy — ProfitPilot">
+  <meta property="og:description" content="What data ProfitPilot collects, how it’s used, and your choices.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://profitpilot.ukwebtools.com/privacy.html">
 
   <style>
     :root{
@@ -15,9 +22,9 @@
       --card:#fff; --line:rgba(16,24,40,.10);
       --accent:#0ea5a4; --accent2:#4f46e5;
       --shadow:0 14px 36px rgba(16,24,40,.08);
-      --shadow2:0 8px 22px rgba(16,24,40,.06);
     }
     *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
     body{
       margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--txt);
       background:
@@ -25,21 +32,24 @@
         radial-gradient(900px 520px at 84% 0%, rgba(79,70,229,.12), transparent 55%),
         linear-gradient(180deg,var(--bg2),var(--bg));
     }
-    a{text-decoration:none;color:inherit}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    :focus-visible{outline:3px solid rgba(79,70,229,.55);outline-offset:3px;border-radius:10px}
+
     .wrap{max-width:980px;margin:0 auto;padding:18px 16px 50px}
 
-    /* UNIVERSAL NAV (single) */
+    /* NAV */
     .pp-navwrap{max-width:1200px;margin:0 auto;padding:14px 0;position:relative;z-index:50}
     .pp-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
     .pp-left,.pp-right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .pp-btn{
       padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
-      background:#fff;font-weight:800;text-decoration:none;color:#0b1220;
+      background:#fff;font-weight:800;color:#0b1220;
       box-shadow:0 8px 18px rgba(16,24,40,.06);
       display:inline-flex;gap:8px;align-items:center;
-      transition:transform .08s ease;
+      transition:transform .10s ease;
     }
-    .pp-btn:hover{transform:translateY(-1px)}
+    .pp-btn:hover{transform:translateY(-1px);text-decoration:none}
     .pp-btn:active{transform:translateY(0)}
     .pp-primary{
       border:none;color:#fff;
@@ -64,42 +74,64 @@
       color:rgba(16,24,40,.62);
       display:flex;gap:6px;flex-wrap:wrap;align-items:center;
     }
-    .pp-crumbs a{color:rgba(14,165,164,.95);font-weight:800;text-decoration:none}
+    .pp-crumbs a{color:rgba(14,165,164,.95);font-weight:800}
     .pp-sep{opacity:.55}
 
     .card{
-      margin-top:14px;background:rgba(255,255,255,.75);
-      border:1px solid var(--line);border-radius:22px;padding:20px;
+      margin-top:14px;
+      background:rgba(255,255,255,.78);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:20px;
       box-shadow:var(--shadow);
     }
+
     h1{margin:0 0 8px;font-size:28px;letter-spacing:-.02em}
+    .meta{margin:0 0 12px;font-size:12.5px;color:rgba(16,24,40,.62)}
     h2{margin:20px 0 8px;font-size:18px}
-    p,li{color:var(--muted);line-height:1.75}
+    p,li{color:rgba(16,24,40,.70);line-height:1.8}
     ul{margin:8px 0 0;padding-left:18px}
+    code{
+      background:rgba(16,24,40,.06);
+      border:1px solid rgba(16,24,40,.10);
+      padding:2px 6px;border-radius:10px;
+      font-size:12.5px;
+    }
+    .callout{
+      margin-top:12px;
+      border:1px solid rgba(16,24,40,.10);
+      border-radius:18px;
+      padding:12px;
+      background:rgba(255,255,255,.86);
+    }
+    .hr{height:1px;background:rgba(16,24,40,.10);margin:14px 0}
     footer{
       margin-top:18px;padding-top:14px;border-top:1px solid var(--line);
-      text-align:center;color:var(--muted);font-size:12.5px;line-height:1.7;
+      text-align:center;color:rgba(16,24,40,.62);font-size:12.5px;line-height:1.7;
     }
-    .fine a{color:var(--accent);font-weight:800}
   </style>
 </head>
 
 <body>
   <div class="wrap">
 
-    <!-- SINGLE NAV -->
+    <!-- NAV -->
     <div class="pp-navwrap" role="navigation" aria-label="Primary">
       <div class="pp-nav">
         <div class="pp-left">
-          <a class="pp-btn" href="https://ukwebtools.com/" data-nav="ukwebtools">← Ukwebtools</a>
-          <a class="pp-btn" href="index.html" data-nav="home">Home</a>
-          <a class="pp-btn" href="reviews.html" data-nav="reviews">Reviews</a>
-          <a class="pp-btn pp-active" href="privacy.html" data-nav="privacy">Privacy</a>
-          <a class="pp-btn" href="terms.html" data-nav="terms">Terms</a>
+          <a class="pp-btn" href="https://ukwebtools.com/" rel="nofollow">← Ukwebtools</a>
+          <a class="pp-btn" href="index.html">Home</a>
+          <a class="pp-btn" href="pricing.html">Pricing</a>
+          <a class="pp-btn" href="reviews.html">Reviews</a>
+          <a class="pp-btn" href="help.html">How to use</a>
+          <a class="pp-btn" href="faq.html">FAQ</a>
+          <a class="pp-btn pp-active" href="privacy.html" aria-current="page">Privacy</a>
+          <a class="pp-btn" href="terms.html">Terms</a>
+          <a class="pp-btn" href="refunds.html">Refund Policy</a>
         </div>
 
         <div class="pp-right">
-          <span class="pp-user" id="ppUserChip">Signed in</span>
+          <span class="pp-user" id="ppUserChip" title="Signed in user">Signed in</span>
 
           <!-- Signed OUT -->
           <a class="pp-btn pp-primary" id="ppAuthBtn" href="login.html">Log in</a>
@@ -133,47 +165,119 @@
 
     <div class="card">
       <h1>Privacy Policy</h1>
-      <p style="margin:0 0 12px"><span style="font-size:12px;color:var(--muted)">Last updated: <span id="d"></span></span></p>
+      <p class="meta">Last updated: <span id="d"></span></p>
 
       <p>
-        ProfitPilot is an independent tool by Ukwebtools. This policy explains what data we collect, how we use it, and your choices.
+        ProfitPilot is an independent tool by Ukwebtools (“we”, “us”, “our”). This policy explains what data we collect,
+        how we use it, and your choices.
+      </p>
+
+      <div class="callout">
+        <p style="margin:0">
+          <b>Quick summary:</b> We collect the minimum needed to run accounts (email), enforce trial/PRO access,
+          and publish reviews you choose to submit. We do not access your marketplace accounts and we do not store card details.
+        </p>
+      </div>
+
+      <h2>Who is the data controller?</h2>
+      <p>
+        Ukwebtools is the data controller for ProfitPilot. For privacy questions or requests, contact:
+        <a href="mailto:support@ukwebtools.com"><b>support@ukwebtools.com</b></a>.
       </p>
 
       <h2>What we collect</h2>
       <ul>
-        <li><b>Account email</b> (for login). Authentication is managed via Supabase.</li>
-        <li><b>Access data</b> needed to enforce trial/PRO status (e.g., trial start time, feature usage counters, unlock status).</li>
-        <li><b>Reviews you submit</b> (name optional, rating, message). Reviews may appear publicly.</li>
+        <li><b>Account information</b>: email address (and authentication metadata) used for login via Supabase.</li>
+        <li><b>Access & entitlement data</b>: trial start time, PRO/unlock status, and limited counters used to prevent abuse.</li>
+        <li><b>Reviews you submit</b>: name (optional), rating, category, and message. Reviews may be displayed publicly.</li>
+        <li><b>Technical data</b>: basic logs necessary for security and reliability (e.g., timestamps, request metadata).</li>
       </ul>
 
       <h2>What we don’t collect</h2>
       <ul>
-        <li>We do not collect your card or bank details (payments are handled by the payment provider shown at checkout).</li>
-        <li>We do not connect to your marketplace accounts.</li>
+        <li>We do not store your card/bank details (payments are handled by the payment provider shown at checkout).</li>
+        <li>We do not connect to your marketplace accounts or pull order data from eBay/Etsy/Amazon.</li>
+        <li>We do not intentionally collect sensitive personal data.</li>
       </ul>
 
-      <h2>How we use information</h2>
+      <h2>How we use your information</h2>
       <ul>
         <li>To provide login, trial access, and PRO unlocking.</li>
-        <li>To prevent abuse and keep the product stable.</li>
-        <li>To display reviews publicly when submitted.</li>
+        <li>To operate the calculator features and keep the service stable.</li>
+        <li>To prevent abuse, fraud, and misuse of free/trial features.</li>
+        <li>To publish reviews where you choose to submit them.</li>
+        <li>To respond to support requests.</li>
       </ul>
 
-      <h2>Third parties</h2>
+      <h2>Legal bases (GDPR/UK GDPR)</h2>
       <ul>
-        <li><b>Supabase</b> for authentication and database storage.</li>
-        <li><b>Payment provider</b> (shown at checkout) for payments, tax/VAT handling, and receipts.</li>
+        <li><b>Contract</b>: to provide the service you request (accounts, access, features).</li>
+        <li><b>Legitimate interests</b>: to prevent abuse, maintain security, and improve reliability.</li>
+        <li><b>Consent</b> (where applicable): for optional actions such as submitting a public review.</li>
       </ul>
 
-      <h2>Account deletion</h2>
+      <h2>Reviews are public</h2>
       <p>
-        You can request deletion by emailing
-        <a href="mailto:support@ukwebtools.com" style="color:var(--accent);font-weight:800">support@ukwebtools.com</a>.
+        If you submit a review, it may be displayed publicly on the Reviews page. Avoid including personal, confidential,
+        or sensitive information in your review text. If you want a review removed, contact support.
       </p>
 
-      <footer class="fine">
+      <h2>Third-party services</h2>
+      <ul>
+        <li><b>Supabase</b>: authentication and database hosting for accounts, entitlements, and reviews.</li>
+        <li><b>Payment provider</b> (shown at checkout): processes payments, may calculate/apply VAT/taxes, and issues receipts.</li>
+      </ul>
+
+      <h2>International transfers</h2>
+      <p>
+        Some service providers may process data outside the UK/EEA (for example, where their infrastructure is located).
+        We use reputable providers and rely on appropriate safeguards where required (such as standard contractual clauses).
+      </p>
+
+      <h2>Data retention</h2>
+      <ul>
+        <li><b>Account data</b>: retained while your account is active, and for a reasonable period afterward for security and compliance.</li>
+        <li><b>Entitlement data</b> (trial/PRO): retained as long as needed to enforce access and prevent abuse.</li>
+        <li><b>Reviews</b>: retained until removed by you (via request) or by us (e.g., moderation or legal reasons).</li>
+      </ul>
+
+      <h2>Cookies and analytics</h2>
+      <p>
+        ProfitPilot does not intentionally use advertising cookies. If we add analytics in the future, we will update this policy.
+        Some essential cookies/local storage may be used by authentication or the application to function (e.g., session management).
+      </p>
+
+      <h2>Security</h2>
+      <p>
+        We implement reasonable technical and organisational measures to protect data, including secure authentication,
+        access controls, and encryption where supported by our providers. No system is 100% secure, so please use a strong password
+        and keep your login details private.
+      </p>
+
+      <h2>Your rights</h2>
+      <p>
+        Depending on your location, you may have rights to access, correct, delete, restrict, or object to processing of your personal data.
+        You may also have the right to data portability and to lodge a complaint with a supervisory authority.
+        To exercise these rights, email <a href="mailto:support@ukwebtools.com"><b>support@ukwebtools.com</b></a>.
+      </p>
+
+      <h2>Children</h2>
+      <p>
+        ProfitPilot is intended for adults/business use. We do not knowingly collect personal data from children.
+      </p>
+
+      <h2>Changes to this policy</h2>
+      <p>
+        We may update this policy from time to time. The “Last updated” date will reflect the latest version.
+      </p>
+
+      <footer>
         <div>© <span id="yr"></span> Ukwebtools • ProfitPilot</div>
-        <div><a href="terms.html">Terms</a> · <a href="reviews.html">Reviews</a></div>
+        <div style="margin-top:6px">
+          <a href="terms.html">Terms</a> ·
+          <a href="refunds.html">Refund Policy</a> ·
+          <a href="reviews.html">Reviews</a>
+        </div>
       </footer>
     </div>
   </div>
@@ -195,18 +299,24 @@
     const openBtn = document.getElementById("ppOpenBtn");
     const logoutBtn = document.getElementById("ppLogoutBtn");
 
+    function safeText(s){ return String(s || "").replace(/\s+/g, " ").trim(); }
+
     async function refreshAuthUI(){
       const { data: { session } } = await supabase.auth.getSession();
+      const email = safeText(session?.user?.email);
 
-      if (session?.user?.email){
+      if (email){
         userChip.style.display = "inline-flex";
-        userChip.textContent = session.user.email;
+        userChip.textContent = email;
+        userChip.title = email;
 
         authBtn.style.display = "none";
         openBtn.style.display = "inline-flex";
         logoutBtn.style.display = "inline-flex";
       } else {
         userChip.style.display = "none";
+        userChip.textContent = "Signed in";
+        userChip.title = "";
 
         authBtn.style.display = "inline-flex";
         openBtn.style.display = "none";
