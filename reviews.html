@@ -4,9 +4,15 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Reviews — ProfitPilot</title>
-  <meta name="description" content="Public reviews for ProfitPilot. See rating average, counts, and real user feedback. Log in to leave or edit your review.">
+  <meta name="description" content="Public reviews for ProfitPilot. See average rating, breakdown, and real user feedback. Log in to leave or edit your review inside the app.">
   <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
   <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://profitpilot.ukwebtools.com/reviews.html">
+
+  <meta property="og:title" content="Reviews — ProfitPilot">
+  <meta property="og:description" content="Public reviews for ProfitPilot: rating average, breakdown, and latest feedback.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://profitpilot.ukwebtools.com/reviews.html">
 
   <style>
     :root{
@@ -17,6 +23,7 @@
       --shadow:0 12px 34px rgba(16,24,40,.10);
     }
     *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
     body{
       margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--txt);
       background:
@@ -26,6 +33,8 @@
     }
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
+    :focus-visible{outline:3px solid rgba(79,70,229,.45);outline-offset:3px;border-radius:10px}
+
     .wrap{max-width:1120px;margin:0 auto;padding:22px 16px 70px}
     @media (min-width:900px){.wrap{padding:26px 22px 84px}}
 
@@ -59,6 +68,7 @@
       display:inline-flex;gap:8px;align-items:center;cursor:pointer;
       box-shadow:0 8px 18px rgba(16,24,40,.06);
       white-space:nowrap;font-weight:900;
+      transition:transform .08s ease, filter .08s ease;
     }
     .btn:hover{transform:translateY(-1px)}
     .btn:active{transform:translateY(0)}
@@ -72,10 +82,12 @@
       border-color:rgba(14,165,164,.35);
       background:rgba(14,165,164,.10);
     }
+    .btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
     .chip{
       padding:9px 12px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
       background:rgba(255,255,255,.76);color:rgba(16,24,40,.72);
       font-size:12px;font-weight:900;display:none;
+      max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
     }
 
     .crumbs{
@@ -93,11 +105,20 @@
       border-radius:24px;
       box-shadow:var(--shadow);
       padding:20px;
-      position:relative;
-      overflow:hidden;
+      position:relative; overflow:hidden;
     }
     h1{margin:0;font-size:26px;line-height:1.15;letter-spacing:-.03em;font-weight:1000}
     .lead{margin-top:10px;color:rgba(16,24,40,.70);line-height:1.7;font-size:14.5px}
+    .note{
+      margin-top:12px;
+      border:1px solid rgba(16,24,40,.10);
+      background:rgba(255,255,255,.78);
+      border-radius:18px;
+      padding:12px;
+      color:rgba(16,24,40,.70);
+      font-size:13px;
+      line-height:1.65;
+    }
 
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
     @media(max-width:980px){.grid{grid-template-columns:1fr}}
@@ -120,7 +141,18 @@
     .big{font-size:28px;font-weight:1000;letter-spacing:-.03em}
     .muted{color:rgba(16,24,40,.62);font-size:12.5px;line-height:1.6}
 
-    .barrow{display:grid;grid-template-columns:48px 1fr 48px;gap:10px;align-items:center;margin-top:10px}
+    .tag{
+      padding:7px 10px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
+      background:rgba(255,255,255,.88);font-size:12px;color:rgba(16,24,40,.62);font-weight:900;
+      display:inline-flex;gap:8px;align-items:center
+    }
+    .tag.good{
+      border-color:rgba(14,165,164,.22);
+      background:rgba(14,165,164,.08);
+      color:rgba(14,165,164,.95);
+    }
+
+    .barrow{display:grid;grid-template-columns:52px 1fr 52px;gap:10px;align-items:center;margin-top:10px}
     .bar{height:10px;border-radius:999px;background:rgba(16,24,40,.08);overflow:hidden;border:1px solid rgba(16,24,40,.10)}
     .fill{height:100%;background:linear-gradient(135deg, rgba(14,165,164,.75), rgba(79,70,229,.70));width:0%}
 
@@ -130,13 +162,8 @@
       background:rgba(255,255,255,.86);
       border-radius:18px;padding:14px;
     }
-    .meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
-    .stars{font-weight:1000}
-    .tag{
-      padding:7px 10px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
-      background:rgba(255,255,255,.88);font-size:12px;color:rgba(16,24,40,.62);font-weight:900;
-      display:inline-flex;gap:8px;align-items:center
-    }
+    .meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+    .stars{font-weight:1000;letter-spacing:.4px}
     .hr{height:1px;background:rgba(16,24,40,.10);margin:14px 0}
     footer{
       margin-top:18px;
@@ -175,9 +202,11 @@
         <a class="btn ghost" href="https://ukwebtools.com/">← Ukwebtools</a>
         <a class="btn" href="index.html">Home</a>
         <a class="btn active" href="reviews.html">Reviews</a>
+        <a class="btn" href="pricing.html">Pricing</a>
+        <a class="btn" href="help.html">How to use</a>
         <a class="btn" href="privacy.html">Privacy</a>
         <a class="btn" href="terms.html">Terms</a>
-        <a class="btn" href="help.html">How to use</a>
+        <a class="btn" href="refunds.html">Refund Policy</a>
         <span class="chip" id="userChip">—</span>
         <a class="btn primary" id="openBtn" href="login.html">Log in</a>
         <a class="btn" id="logoutBtn" href="#" style="display:none">Log out</a>
@@ -199,9 +228,14 @@
         To leave or edit your review, log in and use the review box inside the app.
       </div>
 
+      <div class="note">
+        <b>How we keep this fair:</b> reviews are stored in our database and displayed publicly. We don’t edit review content,
+        but we may remove spam/abuse. Your review name is optional.
+      </div>
+
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
-        <a class="btn primary" href="app.html">Open app</a>
-        <a class="btn" href="login.html">Log in / Sign up</a>
+        <a class="btn primary" id="heroCta" href="app.html">Open app</a>
+        <a class="btn" id="heroAlt" href="login.html">Log in / Sign up</a>
       </div>
     </div>
 
@@ -221,7 +255,7 @@
         <div class="hr"></div>
 
         <div class="small"><b>Rating breakdown</b></div>
-        <div id="breakdown"></div>
+        <div id="breakdown" aria-label="Rating breakdown"></div>
 
         <div class="hr"></div>
 
@@ -239,8 +273,8 @@
 
         <div class="reviews" id="reviews"></div>
 
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
-          <button class="btn" id="moreBtn">Load more</button>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center">
+          <button class="btn" id="moreBtn" type="button">Load more</button>
           <span class="tag" id="moreStatus">—</span>
         </div>
       </div>
@@ -280,6 +314,18 @@
   const openBtn = document.getElementById("openBtn");
   const logoutBtn = document.getElementById("logoutBtn");
 
+  const heroCta = document.getElementById("heroCta");
+  const heroAlt = document.getElementById("heroAlt");
+
+  function safeText(s){ return String(s ?? "").replace(/\s+/g," ").trim(); }
+  function escapeHtml(s){
+    return String(s ?? "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#39;");
+  }
   function stars(n){
     const r = Math.max(0, Math.min(5, Math.round(n)));
     return "★".repeat(r) + "☆".repeat(5-r);
@@ -288,23 +334,42 @@
   // Auth chip + CTAs
   async function refreshAuthUI(){
     const { data: { session } } = await supabase.auth.getSession();
-    if (session?.user?.email){
+    const email = safeText(session?.user?.email);
+
+    if (email){
       userChip.style.display = "inline-flex";
-      userChip.textContent = session.user.email;
+      userChip.textContent = email;
+      userChip.title = email;
+
       openBtn.textContent = "Open app";
       openBtn.href = "app.html";
       logoutBtn.style.display = "inline-flex";
+
       meLine.textContent = "You’re logged in. Open the app to leave or edit your review.";
       leaveBtn.textContent = "Open app to leave/edit your review";
       leaveBtn.href = "app.html";
+
+      heroCta.textContent = "Open app";
+      heroCta.href = "app.html";
+      heroAlt.textContent = "Manage your review";
+      heroAlt.href = "app.html";
     } else {
       userChip.style.display = "none";
+      userChip.textContent = "—";
+      userChip.title = "";
+
       openBtn.textContent = "Log in";
       openBtn.href = "login.html";
       logoutBtn.style.display = "none";
+
       meLine.textContent = "You’re viewing publicly. Log in to leave or edit your review.";
       leaveBtn.textContent = "Log in to leave/edit your review";
       leaveBtn.href = "login.html";
+
+      heroCta.textContent = "Start free trial";
+      heroCta.href = "login.html";
+      heroAlt.textContent = "Open app";
+      heroAlt.href = "app.html";
     }
   }
   logoutBtn.addEventListener("click", async (e)=>{
@@ -318,21 +383,32 @@
   // Pagination
   let page = 0;
   const PAGE_SIZE = 10;
+  let loading = false;
 
+  function setMoreLoading(on){
+    loading = !!on;
+    moreBtn.disabled = !!on;
+    moreBtn.textContent = on ? "Loading…" : "Load more";
+  }
+
+  // Summary (simple for now; switch to RPC later if you grow)
   async function loadSummary(){
-    // Get total count (fast)
+    // Total count
     const { count, error: countErr } = await supabase
       .from("reviews")
       .select("id", { count: "exact", head: true });
 
     if (countErr){
       countOut.textContent = "Count unavailable";
+      avgOut.textContent = "—";
+      starsOut.textContent = "—";
+      breakdown.innerHTML = `<div class="small">Summary unavailable right now.</div>`;
       return;
     }
-    countOut.textContent = `${count || 0} total review(s)`;
 
-    // Fetch ratings (for avg + breakdown)
-    // NOTE: Early stage OK. If you later have thousands, we’ll switch to a SQL view/RPC.
+    const totalCount = count || 0;
+
+    // Ratings list for avg/breakdown (OK early stage)
     const { data, error } = await supabase
       .from("reviews")
       .select("rating")
@@ -340,6 +416,7 @@
       .limit(1000);
 
     if (error || !data){
+      countOut.textContent = `${totalCount} total review(s)`;
       avgOut.textContent = "—";
       starsOut.textContent = "—";
       breakdown.innerHTML = `<div class="small">Rating breakdown unavailable.</div>`;
@@ -347,49 +424,49 @@
     }
 
     const ratings = data.map(x=>Number(x.rating)||0).filter(x=>x>=1 && x<=5);
-    if (!ratings.length){
+    const n = ratings.length;
+
+    countOut.textContent = totalCount ? `${totalCount} total review(s)` : "No reviews yet";
+
+    if (!n){
       avgOut.textContent = "—";
       starsOut.textContent = "—";
       breakdown.innerHTML = `<div class="small">No ratings yet.</div>`;
       return;
     }
 
-    const avg = ratings.reduce((s,x)=>s+x,0) / ratings.length;
+    const avg = ratings.reduce((s,x)=>s+x,0) / n;
     avgOut.textContent = avg.toFixed(1);
     starsOut.textContent = stars(avg);
 
     const counts = {1:0,2:0,3:0,4:0,5:0};
     ratings.forEach(r=>counts[r]++);
-    const total = ratings.length;
-
     breakdown.innerHTML = "";
+
     for (let r=5; r>=1; r--){
-      const pct = total ? (counts[r] / total) * 100 : 0;
+      const pct = n ? (counts[r] / n) * 100 : 0;
       const row = document.createElement("div");
       row.className = "barrow";
       row.innerHTML = `
         <div class="small"><b>${r}★</b></div>
-        <div class="bar"><div class="fill" style="width:${pct.toFixed(1)}%"></div></div>
+        <div class="bar" role="img" aria-label="${r} star: ${counts[r]} review(s)">
+          <div class="fill" style="width:${pct.toFixed(1)}%"></div>
+        </div>
         <div class="small">${counts[r]}</div>
       `;
       breakdown.appendChild(row);
     }
   }
 
-  function escapeHtml(s){
-    return String(s ?? "")
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#39;");
-  }
-
   async function loadPage(reset=false){
+    if (loading) return;
+    setMoreLoading(true);
+
     if (reset){
       page = 0;
       reviewsBox.innerHTML = "";
     }
+
     status.textContent = "Loading…";
     moreStatus.textContent = "—";
 
@@ -404,14 +481,16 @@
 
     if (error){
       status.textContent = "Could not load reviews.";
-      moreStatus.textContent = error.message || "Error";
+      moreStatus.textContent = "Error";
+      setMoreLoading(false);
       return;
     }
 
     if (!data || data.length === 0){
       status.textContent = (from === 0) ? "No reviews yet." : "No more reviews.";
-      moreBtn.disabled = true;
       moreStatus.textContent = "End";
+      moreBtn.disabled = true;
+      moreBtn.textContent = "End";
       return;
     }
 
@@ -419,19 +498,26 @@
     data.forEach(r=>{
       const div = document.createElement("div");
       div.className = "review";
+
+      const cat = escapeHtml(r.category || "General");
+      const name = escapeHtml(r.name || "Anonymous");
+      const msg = escapeHtml(r.message || "");
+      const date = new Date(r.created_at).toLocaleDateString();
+      const rating = Number(r.rating) || 0;
+
       div.innerHTML = `
         <div class="meta">
-          <div class="stars">${stars(r.rating || 0)} <span class="tag">${escapeHtml(r.category || "General")}</span></div>
-          <div class="muted">${new Date(r.created_at).toLocaleDateString()}</div>
+          <div class="stars">${stars(rating)} <span class="tag">${cat}</span></div>
+          <div class="muted">${date}</div>
         </div>
-        <div class="small" style="margin-top:8px"><b>${escapeHtml(r.name || "Anonymous")}</b> — ${escapeHtml(r.message || "")}</div>
+        <div class="small" style="margin-top:8px"><b>${name}</b> — ${msg}</div>
       `;
       reviewsBox.appendChild(div);
     });
 
     page++;
-    moreBtn.disabled = false;
     moreStatus.textContent = `Loaded ${data.length}`;
+    setMoreLoading(false);
   }
 
   moreBtn.addEventListener("click", ()=>loadPage(false));
