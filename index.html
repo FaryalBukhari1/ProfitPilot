@@ -6,6 +6,7 @@
   <title>ProfitPilot — Listing Profit & Pricing Calculator</title>
   <meta name="description" content="ProfitPilot helps you estimate profit & margin, reverse-calculate target selling price, and run bulk checks. 5-day free trial. One-time PRO unlock.">
   <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
+  <meta name="robots" content="index,follow">
 
   <style>
     :root{
@@ -13,17 +14,20 @@
       --card:rgba(255,255,255,.92); --line:rgba(16,24,40,.10);
       --accent:#0ea5a4; --accent2:#4f46e5;
       --shadow:0 10px 30px rgba(16,24,40,.08);
-      --shadow2:0 16px 40px rgba(16,24,40,.10);
+      --shadow2:0 16px 44px rgba(16,24,40,.10);
     }
     *{box-sizing:border-box}
     body{
-      margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--txt);
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--txt);
       background:
-        radial-gradient(900px 500px at 20% 0%, rgba(14,165,164,.14), transparent 55%),
-        radial-gradient(900px 500px at 80% 0%, rgba(79,70,229,.10), transparent 55%),
+        radial-gradient(900px 520px at 20% 0%, rgba(14,165,164,.14), transparent 55%),
+        radial-gradient(900px 520px at 80% 0%, rgba(79,70,229,.10), transparent 55%),
         linear-gradient(180deg, var(--bg2), var(--bg));
     }
     a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
     .wrap{max-width:1150px;margin:18px auto;padding:0 14px}
 
     /* NAV */
@@ -31,23 +35,27 @@
       background:rgba(255,255,255,.78);
       border:1px solid var(--line);
       border-radius:18px;
-      padding:12px;
+      padding:12px 12px;
       box-shadow:var(--shadow);
       backdrop-filter: blur(10px);
       position:sticky; top:10px; z-index:50;
     }
     .navrow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-    .brand{display:flex;align-items:center;gap:10px}
+    .brand{display:flex;align-items:center;gap:10px;min-width:220px}
     .logo{
       width:40px;height:40px;border-radius:14px;
       background:linear-gradient(135deg, rgba(14,165,164,.20), rgba(79,70,229,.16));
       border:1px solid var(--line);
       display:flex;align-items:center;justify-content:center;
-      font-weight:1000; letter-spacing:.4px;
+      font-weight:1000; letter-spacing:.2px;
+      user-select:none;
     }
-    .brandtitle{font-weight:1000; line-height:1.1}
-    .brandsub{font-size:12px;color:var(--muted);font-weight:700;margin-top:2px}
-    .nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .brandtitle{font-weight:1000; line-height:1.05}
+    .brandsub{font-size:12px;color:var(--muted);font-weight:700;margin-top:3px}
+
+    .navlinks{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center;flex:1}
+    .navactions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:flex-end}
+
     .btn{
       padding:10px 14px;border-radius:999px;border:1px solid var(--line);
       background:rgba(255,255,255,.92);color:var(--txt);
@@ -58,46 +66,48 @@
       cursor:pointer;
     }
     .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(0)}
     .btn.primary{
       border:none;color:#fff;
       background:linear-gradient(135deg,var(--accent),var(--accent2));
       box-shadow:0 16px 34px rgba(79,70,229,.16);
     }
     .btn.ghost{background:transparent;box-shadow:none}
-    .active{
+    .btn.active{
       border-color:rgba(14,165,164,.30);
       background:rgba(14,165,164,.08);
     }
     .chip{
       padding:10px 14px;border-radius:999px;border:1px solid var(--line);
       background:rgba(255,255,255,.75);color:rgba(16,24,40,.70);
-      font-weight:900;display:none;max-width:280px;overflow:hidden;text-overflow:ellipsis;
+      font-weight:900;display:none;max-width:260px;
+      overflow:hidden;text-overflow:ellipsis;
     }
-    .crumbs{
-      margin-top:10px;font-size:12.5px;color:rgba(16,24,40,.62);
-      display:flex;gap:6px;flex-wrap:wrap;align-items:center;
-    }
-    .crumbs a{color:rgba(14,165,164,.95);font-weight:900}
-    .sep{opacity:.55}
 
     /* HERO */
     .hero{
       margin-top:14px;
-      background:linear-gradient(180deg, rgba(14,165,164,.10), rgba(255,255,255,.70));
+      background:linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.70));
       border:1px solid var(--line);
       border-radius:22px;
       padding:18px;
       box-shadow:var(--shadow2);
     }
-    h1{margin:0;font-size:30px;letter-spacing:-.3px}
-    .lead{margin:8px 0 0;color:var(--muted);line-height:1.7;font-weight:650;max-width:900px}
+    h1{margin:0;font-size:30px;letter-spacing:-.4px;line-height:1.15}
+    .lead{
+      margin:10px 0 0;
+      color:var(--muted);
+      line-height:1.75;
+      font-weight:650;
+      max-width:920px
+    }
     .cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
     .pillrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
     .pill{
       display:inline-flex;gap:8px;align-items:center;
       padding:8px 10px;border-radius:999px;border:1px solid var(--line);
       background:rgba(255,255,255,.70);
-      color:var(--muted);font-size:12px;font-weight:800;
+      color:rgba(16,24,40,.62);font-size:12px;font-weight:850;
       white-space:nowrap;
     }
 
@@ -112,16 +122,17 @@
       box-shadow:var(--shadow);
     }
     .title{font-weight:1000;margin:0 0 8px}
-    .small{font-size:12px;color:var(--muted);line-height:1.7}
-    .list{margin:10px 0 0;padding-left:18px;color:var(--muted);line-height:1.8;font-size:12.5px}
+    .small{font-size:12.5px;color:var(--muted);line-height:1.75}
+    .list{margin:10px 0 0;padding-left:18px;color:rgba(16,24,40,.62);line-height:1.85;font-size:12.8px}
     .kgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
     @media(max-width:560px){.kgrid{grid-template-columns:1fr}}
     .k{
       border:1px solid var(--line);background:rgba(255,255,255,.72);
       border-radius:16px;padding:12px;
     }
-    .k .h{font-size:12px;color:var(--muted);font-weight:900}
-    .k .v{margin-top:6px;font-size:18px;font-weight:1000}
+    .k .h{font-size:12px;color:var(--muted);font-weight:950;text-transform:uppercase;letter-spacing:.08em}
+    .k .v{margin-top:8px;font-size:18px;font-weight:1000;letter-spacing:-.2px}
+    .divider{height:1px;background:var(--line);margin:12px 0}
 
     /* REVIEWS */
     .reviews{display:grid;gap:10px;margin-top:10px}
@@ -134,53 +145,52 @@
     .meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
     .tag{
       padding:6px 10px;border-radius:999px;border:1px solid var(--line);
-      background:rgba(255,255,255,.90);color:var(--muted);font-size:12px;font-weight:900;
+      background:rgba(255,255,255,.90);color:rgba(16,24,40,.62);font-size:12px;font-weight:950;
     }
     .stars{font-weight:1000;letter-spacing:.8px}
-    .divider{height:1px;background:var(--line);margin:12px 0}
-
     footer{
-      margin:14px 2px 0;color:var(--muted);font-size:12px;line-height:1.7;
-      padding-bottom:18px;
+      margin:16px 2px 0;
+      color:var(--muted);
+      font-size:12.5px;
+      line-height:1.75;
+      padding:6px 0 18px;
     }
+    .footrow{
+      display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center
+    }
+    .footlinks{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
   </style>
 </head>
 
 <body>
   <div class="wrap">
 
-    <!-- ✅ SINGLE NAV ONLY (NO DUPLICATES) -->
-    <div class="topbar">
+    <!-- NAV (single, clean, premium) -->
+    <div class="topbar" role="navigation" aria-label="Primary">
       <div class="navrow">
         <div class="brand">
-          <div class="logo">PP</div>
+          <div class="logo" aria-hidden="true">PP</div>
           <div>
             <div class="brandtitle">ProfitPilot</div>
-            <div class="brandsub">by Ukwebtools • independent tool</div>
+            <div class="brandsub">Independent tool by Ukwebtools</div>
           </div>
         </div>
 
-        <div class="nav">
-          <a class="btn ghost" href="https://ukwebtools.com/">← Ukwebtools</a>
+        <div class="navlinks" aria-label="Site">
           <a class="btn active" href="index.html">Home</a>
           <a class="btn" href="pricing.html">Pricing</a>
           <a class="btn" href="reviews.html">Reviews</a>
           <a class="btn" href="help.html">How to use</a>
-          <a class="btn" href="privacy.html">Privacy</a>
-          <a class="btn" href="terms.html">Terms</a>
+        </div>
 
-          <span class="chip" id="userChip">Signed in</span>
-          <a class="btn primary" id="authBtn" href="login.html">Start free trial</a>
+        <div class="navactions" aria-label="Account">
+          <span class="chip" id="userChip">—</span>
+          <a class="btn primary" id="primaryNavCta" href="login.html">Start free trial</a>
           <a class="btn" id="logoutBtn" href="#" style="display:none">Log out</a>
         </div>
       </div>
 
-      <div class="crumbs" aria-label="Breadcrumb">
-        <a href="https://ukwebtools.com/">Ukwebtools</a>
-        <span class="sep">›</span>
-        <span>ProfitPilot</span>
-      </div>
-
+      <!-- SEO Breadcrumb JSON-LD -->
       <script type="application/ld+json">
       {
         "@context":"https://schema.org",
@@ -197,22 +207,21 @@
     <div class="hero">
       <h1>Price smarter. Protect your margin. Scale with confidence.</h1>
       <p class="lead">
-        ProfitPilot helps you estimate profit and margin, reverse-calculate the selling price you need for a target profit,
-        and run bulk checks across multiple products — all from your own inputs.
+        Estimate profit and margin, reverse-calculate the selling price you need for a target profit,
+        and run bulk checks across multiple products — using only your own inputs.
       </p>
 
       <div class="cta">
-        <a class="btn primary" href="login.html" id="startBtn">Start free trial</a>
+        <a class="btn primary" href="login.html" id="primaryHeroCta">Start free trial</a>
         <a class="btn" href="pricing.html">View pricing</a>
-        <a class="btn" href="app.html" id="openAppBtn">Open app</a>
-        <a class="btn" href="help.html">How to use</a>
+        <a class="btn ghost" href="https://ukwebtools.com/">← Ukwebtools</a>
       </div>
 
       <div class="pillrow">
         <span class="pill">5-day trial</span>
         <span class="pill">One-time PRO unlock</span>
         <span class="pill">No subscriptions</span>
-        <span class="pill">No scraping • your inputs only</span>
+        <span class="pill">Your inputs only</span>
       </div>
     </div>
 
@@ -234,19 +243,20 @@
         <div class="kgrid">
           <div class="k">
             <div class="h">Trial</div>
-            <div class="v">Try before you buy</div>
+            <div class="v">Validate fast</div>
             <ul class="list" style="margin-top:8px">
               <li>Profit mode: unlimited</li>
-              <li>Reverse: limited “taste test”</li>
+              <li>Reverse: limited access</li>
               <li>Bulk: limited rows/runs</li>
             </ul>
           </div>
+
           <div class="k" style="border-color:rgba(14,165,164,.28);background:rgba(14,165,164,.06)">
             <div class="h">PRO</div>
             <div class="v">Unlimited tools</div>
             <ul class="list" style="margin-top:8px">
               <li>Unlimited Reverse + Bulk</li>
-              <li>Insights (break-even, target margin, risk hints)</li>
+              <li>Insights (break-even, targets, hints)</li>
               <li>Export/share (where enabled)</li>
             </ul>
           </div>
@@ -256,7 +266,7 @@
 
         <div class="small">
           <b>Disclaimer:</b> Independent tool. Not affiliated with or endorsed by any marketplace, platform, or payment provider.
-          Estimates only: outputs depend on your inputs and assumptions; no profit guarantees. This is not financial, legal, or tax advice.
+          Estimates only: outputs depend on your inputs and assumptions; no profit guarantees. Not financial, legal, or tax advice.
         </div>
       </div>
 
@@ -266,7 +276,6 @@
           <div class="title">PRO unlock</div>
           <div class="small">
             PRO is a <b>one-time purchase</b> unlock. No subscriptions.
-            (We’re switching checkout to Paddle soon — you’ll just swap the checkout link.)
           </div>
 
           <div class="divider"></div>
@@ -274,7 +283,7 @@
           <div class="k">
             <div class="h">Current price</div>
             <div class="v" id="priceLine">£9.99</div>
-            <div class="small">See full limits and comparison on the Pricing page.</div>
+            <div class="small">Full limits and comparison are on the Pricing page.</div>
           </div>
 
           <div class="cta" style="margin-top:12px">
@@ -295,7 +304,7 @@
 
           <div class="cta">
             <a class="btn" href="reviews.html">See all reviews</a>
-            <a class="btn" href="app.html">Log in to submit/edit review</a>
+            <a class="btn" id="reviewCta" href="app.html">Log in to submit/edit review</a>
           </div>
 
           <div class="small" style="margin-top:10px">
@@ -306,8 +315,16 @@
     </div>
 
     <footer>
-      © <span id="yr"></span> Ukwebtools • ProfitPilot
+      <div class="divider"></div>
+      <div class="footrow">
+        <div>© <span id="yr"></span> Ukwebtools • ProfitPilot</div>
+        <div class="footlinks">
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+        </div>
+      </div>
     </footer>
+
   </div>
 
 <script type="module">
@@ -317,17 +334,18 @@
   const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-  // ✅ Checkout link (swap to Paddle later)
+  // Checkout link (swap to Paddle later)
   const CHECKOUT_URL = "https://stonevia.gumroad.com/l/goddhg";
   document.getElementById("buyBtn").href = CHECKOUT_URL;
 
   document.getElementById("yr").textContent = new Date().getFullYear();
 
-  // Auth UI
+  // Auth UI (single CTA across nav + hero)
   const userChip = document.getElementById("userChip");
-  const authBtn = document.getElementById("authBtn");
+  const navCta = document.getElementById("primaryNavCta");
+  const heroCta = document.getElementById("primaryHeroCta");
   const logoutBtn = document.getElementById("logoutBtn");
-  const startBtn = document.getElementById("startBtn");
+  const reviewCta = document.getElementById("reviewCta");
 
   async function refreshAuthUI(){
     const { data: { session } } = await supabase.auth.getSession();
@@ -336,18 +354,26 @@
     if (email){
       userChip.style.display = "inline-flex";
       userChip.textContent = email;
-      authBtn.style.display = "none";
+
+      navCta.textContent = "Open app";
+      navCta.href = "app.html";
+
+      heroCta.textContent = "Open app";
+      heroCta.href = "app.html";
+
       logoutBtn.style.display = "inline-flex";
-      startBtn.textContent = "Open app";
-      startBtn.href = "app.html";
+      reviewCta.href = "app.html";
     } else {
       userChip.style.display = "none";
-      authBtn.style.display = "inline-flex";
-      authBtn.textContent = "Start free trial";
-      authBtn.href = "login.html";
+
+      navCta.textContent = "Start free trial";
+      navCta.href = "login.html";
+
+      heroCta.textContent = "Start free trial";
+      heroCta.href = "login.html";
+
       logoutBtn.style.display = "none";
-      startBtn.textContent = "Start free trial";
-      startBtn.href = "login.html";
+      reviewCta.href = "app.html";
     }
   }
 
