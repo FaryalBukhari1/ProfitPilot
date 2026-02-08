@@ -724,6 +724,8 @@
     const bulkStatus = document.getElementById("bulkStatus");
     const bulkImportStatus = document.getElementById("bulkImportStatus");
     const importBanner = document.getElementById("importBanner");
+    const proCard = document.getElementById("proCard");
+
 
     const pdfBtn = document.getElementById("pdfBtn");
     const shareBtn = document.getElementById("shareBtn");
@@ -1041,6 +1043,7 @@
       compStatus.textContent = isPro ? "Unlocked" : "Trial limited";
       insStatus.textContent = isPro ? "Unlocked" : "Locked";
       scenarioStatus.textContent = isPro ? "PRO enabled" : "Unlock PRO to save scenarios.";
+      if (proCard) proCard.style.display = isPro ? "none" : "block";
     }
 
     function updateAccessUI(profile){
