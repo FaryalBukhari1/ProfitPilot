@@ -8,52 +8,67 @@
   <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
 
   <style>
-    :root{--bg:#0b0f14;--card:#111826;--card2:#0e1521;--txt:#eaf0ff;--muted:#9aa7bd;--line:rgba(255,255,255,.08);--accent:#5eead4;}
+    :root{
+      --bg:#0b0f14;
+      --card:#111826;
+      --card2:#0e1521;
+      --txt:#eaf0ff;
+      --muted:#9aa7bd;
+      --line:rgba(255,255,255,.10);
+      --accent:#5eead4;
+      --accent2:#60a5fa;
+      --good:#34d399;
+      --warn:#fbbf24;
+      --bad:#fb7185;
+      --shadow:0 18px 46px rgba(0,0,0,.35);
+    }
     *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui;background:var(--bg);color:var(--txt)}
-    .wrap{max-width:520px;margin:40px auto;padding:0 14px}
-
-    /* Reuse your login look */
-    .card{
-      background:linear-gradient(180deg,rgba(94,234,212,.10),transparent 60%),var(--card);
-      border:1px solid var(--line);border-radius:18px;padding:20px
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:
+        radial-gradient(900px 520px at 20% 0%, rgba(94,234,212,.12), transparent 55%),
+        radial-gradient(900px 520px at 80% 0%, rgba(96,165,250,.10), transparent 55%),
+        linear-gradient(180deg, #090c11, var(--bg));
+      color:var(--txt);
     }
-    h2{margin:0 0 10px}
-    input{width:100%;padding:12px;border-radius:14px;border:1px solid var(--line);background:var(--card2);color:var(--txt);outline:none}
-    input:focus{border-color:rgba(94,234,212,.35)}
-    label{font-size:12px;color:var(--muted);margin-top:14px;display:block}
-    .btn{
-      width:100%;margin-top:14px;padding:12px;border-radius:999px;
-      border:1px solid rgba(255,255,255,.1);
-      background:rgba(255,255,255,.03);color:var(--txt);cursor:pointer
-    }
-    .btn.primary{background:rgba(94,234,212,.12);border-color:rgba(94,234,212,.35)}
-    .small{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.5}
     a{color:var(--accent);text-decoration:none}
-  </style>
+    a:hover{text-decoration:underline}
+    :focus-visible{outline:3px solid rgba(96,165,250,.45);outline-offset:3px;border-radius:10px}
 
-  <!-- PROFITPILOT: UNIVERSAL NAV + BREADCRUMBS -->
-  <style>
+    /* ---------- NAV (single, clean, dark) ---------- */
     .pp-navwrap{max-width:1200px;margin:0 auto;padding:14px 16px;position:relative;z-index:50}
-    .pp-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+    .pp-nav{
+      display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+    }
     .pp-left,.pp-right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .pp-btn{
-      padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
-      background:#fff;font-weight:800;text-decoration:none;color:#0b1220;
-      box-shadow:0 8px 18px rgba(16,24,40,.06);
-      display:inline-flex;gap:8px;align-items:center;
+      padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.06);
+      font-weight:900;text-decoration:none;color:rgba(255,255,255,.92);
+      display:inline-flex;gap:8px;align-items:center;white-space:nowrap;
       transition:transform .08s ease;
+      backdrop-filter: blur(10px);
     }
     .pp-btn:hover{transform:translateY(-1px)}
     .pp-btn:active{transform:translateY(0)}
     .pp-primary{
-      border:none;color:#fff;
-      background:linear-gradient(135deg,#0ea5a4,#4f46e5);
-      box-shadow:0 14px 28px rgba(79,70,229,.16);
+      border:none;color:#0b1220;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      box-shadow:0 14px 28px rgba(96,165,250,.18);
     }
     .pp-active{
-      border-color:rgba(14,165,164,.35);
-      background:rgba(14,165,164,.08);
+      border-color:rgba(94,234,212,.35);
+      background:rgba(94,234,212,.10);
+    }
+    .pp-user{
+      padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.06);
+      color:rgba(255,255,255,.80);
+      font-weight:900;
+      display:none;
+      max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
     }
     .pp-crumbs{
       margin-top:10px;
@@ -61,24 +76,131 @@
       color:rgba(255,255,255,.70);
       display:flex;gap:6px;flex-wrap:wrap;align-items:center;
     }
-    .pp-crumbs a{color:rgba(94,234,212,.95);font-weight:800;text-decoration:none}
+    .pp-crumbs a{color:rgba(94,234,212,.95);font-weight:900;text-decoration:none}
     .pp-sep{opacity:.55}
-    .pp-user{
-      padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.10);
+
+    /* ---------- PAGE ---------- */
+    .wrap{max-width:520px;margin:26px auto 70px;padding:0 14px}
+    .hero{
+      margin:0 auto 14px;
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px;
+      padding:14px;
+      box-shadow:0 10px 30px rgba(0,0,0,.22);
+    }
+    h1{margin:0;font-size:20px;letter-spacing:-.02em}
+    .lead{margin-top:8px;color:rgba(234,240,255,.75);line-height:1.6;font-size:13px}
+
+    .card{
+      background:linear-gradient(180deg,rgba(94,234,212,.10),transparent 60%),var(--card);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:20px;
+      box-shadow:var(--shadow);
+    }
+    .brandline{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .brand{
+      font-weight:1000;letter-spacing:-.02em;font-size:18px;
+    }
+    .pillrow{display:flex;gap:8px;flex-wrap:wrap}
+    .pill{
+      padding:7px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.05);
+      color:rgba(234,240,255,.72);
+      font-size:12px;font-weight:900;
+    }
+
+    label{font-size:12px;color:var(--muted);margin-top:14px;display:block}
+    input{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:var(--card2);
+      color:var(--txt);
+      outline:none;
+    }
+    input:focus{border-color:rgba(94,234,212,.35)}
+    .row{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:10px;
+      align-items:center;
+    }
+    .toggle{
+      padding:10px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.10);
       background:rgba(255,255,255,.06);
-      color:rgba(255,255,255,.80);
-      font-weight:800;
-      display:none;
-      max-width:260px;
-      overflow:hidden;text-overflow:ellipsis;
+      color:rgba(255,255,255,.90);
+      font-weight:900;
+      cursor:pointer;
+      user-select:none;
       white-space:nowrap;
     }
+    .toggle:hover{transform:translateY(-1px)}
+    .toggle:active{transform:translateY(0)}
+
+    .hint{font-size:12px;color:rgba(234,240,255,.70);margin-top:8px;line-height:1.5}
+    .hint b{color:rgba(255,255,255,.92)}
+    .meter{
+      margin-top:10px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      border-radius:999px;
+      overflow:hidden;
+      height:10px;
+    }
+    .fill{height:100%;width:0%;background:linear-gradient(90deg,var(--bad),var(--warn),var(--good))}
+    .meterline{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:8px}
+    .score{font-size:12px;color:rgba(234,240,255,.70)}
+    .score strong{color:rgba(255,255,255,.92)}
+
+    .btn{
+      width:100%;
+      margin-top:14px;
+      padding:12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      color:var(--txt);
+      cursor:pointer;
+      font-weight:1000;
+      transition:transform .08s ease, opacity .08s ease;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(0)}
+    .btn.primary{
+      border:none;
+      color:#0b1220;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      box-shadow:0 14px 28px rgba(96,165,250,.16);
+    }
+    .btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+
+    .small{font-size:12px;color:rgba(234,240,255,.68);margin-top:12px;line-height:1.55}
+    .msg{
+      margin-top:12px;
+      font-size:12.5px;
+      line-height:1.55;
+      color:rgba(234,240,255,.78);
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px;
+      padding:10px 12px;
+    }
+    .msg.ok{border-color:rgba(52,211,153,.22);background:rgba(52,211,153,.06)}
+    .msg.bad{border-color:rgba(251,113,133,.22);background:rgba(251,113,133,.06)}
   </style>
+
+  <script type="application/ld+json" id="ppBreadcrumbJson"></script>
 </head>
 
 <body>
 
-  <!-- PROFITPILOT NAV -->
+  <!-- NAV -->
   <div class="pp-navwrap" role="navigation" aria-label="Primary">
     <div class="pp-nav">
       <div class="pp-left">
@@ -91,7 +213,7 @@
       </div>
 
       <div class="pp-right">
-        <span class="pp-user" id="ppUserChip">Signed in</span>
+        <span class="pp-user" id="ppUserChip">—</span>
 
         <!-- Signed OUT -->
         <a class="pp-btn" id="ppLoginBtn" href="login.html">Log in</a>
@@ -110,143 +232,258 @@
       <span class="pp-sep">›</span>
       <span id="ppCrumbCurrent">Sign up</span>
     </div>
-
-    <script id="ppBreadcrumbJson" type="application/ld+json"></script>
   </div>
-  <!-- END NAV -->
 
   <div class="wrap">
-    <div class="card">
-      <h2>ProfitPilot</h2>
-      <p class="small">Create an account. If email confirmation is enabled, you’ll be asked to verify your email before logging in.</p>
-
-      <label>Email</label>
-      <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
-
-      <label>Password</label>
-      <input id="password" type="password" placeholder="Minimum 8 characters" autocomplete="new-password">
-
-      <label>Confirm password</label>
-      <input id="password2" type="password" placeholder="Repeat password" autocomplete="new-password">
-
-      <button class="btn primary" id="create">Create account</button>
-      <button class="btn" id="goLogin">I already have an account</button>
-
-      <div class="small" id="msg">—</div>
-
-      <div class="small" style="margin-top:10px">
-        By signing up, you agree to the <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy</a>.
+    <div class="hero">
+      <h1>Create your ProfitPilot account</h1>
+      <div class="lead">
+        Start the 5-day trial, then unlock PRO with a one-time purchase if you want unlimited Reverse + Bulk.
+        No subscriptions.
       </div>
+    </div>
+
+    <div class="card">
+      <div class="brandline">
+        <div class="brand">ProfitPilot</div>
+        <div class="pillrow" aria-label="Trust">
+          <span class="pill">No subscriptions</span>
+          <span class="pill">Cancel nothing</span>
+          <span class="pill">Email only</span>
+        </div>
+      </div>
+
+      <form id="form" novalidate>
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+
+        <label for="password">Password</label>
+        <div class="row">
+          <input id="password" type="password" placeholder="Minimum 8 characters" autocomplete="new-password" required>
+          <button class="toggle" id="togglePw" type="button" aria-label="Show password">Show</button>
+        </div>
+
+        <div class="meter" aria-label="Password strength">
+          <div class="fill" id="pwFill"></div>
+        </div>
+        <div class="meterline">
+          <div class="score" id="pwScore">Strength: <strong>—</strong></div>
+          <div class="score" id="capsHint" style="display:none">Caps Lock is ON</div>
+        </div>
+
+        <label for="password2">Confirm password</label>
+        <div class="row">
+          <input id="password2" type="password" placeholder="Repeat password" autocomplete="new-password" required>
+          <button class="toggle" id="togglePw2" type="button" aria-label="Show confirm password">Show</button>
+        </div>
+
+        <button class="btn primary" id="create" type="submit">Create account</button>
+        <button class="btn" id="goLogin" type="button">I already have an account</button>
+
+        <div class="msg" id="msg" role="status" aria-live="polite">—</div>
+
+        <div class="small" style="margin-top:12px">
+          By signing up, you agree to the <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy</a>.
+        </div>
+        <div class="hint" style="margin-top:10px">
+          <b>Privacy:</b> We do not connect to your marketplace accounts. Payment details are handled by the checkout provider.
+        </div>
+      </form>
     </div>
   </div>
 
-<script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-  // SAME credentials as login.html (no broken placeholders)
-  const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
-  const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+    const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
+    const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-  const msg = document.getElementById("msg");
-  const emailEl = document.getElementById("email");
-  const passwordEl = document.getElementById("password");
-  const password2El = document.getElementById("password2");
-
-  function setMsg(text){ msg.textContent = text; }
-
-  // Breadcrumb JSON-LD (kept correct + non-broken)
-  const base = "https://profitpilot.ukwebtools.com/";
-  document.getElementById("ppBreadcrumbJson").textContent = JSON.stringify({
-    "@context":"https://schema.org",
-    "@type":"BreadcrumbList",
-    "itemListElement":[
-      {"@type":"ListItem","position":1,"name":"Ukwebtools","item":"https://ukwebtools.com/"},
-      {"@type":"ListItem","position":2,"name":"ProfitPilot","item": base + "index.html"},
-      {"@type":"ListItem","position":3,"name":"Sign up","item": base + "signup.html"}
-    ]
-  });
-
-  // Nav auth UI
-  const userChip = document.getElementById("ppUserChip");
-  const loginBtn = document.getElementById("ppLoginBtn");
-  const signupBtn = document.getElementById("ppSignupBtn");
-  const openBtn = document.getElementById("ppOpenBtn");
-  const logoutBtn = document.getElementById("ppLogoutBtn");
-
-  async function refreshAuthUI(){
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session?.user?.email){
-      userChip.style.display = "inline-flex";
-      userChip.textContent = session.user.email;
-
-      loginBtn.style.display = "none";
-      signupBtn.style.display = "none";
-
-      openBtn.style.display = "inline-flex";
-      logoutBtn.style.display = "inline-flex";
-    } else {
-      userChip.style.display = "none";
-
-      loginBtn.style.display = "inline-flex";
-      signupBtn.style.display = "inline-flex";
-
-      openBtn.style.display = "none";
-      logoutBtn.style.display = "none";
+    // Breadcrumb JSON-LD
+    const base = "https://profitpilot.ukwebtools.com/";
+    const bj = document.getElementById("ppBreadcrumbJson");
+    if (bj){
+      bj.textContent = JSON.stringify({
+        "@context":"https://schema.org",
+        "@type":"BreadcrumbList",
+        "itemListElement":[
+          {"@type":"ListItem","position":1,"name":"Ukwebtools","item":"https://ukwebtools.com/"},
+          {"@type":"ListItem","position":2,"name":"ProfitPilot","item": base + "index.html"},
+          {"@type":"ListItem","position":3,"name":"Sign up","item": base + "signup.html"}
+        ]
+      });
     }
-  }
 
-  logoutBtn.addEventListener("click", async (e)=>{
-    e.preventDefault();
-    await supabase.auth.signOut();
-    location.href = "login.html";
-  });
+    // Elements
+    const form = document.getElementById("form");
+    const msg = document.getElementById("msg");
+    const emailEl = document.getElementById("email");
+    const pwEl = document.getElementById("password");
+    const pw2El = document.getElementById("password2");
+    const createBtn = document.getElementById("create");
+    const pwFill = document.getElementById("pwFill");
+    const pwScore = document.getElementById("pwScore");
+    const capsHint = document.getElementById("capsHint");
 
-  // If already signed in, go to app
-  const { data: { session } } = await supabase.auth.getSession();
-  if (session?.user){ location.href = "app.html"; }
+    function setMsg(text, kind=""){
+      msg.textContent = text;
+      msg.className = "msg" + (kind ? " " + kind : "");
+    }
 
-  await refreshAuthUI();
-  supabase.auth.onAuthStateChange(() => refreshAuthUI());
+    function normalizeErrorMessage(err){
+      const raw = String(err?.message || err || "");
+      // Friendly mapping (avoid leaking technicalities)
+      if (raw.toLowerCase().includes("invalid login credentials")) return "That email/password combination isn’t valid.";
+      if (raw.toLowerCase().includes("user already registered")) return "This email is already registered. Try logging in instead.";
+      if (raw.toLowerCase().includes("password")) return "Please choose a stronger password (8+ characters recommended).";
+      return "Could not create account. Please try again.";
+    }
 
-  // Page buttons
-  document.getElementById("goLogin").addEventListener("click", () => {
-    location.href = "login.html";
-  });
+    // Password strength (simple + fast)
+    function scorePassword(pw){
+      const s = String(pw || "");
+      let score = 0;
+      if (s.length >= 8) score += 25;
+      if (s.length >= 12) score += 15;
+      if (/[A-Z]/.test(s)) score += 15;
+      if (/[a-z]/.test(s)) score += 10;
+      if (/[0-9]/.test(s)) score += 15;
+      if (/[^A-Za-z0-9]/.test(s)) score += 20;
+      score = Math.min(100, score);
 
-  document.getElementById("create").addEventListener("click", async () => {
-    const email = emailEl.value.trim();
-    const password = passwordEl.value;
-    const password2 = password2El.value;
+      let label = "Weak";
+      if (score >= 70) label = "Strong";
+      else if (score >= 45) label = "Okay";
+      return { score, label };
+    }
 
-    if (!email) { setMsg("Please enter your email."); return; }
-    if (!password || password.length < 8) { setMsg("Password must be at least 8 characters."); return; }
-    if (password !== password2) { setMsg("Passwords do not match."); return; }
+    function updateStrength(){
+      const { score, label } = scorePassword(pwEl.value);
+      pwFill.style.width = score + "%";
+      pwScore.innerHTML = `Strength: <strong>${label}</strong>`;
+    }
 
-    setMsg("Creating account…");
+    pwEl.addEventListener("input", updateStrength);
+    updateStrength();
 
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: "https://profitpilot.ukwebtools.com/login.html"
+    // Caps lock hint
+    function capsCheck(e){
+      const on = e.getModifierState && e.getModifierState("CapsLock");
+      capsHint.style.display = on ? "inline" : "none";
+    }
+    pwEl.addEventListener("keydown", capsCheck);
+    pw2El.addEventListener("keydown", capsCheck);
+
+    // Show/hide
+    function bindToggle(btnId, inputId){
+      const btn = document.getElementById(btnId);
+      const input = document.getElementById(inputId);
+      btn.addEventListener("click", ()=>{
+        const isPw = input.type === "password";
+        input.type = isPw ? "text" : "password";
+        btn.textContent = isPw ? "Hide" : "Show";
+      });
+    }
+    bindToggle("togglePw", "password");
+    bindToggle("togglePw2", "password2");
+
+    // Nav auth UI
+    const userChip = document.getElementById("ppUserChip");
+    const loginBtn = document.getElementById("ppLoginBtn");
+    const signupBtn = document.getElementById("ppSignupBtn");
+    const openBtn = document.getElementById("ppOpenBtn");
+    const logoutBtn = document.getElementById("ppLogoutBtn");
+
+    async function refreshAuthUI(){
+      const { data: { session } } = await supabase.auth.getSession();
+      const email = session?.user?.email;
+
+      if (email){
+        userChip.style.display = "inline-flex";
+        userChip.textContent = email;
+        userChip.title = email;
+
+        loginBtn.style.display = "none";
+        signupBtn.style.display = "none";
+        openBtn.style.display = "inline-flex";
+        logoutBtn.style.display = "inline-flex";
+      } else {
+        userChip.style.display = "none";
+        userChip.textContent = "—";
+        userChip.title = "";
+
+        loginBtn.style.display = "inline-flex";
+        signupBtn.style.display = "inline-flex";
+        openBtn.style.display = "none";
+        logoutBtn.style.display = "none";
       }
+    }
+
+    logoutBtn.addEventListener("click", async (e)=>{
+      e.preventDefault();
+      await supabase.auth.signOut();
+      location.href = "login.html";
     });
 
-    if (error){
-      setMsg(error.message);
-      return;
-    }
+    // If already signed in, go to app
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user){ location.href = "app.html"; }
 
-    // If confirmation is ON, session is usually null. Send to verify page like your login flow.
-    localStorage.setItem("pp_pending_email", email);
+    await refreshAuthUI();
+    supabase.auth.onAuthStateChange(()=>refreshAuthUI());
 
-    if (!data?.session){
-      location.href = "verify.html";
-    } else {
-      location.href = "app.html";
-    }
-  });
-</script>
+    // Buttons
+    document.getElementById("goLogin").addEventListener("click", ()=>location.href="login.html");
+
+    // Submit
+    form.addEventListener("submit", async (e)=>{
+      e.preventDefault();
+
+      const email = emailEl.value.trim();
+      const password = pwEl.value;
+      const password2 = pw2El.value;
+
+      if (!email){ setMsg("Please enter your email.", "bad"); emailEl.focus(); return; }
+      if (!password || password.length < 8){ setMsg("Password must be at least 8 characters.", "bad"); pwEl.focus(); return; }
+      if (password !== password2){ setMsg("Passwords do not match.", "bad"); pw2El.focus(); return; }
+
+      createBtn.disabled = true;
+      setMsg("Creating account…");
+
+      try{
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            // After email confirmation, users can log in normally
+            emailRedirectTo: "https://profitpilot.ukwebtools.com/login.html"
+          }
+        });
+
+        if (error){
+          console.error("Supabase signUp error:", error);
+          setMsg(normalizeErrorMessage(error), "bad");
+          createBtn.disabled = false;
+          return;
+        }
+
+        localStorage.setItem("pp_pending_email", email);
+
+        // If email confirmation is ON, session is usually null.
+        if (!data?.session){
+          setMsg("Check your inbox to verify your email. Then come back and log in.", "ok");
+          // send to verify page if you have it
+          setTimeout(()=>{ location.href = "verify.html"; }, 700);
+        } else {
+          setMsg("Account created. Redirecting…", "ok");
+          setTimeout(()=>{ location.href = "app.html"; }, 400);
+        }
+      } catch (err){
+        console.error("Signup fatal error:", err);
+        setMsg("Something went wrong. Please try again.", "bad");
+        createBtn.disabled = false;
+      }
+    });
+  </script>
 </body>
 </html>
