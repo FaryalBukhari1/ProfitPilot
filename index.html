@@ -35,7 +35,7 @@
       background:rgba(255,255,255,.78);
       border:1px solid var(--line);
       border-radius:18px;
-      padding:12px 12px;
+      padding:12px;
       box-shadow:var(--shadow);
       backdrop-filter: blur(10px);
       position:sticky; top:10px; z-index:50;
@@ -101,7 +101,6 @@
       font-weight:650;
       max-width:920px
     }
-    .heroCta{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
     .pillrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
     .pill{
       display:inline-flex;gap:8px;align-items:center;
@@ -177,6 +176,7 @@
         </div>
 
         <div class="navlinks" aria-label="Site">
+          <a class="btn ghost" href="https://ukwebtools.com/">← Ukwebtools</a>
           <a class="btn active" href="index.html">Home</a>
           <a class="btn" href="pricing.html">Pricing</a>
           <a class="btn" href="reviews.html">Reviews</a>
@@ -185,7 +185,7 @@
 
         <div class="navactions" aria-label="Account">
           <span class="chip" id="userChip">—</span>
-          <a class="btn primary" id="primaryNavCta" href="login.html">Start free trial</a>
+          <a class="btn primary" id="primaryCta" href="login.html">Start free trial</a>
           <a class="btn" id="logoutBtn" href="#" style="display:none">Log out</a>
         </div>
       </div>
@@ -202,17 +202,13 @@
       </script>
     </div>
 
-    <!-- HERO (no navigation buttons; only primary action) -->
+    <!-- HERO (NO BUTTONS HERE) -->
     <div class="hero">
       <h1>Price smarter. Protect your margin. Scale with confidence.</h1>
       <p class="lead">
         Estimate profit and margin, reverse-calculate the selling price you need for a target profit,
         and run bulk checks across multiple products — using only your own inputs.
       </p>
-
-      <div class="heroCta">
-        <a class="btn primary" href="login.html" id="primaryHeroCta">Start free trial</a>
-      </div>
 
       <div class="pillrow">
         <span class="pill">5-day trial</span>
@@ -283,7 +279,7 @@
             <div class="small">Full limits and comparison are on the Pricing page.</div>
           </div>
 
-          <div class="heroCta" style="margin-top:12px">
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
             <a class="btn primary" id="buyBtn" href="#" target="_blank" rel="noopener">Buy PRO</a>
             <a class="btn" href="pricing.html">See pricing & limits</a>
           </div>
@@ -299,7 +295,7 @@
 
           <div class="divider"></div>
 
-          <div class="heroCta">
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
             <a class="btn" href="reviews.html">See all reviews</a>
             <a class="btn" id="reviewCta" href="app.html">Log in to submit/edit review</a>
           </div>
@@ -337,10 +333,9 @@
 
   document.getElementById("yr").textContent = new Date().getFullYear();
 
-  // Auth UI (keep only top nav + hero primary button)
+  // Auth UI (ONLY ONE CTA: top nav button)
   const userChip = document.getElementById("userChip");
-  const navCta = document.getElementById("primaryNavCta");
-  const heroCta = document.getElementById("primaryHeroCta");
+  const primaryCta = document.getElementById("primaryCta");
   const logoutBtn = document.getElementById("logoutBtn");
 
   async function refreshAuthUI(){
@@ -351,21 +346,15 @@
       userChip.style.display = "inline-flex";
       userChip.textContent = email;
 
-      navCta.textContent = "Open app";
-      navCta.href = "app.html";
-
-      heroCta.textContent = "Open app";
-      heroCta.href = "app.html";
+      primaryCta.textContent = "Open app";
+      primaryCta.href = "app.html";
 
       logoutBtn.style.display = "inline-flex";
     } else {
       userChip.style.display = "none";
 
-      navCta.textContent = "Start free trial";
-      navCta.href = "login.html";
-
-      heroCta.textContent = "Start free trial";
-      heroCta.href = "login.html";
+      primaryCta.textContent = "Start free trial";
+      primaryCta.href = "login.html";
 
       logoutBtn.style.display = "none";
     }
