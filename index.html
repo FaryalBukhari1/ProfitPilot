@@ -149,7 +149,7 @@
 <body>
   <div class="wrap">
 
-    <!-- NAV -->
+    <!-- ✅ SINGLE NAV ONLY (NO DUPLICATES) -->
     <div class="topbar">
       <div class="navrow">
         <div class="brand">
@@ -175,14 +175,12 @@
         </div>
       </div>
 
-      <!-- Breadcrumbs -->
       <div class="crumbs" aria-label="Breadcrumb">
         <a href="https://ukwebtools.com/">Ukwebtools</a>
         <span class="sep">›</span>
         <span>ProfitPilot</span>
       </div>
 
-      <!-- SEO JSON-LD breadcrumbs -->
       <script type="application/ld+json">
       {
         "@context":"https://schema.org",
@@ -232,32 +230,6 @@
 
         <div class="divider"></div>
 
-        <div class="title">Why sellers keep it open</div>
-        <div class="kgrid">
-          <div class="k">
-            <div class="h">Not just a fee calculator</div>
-            <div class="v">Decision-focused</div>
-            <div class="small">Break-even, reverse pricing, bulk checks, sensitivity hints.</div>
-          </div>
-          <div class="k">
-            <div class="h">Built for trust</div>
-            <div class="v">Transparent</div>
-            <div class="small">No “guaranteed profit” claims. You control assumptions.</div>
-          </div>
-          <div class="k">
-            <div class="h">Platform-neutral</div>
-            <div class="v">Independent</div>
-            <div class="small">Platform names (if shown) are for reference only. No affiliation claimed.</div>
-          </div>
-          <div class="k">
-            <div class="h">Simple pricing</div>
-            <div class="v">One-time unlock</div>
-            <div class="small">Trial first, then unlock PRO once. No subscriptions.</div>
-          </div>
-        </div>
-
-        <div class="divider"></div>
-
         <div class="title">Trial vs PRO</div>
         <div class="kgrid">
           <div class="k">
@@ -271,10 +243,10 @@
           </div>
           <div class="k" style="border-color:rgba(14,165,164,.28);background:rgba(14,165,164,.06)">
             <div class="h">PRO</div>
-            <div class="v">Unlimited decision tools</div>
+            <div class="v">Unlimited tools</div>
             <ul class="list" style="margin-top:8px">
               <li>Unlimited Reverse + Bulk</li>
-              <li>Insights (break-even, target margin price, risk hints)</li>
+              <li>Insights (break-even, target margin, risk hints)</li>
               <li>Export/share (where enabled)</li>
             </ul>
           </div>
@@ -294,14 +266,14 @@
           <div class="title">PRO unlock</div>
           <div class="small">
             PRO is a <b>one-time purchase</b> unlock. No subscriptions.
-            (We will switch checkout provider to Paddle; your access stays tied to your account.)
+            (We’re switching checkout to Paddle soon — you’ll just swap the checkout link.)
           </div>
 
           <div class="divider"></div>
 
           <div class="k">
             <div class="h">Current price</div>
-            <div class="v" id="priceLine">£7.99</div>
+            <div class="v" id="priceLine">£9.99</div>
             <div class="small">See full limits and comparison on the Pricing page.</div>
           </div>
 
@@ -341,23 +313,21 @@
 <script type="module">
   import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-  // ✅ Supabase public credentials (safe for frontend)
   const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
   const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-  // ✅ Checkout link (swap to Paddle later by changing only this)
+  // ✅ Checkout link (swap to Paddle later)
   const CHECKOUT_URL = "https://stonevia.gumroad.com/l/goddhg";
   document.getElementById("buyBtn").href = CHECKOUT_URL;
 
   document.getElementById("yr").textContent = new Date().getFullYear();
 
-  // --- Auth UI (fixes wrong Log out showing to logged-out users) ---
+  // Auth UI
   const userChip = document.getElementById("userChip");
   const authBtn = document.getElementById("authBtn");
   const logoutBtn = document.getElementById("logoutBtn");
   const startBtn = document.getElementById("startBtn");
-  const openAppBtn = document.getElementById("openAppBtn");
 
   async function refreshAuthUI(){
     const { data: { session } } = await supabase.auth.getSession();
@@ -366,26 +336,18 @@
     if (email){
       userChip.style.display = "inline-flex";
       userChip.textContent = email;
-
       authBtn.style.display = "none";
       logoutBtn.style.display = "inline-flex";
-
-      // If signed in, “Start free trial” button becomes “Open app”
       startBtn.textContent = "Open app";
       startBtn.href = "app.html";
-      openAppBtn.style.display = "inline-flex";
     } else {
       userChip.style.display = "none";
-
       authBtn.style.display = "inline-flex";
       authBtn.textContent = "Start free trial";
       authBtn.href = "login.html";
-
       logoutBtn.style.display = "none";
-
       startBtn.textContent = "Start free trial";
       startBtn.href = "login.html";
-      openAppBtn.style.display = "inline-flex";
     }
   }
 
@@ -398,7 +360,7 @@
   await refreshAuthUI();
   supabase.auth.onAuthStateChange(() => refreshAuthUI());
 
-  // --- Reviews (public, no login required) ---
+  // Reviews (public)
   function stars(n){
     n = Math.max(0, Math.min(5, Math.round(n)));
     return "★".repeat(n) + "☆".repeat(5-n);
@@ -408,12 +370,10 @@
     const summary = document.getElementById("ratingSummary");
     const box = document.getElementById("reviews");
 
-    // Count all reviews (public)
     const { count, error: countErr } = await supabase
       .from("reviews")
       .select("*", { count: "exact", head: true });
 
-    // Fetch latest reviews
     const { data, error } = await supabase
       .from("reviews")
       .select("created_at,name,rating,category,message")
@@ -438,6 +398,7 @@
     data.forEach(r=>{
       const div = document.createElement("div");
       div.className = "review";
+      const safeMsg = String(r.message || "").replaceAll("<","&lt;").replaceAll(">","&gt;");
       div.innerHTML = `
         <div class="meta">
           <div class="stars">${stars(r.rating)}</div>
@@ -445,7 +406,7 @@
           <span class="small">${new Date(r.created_at).toLocaleDateString()}</span>
         </div>
         <div class="small" style="margin-top:8px">
-          <b>${(r.name || "Anonymous")}</b> — ${String(r.message || "").replaceAll("<","&lt;").replaceAll(">","&gt;")}
+          <b>${(r.name || "Anonymous")}</b> — ${safeMsg}
         </div>
       `;
       box.appendChild(div);
