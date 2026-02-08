@@ -335,10 +335,17 @@
         and run bulk checks across multiple products — using only your own inputs.
       </p>
 
-      <div class="heroActions">
-        <a class="pp-btn primary" id="heroPrimary" href="login.html">Start free trial</a>
-        <a class="pp-btn" id="heroSecondary" href="app.html">Open app</a>
-        <a class="pp-btn" href="pricing.html">See PRO features</a>
+      <!-- ✅ changed: removed the 3 hero buttons, added platforms + dropshipper line -->
+      <div class="pillrow" aria-label="Platforms where it helps">
+        <span class="pill">Best for dropshippers</span>
+        <span class="pill">eBay</span>
+        <span class="pill">Amazon</span>
+        <span class="pill">Etsy</span>
+        <span class="pill">Facebook Marketplace</span>
+        <span class="pill">Vinted</span>
+        <span class="pill">Depop</span>
+        <span class="pill">Shopify</span>
+        <span class="pill">WooCommerce</span>
       </div>
 
       <div class="pillrow" aria-label="Highlights">
@@ -484,7 +491,6 @@
           </div>
 
           <div class="pp-footlinks" aria-label="Footer links">
-            <!-- sequence you asked -->
             <a href="index.html">Home</a>
             <a href="pricing.html">Pricing</a>
             <a href="reviews.html">Reviews</a>
@@ -510,7 +516,7 @@
     const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-    // ✅ Checkout link (your current one)
+    // Checkout link
     const CHECKOUT_URL = "https://stonevia.gumroad.com/l/goddhg";
     document.getElementById("buyBtn").href = CHECKOUT_URL;
 
@@ -527,11 +533,9 @@
         .replaceAll("'","&#039;");
     }
 
-    // ===== Auth UI (header + hero CTA) =====
+    // Auth UI
     const userChip = document.getElementById("userChip");
     const accountBtn = document.getElementById("accountBtn");
-    const heroPrimary = document.getElementById("heroPrimary");
-    const heroSecondary = document.getElementById("heroSecondary");
     const logoutBtn = document.getElementById("logoutBtn");
     const reviewCta = document.getElementById("reviewCta");
 
@@ -544,14 +548,8 @@
         userChip.textContent = email;
         userChip.title = email;
 
-        accountBtn.textContent = "Account";
+        accountBtn.textContent = "Open app";
         accountBtn.href = "app.html";
-
-        heroPrimary.textContent = "Open app";
-        heroPrimary.href = "app.html";
-
-        heroSecondary.textContent = "Open app";
-        heroSecondary.href = "app.html";
 
         reviewCta.textContent = "Open app to submit/edit review";
         reviewCta.href = "app.html";
@@ -564,12 +562,6 @@
 
         accountBtn.textContent = "Account";
         accountBtn.href = "login.html";
-
-        heroPrimary.textContent = "Start free trial";
-        heroPrimary.href = "login.html";
-
-        heroSecondary.textContent = "Open app";
-        heroSecondary.href = "app.html";
 
         reviewCta.textContent = "Log in to submit/edit review";
         reviewCta.href = "login.html";
@@ -587,7 +579,7 @@
     await refreshAuthUI();
     supabase.auth.onAuthStateChange(() => refreshAuthUI());
 
-    // ===== Reviews (public) =====
+    // Reviews (public)
     function stars(n){
       n = Math.max(0, Math.min(5, Math.round(Number(n) || 0)));
       return "★".repeat(n) + "☆".repeat(5-n);
