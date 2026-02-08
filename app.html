@@ -22,7 +22,14 @@
         linear-gradient(180deg, var(--bg2), var(--bg));
     }
     a{color:var(--accent);text-decoration:none}
-    .wrap{max-width:1100px;margin:18px auto;padding:0 14px}
+    .wrap{
+  max-width:1100px;
+  margin:0 auto;
+  padding:22px 16px 70px;
+}
+@media (min-width:900px){
+  .wrap{ padding:26px 22px 80px; }
+}
     .nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
     .brand{display:flex;gap:10px;align-items:center}
     .logo{
@@ -50,11 +57,22 @@
     .btn.primary{border-color:rgba(14,165,164,.30);background:rgba(14,165,164,.10)}
     .btn.ghost{background:transparent;box-shadow:none}
     .btn:disabled{opacity:.55;cursor:not-allowed}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
-    @media(max-width:980px){.grid{grid-template-columns:1fr}}
+    .grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin-top:18px;
+}
+@media(max-width:980px){
+  .grid{grid-template-columns:1fr}
+}
     .card{
-      background:var(--card);border:1px solid var(--line);
-      border-radius:18px;padding:16px;box-shadow:var(--shadow);
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:18px;
+  box-shadow:var(--shadow);
+}
     }
     .title{font-weight:900;margin:0 0 8px}
     .small{font-size:12px;color:var(--muted);line-height:1.6}
@@ -146,7 +164,15 @@
       <span class="pill" id="accessPill">Checking access…</span>
       <button class="btn" id="logoutBtn">Log out</button>
     </div>
-  </div>
+
+/* Premium rhythm */
+.title{margin:0 0 10px}
+.small{line-height:1.75}
+.divider{margin:14px 0}
+.kpi{gap:12px;margin-top:12px}
+.k{padding:14px;border-radius:18px}
+.tabs{margin-top:12px}
+footer{margin-top:18px}
 
   <!-- Breadcrumbs (visible) -->
   <div style="margin-top:10px;font-size:12.5px;color:var(--muted);display:flex;gap:6px;flex-wrap:wrap;align-items:center">
@@ -517,8 +543,7 @@
         <button class="btn primary" id="sendReview">Submit review</button>
         <div class="toast" id="reviewStatus">—</div>
       </div>
-    </div>
-  </div>
+    
 
   <footer>© <span id="yr"></span> Ukwebtools • ProfitPilot</footer>
 </div>
@@ -1664,6 +1689,7 @@
       refreshInsights();
       refreshScenarioDropdown();
       useSuggestedBtn.disabled = true;
+maybeStartTour();
 
       tryImportFromHash();
 
@@ -1695,177 +1721,138 @@
   });
 
 </script>
+  <!-- FIRST-TIME TOUR (ONBOARDING) -->
+<div id="tourOverlay" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,.45);backdrop-filter:blur(6px);z-index:9999;">
+  <div id="tourCard" style="max-width:520px;margin:10vh auto 0;background:rgba(255,255,255,.96);border:1px solid rgba(16,24,40,.12);border-radius:20px;box-shadow:0 22px 70px rgba(16,24,40,.18);padding:16px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+      <div style="font-weight:1000;letter-spacing:-.01em">Quick tour</div>
+      <span id="tourStepPill" style="font-size:12px;color:rgba(16,24,40,.60);font-weight:900">Step 1/6</span>
+    </div>
+
+    <div id="tourTitle" style="margin-top:10px;font-size:18px;font-weight:1000;letter-spacing:-.01em">Welcome to ProfitPilot</div>
+    <div id="tourBody" style="margin-top:8px;color:rgba(16,24,40,.70);line-height:1.65;font-size:13.5px">
+      This takes 20 seconds. We’ll show you where everything is.
+    </div>
+
+    <div id="tourHint" style="margin-top:12px;padding:10px 12px;border-radius:14px;border:1px dashed rgba(16,24,40,.18);background:rgba(255,255,255,.75);color:rgba(16,24,40,.62);font-size:12.5px;line-height:1.6">
+      Tip: You can skip anytime.
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;justify-content:flex-end">
+      <button class="btn" id="tourSkipBtn" type="button">Skip</button>
+      <button class="btn" id="tourBackBtn" type="button">Back</button>
+      <button class="btn primary" id="tourNextBtn" type="button">Next</button>
+    </div>
+ 
+// ---------- First-time guided tour ----------
+const TOUR_KEY = "pp_tour_done_v1";
+
+const tourOverlay = document.getElementById("tourOverlay");
+const tourStepPill = document.getElementById("tourStepPill");
+const tourTitle = document.getElementById("tourTitle");
+const tourBody = document.getElementById("tourBody");
+const tourHint = document.getElementById("tourHint");
+const tourBackBtn = document.getElementById("tourBackBtn");
+const tourNextBtn = document.getElementById("tourNextBtn");
+const tourSkipBtn = document.getElementById("tourSkipBtn");
+
+// Targets to “point” users (we scroll them into view)
+const TOUR_STEPS = [
+  {
+    title: "Welcome to ProfitPilot",
+    body: "This is your workspace. You can do profit, reverse pricing, and bulk checks.",
+    hint: "You’re seeing this once only.",
+    targetId: "tabProfit"
+  },
+  {
+    title: "Modes (Profit / Reverse / Bulk)",
+    body: "Use tabs to switch modes. Profit = normal. Reverse = target profit → selling price. Bulk = table for many items.",
+    hint: "Try Bulk when you’re checking multiple products quickly.",
+    targetId: "tabReverse"
+  },
+  {
+    title: "Profit Calculator inputs",
+    body: "Enter selling price, product cost, shipping, fees and returns. Outputs update based on your inputs.",
+    hint: "Presets are examples — adjust for your real fees.",
+    targetId: "sellPrice"
+  },
+  {
+    title: "Reverse mode (trial limited)",
+    body: "Reverse calculates the selling price you need to reach a target profit. Trial is limited, PRO is unlimited.",
+    hint: "If your reverse price is above market → product may not be viable.",
+    targetId: "targetProfit"
+  },
+  {
+    title: "Bulk table",
+    body: "Bulk mode lets you paste rows or enter in the table. Then run bulk to get profit/margin per row.",
+    hint: "Export Bulk CSV for records and comparisons.",
+    targetId: "bulkTable"
+  },
+  {
+    title: "Insights + Export + Reviews",
+    body: "Insights help decision-making (PRO). Export and Share are for PRO. Reviews help trust — submit once logged in.",
+    hint: "You can always find Help from the navigation.",
+    targetId: "insightsBox"
+  }
+];
+
+let tourIndex = 0;
+
+function scrollToTarget(id){
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.scrollIntoView({ behavior:"smooth", block:"center" });
+  // subtle focus ring
+  el.style.boxShadow = "0 0 0 4px rgba(14,165,164,.15)";
+  el.style.transition = "box-shadow .25s ease";
+  setTimeout(()=>{ el.style.boxShadow=""; }, 1200);
+}
+
+function renderTour(){
+  const step = TOUR_STEPS[tourIndex];
+  tourStepPill.textContent = `Step ${tourIndex+1}/${TOUR_STEPS.length}`;
+  tourTitle.textContent = step.title;
+  tourBody.textContent = step.body;
+  tourHint.textContent = step.hint;
+
+  tourBackBtn.style.display = tourIndex === 0 ? "none" : "inline-flex";
+  tourNextBtn.textContent = tourIndex === TOUR_STEPS.length - 1 ? "Finish" : "Next";
+
+  // Switch mode automatically if needed (so targets exist)
+  if (step.targetId === "bulkTable") setMode("bulk");
+  if (step.targetId === "targetProfit") setMode("reverse");
+  if (step.targetId === "sellPrice" || step.targetId === "tabProfit") setMode("profit");
+
+  setTimeout(()=>scrollToTarget(step.targetId), 250);
+}
+
+function startTour(){
+  tourOverlay.style.display = "block";
+  tourIndex = 0;
+  renderTour();
+}
+
+function finishTour(){
+  localStorage.setItem(TOUR_KEY, "1");
+  tourOverlay.style.display = "none";
+}
+
+tourSkipBtn?.addEventListener("click", finishTour);
+tourBackBtn?.addEventListener("click", ()=>{
+  tourIndex = Math.max(0, tourIndex - 1);
+  renderTour();
+});
+tourNextBtn?.addEventListener("click", ()=>{
+  if (tourIndex >= TOUR_STEPS.length - 1) return finishTour();
+  tourIndex += 1;
+  renderTour();
+});
+
+// Start only once (after boot completes)
+function maybeStartTour(){
+  if (localStorage.getItem(TOUR_KEY)) return;
+  startTour();
+}
+
 </body>
 </html>
-<!-- PROFITPILOT: UNIVERSAL NAV + BREADCRUMBS -->
-<style>
-  /* Keep styles scoped to nav so it won't break your existing CSS */
-  .pp-navwrap{max-width:1200px;margin:0 auto;padding:14px 16px;position:relative;z-index:50}
-  .pp-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-  .pp-left,.pp-right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-  .pp-btn{
-    padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
-    background:#fff;font-weight:800;text-decoration:none;color:#0b1220;
-    box-shadow:0 8px 18px rgba(16,24,40,.06);
-    display:inline-flex;gap:8px;align-items:center;
-  }
-  .pp-btn:hover{transform:translateY(-1px)}
-  .pp-btn:active{transform:translateY(0)}
-  .pp-primary{
-    border:none;color:#fff;
-    background:linear-gradient(135deg,#0ea5a4,#4f46e5);
-    box-shadow:0 14px 28px rgba(79,70,229,.16);
-  }
-  .pp-active{
-    border-color:rgba(14,165,164,.35);
-    background:rgba(14,165,164,.08);
-  }
-  .pp-crumbs{
-    margin-top:10px;
-    font-size:12.5px;
-    color:rgba(16,24,40,.62);
-    display:flex;gap:6px;flex-wrap:wrap;align-items:center;
-  }
-  .pp-crumbs a{color:rgba(14,165,164,.95);font-weight:800;text-decoration:none}
-  .pp-sep{opacity:.55}
-  .pp-user{
-    padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
-    background:rgba(255,255,255,.75);
-    color:rgba(16,24,40,.72);
-    font-weight:800;
-    display:none;
-  }
-</style>
-
-<div class="pp-navwrap" role="navigation" aria-label="Primary">
-  <div class="pp-nav">
-    <!-- LEFT -->
-    <div class="pp-left">
-      <a class="pp-btn" href="https://ukwebtools.com/" data-nav="ukwebtools">← Ukwebtools</a>
-      <a class="pp-btn" href="index.html" data-nav="home">Home</a>
-      <a class="pp-btn" href="reviews.html" data-nav="reviews">Reviews</a>
-      <a class="pp-btn" href="privacy.html" data-nav="privacy">Privacy</a>
-      <a class="pp-btn" href="terms.html" data-nav="terms">Terms</a>
-      <a class="pp-btn" href="faq.html" data-nav="faq">FAQ</a>
-    </div>
-
-    <!-- RIGHT -->
-    <div class="pp-right">
-      <span class="pp-user" id="ppUserChip">Signed in</span>
-      <a class="pp-btn pp-primary" id="ppAuthBtn" href="login.html">Log in</a>
-      <a class="pp-btn" id="ppLogoutBtn" href="#" style="display:none">Log out</a>
-    </div>
-  </div>
-
-  <!-- Visible Breadcrumbs -->
-  <div class="pp-crumbs" aria-label="Breadcrumb">
-    <a href="https://ukwebtools.com/">Ukwebtools</a>
-    <span class="pp-sep">›</span>
-    <a href="index.html">ProfitPilot</a>
-    <span class="pp-sep">›</span>
-    <span id="ppCrumbCurrent">Page</span>
-  </div>
-
-  <!-- JSON-LD Breadcrumbs for SEO -->
-  <script id="ppBreadcrumbJson" type="application/ld+json"></script>
-</div>
-
-<script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
-  // ✅ REPLACE THESE TWO:
-  const SUPABASE_URL = "PASTE_YOUR_SUPABASE_URL_HERE";
-  const SUPABASE_ANON = "PASTE_YOUR_SUPABASE_ANON_KEY_HERE";
-
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
-
-  // ---------- Active page highlighting ----------
-  const path = (location.pathname.split("/").pop() || "index.html").toLowerCase();
-  const map = {
-    "index.html":"home",
-    "reviews.html":"reviews",
-    "privacy.html":"privacy",
-    "terms.html":"terms",
-    "faq.html":"faq",
-    "login.html":"login",
-    "app.html":"app",
-    "reset.html":"reset",
-    "verify.html":"verify"
-  };
-  const activeKey = map[path] || "home";
-
-  // Highlight matching nav item if present
-  document.querySelectorAll(".pp-btn[data-nav]").forEach(a=>{
-    const key = a.getAttribute("data-nav");
-    if (key === activeKey) a.classList.add("pp-active");
-  });
-
-  // ---------- Breadcrumb text + JSON-LD ----------
-  const titles = {
-    home:"Home",
-    reviews:"Reviews",
-    privacy:"Privacy",
-    terms:"Terms",
-    faq:"FAQ",
-    login:"Log in",
-    app:"App",
-    reset:"Reset password",
-    verify:"Verify email"
-  };
-  const currentTitle = titles[activeKey] || "Page";
-  document.getElementById("ppCrumbCurrent").textContent = currentTitle;
-
-  const base = "https://profitpilot.ukwebtools.com/";
-  const crumbItems = [
-    { name:"Ukwebtools", item:"https://ukwebtools.com/" },
-    { name:"ProfitPilot", item: base + "index.html" },
-    { name: currentTitle, item: base + path }
-  ];
-
-  document.getElementById("ppBreadcrumbJson").textContent = JSON.stringify({
-    "@context":"https://schema.org",
-    "@type":"BreadcrumbList",
-    "itemListElement": crumbItems.map((c,i)=>({
-      "@type":"ListItem",
-      "position": i+1,
-      "name": c.name,
-      "item": c.item
-    }))
-  });
-
-  // ---------- Auth state: show email + logout ----------
-  const userChip = document.getElementById("ppUserChip");
-  const authBtn = document.getElementById("ppAuthBtn");
-  const logoutBtn = document.getElementById("ppLogoutBtn");
-
-  async function refreshAuthUI(){
-    const { data: { session } } = await supabase.auth.getSession();
-
-    if (session?.user?.email){
-      userChip.style.display = "inline-flex";
-      userChip.textContent = session.user.email;
-      authBtn.style.display = "none";
-      logoutBtn.style.display = "inline-flex";
-      // Make the "Home" button still go to landing; optional: direct logged-in users to app
-      // If you want Home button to open app when logged in, uncomment:
-      // document.querySelector('[data-nav="home"]').setAttribute("href","app.html");
-    } else {
-      userChip.style.display = "none";
-      authBtn.style.display = "inline-flex";
-      logoutBtn.style.display = "none";
-      authBtn.textContent = "Log in";
-      authBtn.setAttribute("href","login.html");
-    }
-  }
-
-  logoutBtn.addEventListener("click", async (e)=>{
-    e.preventDefault();
-    await supabase.auth.signOut();
-    location.href = "login.html";
-  });
-
-  // initial + live updates
-  await refreshAuthUI();
-  supabase.auth.onAuthStateChange(() => refreshAuthUI());
-</script>
-<!-- END PROFITPILOT NAV -->
