@@ -13,7 +13,14 @@
       --card:rgba(255,255,255,.90); --line:rgba(16,24,40,.10);
       --accent:#0ea5a4; --accent2:#4f46e5; --shadow:0 10px 30px rgba(16,24,40,.08);
       --warn:#f59e0b; --bad:#ef4444; --ok:#0ea5a4;
+
+      /* footer */
+      --f-bg:#0b0f14;
+      --f-line:rgba(255,255,255,.10);
+      --f-txt:rgba(255,255,255,.92);
+      --f-muted:rgba(255,255,255,.68);
     }
+
     *{box-sizing:border-box}
     body{
       margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--txt);
@@ -23,23 +30,52 @@
         linear-gradient(180deg, var(--bg2), var(--bg));
     }
     a{color:var(--accent);text-decoration:none}
-    .wrap{
-      max-width:1100px;
-      margin:0 auto;
-      padding:22px 16px 70px;
+    a:hover{text-decoration:underline}
+    :focus-visible{outline:3px solid rgba(79,70,229,.55);outline-offset:3px;border-radius:12px}
+
+    .skip{
+      position:absolute;left:-9999px;top:10px;
+      background:#fff;border:1px solid rgba(16,24,40,.14);
+      padding:10px 12px;border-radius:12px;
+      box-shadow:0 12px 24px rgba(16,24,40,.10);
+      z-index:1000;
     }
-    @media (min-width:900px){
-      .wrap{ padding:26px 22px 80px; }
+    .skip:focus{left:12px}
+
+    /* ===== Header (ONLY 3 NAV ITEMS) ===== */
+    .pp-wrap{max-width:1200px;margin:0 auto;padding:0 16px}
+    .pp-header{position:sticky; top:10px; z-index:100; margin:14px auto 0}
+    .pp-headerbar{
+      background:rgba(255,255,255,.78);
+      border:1px solid var(--line);
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      padding:10px;
     }
-    .nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-    .brand{display:flex;gap:10px;align-items:center}
-    .logo{
+    .pp-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:nowrap}
+    .pp-brand{display:flex;gap:10px;align-items:center;min-width:220px}
+    .pp-logo{
       width:40px;height:40px;border-radius:14px;
       background:linear-gradient(135deg, rgba(14,165,164,.18), rgba(79,70,229,.14));
       border:1px solid var(--line);
       display:flex;align-items:center;justify-content:center;
-      font-weight:900;
+      font-weight:1000;color:var(--txt);
+      user-select:none;
     }
+    .pp-title{font-weight:1000;line-height:1.05}
+    .pp-sub{font-size:12px;color:var(--muted);font-weight:750;margin-top:3px}
+    @media(max-width:760px){.pp-sub{display:none}.pp-brand{min-width:auto}}
+
+    .pp-nav{
+      display:flex;gap:10px;align-items:center;justify-content:flex-end;
+      flex:1 1 auto;
+      overflow-x:auto;-webkit-overflow-scrolling:touch;
+      padding:2px 4px;
+      scrollbar-width:thin;
+    }
+
+    /* Existing UI atoms */
     .pill{
       padding:8px 10px;border-radius:999px;border:1px solid var(--line);
       background:rgba(255,255,255,.76);font-size:12px;color:var(--muted);
@@ -48,16 +84,28 @@
     .pill.ok{border-color:rgba(14,165,164,.30);background:rgba(14,165,164,.10);color:var(--txt)}
     .pill.warn{border-color:rgba(245,158,11,.30);background:rgba(245,158,11,.10);color:var(--txt)}
     .pill.bad{border-color:rgba(239,68,68,.30);background:rgba(239,68,68,.10);color:var(--txt)}
+
     .btn{
       padding:10px 14px;border-radius:999px;border:1px solid var(--line);
       background:rgba(255,255,255,.80);color:var(--txt);
       display:inline-flex;gap:8px;align-items:center;cursor:pointer;
       box-shadow:0 4px 16px rgba(16,24,40,.06);user-select:none;
       white-space:nowrap;
+      text-decoration:none;
     }
     .btn.primary{border-color:rgba(14,165,164,.30);background:rgba(14,165,164,.10)}
     .btn.ghost{background:transparent;box-shadow:none}
     .btn:disabled{opacity:.55;cursor:not-allowed}
+
+    /* App layout */
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:18px 16px 40px;
+    }
+    @media (min-width:900px){
+      .wrap{ padding:20px 22px 44px; }
+    }
 
     .grid{
       display:grid;
@@ -91,7 +139,6 @@
     .tab{padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.76);cursor:pointer;font-size:12px;user-select:none}
     .tab.active{border-color:rgba(14,165,164,.35);background:rgba(14,165,164,.10);font-weight:900}
     .toast{margin-top:10px;font-size:12px;color:var(--muted)}
-    footer{margin:18px 2px 0;color:var(--muted);font-size:12px;line-height:1.6}
     .good{color:var(--ok);font-weight:900}
     .bad{color:var(--bad);font-weight:900}
 
@@ -142,9 +189,69 @@
       background:rgba(255,255,255,.82);font-size:12px;color:var(--muted);
     }
 
+    /* ===== Footer (all other links) ===== */
+    .pp-footer{
+      margin-top:26px;
+      background:
+        radial-gradient(900px 520px at 20% 0%, rgba(94,234,212,.10), transparent 55%),
+        radial-gradient(900px 520px at 80% 0%, rgba(96,165,250,.10), transparent 55%),
+        var(--f-bg);
+      border-top:1px solid rgba(255,255,255,.08);
+      padding:26px 0;
+    }
+    .pp-footbox{
+      border:1px solid var(--f-line);
+      background:rgba(255,255,255,.04);
+      border-radius:18px;
+      padding:16px;
+      max-width:1200px;
+      margin:0 auto;
+    }
+    .pp-footgrid{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:16px;
+      align-items:start;
+      padding:0 16px;
+    }
+    @media(max-width:880px){.pp-footgrid{grid-template-columns:1fr}}
+    .pp-footbrand b{color:var(--f-txt);font-weight:1000}
+    .pp-footmut{
+      margin-top:8px;
+      color:var(--f-muted);
+      font-size:12.6px;
+      line-height:1.75;
+      max-width:760px;
+    }
+    .pp-footmut a{color:rgba(94,234,212,.95);font-weight:900}
+    .pp-footlinks{
+      display:flex;flex-wrap:wrap;gap:10px;
+      justify-content:flex-end;
+    }
+    @media(max-width:880px){.pp-footlinks{justify-content:flex-start}}
+    .pp-footlinks a{
+      padding:9px 12px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.06);
+      color:var(--f-txt);
+      font-weight:900;
+      display:inline-flex;align-items:center;gap:8px;
+      transition:transform .08s ease;
+    }
+    .pp-footlinks a:hover{transform:translateY(-1px);text-decoration:none}
+    .pp-footbottom{
+      margin-top:14px;padding-top:14px;
+      border-top:1px solid rgba(255,255,255,.10);
+      display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;
+      color:rgba(255,255,255,.72);
+      font-size:12.5px;line-height:1.75;
+      padding:14px 16px 0;
+    }
+    .pp-footbottom a{color:rgba(94,234,212,.95);font-weight:900}
+
     @media print{
       body{background:#fff}
-      .nav, #controlsRow, #reviewsCard, #proCard, #logoutBtn, .btn.ghost, .tabs, #bulkTools, #bulkPasteBox, #importBanner {display:none !important}
+      .pp-header, .pp-footer, #tourOverlay, #controlsRow, #reviewsCard, #proCard, #logoutBtn, .tabs, #bulkTools, #bulkPasteBox, #importBanner {display:none !important}
       .wrap{margin:0;max-width:none}
       .card{box-shadow:none}
     }
@@ -152,38 +259,32 @@
 </head>
 
 <body>
-  <div class="wrap">
+  <a class="skip" href="#content">Skip to content</a>
 
-    <!-- APP NAV -->
-    <div style="max-width:1200px;margin:0 auto;padding:14px 16px;position:relative;z-index:50">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+  <!-- ===== Header: ONLY 3 NAV ITEMS ===== -->
+  <header class="pp-header" role="navigation" aria-label="Primary">
+    <div class="pp-wrap">
+      <div class="pp-headerbar">
+        <div class="pp-row">
+          <div class="pp-brand" aria-label="ProfitPilot">
+            <div class="pp-logo" aria-hidden="true">PP</div>
+            <div>
+              <div class="pp-title">ProfitPilot</div>
+              <div class="pp-sub">Independent tool by Ukwebtools</div>
+            </div>
+          </div>
 
-        <!-- LEFT -->
-        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-          <a class="btn ghost" href="https://ukwebtools.com/">← Ukwebtools</a>
-          <a class="btn ghost" href="index.html">Home</a>
-          <a class="btn ghost" href="reviews.html">Reviews</a>
-          <a class="btn ghost" href="privacy.html">Privacy</a>
-          <a class="btn ghost" href="terms.html">Terms</a>
-        </div>
-
-        <!-- RIGHT -->
-        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-          <span class="pill" id="accessPill">Checking access…</span>
-          <button class="btn" id="logoutBtn" type="button">Log out</button>
+          <nav class="pp-nav" aria-label="Main">
+            <a class="btn ghost" href="https://ukwebtools.com/" rel="nofollow">← Ukwebtools</a>
+            <a class="btn ghost" href="help.html">How to use</a>
+            <a class="btn primary" href="login.html" id="accountLink">Account</a>
+            <span class="pill" id="accessPill">Checking access…</span>
+            <button class="btn" id="logoutBtn" type="button">Log out</button>
+          </nav>
         </div>
       </div>
 
-      <!-- Breadcrumbs (visible) -->
-      <div style="margin-top:10px;font-size:12.5px;color:var(--muted);display:flex;gap:6px;flex-wrap:wrap;align-items:center">
-        <a href="https://ukwebtools.com/" style="color:var(--accent);text-decoration:none;font-weight:800">Ukwebtools</a>
-        <span style="opacity:.55">›</span>
-        <a href="index.html" style="color:var(--accent);text-decoration:none;font-weight:800">ProfitPilot</a>
-        <span style="opacity:.55">›</span>
-        <span>App</span>
-      </div>
-
-      <!-- Breadcrumbs (SEO JSON-LD) -->
+      <!-- Breadcrumbs (SEO JSON-LD only) -->
       <script type="application/ld+json">
       {
         "@context":"https://schema.org",
@@ -196,8 +297,9 @@
       }
       </script>
     </div>
-    <!-- END APP NAV -->
+  </header>
 
+  <main class="wrap" id="content">
     <div class="banner" id="importBanner">Imported shared calculation ✅</div>
 
     <div class="grid">
@@ -419,7 +521,7 @@
             <div class="small">Paste: <b>Sell, Cost, Ship, Misc</b> (comma or tab).</div>
             <textarea id="bulkPaste" placeholder="Example:
 12.99, 6.20, 0.00, 0.20
-19.99, 9.50, 0.00, 0.30"></textarea>
+19.99, zß=9.50, 0.00, 0.30"></textarea>
             <div class="actions" style="margin-top:10px">
               <button class="btn" id="bulkImportBtn" type="button">Import into table</button>
               <button class="btn" id="bulkFillExampleBtn" type="button">Fill example</button>
@@ -469,8 +571,8 @@
         <div class="small">
           <b>Disclaimer:</b> estimates only (not financial/legal/tax advice). Not affiliated with any platform.
           FX depends on your entered rate (no live rates). See
-          <a href="https://ukwebtools.com/terms.html" target="_blank" rel="noopener">Terms</a> and
-          <a href="https://ukwebtools.com/privacy.html" target="_blank" rel="noopener">Privacy</a>.
+          <a href="terms.html">Terms</a> and
+          <a href="privacy.html">Privacy</a>.
         </div>
       </div>
 
@@ -540,10 +642,41 @@
           <div class="toast" id="reviewStatus">—</div>
         </div>
 
-        <footer>© <span id="yr"></span> Ukwebtools • ProfitPilot</footer>
+        <div style="margin-top:14px" class="small">© <span id="yr"></span> Ukwebtools • ProfitPilot</div>
       </div>
     </div>
-  </div>
+  </main>
+
+  <!-- ===== Footer: ALL OTHER LINKS (no repeats) ===== -->
+  <footer class="pp-footer" role="contentinfo">
+    <div class="pp-footbox">
+      <div class="pp-footgrid">
+        <div class="pp-footbrand">
+          <div><b>ProfitPilot</b></div>
+          <div class="pp-footmut">
+            <b>Independent tool:</b> not affiliated with any marketplace/platform/payment provider.<br>
+            <b>Estimates only:</b> outputs depend on your inputs and assumptions; no profit guarantees.<br>
+            Need help? <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a>
+          </div>
+        </div>
+
+        <div class="pp-footlinks" aria-label="Footer links">
+          <a href="index.html">Home</a>
+          <a href="pricing.html">Pricing</a>
+          <a href="reviews.html">Reviews</a>
+          <a href="refunds.html">Refund Policy</a>
+          <a href="faq.html">FAQ</a>
+          <a href="terms.html">Terms</a>
+          <a href="privacy.html">Privacy</a>
+        </div>
+      </div>
+
+      <div class="pp-footbottom">
+        <div>© <span id="yr2"></span> Ukwebtools • ProfitPilot</div>
+        <div><a href="https://ukwebtools.com/" rel="nofollow">Ukwebtools</a></div>
+      </div>
+    </div>
+  </footer>
 
   <!-- FIRST-TIME TOUR (ONBOARDING) -->
   <div id="tourOverlay" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,.45);backdrop-filter:blur(6px);z-index:9999;">
@@ -685,6 +818,7 @@
     const bulkBox = document.getElementById("bulkBox");
 
     document.getElementById("yr").textContent = new Date().getFullYear();
+    document.getElementById("yr2").textContent = new Date().getFullYear();
 
     // Dev-only duplicate ID detector (warns only)
     (function detectDuplicateIds(){
@@ -862,7 +996,6 @@
     let CURRENT_PROFILE = null;
     let CURRENT_USER = null;
 
-    // ✅ FIXED: ensureProfile was corrupted; restored correct insert/update logic.
     async function ensureProfile(userId){
       const { data: prof, error } = await supabase
         .from("profiles")
@@ -1646,7 +1779,6 @@
       return new TextDecoder().decode(bytes);
     }
 
-    // ✅ FIXED: accept both #s= and #import=
     function tryImportFromHash(){
       const h = location.hash || "";
       const m = h.match(/[#&](?:s|import)=([^&]+)/);
@@ -1682,7 +1814,6 @@
       history.replaceState(null, "", location.pathname);
     }
 
-    // Calc initial + reactive
     [sellPriceEl, productCostEl, shipCostEl, miscCostEl, feePctEl, feeFixedEl, adsPctEl, returnPctEl, fxRateEl, currencyEl]
       .forEach(el=> el.addEventListener("input", ()=>{ computeProfit(); refreshInsights(); }));
 
@@ -1692,7 +1823,6 @@
       refreshInsights();
     }
 
-    // Calculate (only ONE handler)
     document.getElementById("calcBtn").addEventListener("click", async ()=>{
       try{
         o1hint.style.color = "";
@@ -1805,8 +1935,6 @@
         useSuggestedBtn.disabled = true;
 
         tryImportFromHash();
-
-        // Start tour once everything exists and mode has been set
         maybeStartTour();
 
         document.getElementById("calcBtn").disabled = false;
