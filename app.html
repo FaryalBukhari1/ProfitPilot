@@ -883,7 +883,14 @@
       };
 
       if (!prof){
-        const { error: insErr } = await supabase.from("profiles").insert([base]);
+        const { error: insErr } = const { error } = await supabase.from("reviews").upsert([{
+  user_id: user.id,
+  name: name || null,
+  rating: selectedStars,
+  category,
+  message
+}], { onConflict: "user_id" });
+
         if (insErr) throw insErr;
         return base;
       }
