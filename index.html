@@ -7,6 +7,14 @@
   <meta name="description" content="ProfitPilot helps you estimate profit & margin, reverse-calculate target selling price, and run bulk checks. 5-day free trial. One-time PRO unlock.">
   <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
   <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://profitpilot.ukwebtools.com/index.html">
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="ProfitPilot — Listing Profit & Pricing Calculator">
+  <meta property="og:description" content="Estimate profit & margin, reverse-calculate target selling price, and run bulk checks. 5-day free trial. One-time PRO unlock.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://profitpilot.ukwebtools.com/index.html">
+  <meta name="twitter:card" content="summary">
 
   <style>
     :root{
@@ -15,8 +23,11 @@
       --accent:#0ea5a4; --accent2:#4f46e5;
       --shadow:0 10px 30px rgba(16,24,40,.08);
       --shadow2:0 16px 44px rgba(16,24,40,.10);
+      --radius:18px;
     }
+
     *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
     body{
       margin:0;
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
@@ -26,8 +37,25 @@
         radial-gradient(900px 520px at 80% 0%, rgba(79,70,229,.10), transparent 55%),
         linear-gradient(180deg, var(--bg2), var(--bg));
     }
+
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
+
+    :focus-visible{
+      outline:3px solid rgba(79,70,229,.55);
+      outline-offset:3px;
+      border-radius:10px;
+    }
+
+    .skip{
+      position:absolute;left:-9999px;top:10px;
+      background:#fff;border:1px solid rgba(16,24,40,.14);
+      padding:10px 12px;border-radius:12px;
+      box-shadow:0 12px 24px rgba(16,24,40,.10);
+      z-index:1000;
+    }
+    .skip:focus{left:12px}
+
     .wrap{max-width:1150px;margin:18px auto;padding:0 14px}
 
     /* NAV */
@@ -65,7 +93,7 @@
       transition:transform .08s ease;
       cursor:pointer;
     }
-    .btn:hover{transform:translateY(-1px)}
+    .btn:hover{transform:translateY(-1px);text-decoration:none}
     .btn:active{transform:translateY(0)}
     .btn.primary{
       border:none;color:#fff;
@@ -81,7 +109,7 @@
       padding:10px 14px;border-radius:999px;border:1px solid var(--line);
       background:rgba(255,255,255,.75);color:rgba(16,24,40,.70);
       font-weight:900;display:none;max-width:260px;
-      overflow:hidden;text-overflow:ellipsis;
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
     }
 
     /* HERO */
@@ -92,15 +120,29 @@
       border-radius:22px;
       padding:18px;
       box-shadow:var(--shadow2);
+      position:relative;
+      overflow:hidden;
     }
-    h1{margin:0;font-size:30px;letter-spacing:-.4px;line-height:1.15}
+    .hero::after{
+      content:"";position:absolute;inset:-60px -80px auto auto;width:320px;height:320px;border-radius:999px;
+      background:radial-gradient(circle at 30% 30%, rgba(14,165,164,.18), transparent 60%),
+                 radial-gradient(circle at 70% 70%, rgba(79,70,229,.16), transparent 60%);
+      filter:blur(2px);
+      pointer-events:none;
+    }
+
+    h1{margin:0;font-size:32px;letter-spacing:-.6px;line-height:1.12}
     .lead{
       margin:10px 0 0;
-      color:var(--muted);
+      color:rgba(16,24,40,.70);
       line-height:1.75;
       font-weight:650;
-      max-width:920px
+      max-width:960px
     }
+
+    .heroActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .heroFine{margin-top:10px;color:rgba(16,24,40,.62);font-size:12.7px;line-height:1.7}
+
     .pillrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
     .pill{
       display:inline-flex;gap:8px;align-items:center;
@@ -116,22 +158,33 @@
     .card{
       background:var(--card);
       border:1px solid var(--line);
-      border-radius:18px;
+      border-radius:var(--radius);
       padding:16px;
       box-shadow:var(--shadow);
     }
     .title{font-weight:1000;margin:0 0 8px}
-    .small{font-size:12.5px;color:var(--muted);line-height:1.75}
-    .list{margin:10px 0 0;padding-left:18px;color:rgba(16,24,40,.62);line-height:1.85;font-size:12.8px}
+    .small{font-size:12.6px;color:rgba(16,24,40,.68);line-height:1.75}
+    .list{margin:10px 0 0;padding-left:18px;color:rgba(16,24,40,.66);line-height:1.85;font-size:12.9px}
     .kgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
     @media(max-width:560px){.kgrid{grid-template-columns:1fr}}
     .k{
       border:1px solid var(--line);background:rgba(255,255,255,.72);
       border-radius:16px;padding:12px;
     }
-    .k .h{font-size:12px;color:var(--muted);font-weight:950;text-transform:uppercase;letter-spacing:.08em}
+    .k .h{font-size:12px;color:rgba(16,24,40,.58);font-weight:950;text-transform:uppercase;letter-spacing:.08em}
     .k .v{margin-top:8px;font-size:18px;font-weight:1000;letter-spacing:-.2px}
     .divider{height:1px;background:var(--line);margin:12px 0}
+
+    /* MINI FAQ */
+    .faqgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+    @media(max-width:700px){.faqgrid{grid-template-columns:1fr}}
+    .faq{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.78);
+      border-radius:16px;
+      padding:12px;
+    }
+    .faq b{display:block;margin-bottom:6px}
 
     /* REVIEWS */
     .reviews{display:grid;gap:10px;margin-top:10px}
@@ -147,9 +200,10 @@
       background:rgba(255,255,255,.90);color:rgba(16,24,40,.62);font-size:12px;font-weight:950;
     }
     .stars{font-weight:1000;letter-spacing:.8px}
+
     footer{
       margin:16px 2px 0;
-      color:var(--muted);
+      color:rgba(16,24,40,.62);
       font-size:12.5px;
       line-height:1.75;
       padding:6px 0 18px;
@@ -158,14 +212,22 @@
       display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center
     }
     .footlinks{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto}
+      .btn{transition:none}
+      .btn:hover{transform:none}
+    }
   </style>
 </head>
 
 <body>
+  <a class="skip" href="#content">Skip to content</a>
+
   <div class="wrap">
 
     <!-- NAV -->
-    <div class="topbar" role="navigation" aria-label="Primary">
+    <header class="topbar" role="navigation" aria-label="Primary">
       <div class="navrow">
         <div class="brand">
           <div class="logo" aria-hidden="true">PP</div>
@@ -176,11 +238,11 @@
         </div>
 
         <div class="navlinks" aria-label="Site">
-          <a class="btn ghost" href="https://ukwebtools.com/">← Ukwebtools</a>
-          <a class="btn active" href="index.html">Home</a>
+          <a class="btn ghost" href="https://ukwebtools.com/" rel="nofollow">← Ukwebtools</a>
+          <a class="btn active" href="index.html" aria-current="page">Home</a>
           <a class="btn" href="pricing.html">Pricing</a>
           <a class="btn" href="reviews.html">Reviews</a>
-          <a class="btn" href="help.html">How to use</a>
+          <a class="btn" href="help.html informing you now? wait, check: not allowed"> </a>
         </div>
 
         <div class="navactions" aria-label="Account">
@@ -200,28 +262,38 @@
         ]
       }
       </script>
-    </div>
+    </header>
 
-    <!-- HERO (NO BUTTONS HERE) -->
-    <div class="hero">
+    <!-- HERO -->
+    <main id="content" class="hero" role="main">
       <h1>Price smarter. Protect your margin. Scale with confidence.</h1>
       <p class="lead">
         Estimate profit and margin, reverse-calculate the selling price you need for a target profit,
         and run bulk checks across multiple products — using only your own inputs.
       </p>
 
-      <div class="pillrow">
+      <div class="heroActions">
+        <a class="btn primary" id="heroPrimary" href="login.html">Start free trial</a>
+        <a class="btn" id="heroSecondary" href="app.html">Open app</a>
+        <a class="btn" href="pricing.html">See PRO features</a>
+      </div>
+
+      <div class="pillrow" aria-label="Highlights">
         <span class="pill">5-day trial</span>
         <span class="pill">One-time PRO unlock</span>
         <span class="pill">No subscriptions</span>
         <span class="pill">Your inputs only</span>
       </div>
-    </div>
+
+      <div class="heroFine">
+        <b>Independent tool:</b> not affiliated with any marketplace. <b>Estimates only:</b> outputs depend on your inputs. No profit guarantees.
+      </div>
+    </main>
 
     <div class="grid">
       <!-- LEFT -->
-      <div class="card">
-        <div class="title">How it works (30 seconds)</div>
+      <section class="card" aria-label="Overview">
+        <h2 class="title">How it works (30 seconds)</h2>
         <ul class="list">
           <li>Choose a currency + optional FX (manual rate).</li>
           <li>Enter price, costs, fees, ads, and return assumptions.</li>
@@ -232,7 +304,7 @@
 
         <div class="divider"></div>
 
-        <div class="title">Trial vs PRO</div>
+        <h2 class="title">Trial vs PRO</h2>
         <div class="kgrid">
           <div class="k">
             <div class="h">Trial</div>
@@ -257,16 +329,38 @@
 
         <div class="divider"></div>
 
+        <h2 class="title">Quick answers</h2>
+        <div class="faqgrid">
+          <div class="faq">
+            <b>Why is checkout higher than £9.99?</b>
+            <div class="small">VAT/sales tax may be added by the payment provider where required by law.</div>
+          </div>
+          <div class="faq">
+            <b>Is this a subscription?</b>
+            <div class="small">No — PRO is a one-time unlock. No recurring fees.</div>
+          </div>
+          <div class="faq">
+            <b>Refunds?</b>
+            <div class="small">See <a href="refunds.html">Refund Policy</a> for eligibility and process.</div>
+          </div>
+          <div class="faq">
+            <b>Need help using it?</b>
+            <div class="small">Start with <a href="help.html">How to use</a> or email <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a>.</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
         <div class="small">
           <b>Disclaimer:</b> Independent tool. Not affiliated with or endorsed by any marketplace, platform, or payment provider.
           Estimates only: outputs depend on your inputs and assumptions; no profit guarantees. Not financial, legal, or tax advice.
         </div>
-      </div>
+      </section>
 
       <!-- RIGHT -->
-      <div>
-        <div class="card">
-          <div class="title">PRO unlock</div>
+      <aside>
+        <section class="card" aria-label="Purchase">
+          <h2 class="title">PRO unlock</h2>
           <div class="small">
             PRO is a <b>one-time purchase</b> unlock. No subscriptions.
           </div>
@@ -276,17 +370,21 @@
           <div class="k">
             <div class="h">Current price</div>
             <div class="v" id="priceLine">£9.99</div>
-            <div class="small">Full limits and comparison are on the Pricing page.</div>
+            <div class="small">Full details are on the <a href="pricing.html">Pricing</a> page.</div>
           </div>
 
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
             <a class="btn primary" id="buyBtn" href="#" target="_blank" rel="noopener">Buy PRO</a>
             <a class="btn" href="pricing.html">See pricing & limits</a>
           </div>
-        </div>
 
-        <div class="card" style="margin-top:14px">
-          <div class="title">Public feedback</div>
+          <div class="small" style="margin-top:10px">
+            After purchase, PRO activates on your logged-in account. If you switch devices, log in again.
+          </div>
+        </section>
+
+        <section class="card" style="margin-top:14px" aria-label="Reviews">
+          <h2 class="title">Public feedback</h2>
           <div class="small" id="ratingSummary">Loading…</div>
 
           <div class="reviews" id="reviews">
@@ -303,8 +401,8 @@
           <div class="small" style="margin-top:10px">
             You can <b>view</b> reviews without logging in. To submit or edit a review, log in from the app.
           </div>
-        </div>
-      </div>
+        </section>
+      </aside>
     </div>
 
     <footer>
@@ -314,6 +412,7 @@
         <div class="footlinks">
           <a href="privacy.html">Privacy</a>
           <a href="terms.html">Terms</a>
+          <a href="refunds.html">Refund Policy</a>
         </div>
       </div>
     </footer>
@@ -327,34 +426,63 @@
   const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-  // Checkout link (swap to Paddle later)
+  // Checkout link
   const CHECKOUT_URL = "https://stonevia.gumroad.com/l/goddhg";
   document.getElementById("buyBtn").href = CHECKOUT_URL;
 
   document.getElementById("yr").textContent = new Date().getFullYear();
 
-  // Auth UI (ONLY ONE CTA: top nav button)
+  function safeText(s){
+    return String(s || "").replace(/\s+/g, " ").trim();
+  }
+  function escapeHtml(s){
+    return String(s || "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  // Auth UI
   const userChip = document.getElementById("userChip");
   const primaryCta = document.getElementById("primaryCta");
+  const heroPrimary = document.getElementById("heroPrimary");
+  const heroSecondary = document.getElementById("heroSecondary");
   const logoutBtn = document.getElementById("logoutBtn");
 
   async function refreshAuthUI(){
     const { data: { session } } = await supabase.auth.getSession();
-    const email = session?.user?.email;
+    const email = safeText(session?.user?.email);
 
     if (email){
       userChip.style.display = "inline-flex";
       userChip.textContent = email;
+      userChip.title = email;
 
       primaryCta.textContent = "Open app";
       primaryCta.href = "app.html";
 
+      heroPrimary.textContent = "Open app";
+      heroPrimary.href = "app.html";
+
+      heroSecondary.textContent = "Account";
+      heroSecondary.href = "login.html";
+
       logoutBtn.style.display = "inline-flex";
     } else {
       userChip.style.display = "none";
+      userChip.textContent = "—";
+      userChip.title = "";
 
       primaryCta.textContent = "Start free trial";
       primaryCta.href = "login.html";
+
+      heroPrimary.textContent = "Start free trial";
+      heroPrimary.href = "login.html";
+
+      heroSecondary.textContent = "Open app";
+      heroSecondary.href = "app.html";
 
       logoutBtn.style.display = "none";
     }
@@ -362,8 +490,8 @@
 
   logoutBtn.addEventListener("click", async (e)=>{
     e.preventDefault();
-    await supabase.auth.signOut();
-    location.href = "index.html";
+    try { await supabase.auth.signOut(); }
+    finally { location.href = "index.html"; }
   });
 
   await refreshAuthUI();
@@ -371,7 +499,7 @@
 
   // Reviews (public)
   function stars(n){
-    n = Math.max(0, Math.min(5, Math.round(n)));
+    n = Math.max(0, Math.min(5, Math.round(Number(n) || 0)));
     return "★".repeat(n) + "☆".repeat(5-n);
   }
 
@@ -395,7 +523,7 @@
       return;
     }
 
-    const total = count || 0;
+    const total = Number(count || 0);
     summary.textContent = total ? `${total} public review(s)` : "No reviews yet";
 
     if (!data || data.length === 0){
@@ -407,15 +535,21 @@
     data.forEach(r=>{
       const div = document.createElement("div");
       div.className = "review";
-      const safeMsg = String(r.message || "").replaceAll("<","&lt;").replaceAll(">","&gt;");
+
+      const safeMsg = escapeHtml(r.message || "");
+      const safeName = escapeHtml(r.name || "Anonymous");
+      const safeCat = escapeHtml(r.category || "General");
+      const d = r.created_at ? new Date(r.created_at) : null;
+      const dateText = d && !isNaN(d.getTime()) ? d.toLocaleDateString() : "";
+
       div.innerHTML = `
         <div class="meta">
-          <div class="stars">${stars(r.rating)}</div>
-          <span class="tag">${(r.category || "General")}</span>
-          <span class="small">${new Date(r.created_at).toLocaleDateString()}</span>
+          <div class="stars" aria-label="Rating">${stars(r.rating)}</div>
+          <span class="tag">${safeCat}</span>
+          <span class="small">${escapeHtml(dateText)}</span>
         </div>
         <div class="small" style="margin-top:8px">
-          <b>${(r.name || "Anonymous")}</b> — ${safeMsg}
+          <b>${safeName}</b> — ${safeMsg}
         </div>
       `;
       box.appendChild(div);
