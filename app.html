@@ -77,7 +77,7 @@
       box-shadow:var(--shadow);
     }
 
-    /* Premium rhythm (moved into CSS properly) */
+    /* Premium rhythm */
     .title{font-weight:900;margin:0 0 10px}
     .small{font-size:12px;color:var(--muted);line-height:1.75}
     .divider{height:1px;background:var(--line);margin:14px 0}
@@ -389,7 +389,6 @@
               </div>
             </div>
 
-            <!-- NEW ACTIONS -->
             <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
               <button class="btn" id="useSuggestedBtn" type="button" disabled>Use suggested price</button>
               <button class="btn" id="saveScenarioBtn" type="button">Save scenario (PRO)</button>
@@ -687,7 +686,7 @@
 
     document.getElementById("yr").textContent = new Date().getFullYear();
 
-    // Optional: dev-only duplicate ID detector (safe in prod too; just warns)
+    // Dev-only duplicate ID detector (warns only)
     (function detectDuplicateIds(){
       const seen = new Map();
       document.querySelectorAll("[id]").forEach(el=>{
@@ -863,6 +862,7 @@
     let CURRENT_PROFILE = null;
     let CURRENT_USER = null;
 
+    // ✅ FIXED: ensureProfile was corrupted; restored correct insert/update logic.
     async function ensureProfile(userId){
       const { data: prof, error } = await supabase
         .from("profiles")
@@ -883,14 +883,7 @@
       };
 
       if (!prof){
-        const { error: insErr } = const { error } = await supabase.from("reviews").upsert([{
-  user_id: user.id,
-  name: name || null,
-  rating: selectedStars,
-  category,
-  message
-}], { onConflict: "user_id" });
-
+        const { error: insErr } = await supabase.from("profiles").insert([base]);
         if (insErr) throw insErr;
         return base;
       }
@@ -1652,9 +1645,11 @@
       const bytes = new Uint8Array([...bin].map(ch => ch.charCodeAt(0)));
       return new TextDecoder().decode(bytes);
     }
+
+    // ✅ FIXED: accept both #s= and #import=
     function tryImportFromHash(){
       const h = location.hash || "";
-      const m = h.match(/[#&]import=([^&]+)/);
+      const m = h.match(/[#&](?:s|import)=([^&]+)/);
       if (!m) return;
       try{
         const token = decodeURIComponent(m[1]);
@@ -1691,14 +1686,13 @@
     [sellPriceEl, productCostEl, shipCostEl, miscCostEl, feePctEl, feeFixedEl, adsPctEl, returnPctEl, fxRateEl, currencyEl]
       .forEach(el=> el.addEventListener("input", ()=>{ computeProfit(); refreshInsights(); }));
 
-    // Profit / Reverse helper
     async function computeReverseWithLimit(){
       await consumeReverseUseIfTrial();
       computeReverse();
       refreshInsights();
     }
 
-    // Calculate (ONLY ONE handler — fixed)
+    // Calculate (only ONE handler)
     document.getElementById("calcBtn").addEventListener("click", async ()=>{
       try{
         o1hint.style.color = "";
@@ -1815,7 +1809,6 @@
         // Start tour once everything exists and mode has been set
         maybeStartTour();
 
-        // If you want calc disabled until boot, you can still do it; leaving enabled is fine.
         document.getElementById("calcBtn").disabled = false;
       } catch(e){
         accessPill.textContent="Access check failed";
