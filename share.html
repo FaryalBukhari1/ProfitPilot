@@ -1,604 +1,434 @@
-<!-- PROFITPILOT: UNIVERSAL NAV + BREADCRUMBS (includes Pricing) -->
-<style>
-  .pp-navwrap{max-width:1200px;margin:0 auto;padding:14px 16px;position:relative;z-index:60}
-  .pp-nav{
-    display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
-    background:rgba(255,255,255,.72);border:1px solid rgba(16,24,40,.10);
-    border-radius:18px;padding:12px 12px;backdrop-filter:blur(10px);
-    box-shadow:0 10px 30px rgba(16,24,40,.08);
-  }
-  .pp-left,.pp-right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-  .pp-btn{
-    padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
-    background:rgba(255,255,255,.90);font-weight:900;text-decoration:none;color:#0b1220;
-    box-shadow:0 8px 18px rgba(16,24,40,.06);
-    display:inline-flex;gap:8px;align-items:center;white-space:nowrap;
-  }
-  .pp-btn:hover{transform:translateY(-1px)}
-  .pp-btn:active{transform:translateY(0)}
-  .pp-primary{
-    border:none;color:#fff;
-    background:linear-gradient(135deg,#0ea5a4,#4f46e5);
-    box-shadow:0 14px 28px rgba(79,70,229,.16);
-  }
-  .pp-active{
-    border-color:rgba(14,165,164,.35);
-    background:rgba(14,165,164,.10);
-  }
-  .pp-user{
-    padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
-    background:rgba(255,255,255,.70);
-    color:rgba(16,24,40,.72);
-    font-weight:900;
-    display:none;
-    max-width:320px;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-  }
-  .pp-crumbs{
-    margin-top:10px;
-    font-size:12.5px;
-    color:rgba(16,24,40,.62);
-    display:flex;gap:6px;flex-wrap:wrap;align-items:center;
-  }
-  .pp-crumbs a{color:rgba(14,165,164,.95);font-weight:900;text-decoration:none}
-  .pp-sep{opacity:.55}
-</style>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>ProfitPilot — Shared calculation</title>
+  <meta name="description" content="Open a shared ProfitPilot calculation and import it into the app.">
+  <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
+  <meta name="robots" content="noindex,follow">
+  <link rel="canonical" href="https://profitpilot.ukwebtools.com/share.html">
 
-<div class="pp-navwrap" role="navigation" aria-label="Primary">
-  <div class="pp-nav">
-    <!-- LEFT -->
-    <div class="pp-left">
-      <a class="pp-btn" href="https://ukwebtools.com/" data-nav="ukwebtools">← Ukwebtools</a>
-      <a class="pp-btn" href="index.html" data-nav="home">Home</a>
-      <a class="pp-btn" href="app.html" data-nav="app">App</a>
-      <a class="pp-btn" href="pricing.html" data-nav="pricing">Pricing</a>
-      <a class="pp-btn" href="reviews.html" data-nav="reviews">Reviews</a>
-      <a class="pp-btn" href="help.html" data-nav="help">How to use</a>
-      <a class="pp-btn" href="privacy.html" data-nav="privacy">Privacy</a>
-      <a class="pp-btn" href="terms.html" data-nav="terms">Terms</a>
+  <meta property="og:title" content="ProfitPilot — Shared calculation">
+  <meta property="og:description" content="Open a shared ProfitPilot calculation and import it into the app.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://profitpilot.ukwebtools.com/share.html">
+
+  <style>
+    :root{
+      --bg:#f6f8fb; --bg2:#eef2ff; --txt:#0b1220; --muted:#5b6474;
+      --card:rgba(255,255,255,.90); --line:rgba(16,24,40,.10);
+      --accent:#0ea5a4; --accent2:#4f46e5;
+      --shadow:0 10px 30px rgba(16,24,40,.08);
+      --bad:#ef4444;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--txt);
+      background:
+        radial-gradient(900px 520px at 20% 0%, rgba(14,165,164,.16), transparent 55%),
+        radial-gradient(900px 520px at 80% 0%, rgba(79,70,229,.12), transparent 55%),
+        linear-gradient(180deg, var(--bg2), var(--bg));
+    }
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    :focus-visible{outline:3px solid rgba(79,70,229,.45);outline-offset:3px;border-radius:10px}
+
+    /* ---------- UNIVERSAL NAV ---------- */
+    .pp-navwrap{max-width:1200px;margin:0 auto;padding:14px 16px;position:relative;z-index:60}
+    .pp-nav{
+      display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+      background:rgba(255,255,255,.72);border:1px solid rgba(16,24,40,.10);
+      border-radius:18px;padding:12px;backdrop-filter:blur(10px);
+      box-shadow:0 10px 30px rgba(16,24,40,.08);
+    }
+    .pp-left,.pp-right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .pp-btn{
+      padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
+      background:rgba(255,255,255,.90);font-weight:900;text-decoration:none;color:#0b1220;
+      box-shadow:0 8px 18px rgba(16,24,40,.06);
+      display:inline-flex;gap:8px;align-items:center;white-space:nowrap;
+      transition:transform .08s ease;
+    }
+    .pp-btn:hover{transform:translateY(-1px)}
+    .pp-btn:active{transform:translateY(0)}
+    .pp-primary{
+      border:none;color:#fff;
+      background:linear-gradient(135deg,#0ea5a4,#4f46e5);
+      box-shadow:0 14px 28px rgba(79,70,229,.16);
+    }
+    .pp-active{
+      border-color:rgba(14,165,164,.35);
+      background:rgba(14,165,164,.10);
+    }
+    .pp-user{
+      padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
+      background:rgba(255,255,255,.70);
+      color:rgba(16,24,40,.72);
+      font-weight:900;
+      display:none;
+      max-width:320px;
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    }
+    .pp-crumbs{
+      margin-top:10px;font-size:12.5px;color:rgba(16,24,40,.62);
+      display:flex;gap:6px;flex-wrap:wrap;align-items:center;
+    }
+    .pp-crumbs a{color:rgba(14,165,164,.95);font-weight:900;text-decoration:none}
+    .pp-sep{opacity:.55}
+
+    /* ---------- PAGE ---------- */
+    .wrap{max-width:980px;margin:0 auto;padding:8px 14px 70px}
+    .hero{
+      margin-top:10px;
+      background:linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.78));
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:16px;
+      box-shadow:var(--shadow);
+    }
+    h1{margin:0;font-size:22px;letter-spacing:-.02em}
+    .lead{margin-top:8px;color:rgba(16,24,40,.70);line-height:1.65;font-size:13.5px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}}
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px;
+      box-shadow:var(--shadow);
+    }
+    .title{font-weight:1000;margin:0 0 8px}
+    .small{font-size:12.8px;color:rgba(16,24,40,.68);line-height:1.7}
+    .divider{height:1px;background:var(--line);margin:12px 0}
+
+    .kv{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+    @media(max-width:560px){.kv{grid-template-columns:1fr}}
+    .k{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.72);
+      border-radius:16px;
+      padding:12px
+    }
+    .k .h{font-size:12px;color:rgba(16,24,40,.62);font-weight:900;text-transform:uppercase;letter-spacing:.06em}
+    .k .v{font-size:16px;font-weight:1000;margin-top:7px;letter-spacing:-.01em}
+
+    .btn{
+      padding:10px 14px;border-radius:999px;border:1px solid var(--line);
+      background:rgba(255,255,255,.78);color:var(--txt);
+      display:inline-flex;gap:8px;align-items:center;cursor:pointer;
+      box-shadow:0 4px 16px rgba(16,24,40,.06);
+      user-select:none;white-space:nowrap;
+      transition:transform .08s ease;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(0)}
+    .btn.primary{
+      border:none;color:#fff;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      box-shadow:0 14px 28px rgba(79,70,229,.16);
+    }
+    .pill{
+      padding:8px 10px;border-radius:999px;border:1px solid var(--line);
+      background:rgba(255,255,255,.72);font-size:12px;color:rgba(16,24,40,.62);
+      display:inline-flex;gap:8px;align-items:center
+    }
+    textarea{
+      width:100%;
+      padding:12px;border-radius:14px;border:1px solid var(--line);
+      background:rgba(255,255,255,.92);
+      color:var(--txt);outline:none;
+      min-height:140px;resize:vertical;
+      font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size:12.5px;
+      line-height:1.5;
+    }
+    .warn{color:var(--bad);font-weight:1000}
+    code{background:rgba(255,255,255,.7);border:1px solid var(--line);padding:2px 6px;border-radius:10px}
+
+    footer{
+      margin-top:16px;color:rgba(16,24,40,.58);
+      font-size:12.5px;line-height:1.7;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ✅ UNIVERSAL NAV + BREADCRUMBS (inside document) -->
+  <div class="pp-navwrap" role="navigation" aria-label="Primary">
+    <div class="pp-nav">
+      <div class="pp-left">
+        <a class="pp-btn" href="https://ukwebtools.com/" data-nav="ukwebtools">← Ukwebtools</a>
+        <a class="pp-btn" href="index.html" data-nav="home">Home</a>
+        <a class="pp-btn" href="app.html" data-nav="app">App</a>
+        <a class="pp-btn" href="pricing.html" data-nav="pricing">Pricing</a>
+        <a class="pp-btn" href="reviews.html" data-nav="reviews">Reviews</a>
+        <a class="pp-btn" href="help.html" data-nav="help">How to use</a>
+        <a class="pp-btn" href="privacy.html" data-nav="privacy">Privacy</a>
+        <a class="pp-btn" href="terms.html" data-nav="terms">Terms</a>
+        <a class="pp-btn" href="refunds.html" data-nav="refunds">Refund Policy</a>
+      </div>
+
+      <div class="pp-right">
+        <span class="pp-user" id="ppUserChip">—</span>
+        <a class="pp-btn pp-primary" id="ppAuthBtn" href="login.html">Log in</a>
+        <a class="pp-btn" id="ppLogoutBtn" href="#" style="display:none">Log out</a>
+      </div>
     </div>
 
-    <!-- RIGHT -->
-    <div class="pp-right">
-      <span class="pp-user" id="ppUserChip">—</span>
-      <a class="pp-btn pp-primary" id="ppAuthBtn" href="login.html">Log in</a>
-      <a class="pp-btn" id="ppLogoutBtn" href="#" style="display:none">Log out</a>
+    <div class="pp-crumbs" aria-label="Breadcrumb">
+      <a href="https://ukwebtools.com/">Ukwebtools</a>
+      <span class="pp-sep">›</span>
+      <a href="index.html">ProfitPilot</a>
+      <span class="pp-sep">›</span>
+      <span id="ppCrumbCurrent">Shared calculation</span>
     </div>
+
+    <script id="ppBreadcrumbJson" type="application/ld+json"></script>
   </div>
 
-  <!-- Visible Breadcrumbs -->
-  <div class="pp-crumbs" aria-label="Breadcrumb">
-    <a href="https://ukwebtools.com/">Ukwebtools</a>
-    <span class="pp-sep">›</span>
-    <a href="index.html">ProfitPilot</a>
-    <span class="pp-sep">›</span>
-    <span id="ppCrumbCurrent">Page</span>
+  <div class="wrap">
+
+    <div class="hero">
+      <h1>Shared calculation</h1>
+      <div class="lead">
+        This link contains calculator inputs only (no account info). You can preview the values, copy the payload,
+        and open it inside the app.
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+        <button class="btn primary" id="openInAppBtn" type="button">Open in app</button>
+        <button class="btn" id="copyBtn" type="button">Copy JSON</button>
+        <span class="pill" id="copyStatus">—</span>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="title">Summary</div>
+        <div class="small" id="status">Loading shared data…</div>
+
+        <div class="kv" id="kvBox" style="display:none">
+          <div class="k"><div class="h">Mode</div><div class="v" id="modeV">—</div></div>
+          <div class="k"><div class="h">Currency</div><div class="v" id="curV">—</div></div>
+          <div class="k"><div class="h">Selling price</div><div class="v" id="sellV">—</div></div>
+          <div class="k"><div class="h">Product cost</div><div class="v" id="costV">—</div></div>
+          <div class="k"><div class="h">Fees</div><div class="v" id="feeV">—</div></div>
+          <div class="k"><div class="h">Ads / Returns</div><div class="v" id="adV">—</div></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="small">
+          <b>Tip:</b> A valid link looks like <code>share.html#s=...</code>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="title">Shared payload</div>
+        <div class="small">Use this for troubleshooting or support.</div>
+        <div style="margin-top:10px">
+          <textarea id="raw" readonly>—</textarea>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="small">
+          If you see <span class="warn">Invalid payload</span>, the link may be incomplete or copied incorrectly.
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div><b>Independent tool:</b> Not affiliated with any marketplace/platform.</div>
+      <div><b>Estimates only:</b> Outputs depend on user inputs; no guarantees. Not financial/legal/tax advice.</div>
+      <div style="margin-top:6px">© <span id="yr"></span> Ukwebtools • ProfitPilot</div>
+    </footer>
+
   </div>
 
-  <!-- JSON-LD Breadcrumbs for SEO -->
-  <script id="ppBreadcrumbJson" type="application/ld+json"></script>
-</div>
+  <!-- ✅ NAV SCRIPT (auth + crumbs + active) -->
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-<script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+    const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
+    const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-  // ✅ YOUR REAL VALUES (already safe for frontend)
-  const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
-  const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
+    document.getElementById("yr").textContent = new Date().getFullYear();
 
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
-
-  // ---------- Active page highlighting ----------
-  const path = (location.pathname.split("/").pop() || "index.html").toLowerCase();
-  const map = {
-    "index.html":"home",
-    "app.html":"app",
-    "pricing.html":"pricing",
-    "reviews.html":"reviews",
-    "help.html":"help",
-    "privacy.html":"privacy",
-    "terms.html":"terms",
-    "login.html":"login",
-    "reset.html":"reset",
-    "verify.html":"verify"
-  };
-  const activeKey = map[path] || "home";
-
-  document.querySelectorAll(".pp-btn[data-nav]").forEach(a=>{
-    const key = a.getAttribute("data-nav");
-    if (key === activeKey) a.classList.add("pp-active");
-  });
-
-  // ---------- Breadcrumb text + JSON-LD ----------
-  const titles = {
-    home:"Home",
-    app:"App",
-    pricing:"Pricing",
-    reviews:"Reviews",
-    help:"How to use",
-    privacy:"Privacy",
-    terms:"Terms",
-    login:"Log in",
-    reset:"Reset password",
-    verify:"Verify email"
-  };
-  const currentTitle = titles[activeKey] || "Page";
-  const crumbEl = document.getElementById("ppCrumbCurrent");
-  if (crumbEl) crumbEl.textContent = currentTitle;
-
-  const base = "https://profitpilot.ukwebtools.com/";
-  const crumbItems = [
-    { name:"Ukwebtools", item:"https://ukwebtools.com/" },
-    { name:"ProfitPilot", item: base + "index.html" },
-    { name: currentTitle, item: base + path }
-  ];
-
-  const jsonEl = document.getElementById("ppBreadcrumbJson");
-  if (jsonEl){
-    jsonEl.textContent = JSON.stringify({
-      "@context":"https://schema.org",
-      "@type":"BreadcrumbList",
-      "itemListElement": crumbItems.map((c,i)=>({
-        "@type":"ListItem",
-        "position": i+1,
-        "name": c.name,
-        "item": c.item
-      }))
+    // Active highlighting
+    const path = (location.pathname.split("/").pop() || "index.html").toLowerCase();
+    const map = {
+      "index.html":"home",
+      "app.html":"app",
+      "pricing.html":"pricing",
+      "reviews.html":"reviews",
+      "help.html":"help",
+      "privacy.html":"privacy",
+      "terms.html":"terms",
+      "refunds.html":"refunds",
+      "share.html":"share"
+    };
+    const activeKey = map[path] || "home";
+    document.querySelectorAll(".pp-btn[data-nav]").forEach(a=>{
+      if (a.getAttribute("data-nav") === activeKey) a.classList.add("pp-active");
     });
-  }
 
-  // ---------- Auth state: show email + logout ----------
-  const userChip = document.getElementById("ppUserChip");
-  const authBtn = document.getElementById("ppAuthBtn");
-  const logoutBtn = document.getElementById("ppLogoutBtn");
+    // Breadcrumb JSON-LD
+    const base = "https://profitpilot.ukwebtools.com/";
+    const currentTitle = "Shared calculation";
+    const jsonEl = document.getElementById("ppBreadcrumbJson");
+    if (jsonEl){
+      jsonEl.textContent = JSON.stringify({
+        "@context":"https://schema.org",
+        "@type":"BreadcrumbList",
+        "itemListElement":[
+          {"@type":"ListItem","position":1,"name":"Ukwebtools","item":"https://ukwebtools.com/"},
+          {"@type":"ListItem","position":2,"name":"ProfitPilot","item": base + "index.html"},
+          {"@type":"ListItem","position":3,"name": currentTitle, "item": base + path}
+        ]
+      });
+    }
 
-  async function refreshAuthUI(){
-    const { data: { session } } = await supabase.auth.getSession();
+    // Auth UI
+    const userChip = document.getElementById("ppUserChip");
+    const authBtn = document.getElementById("ppAuthBtn");
+    const logoutBtn = document.getElementById("ppLogoutBtn");
 
-    if (session?.user?.email){
-      userChip.style.display = "inline-flex";
-      userChip.textContent = session.user.email;
-      authBtn.style.display = "none";
-      logoutBtn.style.display = "inline-flex";
+    async function refreshAuthUI(){
+      const { data: { session } } = await supabase.auth.getSession();
+      const email = session?.user?.email;
+
+      if (email){
+        userChip.style.display = "inline-flex";
+        userChip.textContent = email;
+        userChip.title = email;
+        authBtn.style.display = "none";
+        logoutBtn.style.display = "inline-flex";
+      } else {
+        userChip.style.display = "none";
+        userChip.textContent = "—";
+        userChip.title = "";
+        authBtn.style.display = "inline-flex";
+        logoutBtn.style.display = "none";
+        authBtn.textContent = "Log in";
+        authBtn.setAttribute("href","login.html");
+      }
+    }
+
+    logoutBtn?.addEventListener("click", async (e)=>{
+      e.preventDefault();
+      await supabase.auth.signOut();
+      location.href = "login.html";
+    });
+
+    await refreshAuthUI();
+    supabase.auth.onAuthStateChange(()=>refreshAuthUI());
+  </script>
+
+  <!-- ✅ SHARE PAGE LOGIC -->
+  <script>
+    function safeNum(v){
+      const x = parseFloat(String(v ?? "").replace(/,/g,""));
+      return Number.isFinite(x) ? x : 0;
+    }
+    function setText(id, v){
+      const el = document.getElementById(id);
+      if (el) el.textContent = v;
+    }
+
+    // Robust base64url -> UTF-8 string decode
+    function base64urlToUtf8(b64url){
+      let s = String(b64url || "").replace(/-/g, "+").replace(/_/g, "/");
+      while (s.length % 4) s += "=";
+      const binary = atob(s);
+      const bytes = new Uint8Array(binary.length);
+      for (let i=0;i<binary.length;i++) bytes[i] = binary.charCodeAt(i);
+      return new TextDecoder("utf-8", { fatal:false }).decode(bytes);
+    }
+
+    function getTokenFromHash(){
+      const hash = location.hash || "";
+      // support #s=... and #import=...
+      const m1 = hash.match(/[#&]s=([^&]+)/);
+      if (m1?.[1]) return m1[1];
+      const m2 = hash.match(/[#&]import=([^&]+)/);
+      if (m2?.[1]) return m2[1];
+      return "";
+    }
+
+    const status = document.getElementById("status");
+    const raw = document.getElementById("raw");
+    const kvBox = document.getElementById("kvBox");
+    const copyStatus = document.getElementById("copyStatus");
+
+    const openInAppBtn = document.getElementById("openInAppBtn");
+    const copyBtn = document.getElementById("copyBtn");
+
+    const token = getTokenFromHash();
+
+    function setError(msg){
+      status.innerHTML = `<span class="warn">${msg}</span>`;
+      kvBox.style.display = "none";
+      raw.value = msg;
+      openInAppBtn.disabled = true;
+      copyBtn.disabled = true;
+      copyStatus.textContent = "—";
+    }
+
+    if (!token){
+      setError("No shared payload found. Please open a valid share link.");
+    } else if (token.length > 8000){
+      // basic guard (prevents huge hashes freezing the page)
+      setError("Shared payload is too large. Please create a shorter share link.");
     } else {
-      userChip.style.display = "none";
-      authBtn.style.display = "inline-flex";
-      logoutBtn.style.display = "none";
-      authBtn.textContent = "Log in";
-      authBtn.setAttribute("href","login.html");
+      try{
+        const jsonStr = base64urlToUtf8(token);
+        const data = JSON.parse(jsonStr);
+
+        raw.value = JSON.stringify(data, null, 2);
+        kvBox.style.display = "grid";
+
+        setText("modeV", data.mode || "profit");
+        setText("curV", data.currency || "GBP");
+
+        setText("sellV", safeNum(data.sellPrice).toFixed(2));
+        setText("costV", safeNum(data.productCost).toFixed(2));
+
+        const feePct = safeNum(data.feePct).toFixed(2);
+        const feeFixed = safeNum(data.feeFixed).toFixed(2);
+        setText("feeV", `${feePct}% + ${feeFixed}`);
+
+        const adsPct = safeNum(data.adsPct).toFixed(2);
+        const returnPct = safeNum(data.returnPct).toFixed(2);
+        setText("adV", `${adsPct}% / ${returnPct}%`);
+
+        status.textContent = "Ready. You can import this into the app.";
+
+        openInAppBtn.onclick = ()=>{
+          // keep using token; app can read either import= or s=
+          const appUrl = `${location.origin}/app.html#import=${encodeURIComponent(token)}`;
+          location.href = appUrl;
+        };
+
+        copyBtn.onclick = async ()=>{
+          try{
+            await navigator.clipboard.writeText(JSON.stringify(data));
+            copyStatus.textContent = "Copied JSON ✅";
+          } catch (e){
+            copyStatus.textContent = "Copy blocked by browser.";
+          }
+        };
+
+        copyStatus.textContent = "—";
+      } catch (e){
+        setError("Invalid or corrupted share payload.");
+      }
     }
-  }
-
-  logoutBtn?.addEventListener("click", async (e)=>{
-    e.preventDefault();
-    await supabase.auth.signOut();
-    location.href = "login.html";
-  });
-
-  await refreshAuthUI();
-  supabase.auth.onAuthStateChange(()=>refreshAuthUI());
-</script>
-<!-- END PROFITPILOT NAV -->
-
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>ProfitPilot — Shared calculation</title>
-  <meta name="description" content="Open a shared ProfitPilot calculation and import it into the app.">
-  <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
-  <style>
-    :root{
-      --bg:#f6f8fb; --bg2:#eef2ff; --txt:#0b1220; --muted:#5b6474;
-      --card:rgba(255,255,255,.90); --line:rgba(16,24,40,.10);
-      --accent:#0ea5a4; --accent2:#4f46e5; --shadow:0 10px 30px rgba(16,24,40,.08);
-      --warn:#f59e0b; --bad:#ef4444; --ok:#0ea5a4;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--txt);
-      background:
-        radial-gradient(900px 500px at 20% 0%, rgba(14,165,164,.16), transparent 55%),
-        radial-gradient(900px 500px at 80% 0%, rgba(79,70,229,.12), transparent 55%),
-        linear-gradient(180deg, var(--bg2), var(--bg));
-    }
-    a{color:var(--accent);text-decoration:none}
-    .wrap{max-width:980px;margin:20px auto;padding:0 14px}
-    .nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-    .brand{display:flex;gap:10px;align-items:center}
-    .logo{
-      width:40px;height:40px;border-radius:14px;
-      background:linear-gradient(135deg, rgba(14,165,164,.18), rgba(79,70,229,.14));
-      border:1px solid var(--line);
-      display:flex;align-items:center;justify-content:center;
-      font-weight:900;
-    }
-    .pill{
-      padding:8px 10px;border-radius:999px;border:1px solid var(--line);
-      background:rgba(255,255,255,.72);font-size:12px;color:var(--muted);
-      display:inline-flex;gap:8px;align-items:center
-    }
-    .btn{
-      padding:10px 14px;border-radius:999px;border:1px solid var(--line);
-      background:rgba(255,255,255,.78);color:var(--txt);
-      display:inline-flex;gap:8px;align-items:center;cursor:pointer;
-      box-shadow:0 4px 16px rgba(16,24,40,.06);user-select:none;
-      white-space:nowrap;
-    }
-    .btn.primary{border-color:rgba(14,165,164,.30);background:rgba(14,165,164,.10)}
-    .btn.ghost{background:transparent;box-shadow:none}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
-    @media(max-width:900px){.grid{grid-template-columns:1fr}}
-    .card{
-      background:var(--card);border:1px solid var(--line);
-      border-radius:18px;padding:16px;box-shadow:var(--shadow);
-    }
-    .title{font-weight:900;margin:0 0 8px}
-    .small{font-size:12px;color:var(--muted);line-height:1.6}
-    .kv{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-    @media(max-width:560px){.kv{grid-template-columns:1fr}}
-    .k{border:1px solid var(--line);background:rgba(255,255,255,.72);border-radius:16px;padding:12px}
-    .k .h{font-size:12px;color:var(--muted)}
-    .k .v{font-size:18px;font-weight:900;margin-top:6px}
-    .divider{height:1px;background:var(--line);margin:12px 0}
-    input,textarea{
-      width:100%;padding:12px;border-radius:14px;border:1px solid var(--line);
-      background:rgba(255,255,255,.92);color:var(--txt);outline:none;
-    }
-    textarea{min-height:120px;resize:vertical}
-    .warn{color:var(--bad);font-weight:800}
-    footer{margin:14px 2px 0;color:var(--muted);font-size:12px;line-height:1.6}
-    code{background:rgba(255,255,255,.7);border:1px solid var(--line);padding:2px 6px;border-radius:10px}
-  </style>
-</head>
-<body>
-<div class="wrap">
-
-  <div class="nav">
-    <div class="brand">
-      <div class="logo">PP</div>
-      <div>
-        <div style="font-weight:900">ProfitPilot</div>
-        <div class="pill">Shared calculation</div>
-      </div>
-    </div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-      <a class="btn ghost" href="index.html">Home</a>
-      <a class="btn ghost" href="app.html">Open app</a>
-      <a class="btn ghost" href="reviews.html">Reviews</a>
-    </div>
-  </div>
-
-  <div class="grid">
-    <div class="card">
-      <div class="title">Summary</div>
-      <div class="small" id="status">Loading shared data…</div>
-
-      <div class="kv" id="kvBox" style="display:none">
-        <div class="k"><div class="h">Mode</div><div class="v" id="modeV">—</div></div>
-        <div class="k"><div class="h">Currency</div><div class="v" id="curV">—</div></div>
-        <div class="k"><div class="h">Selling price</div><div class="v" id="sellV">—</div></div>
-        <div class="k"><div class="h">Product cost</div><div class="v" id="costV">—</div></div>
-        <div class="k"><div class="h">Fees % / fixed</div><div class="v" id="feeV">—</div></div>
-        <div class="k"><div class="h">Ads % / return %</div><div class="v" id="adV">—</div></div>
-      </div>
-
-      <div class="divider"></div>
-
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn primary" id="openInAppBtn">Open in app</button>
-        <button class="btn" id="copyBtn">Copy JSON</button>
-        <span class="pill" id="copyStatus">—</span>
-      </div>
-
-      <div class="small" style="margin-top:10px">
-        This shared link only contains calculator inputs (not your account info).
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="title">Shared data</div>
-      <div class="small">If you’re troubleshooting, you can view the raw payload below.</div>
-      <label>Payload (read-only)</label>
-      <textarea id="raw" readonly>—</textarea>
-
-      <div class="divider"></div>
-
-      <div class="small">
-        <b>Tip:</b> If this page shows an error, the link may be incomplete.
-        A valid link looks like: <code>share.html#s=...</code>
-      </div>
-    </div>
-  </div>
-
-  <footer>
-    <div><b>Independent tool:</b> Not affiliated with any marketplace/platform.</div>
-    <div><b>Estimates only:</b> Outputs depend on user inputs; no guarantees.</div>
-  </footer>
-
-</div>
-
-<script>
-  function base64urlDecodeToString(b64url){
-    // convert url-safe -> standard
-    let s = (b64url||"").replace(/-/g, "+").replace(/_/g, "/");
-    // pad
-    while (s.length % 4) s += "=";
-    const bin = atob(s);
-    const bytes = new Uint8Array([...bin].map(ch => ch.charCodeAt(0)));
-    return new TextDecoder().decode(bytes);
-  }
-
-  function safeNum(v){
-    const x = parseFloat(String(v).replace(/,/g,""));
-    return Number.isFinite(x) ? x : 0;
-  }
-
-  function setText(id, v){ document.getElementById(id).textContent = v; }
-
-  const status = document.getElementById("status");
-  const raw = document.getElementById("raw");
-  const kvBox = document.getElementById("kvBox");
-  const copyStatus = document.getElementById("copyStatus");
-
-  const hash = location.hash || "";
-  const m = hash.match(/[#&]s=([^&]+)/);
-  if (!m){
-    status.innerHTML = `<span class="warn">No shared payload found.</span> Please open a valid share link.`;
-    raw.value = "Missing #s token.";
-  } else {
-    try{
-      const token = m[1];
-      const jsonStr = base64urlDecodeToString(token);
-      const data = JSON.parse(jsonStr);
-
-      raw.value = JSON.stringify(data, null, 2);
-      kvBox.style.display = "grid";
-
-      setText("modeV", data.mode || "profit");
-      setText("curV", data.currency || "GBP");
-
-      setText("sellV", (safeNum(data.sellPrice)).toFixed(2));
-      setText("costV", (safeNum(data.productCost)).toFixed(2));
-
-      setText("feeV", `${safeNum(data.feePct).toFixed(2)}% / ${safeNum(data.feeFixed).toFixed(2)}`);
-      setText("adV", `${safeNum(data.adsPct).toFixed(2)}% / ${safeNum(data.returnPct).toFixed(2)}%`);
-
-      status.textContent = "Ready. You can import this into the app.";
-
-      document.getElementById("openInAppBtn").onclick = ()=>{
-        // send payload to app via hash
-        const appUrl = `${location.origin}/app.html#import=${encodeURIComponent(token)}`;
-        location.href = appUrl;
-      };
-
-      document.getElementById("copyBtn").onclick = async ()=>{
-        try{
-          await navigator.clipboard.writeText(JSON.stringify(data));
-          copyStatus.textContent = "Copied.";
-        } catch(e){
-          copyStatus.textContent = "Copy failed (browser blocked).";
-        }
-      };
-
-    } catch(e){
-      status.innerHTML = `<span class="warn">Invalid or corrupted share payload.</span>`;
-      raw.value = "Decode error: " + (e?.message || String(e));
-    }
-  }
-</script>
-</body>
-</html>
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>ProfitPilot — Shared calculation</title>
-  <meta name="description" content="Open a shared ProfitPilot calculation and import it into the app.">
-  <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
-  <style>
-    :root{
-      --bg:#f6f8fb; --bg2:#eef2ff; --txt:#0b1220; --muted:#5b6474;
-      --card:rgba(255,255,255,.90); --line:rgba(16,24,40,.10);
-      --accent:#0ea5a4; --accent2:#4f46e5; --shadow:0 10px 30px rgba(16,24,40,.08);
-      --warn:#f59e0b; --bad:#ef4444; --ok:#0ea5a4;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--txt);
-      background:
-        radial-gradient(900px 500px at 20% 0%, rgba(14,165,164,.16), transparent 55%),
-        radial-gradient(900px 500px at 80% 0%, rgba(79,70,229,.12), transparent 55%),
-        linear-gradient(180deg, var(--bg2), var(--bg));
-    }
-    a{color:var(--accent);text-decoration:none}
-    .wrap{max-width:980px;margin:20px auto;padding:0 14px}
-    .nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-    .brand{display:flex;gap:10px;align-items:center}
-    .logo{
-      width:40px;height:40px;border-radius:14px;
-      background:linear-gradient(135deg, rgba(14,165,164,.18), rgba(79,70,229,.14));
-      border:1px solid var(--line);
-      display:flex;align-items:center;justify-content:center;
-      font-weight:900;
-    }
-    .pill{
-      padding:8px 10px;border-radius:999px;border:1px solid var(--line);
-      background:rgba(255,255,255,.72);font-size:12px;color:var(--muted);
-      display:inline-flex;gap:8px;align-items:center
-    }
-    .btn{
-      padding:10px 14px;border-radius:999px;border:1px solid var(--line);
-      background:rgba(255,255,255,.78);color:var(--txt);
-      display:inline-flex;gap:8px;align-items:center;cursor:pointer;
-      box-shadow:0 4px 16px rgba(16,24,40,.06);user-select:none;
-      white-space:nowrap;
-    }
-    .btn.primary{border-color:rgba(14,165,164,.30);background:rgba(14,165,164,.10)}
-    .btn.ghost{background:transparent;box-shadow:none}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
-    @media(max-width:900px){.grid{grid-template-columns:1fr}}
-    .card{
-      background:var(--card);border:1px solid var(--line);
-      border-radius:18px;padding:16px;box-shadow:var(--shadow);
-    }
-    .title{font-weight:900;margin:0 0 8px}
-    .small{font-size:12px;color:var(--muted);line-height:1.6}
-    .kv{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-    @media(max-width:560px){.kv{grid-template-columns:1fr}}
-    .k{border:1px solid var(--line);background:rgba(255,255,255,.72);border-radius:16px;padding:12px}
-    .k .h{font-size:12px;color:var(--muted)}
-    .k .v{font-size:18px;font-weight:900;margin-top:6px}
-    .divider{height:1px;background:var(--line);margin:12px 0}
-    input,textarea{
-      width:100%;padding:12px;border-radius:14px;border:1px solid var(--line);
-      background:rgba(255,255,255,.92);color:var(--txt);outline:none;
-    }
-    textarea{min-height:120px;resize:vertical}
-    .warn{color:var(--bad);font-weight:800}
-    footer{margin:14px 2px 0;color:var(--muted);font-size:12px;line-height:1.6}
-    code{background:rgba(255,255,255,.7);border:1px solid var(--line);padding:2px 6px;border-radius:10px}
-  </style>
-</head>
-<body>
-<div class="wrap">
-
-  <div class="nav">
-    <div class="brand">
-      <div class="logo">PP</div>
-      <div>
-        <div style="font-weight:900">ProfitPilot</div>
-        <div class="pill">Shared calculation</div>
-      </div>
-    </div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-      <a class="btn ghost" href="index.html">Home</a>
-      <a class="btn ghost" href="app.html">Open app</a>
-      <a class="btn ghost" href="reviews.html">Reviews</a>
-    </div>
-  </div>
-
-  <div class="grid">
-    <div class="card">
-      <div class="title">Summary</div>
-      <div class="small" id="status">Loading shared data…</div>
-
-      <div class="kv" id="kvBox" style="display:none">
-        <div class="k"><div class="h">Mode</div><div class="v" id="modeV">—</div></div>
-        <div class="k"><div class="h">Currency</div><div class="v" id="curV">—</div></div>
-        <div class="k"><div class="h">Selling price</div><div class="v" id="sellV">—</div></div>
-        <div class="k"><div class="h">Product cost</div><div class="v" id="costV">—</div></div>
-        <div class="k"><div class="h">Fees % / fixed</div><div class="v" id="feeV">—</div></div>
-        <div class="k"><div class="h">Ads % / return %</div><div class="v" id="adV">—</div></div>
-      </div>
-
-      <div class="divider"></div>
-
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn primary" id="openInAppBtn">Open in app</button>
-        <button class="btn" id="copyBtn">Copy JSON</button>
-        <span class="pill" id="copyStatus">—</span>
-      </div>
-
-      <div class="small" style="margin-top:10px">
-        This shared link only contains calculator inputs (not your account info).
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="title">Shared data</div>
-      <div class="small">If you’re troubleshooting, you can view the raw payload below.</div>
-      <label>Payload (read-only)</label>
-      <textarea id="raw" readonly>—</textarea>
-
-      <div class="divider"></div>
-
-      <div class="small">
-        <b>Tip:</b> If this page shows an error, the link may be incomplete.
-        A valid link looks like: <code>share.html#s=...</code>
-      </div>
-    </div>
-  </div>
-
-  <footer>
-    <div><b>Independent tool:</b> Not affiliated with any marketplace/platform.</div>
-    <div><b>Estimates only:</b> Outputs depend on user inputs; no guarantees.</div>
-  </footer>
-
-</div>
-
-<script>
-  function base64urlDecodeToString(b64url){
-    // convert url-safe -> standard
-    let s = (b64url||"").replace(/-/g, "+").replace(/_/g, "/");
-    // pad
-    while (s.length % 4) s += "=";
-    const bin = atob(s);
-    const bytes = new Uint8Array([...bin].map(ch => ch.charCodeAt(0)));
-    return new TextDecoder().decode(bytes);
-  }
-
-  function safeNum(v){
-    const x = parseFloat(String(v).replace(/,/g,""));
-    return Number.isFinite(x) ? x : 0;
-  }
-
-  function setText(id, v){ document.getElementById(id).textContent = v; }
-
-  const status = document.getElementById("status");
-  const raw = document.getElementById("raw");
-  const kvBox = document.getElementById("kvBox");
-  const copyStatus = document.getElementById("copyStatus");
-
-  const hash = location.hash || "";
-  const m = hash.match(/[#&]s=([^&]+)/);
-  if (!m){
-    status.innerHTML = `<span class="warn">No shared payload found.</span> Please open a valid share link.`;
-    raw.value = "Missing #s token.";
-  } else {
-    try{
-      const token = m[1];
-      const jsonStr = base64urlDecodeToString(token);
-      const data = JSON.parse(jsonStr);
-
-      raw.value = JSON.stringify(data, null, 2);
-      kvBox.style.display = "grid";
-
-      setText("modeV", data.mode || "profit");
-      setText("curV", data.currency || "GBP");
-
-      setText("sellV", (safeNum(data.sellPrice)).toFixed(2));
-      setText("costV", (safeNum(data.productCost)).toFixed(2));
-
-      setText("feeV", `${safeNum(data.feePct).toFixed(2)}% / ${safeNum(data.feeFixed).toFixed(2)}`);
-      setText("adV", `${safeNum(data.adsPct).toFixed(2)}% / ${safeNum(data.returnPct).toFixed(2)}%`);
-
-      status.textContent = "Ready. You can import this into the app.";
-
-      document.getElementById("openInAppBtn").onclick = ()=>{
-        // send payload to app via hash
-        const appUrl = `${location.origin}/app.html#import=${encodeURIComponent(token)}`;
-        location.href = appUrl;
-      };
-
-      document.getElementById("copyBtn").onclick = async ()=>{
-        try{
-          await navigator.clipboard.writeText(JSON.stringify(data));
-          copyStatus.textContent = "Copied.";
-        } catch(e){
-          copyStatus.textContent = "Copy failed (browser blocked).";
-        }
-      };
-
-    } catch(e){
-      status.innerHTML = `<span class="warn">Invalid or corrupted share payload.</span>`;
-      raw.value = "Decode error: " + (e?.message || String(e));
-    }
-  }
-</script>
+  </script>
 </body>
 </html>
