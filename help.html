@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>How to use ProfitPilot — Help</title>
+  <meta name="description" content="Step-by-step help guide for ProfitPilot: Profit calculator, reverse pricing, competitor check, bulk mode, export, and PRO unlock.">
+  <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
+
+  <style>
+    :root{
+      --bg:#f7f9fc; --bg2:#eef3ff;
+      --txt:#0b1220; --muted:#5b6474;
+      --card:#ffffff; --line:rgba(16,24,40,.10);
+      --accent:#0ea5a4; --accent2:#4f46e5;
+      --shadow:0 14px 36px rgba(16,24,40,.08);
+      --shadow2:0 8px 22px rgba(16,24,40,.06);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--txt);
+      background:
+        radial-gradient(900px 520px at 16% 0%, rgba(14,165,164,.14), transparent 55%),
+        radial-gradient(900px 520px at 84% 0%, rgba(79,70,229,.12), transparent 55%),
+        linear-gradient(180deg,var(--bg2),var(--bg));
+    }
+    a{color:var(--accent);text-decoration:none;font-weight:800}
+    .wrap{max-width:980px;margin:0 auto;padding:22px 16px 70px}
+    @media (min-width:900px){.wrap{padding:26px 22px 80px}}
+
+    .btn{
+      padding:10px 14px;border-radius:999px;border:1px solid var(--line);
+      background:#fff;box-shadow:var(--shadow2);
+      font-weight:800;font-size:14px;
+      display:inline-flex;gap:8px;align-items:center;
+      color:var(--txt);text-decoration:none;
+    }
+    .btn.primary{
+      border:none;color:#fff;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      box-shadow:0 16px 34px rgba(79,70,229,.16);
+    }
+    .nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:8px 0}
+    .left,.right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+    .card{
+      margin-top:14px;
+      background:rgba(255,255,255,.80);
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:18px;
+      box-shadow:var(--shadow);
+    }
+    h1{margin:0;font-size:30px;letter-spacing:-.02em;line-height:1.15}
+    .lead{margin:10px 0 0;color:var(--muted);line-height:1.75}
+    h2{margin:22px 0 8px;font-size:18px;letter-spacing:-.01em}
+    p,li{color:var(--muted);line-height:1.75}
+    ul{margin:8px 0 0;padding-left:18px}
+    .pill{
+      display:inline-flex;gap:8px;align-items:center;
+      padding:8px 10px;border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.75);
+      color:rgba(16,24,40,.70);
+      font-size:12px;font-weight:800;
+    }
+    .k{
+      display:grid;gap:10px;
+      grid-template-columns:1fr 1fr;
+      margin-top:12px;
+    }
+    @media(max-width:760px){.k{grid-template-columns:1fr}}
+    .mini{
+      background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px;
+      box-shadow:var(--shadow2);
+    }
+    .mini b{color:var(--txt)}
+    footer{
+      margin-top:20px;padding-top:14px;border-top:1px solid var(--line);
+      text-align:center;color:var(--muted);font-size:12.5px;line-height:1.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- CONSISTENT NAV -->
+    <div class="nav">
+      <div class="left">
+        <a class="btn" href="https://ukwebtools.com/">← Ukwebtools</a>
+        <a class="btn" href="index.html">Home</a>
+        <a class="btn" href="reviews.html">Reviews</a>
+        <a class="btn" href="privacy.html">Privacy</a>
+        <a class="btn" href="terms.html">Terms</a>
+      </div>
+      <div class="right">
+        <a class="btn primary" href="app.html">Open app</a>
+        <a class="btn" href="login.html">Log in</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:flex-end">
+        <div>
+          <h1>How to use ProfitPilot</h1>
+          <p class="lead">
+            This guide shows you exactly how to get accurate results (and avoid common mistakes).
+          </p>
+        </div>
+        <span class="pill">Estimates only • Not advice</span>
+      </div>
+
+      <h2>Before you start (important)</h2>
+      <ul>
+        <li>Use realistic numbers. Most “wrong results” come from unrealistic input assumptions.</li>
+        <li>If you’re unsure about a fee %, use a preset as a starting point, then adjust.</li>
+        <li>Always include hidden costs: packaging, labels, returns allowance, ad spend if you use it.</li>
+      </ul>
+
+      <h2>1) Profit Calculator (core)</h2>
+      <div class="k">
+        <div class="mini">
+          <b>Step-by-step</b>
+          <ul>
+            <li>Choose a <b>platform preset</b> (or Manual).</li>
+            <li>Enter <b>Selling price</b> and <b>Product cost</b>.</li>
+            <li>Add <b>Shipping</b> + <b>Packaging/Misc</b>.</li>
+            <li>Adjust <b>Platform fee %</b> and <b>Fixed fee</b> if needed.</li>
+            <li>Click <b>Calculate</b>.</li>
+          </ul>
+        </div>
+        <div class="mini">
+          <b>What to look at</b>
+          <ul>
+            <li><b>Profit</b> — money left after all costs & fees.</li>
+            <li><b>Margin</b> — profit as % of selling price.</li>
+            <li><b>Fees + ads</b> — your “platform tax”.</li>
+            <li><b>Return sensitivity</b> — expected impact if returns happen.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2>2) Reverse Pricing (target profit → selling price)</h2>
+      <p>
+        Use this when you know what profit you want and you want the calculator to tell you the selling price needed.
+      </p>
+      <ul>
+        <li>Enter your <b>product cost</b> and other costs.</li>
+        <li>Set fee % and fixed fee (or use a preset).</li>
+        <li>Enter your <b>target profit</b>.</li>
+        <li>ProfitPilot outputs the <b>minimum selling price</b> required to hit that profit.</li>
+      </ul>
+      <p><b>Tip:</b> If the suggested price is too high vs market, the product may not be viable at your cost.</p>
+
+      <h2>3) Competitor Comparison (market check)</h2>
+      <ul>
+        <li>Add competitor prices you see in the market.</li>
+        <li>ProfitPilot shows a safe range and highlights when your required price is above market.</li>
+        <li>This prevents “listing something that can’t profit” before you waste time.</li>
+      </ul>
+
+      <h2>4) Bulk Mode (table analysis)</h2>
+      <ul>
+        <li>Use bulk when you’re checking multiple products fast.</li>
+        <li>Fill rows with: price, cost, shipping, fees.</li>
+        <li>Export results to CSV to keep records and compare suppliers.</li>
+      </ul>
+
+      <h2>Export & Share</h2>
+      <ul>
+        <li><b>Export</b> downloads your results (useful for bookkeeping or supplier comparisons).</li>
+        <li><b>Share</b> creates a shareable summary (useful for partner decisions).</li>
+      </ul>
+
+      <h2>Trial vs PRO</h2>
+      <ul>
+        <li><b>Trial</b> lets you test the tool (some advanced actions limited).</li>
+        <li><b>PRO</b> is one-time unlock: unlimited reverse, competitor checks, bulk, and exports.</li>
+      </ul>
+
+      <h2>Common mistakes (and quick fixes)</h2>
+      <ul>
+        <li><b>Profit looks too high:</b> you forgot fees, ads, or packaging.</li>
+        <li><b>Profit looks negative:</b> your selling price is too low OR fees are too high OR cost is too high.</li>
+        <li><b>Numbers seem weird:</b> ensure you didn’t type commas incorrectly (e.g. 1,000.50 is ok).</li>
+      </ul>
+
+      <h2>Need help?</h2>
+      <p>Email: <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a></p>
+
+      <footer>
+        © <span id="yr"></span> Ukwebtools • ProfitPilot<br/>
+        Independent tool • Estimates only • Not financial, legal, or tax advice.
+      </footer>
+    </div>
+
+  </div>
+
+  <script>
+    document.getElementById("yr").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
