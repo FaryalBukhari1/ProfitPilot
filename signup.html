@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Sign up — ProfitPilot</title>
+  <meta name="description" content="Create your ProfitPilot account.">
+  <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
+  <meta name="robots" content="noindex,nofollow">
+
+  <style>
+    :root{
+      --bg:#f6f8fb; --bg2:#eef2ff; --txt:#0b1220; --muted:#5b6474;
+      --card:rgba(255,255,255,.92); --line:rgba(16,24,40,.10);
+      --accent:#0ea5a4; --accent2:#4f46e5;
+      --shadow:0 12px 34px rgba(16,24,40,.10);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--txt);
+      background:
+        radial-gradient(900px 520px at 20% 0%, rgba(14,165,164,.14), transparent 55%),
+        radial-gradient(900px 520px at 80% 0%, rgba(79,70,229,.10), transparent 55%),
+        linear-gradient(180deg, var(--bg2), var(--bg));
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+    }
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    .card{
+      width:100%;
+      max-width:520px;
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+    .top{
+      display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .brand{
+      display:flex;align-items:center;gap:10px;
+    }
+    .logo{
+      width:40px;height:40px;border-radius:14px;
+      background:linear-gradient(135deg, rgba(14,165,164,.20), rgba(79,70,229,.16));
+      border:1px solid var(--line);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:1000; user-select:none;
+    }
+    .brandtitle{font-weight:1000;line-height:1.05}
+    .brandsub{font-size:12px;color:var(--muted);font-weight:700;margin-top:3px}
+
+    h1{margin:12px 0 6px;font-size:22px;letter-spacing:-.3px}
+    .lead{margin:0 0 14px;color:var(--muted);line-height:1.7;font-size:13px}
+
+    .row{display:grid;gap:10px}
+    label{font-size:12px;color:rgba(16,24,40,.70);font-weight:900}
+    input{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.92);
+      font-weight:750;
+      outline:none;
+    }
+    input:focus{
+      border-color:rgba(14,165,164,.35);
+      box-shadow:0 0 0 4px rgba(14,165,164,.10);
+    }
+
+    .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .btn{
+      padding:10px 14px;border-radius:999px;border:1px solid var(--line);
+      background:rgba(255,255,255,.92);color:var(--txt);
+      font-weight:900;
+      box-shadow:0 8px 18px rgba(16,24,40,.06);
+      display:inline-flex;gap:8px;align-items:center;white-space:nowrap;
+      cursor:pointer;
+      transition:transform .08s ease;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn.primary{
+      border:none;color:#fff;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      box-shadow:0 16px 34px rgba(79,70,229,.16);
+    }
+    .btn.ghost{background:transparent;box-shadow:none}
+
+    .msg{
+      margin-top:12px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.80);
+      color:rgba(16,24,40,.75);
+      font-size:12.8px;
+      line-height:1.6;
+      display:none;
+      white-space:pre-wrap;
+    }
+    .msg.error{
+      border-color:rgba(239,68,68,.25);
+      background:rgba(239,68,68,.08);
+    }
+    .fine{
+      margin-top:12px;
+      color:rgba(16,24,40,.55);
+      font-size:12px;
+      line-height:1.6;
+    }
+    .fine a{font-weight:900}
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div class="top">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">PP</div>
+        <div>
+          <div class="brandtitle">ProfitPilot</div>
+          <div class="brandsub">Create your account</div>
+        </div>
+      </div>
+      <a class="btn ghost" href="https://ukwebtools.com/">← Ukwebtools</a>
+    </div>
+
+    <h1>Sign up</h1>
+    <p class="lead">Use an email and password. You can log in immediately (or confirm your email if enabled).</p>
+
+    <form id="form" class="row">
+      <div>
+        <label for="email">Email</label>
+        <input id="email" type="email" autocomplete="email" required placeholder="you@example.com"/>
+      </div>
+
+      <div>
+        <label for="password">Password</label>
+        <input id="password" type="password" autocomplete="new-password" minlength="8" required placeholder="Minimum 8 characters"/>
+      </div>
+
+      <div>
+        <label for="password2">Confirm password</label>
+        <input id="password2" type="password" autocomplete="new-password" minlength="8" required placeholder="Repeat password"/>
+      </div>
+
+      <div class="btnrow">
+        <button class="btn primary" id="signupSubmit" type="submit">Create account</button>
+        <a class="btn" href="login.html">Log in instead</a>
+        <a class="btn ghost" href="index.html">Back to home</a>
+      </div>
+    </form>
+
+    <div id="msg" class="msg"></div>
+
+    <div class="fine">
+      By creating an account you agree to the <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy</a>.
+    </div>
+  </div>
+
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+  const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
+  const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  const form = document.getElementById("form");
+  const emailEl = document.getElementById("email");
+  const passEl = document.getElementById("password");
+  const pass2El = document.getElementById("password2");
+  const msg = document.getElementById("msg");
+  const btn = document.getElementById("signupSubmit");
+
+  function showMessage(text, isError=false){
+    msg.style.display = "block";
+    msg.classList.toggle("error", isError);
+    msg.textContent = text;
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    msg.style.display = "none";
+
+    const email = emailEl.value.trim();
+    const password = passEl.value;
+    const password2 = pass2El.value;
+
+    if (password !== password2){
+      showMessage("Passwords do not match.", true);
+      return;
+    }
+You may use email confirmation; if enabled, the user must confirm.
+    btn.disabled = true;
+    btn.textContent = "Creating…";
+
+    try{
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: "https://profitpilot.ukwebtools.com/login.html"
+        }
+      });
+
+      if (error){
+        showMessage(error.message || "Sign up failed.", true);
+        return;
+      }
+
+      // If email confirmation is ON, session will usually be null.
+      if (!data?.session){
+        showMessage(
+          "Account created.\n\nCheck your email to confirm your address, then log in.",
+          false
+        );
+      } else {
+        // Email confirmation OFF: session exists, go to app
+        location.href = "app.html";
+      }
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Create account";
+    }
+  });
+
+  // If already signed in, go straight to app
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session?.user){
+    location.href = "app.html";
+  }
+</script>
+</body>
+</html>
