@@ -6,6 +6,8 @@
   <title>Terms — ProfitPilot</title>
   <meta name="description" content="Terms of use for ProfitPilot by Ukwebtools.">
   <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
+  <meta name="robots" content="index,follow">
+
   <style>
     :root{
       --bg:#f7f9fc; --bg2:#eef3ff;
@@ -25,14 +27,46 @@
     }
     a{text-decoration:none;color:inherit}
     .wrap{max-width:980px;margin:0 auto;padding:18px 16px 50px}
-    .nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 0}
-    .left,.right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .btn{
-      padding:10px 14px;border-radius:999px;border:1px solid var(--line);
-      background:#fff;box-shadow:var(--shadow2);
-      font-weight:700;font-size:14px;display:inline-flex;gap:8px;align-items:center;
+
+    /* UNIVERSAL NAV (single) */
+    .pp-navwrap{max-width:1200px;margin:0 auto;padding:14px 0;position:relative;z-index:50}
+    .pp-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+    .pp-left,.pp-right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .pp-btn{
+      padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
+      background:#fff;font-weight:800;text-decoration:none;color:#0b1220;
+      box-shadow:0 8px 18px rgba(16,24,40,.06);
+      display:inline-flex;gap:8px;align-items:center;
+      transition:transform .08s ease;
     }
-    .btn.primary{border:none;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2))}
+    .pp-btn:hover{transform:translateY(-1px)}
+    .pp-btn:active{transform:translateY(0)}
+    .pp-primary{
+      border:none;color:#fff;
+      background:linear-gradient(135deg,#0ea5a4,#4f46e5);
+      box-shadow:0 14px 28px rgba(79,70,229,.16);
+    }
+    .pp-active{
+      border-color:rgba(14,165,164,.35);
+      background:rgba(14,165,164,.08);
+    }
+    .pp-user{
+      padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
+      background:rgba(255,255,255,.75);
+      color:rgba(16,24,40,.72);
+      font-weight:800;
+      display:none;
+      max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    }
+    .pp-crumbs{
+      margin-top:10px;
+      font-size:12.5px;
+      color:rgba(16,24,40,.62);
+      display:flex;gap:6px;flex-wrap:wrap;align-items:center;
+    }
+    .pp-crumbs a{color:rgba(14,165,164,.95);font-weight:800;text-decoration:none}
+    .pp-sep{opacity:.55}
+
     .card{
       margin-top:14px;background:rgba(255,255,255,.75);
       border:1px solid var(--line);border-radius:22px;padding:20px;
@@ -46,20 +80,52 @@
     .fine a{color:var(--accent);font-weight:800}
   </style>
 </head>
+
 <body>
   <div class="wrap">
 
-    <!-- CONSISTENT NAV -->
-    <div class="nav">
-      <div class="left">
-        <a class="btn" href="https://ukwebtools.com/">← Ukwebtools</a>
-        <a class="btn" href="index.html">Home</a>
-        <a class="btn" href="privacy.html">Privacy</a>
-        <a class="btn" href="terms.html">Terms</a>
+    <!-- SINGLE NAV -->
+    <div class="pp-navwrap" role="navigation" aria-label="Primary">
+      <div class="pp-nav">
+        <div class="pp-left">
+          <a class="pp-btn" href="https://ukwebtools.com/" data-nav="ukwebtools">← Ukwebtools</a>
+          <a class="pp-btn" href="index.html" data-nav="home">Home</a>
+          <a class="pp-btn" href="reviews.html" data-nav="reviews">Reviews</a>
+          <a class="pp-btn" href="privacy.html" data-nav="privacy">Privacy</a>
+          <a class="pp-btn pp-active" href="terms.html" data-nav="terms">Terms</a>
+        </div>
+
+        <div class="pp-right">
+          <span class="pp-user" id="ppUserChip">Signed in</span>
+
+          <!-- Signed OUT -->
+          <a class="pp-btn pp-primary" id="ppAuthBtn" href="login.html">Log in</a>
+
+          <!-- Signed IN -->
+          <a class="pp-btn pp-primary" id="ppOpenBtn" href="app.html" style="display:none">Open app</a>
+          <a class="pp-btn" id="ppLogoutBtn" href="#" style="display:none">Log out</a>
+        </div>
       </div>
-      <div class="right">
-        <a class="btn primary" href="login.html">Log in</a>
+
+      <div class="pp-crumbs" aria-label="Breadcrumb">
+        <a href="https://ukwebtools.com/">Ukwebtools</a>
+        <span class="pp-sep">›</span>
+        <a href="index.html">ProfitPilot</a>
+        <span class="pp-sep">›</span>
+        <span>Terms</span>
       </div>
+
+      <script type="application/ld+json">
+      {
+        "@context":"https://schema.org",
+        "@type":"BreadcrumbList",
+        "itemListElement":[
+          {"@type":"ListItem","position":1,"name":"Ukwebtools","item":"https://ukwebtools.com/"},
+          {"@type":"ListItem","position":2,"name":"ProfitPilot","item":"https://profitpilot.ukwebtools.com/index.html"},
+          {"@type":"ListItem","position":3,"name":"Terms","item":"https://profitpilot.ukwebtools.com/terms.html"}
+        ]
+      }
+      </script>
     </div>
 
     <div class="card">
@@ -81,12 +147,13 @@
       <ul>
         <li>You are responsible for keeping your login secure.</li>
         <li>Trial limits and feature limits may apply and may change as the product improves.</li>
-        <li>PRO access is a one-time unlock as described on the sales page.</li>
+        <li>PRO access is a one-time unlock as described on the Pricing page.</li>
       </ul>
 
       <h2>4) Purchases</h2>
       <p>
-        Payments are processed by Gumroad. Receipts, checkout security, and purchase policies follow Gumroad’s systems and applicable consumer rights.
+        Payments are processed by our payment provider (currently Paddle or another provider shown at checkout).
+        Taxes/VAT and receipts are handled during checkout based on your location and applicable rules.
       </p>
 
       <h2>5) Reviews</h2>
@@ -106,186 +173,55 @@
 
       <footer class="fine">
         <div>© <span id="yr"></span> Ukwebtools • ProfitPilot</div>
-        <div><a href="privacy.html">Privacy</a> · <a href="https://profitpilot.ukwebtools.com/reviews.html">Reviews</a></div>
+        <div><a href="privacy.html">Privacy</a> · <a href="reviews.html">Reviews</a></div>
       </footer>
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+    const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
+    const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+    // Dates
     document.getElementById("yr").textContent = new Date().getFullYear();
     document.getElementById("d").textContent = new Date().toLocaleDateString();
+
+    // Auth UI
+    const userChip = document.getElementById("ppUserChip");
+    const authBtn = document.getElementById("ppAuthBtn");
+    const openBtn = document.getElementById("ppOpenBtn");
+    const logoutBtn = document.getElementById("ppLogoutBtn");
+
+    async function refreshAuthUI(){
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (session?.user?.email){
+        userChip.style.display = "inline-flex";
+        userChip.textContent = session.user.email;
+
+        authBtn.style.display = "none";
+        openBtn.style.display = "inline-flex";
+        logoutBtn.style.display = "inline-flex";
+      } else {
+        userChip.style.display = "none";
+
+        authBtn.style.display = "inline-flex";
+        openBtn.style.display = "none";
+        logoutBtn.style.display = "none";
+      }
+    }
+
+    logoutBtn.addEventListener("click", async (e)=>{
+      e.preventDefault();
+      await supabase.auth.signOut();
+      location.href = "login.html";
+    });
+
+    await refreshAuthUI();
+    supabase.auth.onAuthStateChange(()=>refreshAuthUI());
   </script>
 </body>
 </html>
-<!-- PROFITPILOT: UNIVERSAL NAV + BREADCRUMBS -->
-<style>
-  /* Keep styles scoped to nav so it won't break your existing CSS */
-  .pp-navwrap{max-width:1200px;margin:0 auto;padding:14px 16px;position:relative;z-index:50}
-  .pp-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-  .pp-left,.pp-right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-  .pp-btn{
-    padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
-    background:#fff;font-weight:800;text-decoration:none;color:#0b1220;
-    box-shadow:0 8px 18px rgba(16,24,40,.06);
-    display:inline-flex;gap:8px;align-items:center;
-  }
-  .pp-btn:hover{transform:translateY(-1px)}
-  .pp-btn:active{transform:translateY(0)}
-  .pp-primary{
-    border:none;color:#fff;
-    background:linear-gradient(135deg,#0ea5a4,#4f46e5);
-    box-shadow:0 14px 28px rgba(79,70,229,.16);
-  }
-  .pp-active{
-    border-color:rgba(14,165,164,.35);
-    background:rgba(14,165,164,.08);
-  }
-  .pp-crumbs{
-    margin-top:10px;
-    font-size:12.5px;
-    color:rgba(16,24,40,.62);
-    display:flex;gap:6px;flex-wrap:wrap;align-items:center;
-  }
-  .pp-crumbs a{color:rgba(14,165,164,.95);font-weight:800;text-decoration:none}
-  .pp-sep{opacity:.55}
-  .pp-user{
-    padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
-    background:rgba(255,255,255,.75);
-    color:rgba(16,24,40,.72);
-    font-weight:800;
-    display:none;
-  }
-</style>
-
-<div class="pp-navwrap" role="navigation" aria-label="Primary">
-  <div class="pp-nav">
-    <!-- LEFT -->
-    <div class="pp-left">
-      <a class="pp-btn" href="https://ukwebtools.com/" data-nav="ukwebtools">← Ukwebtools</a>
-      <a class="pp-btn" href="index.html" data-nav="home">Home</a>
-      <a class="pp-btn" href="reviews.html" data-nav="reviews">Reviews</a>
-      <a class="pp-btn" href="privacy.html" data-nav="privacy">Privacy</a>
-      <a class="pp-btn" href="terms.html" data-nav="terms">Terms</a>
-      <a class="pp-btn" href="faq.html" data-nav="faq">FAQ</a>
-    </div>
-
-    <!-- RIGHT -->
-    <div class="pp-right">
-      <span class="pp-user" id="ppUserChip">Signed in</span>
-      <a class="pp-btn pp-primary" id="ppAuthBtn" href="login.html">Log in</a>
-      <a class="pp-btn" id="ppLogoutBtn" href="#" style="display:none">Log out</a>
-    </div>
-  </div>
-
-  <!-- Visible Breadcrumbs -->
-  <div class="pp-crumbs" aria-label="Breadcrumb">
-    <a href="https://ukwebtools.com/">Ukwebtools</a>
-    <span class="pp-sep">›</span>
-    <a href="index.html">ProfitPilot</a>
-    <span class="pp-sep">›</span>
-    <span id="ppCrumbCurrent">Page</span>
-  </div>
-
-  <!-- JSON-LD Breadcrumbs for SEO -->
-  <script id="ppBreadcrumbJson" type="application/ld+json"></script>
-</div>
-
-<script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
-  // ✅ REPLACE THESE TWO:
-  const SUPABASE_URL = "PASTE_YOUR_SUPABASE_URL_HERE";
-  const SUPABASE_ANON = "PASTE_YOUR_SUPABASE_ANON_KEY_HERE";
-
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
-
-  // ---------- Active page highlighting ----------
-  const path = (location.pathname.split("/").pop() || "index.html").toLowerCase();
-  const map = {
-    "index.html":"home",
-    "reviews.html":"reviews",
-    "privacy.html":"privacy",
-    "terms.html":"terms",
-    "faq.html":"faq",
-    "login.html":"login",
-    "app.html":"app",
-    "reset.html":"reset",
-    "verify.html":"verify"
-  };
-  const activeKey = map[path] || "home";
-
-  // Highlight matching nav item if present
-  document.querySelectorAll(".pp-btn[data-nav]").forEach(a=>{
-    const key = a.getAttribute("data-nav");
-    if (key === activeKey) a.classList.add("pp-active");
-  });
-
-  // ---------- Breadcrumb text + JSON-LD ----------
-  const titles = {
-    home:"Home",
-    reviews:"Reviews",
-    privacy:"Privacy",
-    terms:"Terms",
-    faq:"FAQ",
-    login:"Log in",
-    app:"App",
-    reset:"Reset password",
-    verify:"Verify email"
-  };
-  const currentTitle = titles[activeKey] || "Page";
-  document.getElementById("ppCrumbCurrent").textContent = currentTitle;
-
-  const base = "https://profitpilot.ukwebtools.com/";
-  const crumbItems = [
-    { name:"Ukwebtools", item:"https://ukwebtools.com/" },
-    { name:"ProfitPilot", item: base + "index.html" },
-    { name: currentTitle, item: base + path }
-  ];
-
-  document.getElementById("ppBreadcrumbJson").textContent = JSON.stringify({
-    "@context":"https://schema.org",
-    "@type":"BreadcrumbList",
-    "itemListElement": crumbItems.map((c,i)=>({
-      "@type":"ListItem",
-      "position": i+1,
-      "name": c.name,
-      "item": c.item
-    }))
-  });
-
-  // ---------- Auth state: show email + logout ----------
-  const userChip = document.getElementById("ppUserChip");
-  const authBtn = document.getElementById("ppAuthBtn");
-  const logoutBtn = document.getElementById("ppLogoutBtn");
-
-  async function refreshAuthUI(){
-    const { data: { session } } = await supabase.auth.getSession();
-
-    if (session?.user?.email){
-      userChip.style.display = "inline-flex";
-      userChip.textContent = session.user.email;
-      authBtn.style.display = "none";
-      logoutBtn.style.display = "inline-flex";
-      // Make the "Home" button still go to landing; optional: direct logged-in users to app
-      // If you want Home button to open app when logged in, uncomment:
-      // document.querySelector('[data-nav="home"]').setAttribute("href","app.html");
-    } else {
-      userChip.style.display = "none";
-      authBtn.style.display = "inline-flex";
-      logoutBtn.style.display = "none";
-      authBtn.textContent = "Log in";
-      authBtn.setAttribute("href","login.html");
-    }
-  }
-
-  logoutBtn.addEventListener("click", async (e)=>{
-    e.preventDefault();
-    await supabase.auth.signOut();
-    location.href = "login.html";
-  });
-
-  // initial + live updates
-  await refreshAuthUI();
-  supabase.auth.onAuthStateChange(() => refreshAuthUI());
-</script>
-<!-- END PROFITPILOT NAV -->
