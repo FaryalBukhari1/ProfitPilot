@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Pricing — ProfitPilot</title>
+  <meta name="description" content="ProfitPilot pricing: start with a free trial, upgrade to PRO with a one-time purchase via Paddle. No subscriptions.">
+  <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
+  <meta name="robots" content="index,follow">
+
+  <style>
+    :root{
+      --bg:#f6f8fb; --bg2:#eef2ff;
+      --txt:#0b1220; --muted:#5b6474;
+      --card:rgba(255,255,255,.92); --line:rgba(16,24,40,.10);
+      --accent:#0ea5a4; --accent2:#4f46e5;
+      --shadow:0 12px 34px rgba(16,24,40,.10);
+      --soft:rgba(14,165,164,.10);
+      --soft2:rgba(79,70,229,.10);
+      --warn:rgba(245,158,11,.14);
+      --ok:rgba(14,165,164,.14);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--txt);
+      background:
+        radial-gradient(900px 520px at 20% 0%, rgba(14,165,164,.16), transparent 55%),
+        radial-gradient(900px 520px at 80% 0%, rgba(79,70,229,.12), transparent 55%),
+        linear-gradient(180deg, var(--bg2), var(--bg));
+    }
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:1120px;margin:0 auto;padding:22px 16px 74px}
+    @media (min-width:900px){.wrap{padding:26px 22px 88px}}
+
+    /* NAV */
+    .nav{
+      display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+      position:sticky;top:0;z-index:60;padding:14px 0;
+      backdrop-filter:blur(10px);
+    }
+    .nav::before{
+      content:"";position:absolute;inset:0;
+      background:rgba(246,248,251,.72);
+      border-bottom:1px solid rgba(16,24,40,.08);
+      z-index:-1;border-radius:18px;
+    }
+    .brand{display:flex;gap:12px;align-items:center;padding:10px 12px}
+    .logo{
+      width:42px;height:42px;border-radius:16px;
+      background:linear-gradient(135deg, rgba(14,165,164,.22), rgba(79,70,229,.18));
+      border:1px solid rgba(16,24,40,.10);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:1000;letter-spacing:-.02em;
+      box-shadow:0 10px 24px rgba(16,24,40,.08);
+      user-select:none;
+    }
+    .brand b{font-weight:1000;letter-spacing:-.02em}
+    .sub{font-size:12px;color:var(--muted);margin-top:2px}
+    .right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+    .btn{
+      padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
+      background:rgba(255,255,255,.86);color:var(--txt);
+      display:inline-flex;gap:8px;align-items:center;cursor:pointer;
+      box-shadow:0 8px 18px rgba(16,24,40,.06);
+      white-space:nowrap;font-weight:900;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(0)}
+    .btn.ghost{background:transparent;box-shadow:none}
+    .btn.primary{
+      border:none;color:#fff;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow:0 18px 34px rgba(79,70,229,.18);
+    }
+    .btn.active{
+      border-color:rgba(14,165,164,.35);
+      background:rgba(14,165,164,.10);
+    }
+    .chip{
+      padding:9px 12px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
+      background:rgba(255,255,255,.76);color:rgba(16,24,40,.72);
+      font-size:12px;font-weight:900;display:none;
+    }
+
+    /* BREADCRUMBS */
+    .crumbs{
+      margin:10px 2px 0;
+      font-size:12.5px;color:rgba(16,24,40,.62);
+      display:flex;gap:6px;flex-wrap:wrap;align-items:center;
+    }
+    .crumbs a{color:rgba(14,165,164,.95);font-weight:900}
+    .sep{opacity:.55}
+
+    /* HERO */
+    .hero{
+      margin-top:14px;
+      background:linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.82));
+      border:1px solid rgba(16,24,40,.10);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:20px;
+      position:relative; overflow:hidden;
+    }
+    h1{margin:0;font-size:28px;line-height:1.15;letter-spacing:-.03em;font-weight:1000}
+    .lead{margin-top:10px;color:rgba(16,24,40,.70);line-height:1.7;font-size:14.5px}
+    .pillrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .pill{
+      padding:9px 12px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
+      background:rgba(255,255,255,.76);color:rgba(16,24,40,.68);
+      font-size:12.5px;font-weight:900;
+    }
+
+    /* PRICING GRID */
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+    @media(max-width:980px){.grid{grid-template-columns:1fr}}
+    .card{
+      background:rgba(255,255,255,.90);
+      border:1px solid rgba(16,24,40,.10);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:18px;
+      position:relative;
+    }
+    .card.featured{
+      border-color:rgba(14,165,164,.28);
+      background:linear-gradient(180deg, rgba(14,165,164,.10), rgba(255,255,255,.90));
+      outline:2px solid rgba(14,165,164,.14);
+    }
+    .kicker{font-size:12px;color:rgba(16,24,40,.56);font-weight:1000;text-transform:uppercase;letter-spacing:.12em}
+    .title{margin:10px 0 8px;font-weight:1000;letter-spacing:-.02em;font-size:16px}
+    .price{font-size:34px;font-weight:1100;letter-spacing:-.04em;margin-top:8px}
+    .per{font-size:12.5px;color:rgba(16,24,40,.60);font-weight:900;margin-top:4px}
+    .small{font-size:12.8px;color:rgba(16,24,40,.68);line-height:1.75}
+    ul{margin:12px 0 0;padding-left:18px;color:rgba(16,24,40,.68);line-height:1.75;font-size:13px}
+    li{margin:6px 0}
+
+    .tag{
+      position:absolute;top:14px;right:14px;
+      padding:7px 10px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
+      background:rgba(255,255,255,.88);font-size:12px;color:rgba(16,24,40,.62);font-weight:1000;
+    }
+    .tag.best{
+      border:none;color:#fff;
+      background:linear-gradient(135deg, rgba(14,165,164,.95), rgba(79,70,229,.95));
+      box-shadow:0 14px 28px rgba(79,70,229,.16);
+    }
+
+    .cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+
+    /* TRUST + FAQ */
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+    @media(max-width:980px){.two{grid-template-columns:1fr}}
+    .note{
+      border:1px solid rgba(16,24,40,.10);
+      border-radius:20px;
+      padding:14px;
+      background:rgba(255,255,255,.84);
+    }
+    .hr{height:1px;background:rgba(16,24,40,.10);margin:14px 0}
+    details{
+      border:1px solid rgba(16,24,40,.10);
+      background:rgba(255,255,255,.86);
+      border-radius:18px;
+      padding:12px 14px;
+      margin-top:10px;
+    }
+    summary{cursor:pointer;font-weight:1000}
+    details p{margin:10px 0 0;color:rgba(16,24,40,.68);line-height:1.7;font-size:13px}
+    footer{
+      margin-top:18px;color:rgba(16,24,40,.58);
+      font-size:12.5px;line-height:1.7;
+    }
+  </style>
+
+  <!-- SEO Breadcrumb JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"BreadcrumbList",
+    "itemListElement":[
+      {"@type":"ListItem","position":1,"name":"Ukwebtools","item":"https://ukwebtools.com/"},
+      {"@type":"ListItem","position":2,"name":"ProfitPilot","item":"https://profitpilot.ukwebtools.com/"},
+      {"@type":"ListItem","position":3,"name":"Pricing","item":"https://profitpilot.ukwebtools.com/pricing.html"}
+    ]
+  }
+  </script>
+
+  <!-- Optional: Paddle (keep commented until you add Paddle) -->
+  <!--
+  <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+  -->
+</head>
+
+<body>
+  <div class="wrap">
+
+    <!-- NAV -->
+    <div class="nav" role="navigation" aria-label="Primary">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">UK</div>
+        <div>
+          <div><b>ProfitPilot</b></div>
+          <div class="sub">Pricing</div>
+        </div>
+      </div>
+
+      <div class="right">
+        <a class="btn ghost" href="https://ukwebtools.com/">← Ukwebtools</a>
+        <a class="btn" href="index.html">Home</a>
+        <a class="btn" href="reviews.html">Reviews</a>
+        <a class="btn" href="help.html">How to use</a>
+        <a class="btn" href="privacy.html">Privacy</a>
+        <a class="btn" href="terms.html">Terms</a>
+        <a class="btn active" href="pricing.html">Pricing</a>
+        <span class="chip" id="userChip">—</span>
+        <a class="btn primary" id="openBtn" href="login.html">Start free trial</a>
+        <a class="btn" id="logoutBtn" href="#" style="display:none">Log out</a>
+      </div>
+    </div>
+
+    <div class="crumbs" aria-label="Breadcrumb">
+      <a href="https://ukwebtools.com/">Ukwebtools</a>
+      <span class="sep">›</span>
+      <a href="index.html">ProfitPilot</a>
+      <span class="sep">›</span>
+      <span>Pricing</span>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+      <h1>Simple pricing. No subscriptions.</h1>
+      <div class="lead">
+        Start with a <b>free trial</b>. When you’re ready, upgrade to <b>PRO</b> with a one-time purchase.
+        Paddle handles VAT/taxes and issues receipts.
+      </div>
+      <div class="pillrow">
+        <span class="pill">Instant access</span>
+        <span class="pill">VAT/tax receipts via Paddle</span>
+        <span class="pill">No dark patterns</span>
+        <span class="pill">Cancel nothing (one-time)</span>
+      </div>
+    </div>
+
+    <!-- PRICING CARDS -->
+    <div class="grid">
+
+      <!-- Trial -->
+      <div class="card">
+        <span class="tag">Try first</span>
+        <div class="kicker">Trial</div>
+        <div class="title">Free access</div>
+        <div class="price">£0</div>
+        <div class="per">5 days</div>
+
+        <ul>
+          <li>Profit calculator</li>
+          <li>Manual + example presets</li>
+          <li>Bulk table (trial limits)</li>
+          <li>Reverse pricing (trial limits)</li>
+          <li>Competitor mode (trial limits)</li>
+        </ul>
+
+        <div class="cta">
+          <a class="btn primary" href="login.html">Start free trial</a>
+          <a class="btn" href="help.html">How it works</a>
+        </div>
+
+        <div class="hr"></div>
+        <div class="small">
+          Trial is designed to help you validate the tool before upgrading.
+        </div>
+      </div>
+
+      <!-- PRO -->
+      <div class="card featured">
+        <span class="tag best">Best value</span>
+        <div class="kicker">PRO</div>
+        <div class="title">One-time unlock</div>
+        <div class="price" id="proPrice">£9.99</div>
+        <div class="per">one-time • lifetime access</div>
+
+        <ul>
+          <li><b>Unlimited</b> reverse pricing</li>
+          <li><b>Unlimited</b> bulk rows + runs</li>
+          <li><b>Unlimited</b> competitor mode</li>
+          <li>Insights panel (break-even, margin targets)</li>
+          <li>PDF export + share links</li>
+          <li>Save scenarios (device)</li>
+        </ul>
+
+        <div class="cta">
+          <button class="btn primary" id="buyProBtn">Buy PRO (Paddle)</button>
+          <a class="btn" href="reviews.html">See reviews</a>
+        </div>
+
+        <div class="hr"></div>
+        <div class="small">
+          Paddle shows final taxes/VAT at checkout and emails your receipt.
+        </div>
+      </div>
+
+      <!-- Optional: PRO+ -->
+      <div class="card">
+        <span class="tag">Optional</span>
+        <div class="kicker">PRO+</div>
+        <div class="title">Founder support</div>
+        <div class="price" id="proPlusPrice">£19.99</div>
+        <div class="per">one-time</div>
+
+        <ul>
+          <li>Everything in PRO</li>
+          <li>Priority support (email)</li>
+          <li>Feature request vote</li>
+          <li>Early access to new tools</li>
+        </ul>
+
+        <div class="cta">
+          <button class="btn primary" id="buyProPlusBtn">Buy PRO+ (Paddle)</button>
+          <a class="btn" href="help.html">Compare</a>
+        </div>
+
+        <div class="hr"></div>
+        <div class="small">
+          Keep this plan only if you truly want it. Otherwise, delete the entire PRO+ card.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TRUST + FAQ -->
+    <div class="two">
+
+      <div class="note">
+        <div class="kicker">Checkout</div>
+        <div class="title">Why Paddle</div>
+        <div class="small">
+          Paddle is a merchant of record in many regions, which improves buyer trust:
+        </div>
+        <ul>
+          <li>Handles VAT/taxes where applicable</li>
+          <li>Secure payment processing</li>
+          <li>Receipts sent automatically</li>
+        </ul>
+        <div class="hr"></div>
+        <div class="small">
+          After purchase, your account will be upgraded to PRO (or you’ll be shown the next step to unlock instantly).
+        </div>
+      </div>
+
+      <div class="note">
+        <div class="kicker">FAQ</div>
+        <div class="title">Quick answers</div>
+
+        <details open>
+          <summary>Is this a subscription?</summary>
+          <p>No. PRO is a one-time payment for lifetime access.</p>
+        </details>
+
+        <details>
+          <summary>Do you charge VAT?</summary>
+          <p>Paddle calculates and applies any taxes/VAT required based on your location during checkout.</p>
+        </details>
+
+        <details>
+          <summary>Do you guarantee profits?</summary>
+          <p>No. ProfitPilot is an estimates tool based on the data you enter. It’s decision support, not a guarantee.</p>
+        </details>
+
+        <details>
+          <summary>Refunds?</summary>
+          <p>If you want a refund policy statement, add it to <a href="terms.html">Terms</a> and keep it consistent with Paddle’s process.</p>
+        </details>
+      </div>
+
+    </div>
+
+    <footer>
+      <div class="hr"></div>
+      <div><b>Independent tool:</b> ProfitPilot is not affiliated with or endorsed by any marketplace, platform, or payment provider.</div>
+      <div><b>Estimates only:</b> outputs depend on your inputs and assumptions; no profit guarantees. Not financial/legal/tax advice.</div>
+      <div style="margin-top:6px">© <span id="yr"></span> Ukwebtools • ProfitPilot</div>
+    </footer>
+
+  </div>
+
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+  // Supabase (for showing email + logout nicely)
+  const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
+  const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  // ✅ Paddle checkout links (FASTEST way)
+  // Replace these with your real Paddle Checkout URLs.
+  const PADDLE_PRO_URL = "PASTE_PADDLE_CHECKOUT_URL_FOR_PRO";
+  const PADDLE_PROPLUS_URL = "PASTE_PADDLE_CHECKOUT_URL_FOR_PROPLUS";
+
+  // Optional: show price dynamically if you want later.
+  // For now, keep it simple. Hardcode price text above and update when you decide.
+  // document.getElementById("proPrice").textContent = "£9.99";
+  // document.getElementById("proPlusPrice").textContent = "£19.99";
+
+  document.getElementById("yr").textContent = new Date().getFullYear();
+
+  // Buy buttons (link checkout approach)
+  const buyProBtn = document.getElementById("buyProBtn");
+  const buyProPlusBtn = document.getElementById("buyProPlusBtn");
+
+  buyProBtn.addEventListener("click", ()=>{
+    if (!PADDLE_PRO_URL || PADDLE_PRO_URL.includes("PASTE_")){
+      alert("Add your Paddle PRO checkout URL in pricing.html (PADDLE_PRO_URL).");
+      return;
+    }
+    location.href = PADDLE_PRO_URL;
+  });
+
+  buyProPlusBtn.addEventListener("click", ()=>{
+    if (!PADDLE_PROPLUS_URL || PADDLE_PROPLUS_URL.includes("PASTE_")){
+      alert("Add your Paddle PRO+ checkout URL in pricing.html (PADDLE_PROPLUS_URL).");
+      return;
+    }
+    location.href = PADDLE_PROPLUS_URL;
+  });
+
+  // Auth chip + CTAs
+  const userChip = document.getElementById("userChip");
+  const openBtn = document.getElementById("openBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  async function refreshAuthUI(){
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user?.email){
+      userChip.style.display = "inline-flex";
+      userChip.textContent = session.user.email;
+      openBtn.textContent = "Open app";
+      openBtn.href = "app.html";
+      logoutBtn.style.display = "inline-flex";
+    } else {
+      userChip.style.display = "none";
+      openBtn.textContent = "Start free trial";
+      openBtn.href = "login.html";
+      logoutBtn.style.display = "none";
+    }
+  }
+  logoutBtn.addEventListener("click", async (e)=>{
+    e.preventDefault();
+    await supabase.auth.signOut();
+    location.href = "pricing.html";
+  });
+
+  await refreshAuthUI();
+  supabase.auth.onAuthStateChange(()=>refreshAuthUI());
+</script>
+</body>
+</html>
