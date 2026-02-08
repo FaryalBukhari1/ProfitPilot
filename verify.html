@@ -4,60 +4,129 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Verify your email — ProfitPilot</title>
+  <meta name="robots" content="noindex,nofollow">
   <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
+
   <style>
-    :root{--bg:#0b0f14;--card:#111826;--card2:#0e1521;--txt:#eaf0ff;--muted:#9aa7bd;--line:rgba(255,255,255,.08);--accent:#5eead4;}
+    :root{
+      --bg:#0b0f14;--card:#111826;--card2:#0e1521;--txt:#eaf0ff;--muted:#9aa7bd;
+      --line:rgba(255,255,255,.10);--accent:#5eead4;--accent2:#60a5fa;
+      --ok:rgba(52,211,153,.22);--bad:rgba(251,113,133,.22);
+    }
     *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui;background:var(--bg);color:var(--txt)}
-    .wrap{max-width:560px;margin:40px auto;padding:0 14px}
-    .card{background:linear-gradient(180deg,rgba(94,234,212,.10),transparent 60%),var(--card);border:1px solid var(--line);border-radius:18px;padding:20px}
-    .pill{display:inline-flex;padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03);font-size:12px;color:var(--muted);gap:8px;align-items:center}
-    h1{margin:0 0 10px;font-size:22px}
-    p{margin:0;color:var(--muted);line-height:1.6}
-    .btn{margin-top:12px;display:inline-flex;gap:8px;align-items:center;padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03);color:var(--txt);text-decoration:none;cursor:pointer}
-    .btn.primary{border-color:rgba(94,234,212,.35);background:rgba(94,234,212,.12)}
-    .btn.full{width:100%;justify-content:center}
-    .small{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6}
-    input{width:100%;margin-top:10px;padding:12px;border-radius:14px;border:1px solid var(--line);background:var(--card2);color:var(--txt);outline:none}
+    body{
+      margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:
+        radial-gradient(900px 520px at 20% 0%, rgba(94,234,212,.12), transparent 55%),
+        radial-gradient(900px 520px at 80% 0%, rgba(96,165,250,.10), transparent 55%),
+        linear-gradient(180deg, #090c11, var(--bg));
+      color:var(--txt)
+    }
+    .wrap{max-width:560px;margin:34px auto;padding:0 14px}
+    .card{
+      background:linear-gradient(180deg,rgba(94,234,212,.10),transparent 60%),var(--card);
+      border:1px solid var(--line);border-radius:18px;padding:20px;
+      box-shadow:0 18px 46px rgba(0,0,0,.35);
+    }
+    .pill{
+      display:inline-flex;padding:8px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      font-size:12px;color:rgba(234,240,255,.72);
+      gap:8px;align-items:center;font-weight:900;
+    }
+    h1{margin:10px 0 10px;font-size:22px;letter-spacing:-.02em}
+    p{margin:0;color:rgba(234,240,255,.70);line-height:1.65}
+    .divider{height:1px;background:rgba(255,255,255,.08);margin:14px 0}
+
+    .small{font-size:12.5px;color:rgba(234,240,255,.70);margin-top:10px;line-height:1.6}
+    .note{margin-top:10px}
+
+    label{font-size:12px;color:rgba(234,240,255,.62);margin-top:14px;display:block}
+    input{
+      width:100%;margin-top:8px;padding:12px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:var(--card2);color:var(--txt);outline:none
+    }
     input:focus{border-color:rgba(94,234,212,.35)}
     a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+
     .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-    .toast{font-size:12px;color:var(--muted);margin-top:10px}
-    .divider{height:1px;background:rgba(255,255,255,.08);margin:14px 0}
-    .note{margin-top:10px}
+    .btn{
+      display:inline-flex;gap:8px;align-items:center;justify-content:center;
+      padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);color:var(--txt);text-decoration:none;cursor:pointer;
+      font-weight:1000;user-select:none;
+      transition:transform .08s ease, opacity .08s ease;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(0)}
+    .btn.primary{
+      border:none;color:#0b1220;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      box-shadow:0 14px 28px rgba(96,165,250,.16);
+    }
+    .btn.full{width:100%}
+    .btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+
+    .msg{
+      margin-top:12px;
+      font-size:12.5px;
+      line-height:1.55;
+      color:rgba(234,240,255,.78);
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px;
+      padding:10px 12px;
+    }
+    .msg.ok{border-color:var(--ok);background:rgba(52,211,153,.06)}
+    .msg.bad{border-color:var(--bad);background:rgba(251,113,133,.06)}
+
+    ul{margin:10px 0 0;padding-left:18px;color:rgba(234,240,255,.68);line-height:1.65;font-size:13px}
+    li{margin:6px 0}
   </style>
 </head>
+
 <body>
   <div class="wrap">
     <div class="card">
       <div class="pill">✅ Almost there</div>
+
       <h1>Verify your email to activate your account</h1>
       <p>
-        We’ve sent a verification link to your email. Open it to finish signup.
-        If you don’t see it, check your spam/junk folder.
+        We sent a verification link to your email. Open it to finish signup.
       </p>
 
       <div class="small note" id="emailLine">Email: —</div>
 
-      <div class="pill" style="margin-top:12px">
-        After verifying, come back and log in to access the app.
-      </div>
+      <div class="divider"></div>
 
-      <div class="row">
+      <div class="small"><b>Do this now:</b></div>
+      <ul>
+        <li>Open the email titled like “Confirm your signup”.</li>
+        <li>Click the verification link.</li>
+        <li>Return here and log in.</li>
+        <li>If you can’t find it: check Spam/Junk + Promotions.</li>
+      </ul>
+
+      <div class="row" style="margin-top:14px">
         <a class="btn primary" href="login.html">Back to login</a>
-        <a class="btn" href="https://mail.google.com/" target="_blank" rel="noopener">Open Gmail</a>
-        <a class="btn" href="https://outlook.live.com/mail/" target="_blank" rel="noopener">Open Outlook</a>
+        <a class="btn" href="signup.html">Change email</a>
       </div>
 
       <div class="divider"></div>
 
       <div class="small"><b>Didn’t get the email?</b> Resend it below.</div>
 
-      <label class="small" style="display:block;margin-top:10px">Email</label>
-      <input id="emailInput" type="email" placeholder="Enter your email">
+      <form id="resendForm" novalidate>
+        <label for="emailInput">Email</label>
+        <input id="emailInput" type="email" placeholder="you@example.com" autocomplete="email" required>
 
-      <button class="btn full" id="resendBtn">Resend verification email</button>
-      <div class="toast" id="msg">—</div>
+        <button class="btn full" id="resendBtn" type="submit">Resend verification email</button>
+      </form>
+
+      <div class="msg" id="msg" role="status" aria-live="polite">—</div>
 
       <div class="small" style="margin-top:12px">
         Need help? <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a>
@@ -78,6 +147,12 @@
   const emailInput = document.getElementById("emailInput");
   const msg = document.getElementById("msg");
   const resendBtn = document.getElementById("resendBtn");
+  const resendForm = document.getElementById("resendForm");
+
+  function setMsg(text, kind=""){
+    msg.textContent = text;
+    msg.className = "msg" + (kind ? " " + kind : "");
+  }
 
   function maskEmail(email){
     if (!email || !email.includes("@")) return email || "—";
@@ -90,26 +165,46 @@
     return `${u2}@${dom2}${tld ? "."+tld : ""}`;
   }
 
-  // Prefill from localStorage
-  const stored = localStorage.getItem("pp_pending_email");
-  if (stored) {
-    emailLine.textContent = "Email: " + maskEmail(stored);
-    emailInput.value = stored;
+  function normalizeErrorMessage(err){
+    const raw = String(err?.message || err || "").toLowerCase();
+    if (raw.includes("rate limit") || raw.includes("too many requests")) return "Too many resend attempts. Please wait a minute and try again.";
+    if (raw.includes("email") && raw.includes("invalid")) return "Please enter a valid email address.";
+    if (raw.includes("user") && raw.includes("not found")) return "That email isn’t registered. Please sign up again.";
+    // fallback
+    return "Could not resend right now. Please try again.";
   }
 
-  // Cooldown to prevent spam clicks
+  // 1) If they’re already signed in, stop the loop
+  try{
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user){
+      // If user exists, they’re verified enough to have a session
+      location.href = "app.html";
+    }
+  } catch (e) {
+    // ignore
+  }
+
+  // Prefill from localStorage (display masked only)
+  const stored = localStorage.getItem("pp_pending_email");
+  if (stored){
+    emailLine.textContent = "Email: " + maskEmail(stored);
+    emailInput.value = stored;
+  } else {
+    setMsg("Enter your email to resend the verification link.", "");
+  }
+
+  // Cooldown
   let cooldown = 0;
   let timer = null;
 
-  function setCooldown(seconds){
+  function startCooldown(seconds){
     cooldown = seconds;
     resendBtn.disabled = true;
-    resendBtn.style.opacity = "0.7";
 
     const tick = () => {
-      if (cooldown <= 0) {
+      if (cooldown <= 0){
         resendBtn.disabled = false;
-        resendBtn.style.opacity = "1";
         resendBtn.textContent = "Resend verification email";
         if (timer) clearInterval(timer);
         timer = null;
@@ -123,11 +218,22 @@
     timer = setInterval(tick, 1000);
   }
 
-  resendBtn.addEventListener("click", async () => {
-    const email = emailInput.value.trim();
-    if (!email) { msg.textContent = "Please enter your email."; return; }
+  // Optional: only auto-cooldown if they arrived *immediately* after signup
+  // (Signup page should set pp_pending_email_ts; add that there if you want)
+  const ts = Number(localStorage.getItem("pp_pending_email_ts") || 0);
+  const now = Date.now();
+  if (stored && ts && (now - ts) < 60_000){
+    startCooldown(10);
+  }
 
-    msg.textContent = "Sending…";
+  resendForm.addEventListener("submit", async (e)=>{
+    e.preventDefault();
+
+    const email = emailInput.value.trim();
+    if (!email){ setMsg("Please enter your email.", "bad"); return; }
+
+    resendBtn.disabled = true;
+    setMsg("Sending…");
 
     const { error } = await supabase.auth.resend({
       type: "signup",
@@ -135,22 +241,20 @@
       options: { emailRedirectTo: EMAIL_REDIRECT }
     });
 
-    if (error) {
-      msg.textContent = error.message;
+    if (error){
+      console.error("Supabase resend error:", error);
+      resendBtn.disabled = false;
+      setMsg(normalizeErrorMessage(error), "bad");
       return;
     }
 
-    // Update display + store
     localStorage.setItem("pp_pending_email", email);
+    localStorage.setItem("pp_pending_email_ts", String(Date.now()));
     emailLine.textContent = "Email: " + maskEmail(email);
 
-    msg.textContent = "Verification email resent. Check inbox/spam.";
-    setCooldown(30);
+    setMsg("Verification email resent. Check inbox and spam/junk.", "ok");
+    startCooldown(30);
   });
-
-  // Start cooldown if user just came here from signup (optional)
-  // If they landed here immediately after signup, this prevents double-send.
-  if (stored) setCooldown(10);
 </script>
 </body>
 </html>
