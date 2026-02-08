@@ -305,3 +305,176 @@
 
 </body>
 </html>
+<!-- PROFITPILOT: UNIVERSAL NAV + BREADCRUMBS -->
+<style>
+  /* Keep styles scoped to nav so it won't break your existing CSS */
+  .pp-navwrap{max-width:1200px;margin:0 auto;padding:14px 16px;position:relative;z-index:50}
+  .pp-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .pp-left,.pp-right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .pp-btn{
+    padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
+    background:#fff;font-weight:800;text-decoration:none;color:#0b1220;
+    box-shadow:0 8px 18px rgba(16,24,40,.06);
+    display:inline-flex;gap:8px;align-items:center;
+  }
+  .pp-btn:hover{transform:translateY(-1px)}
+  .pp-btn:active{transform:translateY(0)}
+  .pp-primary{
+    border:none;color:#fff;
+    background:linear-gradient(135deg,#0ea5a4,#4f46e5);
+    box-shadow:0 14px 28px rgba(79,70,229,.16);
+  }
+  .pp-active{
+    border-color:rgba(14,165,164,.35);
+    background:rgba(14,165,164,.08);
+  }
+  .pp-crumbs{
+    margin-top:10px;
+    font-size:12.5px;
+    color:rgba(16,24,40,.62);
+    display:flex;gap:6px;flex-wrap:wrap;align-items:center;
+  }
+  .pp-crumbs a{color:rgba(14,165,164,.95);font-weight:800;text-decoration:none}
+  .pp-sep{opacity:.55}
+  .pp-user{
+    padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
+    background:rgba(255,255,255,.75);
+    color:rgba(16,24,40,.72);
+    font-weight:800;
+    display:none;
+  }
+</style>
+
+<div class="pp-navwrap" role="navigation" aria-label="Primary">
+  <div class="pp-nav">
+    <!-- LEFT -->
+    <div class="pp-left">
+      <a class="pp-btn" href="https://ukwebtools.com/" data-nav="ukwebtools">← Ukwebtools</a>
+      <a class="pp-btn" href="index.html" data-nav="home">Home</a>
+      <a class="pp-btn" href="reviews.html" data-nav="reviews">Reviews</a>
+      <a class="pp-btn" href="privacy.html" data-nav="privacy">Privacy</a>
+      <a class="pp-btn" href="terms.html" data-nav="terms">Terms</a>
+      <a class="pp-btn" href="faq.html" data-nav="faq">FAQ</a>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="pp-right">
+      <span class="pp-user" id="ppUserChip">Signed in</span>
+      <a class="pp-btn pp-primary" id="ppAuthBtn" href="login.html">Log in</a>
+      <a class="pp-btn" id="ppLogoutBtn" href="#" style="display:none">Log out</a>
+    </div>
+  </div>
+
+  <!-- Visible Breadcrumbs -->
+  <div class="pp-crumbs" aria-label="Breadcrumb">
+    <a href="https://ukwebtools.com/">Ukwebtools</a>
+    <span class="pp-sep">›</span>
+    <a href="index.html">ProfitPilot</a>
+    <span class="pp-sep">›</span>
+    <span id="ppCrumbCurrent">Page</span>
+  </div>
+
+  <!-- JSON-LD Breadcrumbs for SEO -->
+  <script id="ppBreadcrumbJson" type="application/ld+json"></script>
+</div>
+
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+  // ✅ REPLACE THESE TWO:
+  const SUPABASE_URL = "PASTE_YOUR_SUPABASE_URL_HERE";
+  const SUPABASE_ANON = "PASTE_YOUR_SUPABASE_ANON_KEY_HERE";
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  // ---------- Active page highlighting ----------
+  const path = (location.pathname.split("/").pop() || "index.html").toLowerCase();
+  const map = {
+    "index.html":"home",
+    "reviews.html":"reviews",
+    "privacy.html":"privacy",
+    "terms.html":"terms",
+    "faq.html":"faq",
+    "login.html":"login",
+    "app.html":"app",
+    "reset.html":"reset",
+    "verify.html":"verify"
+  };
+  const activeKey = map[path] || "home";
+
+  // Highlight matching nav item if present
+  document.querySelectorAll(".pp-btn[data-nav]").forEach(a=>{
+    const key = a.getAttribute("data-nav");
+    if (key === activeKey) a.classList.add("pp-active");
+  });
+
+  // ---------- Breadcrumb text + JSON-LD ----------
+  const titles = {
+    home:"Home",
+    reviews:"Reviews",
+    privacy:"Privacy",
+    terms:"Terms",
+    faq:"FAQ",
+    login:"Log in",
+    app:"App",
+    reset:"Reset password",
+    verify:"Verify email"
+  };
+  const currentTitle = titles[activeKey] || "Page";
+  document.getElementById("ppCrumbCurrent").textContent = currentTitle;
+
+  const base = "https://profitpilot.ukwebtools.com/";
+  const crumbItems = [
+    { name:"Ukwebtools", item:"https://ukwebtools.com/" },
+    { name:"ProfitPilot", item: base + "index.html" },
+    { name: currentTitle, item: base + path }
+  ];
+
+  document.getElementById("ppBreadcrumbJson").textContent = JSON.stringify({
+    "@context":"https://schema.org",
+    "@type":"BreadcrumbList",
+    "itemListElement": crumbItems.map((c,i)=>({
+      "@type":"ListItem",
+      "position": i+1,
+      "name": c.name,
+      "item": c.item
+    }))
+  });
+
+  // ---------- Auth state: show email + logout ----------
+  const userChip = document.getElementById("ppUserChip");
+  const authBtn = document.getElementById("ppAuthBtn");
+  const logoutBtn = document.getElementById("ppLogoutBtn");
+
+  async function refreshAuthUI(){
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (session?.user?.email){
+      userChip.style.display = "inline-flex";
+      userChip.textContent = session.user.email;
+      authBtn.style.display = "none";
+      logoutBtn.style.display = "inline-flex";
+      // Make the "Home" button still go to landing; optional: direct logged-in users to app
+      // If you want Home button to open app when logged in, uncomment:
+      // document.querySelector('[data-nav="home"]').setAttribute("href","app.html");
+    } else {
+      userChip.style.display = "none";
+      authBtn.style.display = "inline-flex";
+      logoutBtn.style.display = "none";
+      authBtn.textContent = "Log in";
+      authBtn.setAttribute("href","login.html");
+    }
+  }
+
+  logoutBtn.addEventListener("click", async (e)=>{
+    e.preventDefault();
+    await supabase.auth.signOut();
+    location.href = "login.html";
+  });
+
+  // initial + live updates
+  await refreshAuthUI();
+  supabase.auth.onAuthStateChange(() => refreshAuthUI());
+</script>
+<!-- END PROFITPILOT NAV -->
+
