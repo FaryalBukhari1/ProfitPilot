@@ -3,161 +3,414 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
+
   <title>Refund Policy — ProfitPilot</title>
-  <meta name="description" content="Refund policy for ProfitPilot. Learn when refunds are available and how to request one.">
-  <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
+  <meta name="description" content="Refund Policy for ProfitPilot purchases. Learn how refunds are handled and how to request one.">
   <meta name="robots" content="index,follow">
   <link rel="canonical" href="https://profitpilot.ukwebtools.com/refunds.html">
-
-  <meta property="og:title" content="Refund Policy — ProfitPilot">
-  <meta property="og:description" content="When refunds are available and how to request one.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://profitpilot.ukwebtools.com/refunds.html">
+  <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
 
   <style>
     :root{
-      --bg:#f7f9fc; --bg2:#eef3ff;
+      --bg:#f6f8fb; --bg2:#eef2ff;
       --txt:#0b1220; --muted:#5b6474;
-      --card:#fff; --line:rgba(16,24,40,.10);
+      --card:rgba(255,255,255,.92);
+      --line:rgba(16,24,40,.10);
+      --shadow:0 10px 30px rgba(16,24,40,.08);
+      --shadow2:0 16px 44px rgba(16,24,40,.10);
       --accent:#0ea5a4; --accent2:#4f46e5;
-      --shadow:0 14px 36px rgba(16,24,40,.08);
+      --h-bg:rgba(255,255,255,.78);
+
+      --f-bg:#0b0f14;
+      --f-line:rgba(255,255,255,.10);
+      --f-txt:rgba(255,255,255,.92);
+      --f-muted:rgba(255,255,255,.68);
+      --radius:18px;
     }
+
     *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
     body{
-      margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--txt);
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--txt);
       background:
-        radial-gradient(900px 520px at 16% 0%, rgba(14,165,164,.14), transparent 55%),
-        radial-gradient(900px 520px at 84% 0%, rgba(79,70,229,.12), transparent 55%),
-        linear-gradient(180deg,var(--bg2),var(--bg));
+        radial-gradient(900px 520px at 20% 0%, rgba(14,165,164,.14), transparent 55%),
+        radial-gradient(900px 520px at 80% 0%, rgba(79,70,229,.10), transparent 55%),
+        linear-gradient(180deg, var(--bg2), var(--bg));
     }
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
-    :focus-visible{outline:3px solid rgba(79,70,229,.55);outline-offset:3px;border-radius:10px}
+    :focus-visible{outline:3px solid rgba(79,70,229,.55);outline-offset:3px;border-radius:12px}
 
-    .wrap{max-width:980px;margin:0 auto;padding:18px 16px 50px}
+    .skip{
+      position:absolute;left:-9999px;top:10px;
+      background:#fff;border:1px solid rgba(16,24,40,.14);
+      padding:10px 12px;border-radius:12px;
+      box-shadow:0 12px 24px rgba(16,24,40,.10);
+      z-index:1000;
+    }
+    .skip:focus{left:12px}
 
-    /* NAV */
-    .pp-navwrap{max-width:1200px;margin:0 auto;padding:14px 0;position:relative;z-index:50}
-    .pp-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-    .pp-left,.pp-right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .pp-wrap{max-width:920px;margin:0 auto;padding:0 14px}
+
+    /* Header (ONLY 3 LINKS) */
+    .pp-header{position:sticky; top:10px; z-index:100; margin:14px auto 0}
+    .pp-headerbar{
+      background:var(--h-bg);
+      border:1px solid var(--line);
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(10px);
+      padding:10px;
+    }
+    .pp-row{display:flex;align-items:center;gap:12px;flex-wrap:nowrap}
+    .pp-brand{display:flex;align-items:center;gap:10px;flex:0 0 auto; min-width:200px}
+    .pp-logo{
+      width:40px;height:40px;border-radius:14px;
+      background:linear-gradient(135deg, rgba(14,165,164,.20), rgba(79,70,229,.16));
+      border:1px solid var(--line);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:1000; user-select:none;
+      color:var(--txt);
+    }
+    .pp-title{font-weight:1000;line-height:1.05;color:var(--txt)}
+    .pp-sub{font-size:12px;color:var(--muted);font-weight:700;margin-top:3px}
+
+    .pp-nav{
+      display:flex;align-items:center;gap:10px;
+      flex:1 1 auto; justify-content:flex-end;
+      overflow-x:auto; -webkit-overflow-scrolling:touch;
+      padding:2px 4px; scrollbar-width:thin;
+    }
+
     .pp-btn{
-      padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
-      background:#fff;font-weight:800;color:#0b1220;
+      padding:10px 14px;border-radius:999px;border:1px solid var(--line);
+      background:rgba(255,255,255,.92);color:var(--txt);
+      font-weight:900;
       box-shadow:0 8px 18px rgba(16,24,40,.06);
-      display:inline-flex;gap:8px;align-items:center;
-      transition:transform .10s ease;
+      display:inline-flex;gap:8px;align-items:center;white-space:nowrap;
+      transition:transform .08s ease;
+      cursor:pointer;
     }
     .pp-btn:hover{transform:translateY(-1px);text-decoration:none}
     .pp-btn:active{transform:translateY(0)}
-    .pp-primary{
+    .pp-btn.ghost{background:transparent;box-shadow:none}
+    .pp-btn.primary{
       border:none;color:#fff;
-      background:linear-gradient(135deg,#0ea5a4,#4f46e5);
-      box-shadow:0 14px 28px rgba(79,70,229,.16);
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      box-shadow:0 16px 34px rgba(79,70,229,.16);
     }
-    .pp-active{
-      border-color:rgba(14,165,164,.35);
-      background:rgba(14,165,164,.08);
-    }
-    .pp-user{
-      padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
-      background:rgba(255,255,255,.75);
-      color:rgba(16,24,40,.72);
-      font-weight:800;
+    .pp-chip{
+      padding:10px 14px;border-radius:999px;border:1px solid var(--line);
+      background:rgba(255,255,255,.70);
+      color:rgba(16,24,40,.70);
+      font-weight:900;max-width:260px;
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
       display:none;
-      max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
     }
-    .pp-crumbs{
-      margin-top:10px;
-      font-size:12.5px;
-      color:rgba(16,24,40,.62);
-      display:flex;gap:6px;flex-wrap:wrap;align-items:center;
+    @media(max-width:760px){
+      .pp-sub{display:none}
+      .pp-brand{min-width:auto}
     }
-    .pp-crumbs a{color:rgba(14,165,164,.95);font-weight:800}
-    .pp-sep{opacity:.55}
+
+    /* Content */
+    .hero{
+      margin-top:14px;
+      background:linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.72));
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:18px;
+      box-shadow:var(--shadow2);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::after{
+      content:"";position:absolute;inset:-60px -80px auto auto;width:320px;height:320px;border-radius:999px;
+      background:radial-gradient(circle at 30% 30%, rgba(14,165,164,.18), transparent 60%),
+                 radial-gradient(circle at 70% 70%, rgba(79,70,229,.16), transparent 60%);
+      filter:blur(2px);
+      pointer-events:none;
+    }
+    h1{margin:0;font-size:28px;letter-spacing:-.6px;line-height:1.15}
+    .lead{
+      margin:10px 0 0;
+      color:rgba(16,24,40,.70);
+      line-height:1.75;
+      font-weight:650;
+      max-width:860px;
+    }
 
     .card{
       margin-top:14px;
-      background:rgba(255,255,255,.78);
+      background:var(--card);
       border:1px solid var(--line);
-      border-radius:22px;
-      padding:20px;
+      border-radius:var(--radius);
+      padding:16px;
       box-shadow:var(--shadow);
     }
-    h1{margin:0 0 8px;font-size:28px;letter-spacing:-.02em}
-    .meta{margin:0 0 12px;font-size:12.5px;color:rgba(16,24,40,.62)}
-    h2{margin:20px 0 8px;font-size:18px}
-    p,li{color:rgba(16,24,40,.70);line-height:1.8}
-    ul{margin:8px 0 0;padding-left:18px}
-    .callout{
-      margin-top:12px;
-      border:1px solid rgba(16,24,40,.10);
-      border-radius:18px;
-      padding:12px;
-      background:rgba(255,255,255,.86);
+    .kicker{
+      font-size:12px;color:rgba(16,24,40,.58);
+      font-weight:1000;text-transform:uppercase;letter-spacing:.12em
     }
-    .hr{height:1px;background:rgba(16,24,40,.10);margin:14px 0}
-    footer{
-      margin-top:18px;padding-top:14px;border-top:1px solid var(--line);
-      text-align:center;color:rgba(16,24,40,.62);font-size:12.5px;line-height:1.7;
+    .title{margin:8px 0 8px;font-weight:1000;letter-spacing:-.02em;font-size:16px}
+    .small{font-size:13px;color:rgba(16,24,40,.70);line-height:1.85}
+    .divider{height:1px;background:var(--line);margin:12px 0}
+    ul{margin:8px 0 0;padding-left:18px;color:rgba(16,24,40,.70);line-height:1.85}
+
+    .notice{
+      border:1px solid rgba(14,165,164,.25);
+      background:rgba(14,165,164,.06);
+      border-radius:16px;
+      padding:12px;
+      color:rgba(16,24,40,.78);
+      font-size:12.8px;line-height:1.75;
+    }
+    .notice b{font-weight:1000}
+
+    /* Footer */
+    .pp-footer{
+      margin-top:26px;
+      background:radial-gradient(900px 520px at 20% 0%, rgba(94,234,212,.10), transparent 55%),
+                 radial-gradient(900px 520px at 80% 0%, rgba(96,165,250,.10), transparent 55%),
+                 var(--f-bg);
+      border-top:1px solid rgba(255,255,255,.08);
+      padding:26px 0;
+    }
+    .pp-footbox{
+      border:1px solid var(--f-line);
+      background:rgba(255,255,255,.04);
+      border-radius:18px;
+      padding:16px;
+      max-width:1150px;
+      margin:0 auto;
+    }
+    .pp-footgrid{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:16px;
+      align-items:start;
+    }
+    @media(max-width:880px){.pp-footgrid{grid-template-columns:1fr}}
+    .pp-footbrand b{color:var(--f-txt);font-weight:1000}
+    .pp-footmut{
+      margin-top:8px;
+      color:var(--f-muted);
+      font-size:12.6px;
+      line-height:1.75;
+      max-width:760px;
+    }
+    .pp-footmut a{color:rgba(94,234,212,.95);font-weight:900}
+    .pp-footlinks{
+      display:flex;flex-wrap:wrap;gap:10px;
+      justify-content:flex-end;
+    }
+    @media(max-width:880px){.pp-footlinks{justify-content:flex-start}}
+    .pp-footlinks a{
+      padding:9px 12px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.06);
+      color:var(--f-txt);
+      font-weight:900;
+      display:inline-flex;align-items:center;gap:8px;
+      transition:transform .08s ease;
+    }
+    .pp-footlinks a:hover{transform:translateY(-1px);text-decoration:none}
+    .pp-footbottom{
+      margin-top:14px;padding-top:14px;
+      border-top:1px solid rgba(255,255,255,.10);
+      display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;
+      color:rgba(255,255,255,.72);
+      font-size:12.5px;line-height:1.75;
+    }
+    .pp-footbottom a{color:rgba(94,234,212,.95);font-weight:900}
+
+    @media (prefers-reduced-motion: reduce){
+      .pp-btn{transition:none}
+      .pp-btn:hover{transform:none}
+      .pp-footlinks a{transition:none}
+      .pp-footlinks a:hover{transform:none}
     }
   </style>
-
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"BreadcrumbList",
-    "itemListElement":[
-      {"@type":"ListItem","position":1,"name":"Ukwebtools","item":"https://ukwebtools.com/"},
-      {"@type":"ListItem","position":2,"name":"ProfitPilot","item":"https://profitpilot.ukwebtools.com/index.html"},
-      {"@type":"ListItem","position":3,"name":"Refund Policy","item":"https://profitpilot.ukwebtools.com/refunds.html"}
-    ]
-  }
-  </script>
 </head>
 
 <body>
-  <div class="wrap">
+  <a class="skip" href="#content">Skip to content</a>
 
-    <!-- NAV -->
-    <div class="pp-navwrap" role="navigation" aria-label="Primary">
-      <div class="pp-nav">
-        <div class="pp-left">
-          <a class="pp-btn" href="https://ukwebtools.com/" rel="nofollow">← Ukwebtools</a>
-          <a class="pp-btn" href="index.html">Home</a>
-          <a class="pp-btn" href="pricing.html">Pricing</a>
-          <a class="pp-btn" href="reviews.html">Reviews</a>
-          <a class="pp-btn" href="help.html">How to use</a>
-          <a class="pp-btn" href="faq.html">FAQ</a>
-          <a class="pp-btn" href="privacy.html">Privacy</a>
-          <a class="pp-btn" href="terms.html">Terms</a>
-          <a class="pp-btn pp-active" href="refunds.html" aria-current="page">Refund Policy</a>
-        </div>
+  <!-- Header -->
+  <header class="pp-header" role="navigation" aria-label="Primary">
+    <div class="pp-wrap">
+      <div class="pp-headerbar">
+        <div class="pp-row">
+          <div class="pp-brand" aria-label="ProfitPilot">
+            <div class="pp-logo" aria-hidden="true">PP</div>
+            <div>
+              <div class="pp-title">ProfitPilot</div>
+              <div class="pp-sub">Independent tool by Ukwebtools</div>
+            </div>
+          </div>
 
-        <div class="pp-right">
-          <span class="pp-user" id="ppUserChip" title="Signed in user">Signed in</span>
-
-          <!-- Signed OUT -->
-          <a class="pp-btn pp-primary" id="ppAuthBtn" href="login.html">Log in</a>
-
-          <!-- Signed IN -->
-          <a class="pp-btn pp-primary" id="ppOpenBtn" href="app.html" style="display:none">Open app</a>
-          <a class="pp-btn" id="ppLogoutBtn" href="#" style="display:none">Log out</a>
+          <nav class="pp-nav" aria-label="Main">
+            <a class="pp-btn ghost" href="https://ukwebtools.com/" rel="nofollow">← Ukwebtools</a>
+            <a class="pp-btn" href="help.html">How to use</a>
+            <span class="pp-chip" id="userChip">—</span>
+            <a class="pp-btn primary" id="accountBtn" href="login.html">Account</a>
+            <a class="pp-btn" id="logoutBtn" href="#" style="display:none">Log out</a>
+          </nav>
         </div>
       </div>
 
-      <div class="pp-crumbs" aria-label="Breadcrumb">
-        <a href="https://ukwebtools.com/">Ukwebtools</a>
-        <span class="pp-sep">›</span>
-        <a href="index.html">ProfitPilot</a>
-        <span class="pp-sep">›</span>
-        <span>Refund Policy</span>
+      <script type="application/ld+json">
+      {
+        "@context":"https://schema.org",
+        "@type":"BreadcrumbList",
+        "itemListElement":[
+          {"@type":"ListItem","position":1,"name":"Ukwebtools","item":"https://ukwebtools.com/"},
+          {"@type":"ListItem","position":2,"name":"ProfitPilot","item":"https://profitpilot.ukwebtools.com/index.html"},
+          {"@type":"ListItem","position":3,"name":"Refund Policy","item":"https://profitpilot.ukwebtools.com/refunds.html"}
+        ]
+      }
+      </script>
+    </div>
+  </header>
+
+  <main class="pp-wrap" id="content" role="main">
+    <section class="hero" aria-label="Refund policy hero">
+      <h1>Refund Policy</h1>
+      <p class="lead">
+        ProfitPilot is operated by <b>Stonevia Commerce</b>. This policy explains how refunds are handled and how to request one.
+      </p>
+    </section>
+
+    <section class="card" aria-label="Refund policy content">
+      <div class="kicker">Overview</div>
+      <div class="title">How refunds work</div>
+      <div class="small">
+        Payments for ProfitPilot are processed by our payment provider. Refund requests are handled according to the provider’s
+        checkout process and applicable consumer protection laws.
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="title">How to request a refund</div>
+      <div class="small">
+        If you believe you are entitled to a refund:
+        <ul>
+          <li><b>Use the “receipt email”</b> from your payment provider (recommended). It typically includes a self-serve help/refund link.</li>
+          <li>Or email us at <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a> with your purchase email and any receipt/order reference you have.</li>
+        </ul>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="title">Eligibility & fair use</div>
+      <div class="small">
+        We review refund requests fairly and in line with applicable law. We also reserve the right to refuse refunds in cases of:
+        <ul>
+          <li>Misuse, abuse, or fraudulent activity</li>
+          <li>Excessive or repeated refund requests</li>
+          <li>Chargeback abuse</li>
+        </ul>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="notice">
+        <b>Important:</b> ProfitPilot is a digital tool. Outputs are estimates based on the inputs you provide.
+        It is not financial, tax, or legal advice, and we do not guarantee profit outcomes.
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="small">
+        Last updated: <span id="updated">—</span>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (all links) -->
+  <footer class="pp-footer" role="contentinfo">
+    <div class="pp-footbox">
+      <div class="pp-footgrid">
+        <div class="pp-footbrand">
+          <div><b>ProfitPilot</b></div>
+          <div class="pp-footmut">
+            <b>Independent tool:</b> not affiliated with any marketplace/platform/payment provider.<br>
+            <b>Estimates only:</b> outputs depend on your inputs and assumptions; no profit guarantees.<br>
+            Need help? <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a>
+          </div>
+        </div>
+
+        <div class="pp-footlinks" aria-label="Footer links">
+          <a href="index.html">Home</a>
+          <a href="pricing.html">Pricing</a>
+          <a href="reviews.html">Reviews</a>
+          <a href="refunds.html">Refund Policy</a>
+          <a href="faq.html">FAQ</a>
+          <a href="terms.html">Terms &amp; Conditions</a>
+          <a href="privacy.html">Privacy</a>
+        </div>
+      </div>
+
+      <div class="pp-footbottom">
+        <div>© <span id="yr"></span> Ukwebtools • ProfitPilot</div>
+        <div><a href="https://ukwebtools.com/" rel="nofollow">Ukwebtools</a></div>
       </div>
     </div>
+  </footer>
 
-    <div class="card">
-      <h1>Refund Policy</h1>
-      <p class="meta">Last updated: <span id="d"></span></p>
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-      <p>
-        P
+    const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
+    const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+    // Footer year
+    document.getElementById("yr").textContent = new Date().getFullYear();
+
+    // Update date (set your date here if you want)
+    document.getElementById("updated").textContent = new Date().toLocaleDateString();
+
+    function safeText(s){ return String(s || "").replace(/\s+/g, " ").trim(); }
+
+    // Auth UI
+    const userChip = document.getElementById("userChip");
+    const accountBtn = document.getElementById("accountBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    async function refreshAuthUI(){
+      const { data: { session } } = await supabase.auth.getSession();
+      const email = safeText(session?.user?.email);
+
+      if (email){
+        userChip.style.display = "inline-flex";
+        userChip.textContent = email;
+        userChip.title = email;
+
+        accountBtn.textContent = "Open app";
+        accountBtn.href = "app.html";
+
+        logoutBtn.style.display = "inline-flex";
+      } else {
+        userChip.style.display = "none";
+        userChip.textContent = "—";
+        userChip.title = "";
+
+        accountBtn.textContent = "Account";
+        accountBtn.href = "login.html";
+
+        logoutBtn.style.display = "none";
+      }
+    }
+
+    logoutBtn.addEventListener("click", async (e)=>{
+      e.preventDefault();
+      try { await supabase.auth.signOut(); }
+      finally { location.href = "login.html"; }
+    });
+
+    await refreshAuthUI();
+    supabase.auth.onAuthStateChange(() => refreshAuthUI());
+  </script>
+</body>
+</html>
