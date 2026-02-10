@@ -94,24 +94,11 @@
     .btn.ghost{background:transparent;box-shadow:none}
     .btn:disabled{opacity:.55;cursor:not-allowed}
 
-    .wrap{
-      max-width:1100px;
-      margin:0 auto;
-      padding:18px 16px 40px;
-    }
-    @media (min-width:900px){
-      .wrap{ padding:20px 22px 44px; }
-    }
+    .wrap{max-width:1100px;margin:0 auto;padding:18px 16px 40px}
+    @media (min-width:900px){.wrap{ padding:20px 22px 44px; }}
 
-    .grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:16px;
-      margin-top:18px;
-    }
-    @media(max-width:980px){
-      .grid{grid-template-columns:1fr}
-    }
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+    @media(max-width:980px){.grid{grid-template-columns:1fr}}
 
     .card{
       background:var(--card);
@@ -218,10 +205,7 @@
       max-width:760px;
     }
     .pp-footmut a{color:rgba(94,234,212,.95);font-weight:900}
-    .pp-footlinks{
-      display:flex;flex-wrap:wrap;gap:10px;
-      justify-content:flex-end;
-    }
+    .pp-footlinks{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}
     @media(max-width:880px){.pp-footlinks{justify-content:flex-start}}
     .pp-footlinks a{
       padding:9px 12px;border-radius:999px;
@@ -245,7 +229,7 @@
 
     @media print{
       body{background:#fff}
-      .pp-header, .pp-footer, #tourOverlay, #controlsRow, #reviewsCard, #proCard, #logoutBtn, .tabs, #bulkTools, #bulkPasteBox, #importBanner {display:none !important}
+      .pp-header, .pp-footer, #controlsRow, #reviewsCard, #proCard, #logoutBtn, .tabs, #bulkTools, #bulkPasteBox, #importBanner {display:none !important}
       .wrap{margin:0;max-width:none}
       .card{box-shadow:none}
     }
@@ -283,7 +267,7 @@
     <div class="banner" id="importBanner">Imported shared calculation ✅</div>
 
     <div class="grid">
-
+      <!-- LEFT -->
       <div class="card">
         <div class="title">Calculator</div>
         <div class="small">Profit = normal. Reverse = target profit → required selling price. Bulk = multiple items.</div>
@@ -551,6 +535,7 @@
         </div>
       </div>
 
+      <!-- RIGHT -->
       <div>
         <div class="card" id="proCard">
           <div class="title">PRO features</div>
@@ -665,6 +650,7 @@
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
+    // DOM
     const accessPill = document.getElementById("accessPill");
     const reverseUsesLine = document.getElementById("reverseUsesLine");
     const bulkLimitLine = document.getElementById("bulkLimitLine");
@@ -704,6 +690,7 @@
     const fxOut = document.getElementById("fxOut");
     const fxNote = document.getElementById("fxNote");
 
+    // Insights
     const insStatus = document.getElementById("insStatus");
     const bePriceEl = document.getElementById("bePrice");
     const targetMarginPriceEl = document.getElementById("targetMarginPrice");
@@ -716,6 +703,7 @@
     const refreshInsightsBtn = document.getElementById("refreshInsightsBtn");
     const insToast = document.getElementById("insToast");
 
+    // Competitor
     const compStatus = document.getElementById("compStatus");
     const compUsesLine = document.getElementById("compUsesLine");
     const runCompBtn = document.getElementById("runCompBtn");
@@ -737,6 +725,7 @@
     const compCheck2 = document.getElementById("compCheck2");
     const compBullets = document.getElementById("compBullets");
 
+    // Scenarios
     const scenarioSel = document.getElementById("scenarioSel");
     const scenarioName = document.getElementById("scenarioName");
     const saveScenarioBtn2 = document.getElementById("saveScenarioBtn2");
@@ -744,6 +733,7 @@
     const deleteScenarioBtn = document.getElementById("deleteScenarioBtn");
     const scenarioStatus = document.getElementById("scenarioStatus");
 
+    // Bulk
     const bulkRunBtn = document.getElementById("bulkRunBtn");
     const bulkAddRowBtn = document.getElementById("bulkAddRowBtn");
     const bulkClearBtn = document.getElementById("bulkClearBtn");
@@ -754,6 +744,7 @@
     const bulkFillExampleBtn = document.getElementById("bulkFillExampleBtn");
     const bulkTbody = document.getElementById("bulkTbody");
 
+    // Tabs
     const tabProfit = document.getElementById("tabProfit");
     const tabReverse = document.getElementById("tabReverse");
     const tabBulk = document.getElementById("tabBulk");
@@ -778,13 +769,11 @@
       const day = String(d.getUTCDate()).padStart(2,"0");
       return `${y}-${m}-${day}`;
     }
-
     function daysLeft(trialStartISO){
       const start = new Date(trialStartISO).getTime();
       const elapsedDays = (Date.now() - start) / (1000*60*60*24);
       return Math.max(0, Math.ceil(TRIAL_DAYS - elapsedDays));
     }
-
     function updateFXLine(sell){
       const r = n(fxRateEl.value);
       if (r > 0 && sell > 0){
@@ -804,6 +793,7 @@
       URL.revokeObjectURL(url);
     }
 
+    // Presets (examples)
     const PRESETS = [
       { id:"manual", name:"Manual (enter fees yourself)", feePct:0, feeFixed:0, adsPct:0, returnPct:0 },
       { id:"ebay_uk_typical", name:"eBay UK (typical example)", feePct:12.8, feeFixed:0.30, adsPct:0, returnPct:3 },
@@ -824,8 +814,7 @@
         adsPctEl.value = String(p.adsPct ?? 0);
         returnPctEl.value = String(p.returnPct ?? 0);
       }
-      compute();
-      refreshInsights();
+      compute(); refreshInsights();
     });
 
     function totalFees(sell, feePct, feeFixed, adsPct){
@@ -900,6 +889,7 @@
       updateFXLine(sell);
     }
 
+    // Modes
     let MODE = "profit";
     function setMode(m){
       MODE = m;
@@ -913,8 +903,7 @@
 
       if (m==="profit"){ o1h.textContent="Estimated profit"; o2h.textContent="Margin"; }
       if (m==="reverse"){ o1h.textContent="Required selling price"; o2h.textContent="Implied margin"; }
-      compute();
-      refreshInsights();
+      compute(); refreshInsights();
     }
     tabProfit.addEventListener("click", ()=>setMode("profit"));
     tabReverse.addEventListener("click", ()=>setMode("reverse"));
@@ -927,32 +916,29 @@
     }
 
     // ---------------------------
-    // SECURITY: use Supabase RPC
+    // SECURITY: profile + limits via RPC
     // ---------------------------
     let CURRENT_PROFILE = null;
     let CURRENT_USER = null;
 
     async function rpcEnsureProfile(){
       const { data, error } = await supabase.rpc("ensure_profile");
-      if (error) throw error;
+      if (error) throw new Error(error.message || "ensure_profile failed");
       return data;
     }
-
     async function rpcConsumeReverse(){
       const { data, error } = await supabase.rpc("consume_reverse_use", { p_limit: TRIAL_REVERSE_LIMIT });
-      if (error) throw error;
+      if (error) throw new Error(error.message || "consume_reverse_use failed");
       return data;
     }
-
     async function rpcConsumeComp(){
       const { data, error } = await supabase.rpc("consume_comp_use", { p_limit: TRIAL_COMP_LIMIT });
-      if (error) throw error;
+      if (error) throw new Error(error.message || "consume_comp_use failed");
       return data;
     }
-
     async function rpcConsumeBulk(){
       const { data, error } = await supabase.rpc("consume_bulk_run", { p_limit_per_day: TRIAL_BULK_RUNS_PER_DAY });
-      if (error) throw error;
+      if (error) throw new Error(error.message || "consume_bulk_run failed");
       return data;
     }
 
@@ -1261,7 +1247,6 @@
         if (!CURRENT_PROFILE.paid){
           const left = daysLeft(CURRENT_PROFILE.trial_start);
           if (left <= 0) throw new Error("Trial ended. Unlock PRO to use competitor mode.");
-
           const prof = await rpcConsumeComp();
           updateAccessUI(prof);
         }
@@ -1449,12 +1434,14 @@
       renumberBulkRows();
       previewRow(tr);
     }
+
     function clearBulkRows(){
       bulkTbody.innerHTML = "";
       bulkLastRows = [];
       bulkStatus.textContent = "—";
       refreshBulkLimitLine();
     }
+
     function applyFeesToAll(){
       [...bulkTbody.children].forEach(tr=>{
         const r = tr._pp;
@@ -1466,12 +1453,14 @@
       });
       bulkStatus.textContent = "Applied current fees to all rows.";
     }
+
     function computeRow(sell,cost,ship,misc,feePct,feeFixed,adsPct,returnPct){
       const fees = sell*(feePct/100) + feeFixed + sell*(adsPct/100);
       const profit = sell - (cost+ship+misc+fees);
       const margin = sell>0 ? (profit/sell)*100 : 0;
       return { profit, margin, fees };
     }
+
     function previewRow(tr){
       if (!tr?._pp) return;
       const r = tr._pp;
@@ -1519,7 +1508,6 @@
           const left = daysLeft(CURRENT_PROFILE.trial_start);
           if (left <= 0) throw new Error("Trial ended. Unlock PRO to use Bulk mode.");
           if (rowCount() > TRIAL_BULK_MAX_ROWS) throw new Error(`Trial allows max ${TRIAL_BULK_MAX_ROWS} rows.`);
-
           const prof = await rpcConsumeBulk();
           updateAccessUI(prof);
         }
@@ -1606,7 +1594,7 @@
       refreshBulkLimitLine();
     });
 
-    // Reviews (unchanged, your reviews table must exist)
+    // Reviews
     let selectedStars = 5;
     const starsRow = document.getElementById("starsRow");
     const reviewStatus = document.getElementById("reviewStatus");
@@ -1648,7 +1636,7 @@
       location.href = "login.html";
     });
 
-    // Import from share hash (safe: it only fills inputs)
+    // Share import
     function base64urlDecodeToString(b64url){
       let s = (b64url||"").replace(/-/g, "+").replace(/_/g, "/");
       while (s.length % 4) s += "=";
@@ -1697,6 +1685,8 @@
 
     async function computeReverseWithLimit(){
       if (!CURRENT_PROFILE?.paid){
+        const left = daysLeft(CURRENT_PROFILE.trial_start);
+        if (left <= 0) throw new Error("Trial ended. Unlock PRO for Reverse mode.");
         const prof = await rpcConsumeReverse();
         updateAccessUI(prof);
       }
@@ -1740,8 +1730,6 @@
         useSuggestedBtn.disabled = true;
 
         tryImportFromHash();
-
-        document.getElementById("calcBtn").disabled = false;
       } catch(e){
         accessPill.textContent="Access check failed";
         accessPill.className="pill bad";
