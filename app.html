@@ -660,7 +660,16 @@
     const TRIAL_BULK_MAX_ROWS = 3;
     const TRIAL_BULK_RUNS_PER_DAY = 1;
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+    flowType: "pkce",
+    storageKey: "profitpilot_auth"
+  }
+});
+
 
     // DOM
     const accessPill = document.getElementById("accessPill");
