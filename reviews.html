@@ -1,204 +1,445 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Reviews — ProfitPilot</title>
-<meta name="description" content="Public reviews for ProfitPilot.">
-<link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
-<meta name="robots" content="index,follow">
-<meta property="og:title" content="Reviews — ProfitPilot">
-<meta property="og:url" content="https://profitpilot.ukwebtools.com/reviews.html">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Reviews — ProfitPilot</title>
+  <meta name="description" content="Public reviews for ProfitPilot.">
+  <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://profitpilot.ukwebtools.com/reviews.html">
 
-<style>
-:root{
-  --bg:#f6f8fb; --bg2:#eef2ff;
-  --txt:#0b1220; --muted:#5b6474;
-  --card:#fff; --line:rgba(16,24,40,.10);
-  --accent:#0ea5a4; --accent2:#4f46e5;
-  --shadow:0 12px 34px rgba(16,24,40,.10);
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  background:linear-gradient(180deg,var(--bg2),var(--bg));
-  color:var(--txt);
-}
-.wrap{max-width:1100px;margin:auto;padding:20px}
-.nav{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:12px 0;flex-wrap:wrap;gap:10px
-}
-.btn{
-  padding:9px 14px;border-radius:999px;border:1px solid var(--line);
-  background:#fff;font-weight:700;cursor:pointer;text-decoration:none;color:var(--txt)
-}
-.btn.primary{
-  border:none;color:#fff;
-  background:linear-gradient(135deg,var(--accent),var(--accent2))
-}
-.card{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:18px;
-  box-shadow:var(--shadow);
-  padding:18px;margin-top:16px
-}
-.review{
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:12px;margin-top:10px
-}
-.small{font-size:13px;color:var(--muted)}
-.big{font-size:26px;font-weight:800}
-footer{margin-top:30px;font-size:12px;color:var(--muted)}
-</style>
+  <meta property="og:title" content="Reviews — ProfitPilot">
+  <meta property="og:description" content="Public reviews for ProfitPilot: rating average and latest feedback.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://profitpilot.ukwebtools.com/reviews.html">
+
+  <style>
+    :root{
+      --bg:#f6f8fb; --bg2:#eef2ff;
+      --txt:#0b1220; --muted:#5b6474;
+      --card:rgba(255,255,255,.92); --line:rgba(16,24,40,.10);
+      --accent:#0ea5a4; --accent2:#4f46e5;
+      --shadow:0 12px 34px rgba(16,24,40,.10);
+      --bad:#ef4444;
+      --ok:#0ea5a4;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--txt);
+      background:
+        radial-gradient(900px 520px at 20% 0%, rgba(14,165,164,.16), transparent 55%),
+        radial-gradient(900px 520px at 80% 0%, rgba(79,70,229,.12), transparent 55%),
+        linear-gradient(180deg, var(--bg2), var(--bg));
+    }
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    .wrap{max-width:1120px;margin:0 auto;padding:22px 16px 70px}
+    @media (min-width:900px){.wrap{padding:26px 22px 84px}}
+
+    .nav{
+      display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+      position:sticky;top:0;z-index:60;padding:14px 0;
+      backdrop-filter:blur(10px);
+    }
+    .nav::before{
+      content:"";position:absolute;inset:0;
+      background:rgba(246,248,251,.72);
+      border-bottom:1px solid rgba(16,24,40,.08);
+      z-index:-1;border-radius:18px;
+    }
+    .brand{display:flex;gap:12px;align-items:center;padding:10px 12px}
+    .logo{
+      width:42px;height:42px;border-radius:16px;
+      background:linear-gradient(135deg, rgba(14,165,164,.22), rgba(79,70,229,.18));
+      border:1px solid rgba(16,24,40,.10);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:1000;letter-spacing:-.02em;
+      box-shadow:0 10px 24px rgba(16,24,40,.08);
+      user-select:none;
+    }
+    .sub{font-size:12px;color:var(--muted);margin-top:2px}
+
+    .right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .btn{
+      padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
+      background:rgba(255,255,255,.86);color:var(--txt);
+      display:inline-flex;gap:8px;align-items:center;cursor:pointer;
+      box-shadow:0 8px 18px rgba(16,24,40,.06);
+      white-space:nowrap;font-weight:900;
+      transition:transform .08s ease, filter .08s ease;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(0)}
+    .btn.ghost{background:transparent;box-shadow:none}
+    .btn.primary{
+      border:none;color:#fff;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow:0 18px 34px rgba(79,70,229,.18);
+    }
+
+    .hero{
+      margin-top:14px;
+      background:linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.82));
+      border:1px solid rgba(16,24,40,.10);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:20px;
+    }
+    h1{margin:0;font-size:26px;line-height:1.15;letter-spacing:-.03em;font-weight:1000}
+    .lead{margin-top:10px;color:rgba(16,24,40,.70);line-height:1.7;font-size:14.5px}
+
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+    @media(max-width:980px){.grid{grid-template-columns:1fr}}
+
+    .card{
+      background:rgba(255,255,255,.90);
+      border:1px solid rgba(16,24,40,.10);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+    .kicker{font-size:12px;color:rgba(16,24,40,.56);font-weight:1000;text-transform:uppercase;letter-spacing:.12em}
+    .title{margin:8px 0 8px;font-weight:1000;letter-spacing:-.02em;font-size:16px}
+    .small{font-size:12.8px;color:rgba(16,24,40,.68);line-height:1.75}
+
+    .stat{
+      display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;
+      padding:12px;border-radius:18px;border:1px solid rgba(16,24,40,.10);
+      background:rgba(255,255,255,.82);
+    }
+    .big{font-size:28px;font-weight:1000;letter-spacing:-.03em}
+    .tag{
+      padding:7px 10px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
+      background:rgba(255,255,255,.88);font-size:12px;color:rgba(16,24,40,.62);font-weight:900;
+      display:inline-flex;gap:8px;align-items:center
+    }
+
+    .reviews{display:grid;gap:12px;margin-top:12px}
+    .review{
+      border:1px solid rgba(16,24,40,.10);
+      background:rgba(255,255,255,.86);
+      border-radius:18px;padding:14px;
+    }
+    .meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+    .stars{font-weight:1000;letter-spacing:.4px}
+    .muted{color:rgba(16,24,40,.62);font-size:12.5px;line-height:1.6}
+    .hr{height:1px;background:rgba(16,24,40,.10);margin:14px 0}
+
+    .errorBox{
+      display:none;
+      margin-top:14px;
+      border:1px solid rgba(239,68,68,.35);
+      background:rgba(239,68,68,.08);
+      border-radius:16px;
+      padding:10px 12px;
+      color:rgba(16,24,40,.85);
+      font-size:12.8px;
+      line-height:1.6;
+    }
+
+    footer{margin-top:18px;color:rgba(16,24,40,.58);font-size:12.5px;line-height:1.7}
+  </style>
 </head>
 
 <body>
-<div class="wrap">
+  <div class="wrap">
 
-<div class="nav">
-  <div><b>ProfitPilot Reviews</b></div>
-  <div>
-    <a class="btn" href="index.html">Home</a>
-    <a class="btn primary" id="openBtn" href="login.html">Log in</a>
-    <a class="btn" id="logoutBtn" href="#" style="display:none">Log out</a>
+    <div class="nav" role="navigation" aria-label="Primary">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">PP</div>
+        <div>
+          <div><b>ProfitPilot</b></div>
+          <div class="sub">Public reviews</div>
+        </div>
+      </div>
+
+      <div class="right">
+        <a class="btn ghost" href="https://ukwebtools.com/">← UKwebtools</a>
+        <a class="btn" href="index.html">Home</a>
+        <a class="btn" href="pricing.html">Pricing</a>
+        <a class="btn" href="help.html">How to use</a>
+        <a class="btn primary" id="openBtn" href="login.html">Log in</a>
+        <a class="btn" id="logoutBtn" href="#" style="display:none">Log out</a>
+      </div>
+    </div>
+
+    <div class="hero">
+      <h1>Reviews & ratings</h1>
+      <div class="lead">
+        These reviews are submitted by real users. Viewing is public.
+        To leave or edit your review, log in and use the review box inside the app.
+      </div>
+      <div class="errorBox" id="errorBox"></div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="kicker">Summary</div>
+        <div class="title">Overall rating</div>
+
+        <div class="stat">
+          <div>
+            <div class="big" id="avgOut">—</div>
+            <div class="muted" id="countOut">Loading…</div>
+          </div>
+          <div class="tag" id="starsOut">—</div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="small" id="meLine">Checking login…</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+          <a class="btn primary" id="leaveBtn" href="login.html">Log in to leave/edit your review</a>
+          <a class="btn" href="app.html">Open app</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="kicker">Latest</div>
+        <div class="title">Recent reviews</div>
+        <div class="small" id="status">Loading…</div>
+
+        <div class="reviews" id="reviews"></div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center">
+          <button class="btn" id="moreBtn" type="button">Load more</button>
+          <span class="tag" id="moreStatus">—</span>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="hr"></div>
+      <div><b>Independent tool:</b> ProfitPilot is not affiliated with or endorsed by any marketplace, platform, or payment provider.</div>
+      <div><b>Estimates only:</b> outputs depend on your inputs and assumptions; no profit guarantees. Not financial/legal/tax advice.</div>
+      <div style="margin-top:6px">© <span id="yr"></span> UKwebtools • ProfitPilot</div>
+    </footer>
+
   </div>
-</div>
-
-<div class="card">
-  <div class="big" id="avgOut">—</div>
-  <div class="small" id="countOut">Loading…</div>
-</div>
-
-<div class="card">
-  <div id="reviews"></div>
-  <button class="btn" id="moreBtn">Load more</button>
-</div>
-
-<footer>
-© <span id="yr"></span> UKwebtools • ProfitPilot
-</footer>
-
-</div>
 
 <script type="module">
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
-const SUPABASE_ANON = "YOUR_ANON_KEY_HERE";
+  const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
+  const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON, {
-  auth:{
-    persistSession:true,
-    autoRefreshToken:true,
-    detectSessionInUrl:true,
-    flowType:"pkce",
-    storageKey:"profitpilot_auth"
-  }
-});
-
-document.getElementById("yr").textContent = new Date().getFullYear();
-
-const avgOut=document.getElementById("avgOut");
-const countOut=document.getElementById("countOut");
-const reviewsBox=document.getElementById("reviews");
-const moreBtn=document.getElementById("moreBtn");
-const openBtn=document.getElementById("openBtn");
-const logoutBtn=document.getElementById("logoutBtn");
-
-let page=0;
-const PAGE_SIZE=10;
-
-function stars(n){
-  const r=Math.max(0,Math.min(5,Math.round(n)));
-  return "★".repeat(r)+"☆".repeat(5-r);
-}
-
-async function refreshAuthUI(){
-  const {data:{session}}=await supabase.auth.getSession();
-  const loggedIn=!!session?.user;
-
-  if(loggedIn){
-    openBtn.textContent="Open app";
-    openBtn.href="app.html";
-    logoutBtn.style.display="inline-block";
-  }else{
-    openBtn.textContent="Log in";
-    openBtn.href="login.html";
-    logoutBtn.style.display="none";
-  }
-}
-
-logoutBtn.addEventListener("click",async e=>{
-  e.preventDefault();
-  await supabase.auth.signOut();
-  location.reload();
-});
-
-async function loadSummary(){
-  const {data,error}=await supabase
-    .from("reviews")
-    .select("rating")
-    .eq("approved",true);
-
-  if(error||!data){
-    avgOut.textContent="—";
-    countOut.textContent="No reviews";
-    return;
-  }
-
-  const ratings=data.map(r=>Number(r.rating)||0).filter(r=>r>=1&&r<=5);
-  if(!ratings.length){
-    avgOut.textContent="—";
-    countOut.textContent="No reviews yet";
-    return;
-  }
-
-  const avg=ratings.reduce((s,x)=>s+x,0)/ratings.length;
-  avgOut.textContent=avg.toFixed(1)+" "+stars(avg);
-  countOut.textContent=ratings.length+" review(s)";
-}
-
-async function loadPage(){
-  const from=page*PAGE_SIZE;
-  const to=from+PAGE_SIZE-1;
-
-  const {data,error}=await supabase
-    .from("reviews")
-    .select("created_at,name,rating,message")
-    .eq("approved",true)
-    .order("created_at",{ascending:false})
-    .range(from,to);
-
-  if(error||!data||!data.length){
-    moreBtn.disabled=true;
-    moreBtn.textContent="End";
-    return;
-  }
-
-  data.forEach(r=>{
-    const div=document.createElement("div");
-    div.className="review";
-    div.innerHTML=`
-      <div><b>${r.name||"Anonymous"}</b></div>
-      <div>${stars(r.rating)}</div>
-      <div class="small">${new Date(r.created_at).toLocaleDateString()}</div>
-      <div>${r.message||""}</div>
-    `;
-    reviewsBox.appendChild(div);
+  // MUST match your app/login pages:
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      flowType: "pkce",
+      storageKey: "profitpilot_auth"
+    }
   });
 
-  page++;
-}
+  document.getElementById("yr").textContent = new Date().getFullYear();
 
-moreBtn.addEventListener("click",loadPage);
+  const avgOut = document.getElementById("avgOut");
+  const countOut = document.getElementById("countOut");
+  const starsOut = document.getElementById("starsOut");
+  const reviewsBox = document.getElementById("reviews");
+  const status = document.getElementById("status");
+  const moreBtn = document.getElementById("moreBtn");
+  const moreStatus = document.getElementById("moreStatus");
+  const meLine = document.getElementById("meLine");
+  const leaveBtn = document.getElementById("leaveBtn");
+  const openBtn = document.getElementById("openBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const errorBox = document.getElementById("errorBox");
 
-await refreshAuthUI();
-await loadSummary();
-await loadPage();
+  function showError(msg){
+    errorBox.style.display = "block";
+    errorBox.textContent = msg;
+  }
+
+  function escapeHtml(s){
+    return String(s ?? "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#39;");
+  }
+  function stars(n){
+    const r = Math.max(0, Math.min(5, Math.round(Number(n) || 0)));
+    return "★".repeat(r) + "☆".repeat(5-r);
+  }
+
+  async function refreshAuthUI(){
+    const { data: { session } } = await supabase.auth.getSession();
+    const loggedIn = !!session?.user;
+
+    // PRIVACY: do NOT show email anywhere.
+    if (loggedIn){
+      openBtn.textContent = "Open app";
+      openBtn.href = "app.html";
+      logoutBtn.style.display = "inline-flex";
+
+      meLine.textContent = "You’re logged in. Open the app to leave or edit your review.";
+      leaveBtn.textContent = "Open app to leave/edit your review";
+      leaveBtn.href = "app.html";
+    } else {
+      openBtn.textContent = "Log in";
+      openBtn.href = "login.html";
+      logoutBtn.style.display = "none";
+
+      meLine.textContent = "You’re viewing publicly. Log in to leave or edit your review.";
+      leaveBtn.textContent = "Log in to leave/edit your review";
+      leaveBtn.href = "login.html";
+    }
+  }
+
+  logoutBtn.addEventListener("click", async (e)=>{
+    e.preventDefault();
+    await supabase.auth.signOut();
+    location.href = "reviews.html";
+  });
+
+  // Pagination
+  let page = 0;
+  const PAGE_SIZE = 10;
+  let loading = false;
+
+  function setMoreLoading(on){
+    loading = !!on;
+    moreBtn.disabled = !!on;
+    moreBtn.textContent = on ? "Loading…" : "Load more";
+  }
+
+  async function loadSummary(){
+    // Count (approved only)
+    const { count, error: countErr } = await supabase
+      .from("reviews")
+      .select("id", { count: "exact", head: true })
+      .eq("approved", true);
+
+    if (countErr){
+      avgOut.textContent = "—";
+      starsOut.textContent = "—";
+      countOut.textContent = "Summary unavailable";
+      showError("Reviews summary failed to load. Check RLS: allow SELECT on reviews where approved=true.");
+      return;
+    }
+
+    const total = count || 0;
+    countOut.textContent = total ? `${total} review(s)` : "No reviews yet";
+
+    if (!total){
+      avgOut.textContent = "—";
+      starsOut.textContent = "—";
+      return;
+    }
+
+    // Ratings (limit 1000 is fine early stage)
+    const { data, error } = await supabase
+      .from("reviews")
+      .select("rating")
+      .eq("approved", true)
+      .order("created_at", { ascending: false })
+      .limit(1000);
+
+    if (error || !data){
+      avgOut.textContent = "—";
+      starsOut.textContent = "—";
+      return;
+    }
+
+    const ratings = data.map(x=>Number(x.rating)||0).filter(x=>x>=1 && x<=5);
+    if (!ratings.length){
+      avgOut.textContent = "—";
+      starsOut.textContent = "—";
+      return;
+    }
+
+    const avg = ratings.reduce((s,x)=>s+x,0) / ratings.length;
+    avgOut.textContent = avg.toFixed(1);
+    starsOut.textContent = stars(avg);
+  }
+
+  async function loadPage(reset=false){
+    if (loading) return;
+    setMoreLoading(true);
+
+    if (reset){
+      page = 0;
+      reviewsBox.innerHTML = "";
+      moreBtn.disabled = false;
+      moreBtn.textContent = "Load more";
+    }
+
+    status.textContent = "Loading…";
+    moreStatus.textContent = "—";
+
+    const from = page * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+
+    const { data, error } = await supabase
+      .from("reviews")
+      .select("created_at,name,rating,category,message")
+      .eq("approved", true)
+      .order("created_at", { ascending:false })
+      .range(from, to);
+
+    if (error){
+      status.textContent = "Could not load reviews.";
+      moreStatus.textContent = "Error";
+      showError("Reviews list failed to load. Likely RLS blocks SELECT. Allow SELECT where approved=true.");
+      setMoreLoading(false);
+      return;
+    }
+
+    if (!data || data.length === 0){
+      status.textContent = (from === 0) ? "No reviews yet." : "No more reviews.";
+      moreStatus.textContent = "End";
+      moreBtn.disabled = true;
+      moreBtn.textContent = "End";
+      return;
+    }
+
+    status.textContent = "Showing latest reviews.";
+    data.forEach(r=>{
+      const div = document.createElement("div");
+      div.className = "review";
+
+      const cat = escapeHtml(r.category || "General");
+      const name = escapeHtml(r.name || "Anonymous");
+      const msg = escapeHtml(r.message || "");
+      const date = new Date(r.created_at).toLocaleDateString();
+      const rating = Number(r.rating) || 0;
+
+      div.innerHTML = `
+        <div class="meta">
+          <div class="stars">${stars(rating)} <span class="tag">${cat}</span></div>
+          <div class="muted">${date}</div>
+        </div>
+        <div class="small" style="margin-top:8px"><b>${name}</b> — ${msg}</div>
+      `;
+      reviewsBox.appendChild(div);
+    });
+
+    page++;
+    moreStatus.textContent = `Loaded ${data.length}`;
+    setMoreLoading(false);
+  }
+
+  moreBtn.addEventListener("click", ()=>loadPage(false));
+
+  // Boot (with hard error capture so page never "goes blank")
+  window.addEventListener("error", (e)=> showError("JS error: " + (e.message || "unknown")));
+  window.addEventListener("unhandledrejection", (e)=> showError("JS error: " + (e.reason?.message || String(e.reason))));
+
+  try{
+    await refreshAuthUI();
+    supabase.auth.onAuthStateChange(()=>refreshAuthUI());
+    await loadSummary();
+    await loadPage(true);
+  } catch(e){
+    showError("Boot error: " + (e?.message || "unknown"));
+  }
 </script>
 </body>
 </html>
