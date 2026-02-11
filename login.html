@@ -316,7 +316,7 @@
     return message || "Login failed. Please try again.";
   }
 
-  // Show real JS errors in the box (so you’re not blind)
+  // Show real JS errors in the box
   window.addEventListener("error", (e) => {
     console.error("Window error:", e.error || e.message);
     setMsg("JS error: " + (e.message || "unknown"), "bad");
@@ -375,7 +375,7 @@
     await refreshAuthUI();
   });
 
-  // ✅ If already signed in, go to app
+  // If already signed in, go to app
   setMsg("—");
   const { data: { session } } = await supabase.auth.getSession();
   if (session?.user){
@@ -385,7 +385,7 @@
   await refreshAuthUI();
   supabase.auth.onAuthStateChange(()=>refreshAuthUI());
 
-  // ✅ Login action (robust)
+  // Login action
   loginBtn.addEventListener("click", async ()=>{
     const email = emailEl.value.trim();
     const password = pwEl.value;
@@ -397,7 +397,7 @@
     setMsg("Logging in…");
 
     try{
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
 
       if (error){
         console.error("signInWithPassword error:", error);
@@ -406,7 +406,7 @@
         return;
       }
 
-      // ✅ Confirm session saved
+      // Confirm session saved
       const { data: s2, error: e2 } = await supabase.auth.getSession();
       if (e2 || !s2?.session){
         console.error("getSession after login failed:", e2, s2);
