@@ -12,7 +12,7 @@
   <meta property="og:title" content="Reviews — ProfitPilot">
   <meta property="og:description" content="Public reviews for ProfitPilot: rating average, breakdown, and latest feedback.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://profitpilot.tools.com/reviews.html">
+  <meta property="og:url" content="https://profitpilot.ukwebtools.com/reviews.html">
 
   <style>
     :root{
@@ -294,7 +294,17 @@
 
   const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
   const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  // ✅ Use SAME auth storageKey across all pages (login/app/reviews)
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      flowType: "pkce",
+      storageKey: "profitpilot_auth"
+    }
+  });
 
   document.getElementById("yr").textContent = new Date().getFullYear();
 
@@ -377,6 +387,11 @@
     await supabase.auth.signOut();
     location.href = "reviews.html";
   });
+
+  // Helpful debug (won't break UI)
+  window.addEventListener("error", (e)=>console.error("JS error:", e.error || e.message));
+  window.addEventListener("unhandledrejection", (e)=>console.error("Promise error:", e.reason));
+
   await refreshAuthUI();
   supabase.auth.onAuthStateChange(()=>refreshAuthUI());
 
@@ -391,14 +406,16 @@
     moreBtn.textContent = on ? "Loading…" : "Load more";
   }
 
-  // Summary (simple for now; switch to RPC later if you grow)
+  // Summary (public: approved only)
   async function loadSummary(){
-    // Total count
+    // Total approved count
     const { count, error: countErr } = await supabase
       .from("reviews")
-      .select("id", { count: "exact", head: true });
+      .select("id", { count: "exact", head: true })
+      .eq("approved", true);
 
     if (countErr){
+      console.error("Count error:", countErr);
       countOut.textContent = "Count unavailable";
       avgOut.textContent = "—";
       starsOut.textContent = "—";
@@ -408,15 +425,17 @@
 
     const totalCount = count || 0;
 
-    // Ratings list for avg/breakdown (OK early stage)
+    // Ratings for avg/breakdown
     const { data, error } = await supabase
       .from("reviews")
       .select("rating")
+      .eq("approved", true)
       .order("created_at", { ascending: false })
       .limit(1000);
 
     if (error || !data){
-      countOut.textContent = `${totalCount} total review(s)`;
+      console.error("Ratings error:", error);
+      countOut.textContent = totalCount ? `${totalCount} total review(s)` : "No reviews yet";
       avgOut.textContent = "—";
       starsOut.textContent = "—";
       breakdown.innerHTML = `<div class="small">Rating breakdown unavailable.</div>`;
@@ -465,6 +484,8 @@
     if (reset){
       page = 0;
       reviewsBox.innerHTML = "";
+      moreBtn.disabled = false;
+      moreBtn.textContent = "Load more";
     }
 
     status.textContent = "Loading…";
@@ -476,10 +497,12 @@
     const { data, error } = await supabase
       .from("reviews")
       .select("created_at,name,rating,category,message")
+      .eq("approved", true)
       .order("created_at", { ascending:false })
       .range(from, to);
 
     if (error){
+      console.error("Load page error:", error);
       status.textContent = "Could not load reviews.";
       moreStatus.textContent = "Error";
       setMoreLoading(false);
@@ -491,6 +514,7 @@
       moreStatus.textContent = "End";
       moreBtn.disabled = true;
       moreBtn.textContent = "End";
+      setMoreLoading(false);
       return;
     }
 
@@ -522,6 +546,7 @@
 
   moreBtn.addEventListener("click", ()=>loadPage(false));
 
+  // Boot
   await loadSummary();
   await loadPage(true);
 </script>
