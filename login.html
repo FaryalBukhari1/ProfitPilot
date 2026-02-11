@@ -378,9 +378,28 @@
   // If already signed in, go to app
   setMsg("—");
   const { data: { session } } = await supabase.auth.getSession();
-  if (session?.user){
-    location.replace("app.html");
-  }
+if (session?.user){
+  setMsg("You’re already signed in on this device.", "ok");
+  // show two buttons: Continue + Sign out
+  loginBtn.textContent = "Continue to app";
+  loginBtn.onclick = () => location.replace("app.html");
+
+  goSignupBtn.textContent = "Sign out";
+  goSignupBtn.onclick = async () => {
+    await supabase.auth.signOut();
+    localStorage.removeItem("profitpilot_auth"); // extra safety
+    setMsg("Signed out. Please log in again.", "ok");
+    // reset buttons
+    loginBtn.textContent = "Log in";
+    goSignupBtn.textContent = "Create account";
+    loginBtn.onclick = null;
+    goSignupBtn.onclick = () => location.href="signup.html";
+  };
+
+  await refreshAuthUI();
+  return;
+}
+
 
   await refreshAuthUI();
   supabase.auth.onAuthStateChange(()=>refreshAuthUI());
