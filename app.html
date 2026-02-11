@@ -711,6 +711,17 @@
     const fxOut = document.getElementById("fxOut");
     const fxNote = document.getElementById("fxNote");
 
+    function maskEmail(email){
+  const e = String(email || "");
+  const [u, d] = e.split("@");
+  if (!u || !d) return "";
+  const uMasked = u.length <= 2 ? (u[0] + "•") : (u.slice(0,2) + "•••");
+  const dParts = d.split(".");
+  const dMasked = dParts.length ? (dParts[0].slice(0,2) + "•••") : "•••";
+  const tld = dParts.length > 1 ? "." + dParts.slice(1).join(".") : "";
+  return `${uMasked}@${dMasked}${tld}`;
+}
+
     // Insights
     const insStatus = document.getElementById("insStatus");
     const bePriceEl = document.getElementById("bePrice");
@@ -1736,6 +1747,11 @@
         const { data: { user } } = await supabase.auth.getUser();
         if (!user){ location.href="login.html"; return; }
         CURRENT_USER = user;
+// Privacy: never show full email in UI
+const accountLink = document.getElementById("accountLink");
+if (accountLink){
+  accountLink.textContent = "Account";
+}
 
         const prof = await rpcEnsureProfile();
         updateAccessUI(prof);
@@ -1751,10 +1767,12 @@
         useSuggestedBtn.disabled = true;
 
         tryImportFromHash();
-      } catch(e){
-        accessPill.textContent="Access check failed";
-        accessPill.className="pill bad";
-      }
+     } catch(e){
+  console.error("BOOT ERROR:", e);
+  accessPill.textContent = "Access check failed: " + (e?.message || "unknown");
+  accessPill.className = "pill bad";
+}
+
     })();
   </script>
 </body>
