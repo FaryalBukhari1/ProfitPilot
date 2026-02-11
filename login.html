@@ -157,6 +157,7 @@
       border-radius:14px;
       border:1px solid rgba(255,255,255,.10);
       background:rgba(255,255,255,.03);
+      word-break:break-word;
     }
     .msg.ok{border-color:rgba(52,211,153,.28);background:rgba(52,211,153,.08);color:rgba(234,240,255,.92)}
     .msg.bad{border-color:rgba(251,113,133,.28);background:rgba(251,113,133,.08);color:rgba(234,240,255,.92)}
@@ -174,14 +175,14 @@
   <div class="pp-navwrap" role="navigation" aria-label="Primary">
     <div class="pp-nav">
       <div class="pp-left">
-        <a class="pp-btn" href="https://ukwebtools.com/" data-nav="ukwebtools">← UKwebtools</a>
-        <a class="pp-btn" href="index.html" data-nav="home">Home</a>
-        <a class="pp-btn" href="pricing.html" data-nav="pricing">Pricing</a>
-        <a class="pp-btn" href="reviews.html" data-nav="reviews">Reviews</a>
-        <a class="pp-btn" href="help.html" data-nav="help">How to use</a>
-        <a class="pp-btn" href="privacy.html" data-nav="privacy">Privacy</a>
-        <a class="pp-btn" href="terms.html" data-nav="terms">Terms</a>
-        <a class="pp-btn" href="faq.html" data-nav="faq">FAQ</a>
+        <a class="pp-btn" href="https://ukwebtools.com/">← UKwebtools</a>
+        <a class="pp-btn" href="index.html">Home</a>
+        <a class="pp-btn" href="pricing.html">Pricing</a>
+        <a class="pp-btn" href="reviews.html">Reviews</a>
+        <a class="pp-btn" href="help.html">How to use</a>
+        <a class="pp-btn" href="privacy.html">Privacy</a>
+        <a class="pp-btn" href="terms.html">Terms</a>
+        <a class="pp-btn" href="faq.html">FAQ</a>
       </div>
 
       <div class="pp-right">
@@ -211,7 +212,7 @@
     <div class="card">
       <h1>Log in</h1>
       <p class="subtitle">
-        Access your account and PRO status. If you just verified your email, you’ll be redirected automatically.
+        Access your account and PRO status.
       </p>
 
       <label for="email">Email</label>
@@ -249,7 +250,17 @@
   // ✅ Supabase (public anon key is OK in frontend)
   const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
   const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  // ✅ IMPORTANT: same storageKey must be used on ALL pages (login/app/etc)
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      flowType: "pkce",
+      storageKey: "profitpilot_auth"
+    }
+  });
 
   // Breadcrumb JSON-LD
   const base = "https://profitpilot.ukwebtools.com/";
@@ -296,16 +307,24 @@
 
   function friendlyAuthError(message){
     const m = String(message || "").toLowerCase();
-
     if (m.includes("invalid login credentials")) return "Email or password is incorrect.";
-    if (m.includes("email not confirmed")) return "Please verify your email first. Check inbox/spam, then try again.";
+    if (m.includes("email not confirmed")) return "Please verify your email first (check spam too).";
     if (m.includes("too many requests")) return "Too many attempts. Wait a bit and try again.";
     if (m.includes("user not found")) return "No account found with that email.";
     if (m.includes("invalid email")) return "That email address looks invalid.";
     if (m.includes("network")) return "Network error. Check your connection and try again.";
-
     return message || "Login failed. Please try again.";
   }
+
+  // Show real JS errors in the box (so you’re not blind)
+  window.addEventListener("error", (e) => {
+    console.error("Window error:", e.error || e.message);
+    setMsg("JS error: " + (e.message || "unknown"), "bad");
+  });
+  window.addEventListener("unhandledrejection", (e) => {
+    console.error("Unhandled promise rejection:", e.reason);
+    setMsg("JS error: " + (e.reason?.message || String(e.reason)), "bad");
+  });
 
   // Show/hide password
   togglePw.addEventListener("click", ()=>{
@@ -325,58 +344,7 @@
 
   goSignupBtn.addEventListener("click", ()=> location.href = "signup.html");
 
-  // --- Critical: handle email verification / magic-link redirects ---
-  async function handleAuthRedirect(){
-    // 1) PKCE: ?code=...
-    const url = new URL(location.href);
-    const code = url.searchParams.get("code");
-    if (code){
-      const { data, error } = await supabase.auth.exchangeCodeForSession(code);
-      url.searchParams.delete("code");
-      history.replaceState({}, document.title, url.toString());
-
-      if (error){
-        console.error("exchangeCodeForSession error:", error);
-        return { ok:false, reason: friendlyAuthError(error.message) };
-      }
-      if (data?.session) return { ok:true, reason:"Verified. Signing you in…" };
-    }
-
-    // 2) Implicit: #access_token=...&refresh_token=...
-    const hash = location.hash?.startsWith("#") ? location.hash.slice(1) : "";
-    const hp = new URLSearchParams(hash);
-
-    // Recovery link: send to update-password page
-    const type = hp.get("type");
-    if (type === "recovery"){
-      location.href = "update-password.html" + (location.hash || "");
-      return { ok:false, reason:"Redirecting to password update…" };
-    }
-
-    const errDesc = hp.get("error_description") || hp.get("error");
-    if (errDesc){
-      history.replaceState({}, document.title, location.pathname + location.search);
-      return { ok:false, reason: decodeURIComponent(errDesc) };
-    }
-
-    const access_token = hp.get("access_token");
-    const refresh_token = hp.get("refresh_token");
-
-    if (access_token && refresh_token){
-      const { data, error } = await supabase.auth.setSession({ access_token, refresh_token });
-      history.replaceState({}, document.title, location.pathname + location.search);
-
-      if (error){
-        console.error("setSession error:", error);
-        return { ok:false, reason: friendlyAuthError(error.message) };
-      }
-      if (data?.session) return { ok:true, reason:"Verified. Signing you in…" };
-    }
-
-    return { ok:false };
-  }
-
-  // Auth UI in nav
+  // Nav auth UI
   async function refreshAuthUI(){
     const { data: { session } } = await supabase.auth.getSession();
 
@@ -407,25 +375,17 @@
     await refreshAuthUI();
   });
 
-  // Run redirect handler FIRST
+  // ✅ If already signed in, go to app
   setMsg("—");
-  const redirectResult = await handleAuthRedirect();
-  if (redirectResult?.reason) setMsg(redirectResult.reason, redirectResult.ok ? "ok" : "");
-  if (redirectResult?.ok){
-    // give the browser a beat to store session, then go
-    location.href = "app.html";
-  }
-
-  // If already signed in, go to app
   const { data: { session } } = await supabase.auth.getSession();
   if (session?.user){
-    location.href = "app.html";
+    location.replace("app.html");
   }
 
   await refreshAuthUI();
   supabase.auth.onAuthStateChange(()=>refreshAuthUI());
 
-  // Login action
+  // ✅ Login action (robust)
   loginBtn.addEventListener("click", async ()=>{
     const email = emailEl.value.trim();
     const password = pwEl.value;
@@ -436,16 +396,32 @@
     setLoading(true);
     setMsg("Logging in…");
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    try{
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
-    if (error){
+      if (error){
+        console.error("signInWithPassword error:", error);
+        setLoading(false);
+        setMsg(friendlyAuthError(error.message), "bad");
+        return;
+      }
+
+      // ✅ Confirm session saved
+      const { data: s2, error: e2 } = await supabase.auth.getSession();
+      if (e2 || !s2?.session){
+        console.error("getSession after login failed:", e2, s2);
+        setLoading(false);
+        setMsg("Login succeeded but browser did not save session. Try another browser or disable extensions.", "bad");
+        return;
+      }
+
+      setMsg("Success. Redirecting…", "ok");
+      location.replace("app.html");
+    } catch(err){
+      console.error("Login exception:", err);
       setLoading(false);
-      setMsg(friendlyAuthError(error.message), "bad");
-      return;
+      setMsg("Unexpected error: " + (err?.message || String(err)), "bad");
     }
-
-    setMsg("Success. Redirecting…", "ok");
-    location.href = "app.html";
   });
 </script>
 </body>
