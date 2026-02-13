@@ -281,342 +281,166 @@
     <div class="banner" id="importBanner">Imported shared calculation ✅</div>
 
     <div class="grid">
-      <!-- LEFT -->
-      <div class="card">
-        <div class="title">Calculator</div>
-        <div class="small">Profit = normal. Reverse = target profit → required selling price. Bulk = multiple items.</div>
+  <!-- LEFT -->
+  <div class="card">
+    <div class="title">Calculator</div>
+    <div class="small">Profit = normal. Reverse = target profit → required selling price. Bulk = multiple items.</div>
 
-        <div class="tabs">
-          <div class="tab active" id="tabProfit">Profit</div>
-          <div class="tab" id="tabReverse">Reverse</div>
-          <div class="tab" id="tabBulk">Bulk</div>
-        </div>
+    <div class="tabs">
+      <div class="tab active" id="tabProfit">Profit</div>
+      <div class="tab" id="tabReverse">Reverse</div>
+      <div class="tab" id="tabBulk">Bulk</div>
+    </div>
 
-        <div class="divider"></div>
+    <div class="divider"></div>
 
-        <div class="row">
-          <div>
-            <label>Display currency</label>
-            <select id="currency">
-              <option value="GBP">GBP (£)</option>
-              <option value="USD">USD ($)</option>
-              <option value="EUR">EUR (€)</option>
-              <option value="AUD">AUD ($)</option>
-              <option value="CAD">CAD ($)</option>
-              <option value="NZD">NZD ($)</option>
-              <option value="AED">AED</option>
-              <option value="SAR">SAR</option>
-              <option value="PKR">PKR (₨)</option>
-              <option value="INR">INR (₹)</option>
-            </select>
-          </div>
-          <div>
-            <label>Exchange rate (optional)</label>
-            <input id="fxRate" inputmode="decimal" placeholder="e.g., 1 base = 1.25 selected">
-          </div>
-        </div>
-
-        <div id="singleBox">
-          <div class="divider"></div>
-
-          <label>Platform preset</label>
-          <select id="preset"></select>
-
-          <div class="row">
-            <div><label>Selling price</label><input id="sellPrice" inputmode="decimal" value="0"></div>
-            <div><label>Product cost</label><input id="productCost" inputmode="decimal" value="0"></div>
-          </div>
-          <div class="row">
-            <div><label>Shipping cost</label><input id="shipCost" inputmode="decimal" value="0"></div>
-            <div><label>Packaging / misc</label><input id="miscCost" inputmode="decimal" value="0"></div>
-          </div>
-
-          <div class="divider"></div>
-
-          <div class="row">
-            <div><label>Platform fee (%)</label><input id="feePct" inputmode="decimal" value="0"></div>
-            <div><label>Fixed fee</label><input id="feeFixed" inputmode="decimal" value="0"></div>
-          </div>
-          <div class="row">
-            <div><label>Ads (%)</label><input id="adsPct" inputmode="decimal" value="0"></div>
-            <div><label>Return rate (%)</label><input id="returnPct" inputmode="decimal" value="0"></div>
-          </div>
-
-          <div id="reverseBox" style="display:none">
-            <div class="divider"></div>
-            <div class="title" style="margin:0 0 6px;font-size:14px">Reverse mode</div>
-            <div class="small">Trial: 3 reverse calculations total. PRO: unlimited.</div>
-            <label>Target profit</label>
-            <input id="targetProfit" inputmode="decimal" value="0">
-            <div class="small" id="reverseUsesLine" style="margin-top:8px">Reverse uses: —</div>
-          </div>
-
-          <div class="divider"></div>
-
-          <div class="row" id="controlsRow">
-            <button class="btn primary" id="calcBtn" type="button">Calculate</button>
-            <button class="btn" id="resetBtn" type="button">Reset</button>
-          </div>
-
-          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
-            <button class="btn" id="exportCsvBtn" type="button">Export CSV</button>
-            <button class="btn" id="pdfBtn" type="button">Export PDF (PRO)</button>
-            <button class="btn" id="shareBtn" type="button">Share link (PRO)</button>
-            <span class="pill" id="shareStatus">—</span>
-          </div>
-
-          <div class="kpi">
-            <div class="k">
-              <div class="h" id="o1h">Estimated profit</div>
-              <div class="v" id="o1v">£0.00</div>
-              <div class="hint" id="o1hint">—</div>
-            </div>
-            <div class="k">
-              <div class="h" id="o2h">Margin</div>
-              <div class="v" id="o2v">0.0%</div>
-              <div class="hint" id="o2hint">—</div>
-            </div>
-          </div>
-
-          <div class="kpi">
-            <div class="k"><div class="h">Total fees + ads</div><div class="v" id="feesOut">£0.00</div><div class="hint">Platform fee + fixed + ads</div></div>
-            <div class="k"><div class="h">Return sensitivity (expected)</div><div class="v" id="returnOut">£0.00</div><div class="hint">Expected impact from return %</div></div>
-          </div>
-
-          <div class="kpi" id="fxRow" style="display:none">
-            <div class="k" style="grid-column:1 / -1">
-              <div class="h">Converted selling price (your FX)</div>
-              <div class="v" id="fxOut">—</div>
-              <div class="hint" id="fxNote">—</div>
-            </div>
-          </div>
-
-        
-
-            <div class="small" id="compUsesLine" style="margin-top:6px">Competitor uses: —</div>
-
-            <div class="row" style="margin-top:8px">
-              <div><label>Competitor price #1</label><input id="c1" inputmode="decimal" value="0"></div>
-              <div><label>Competitor price #2</label><input id="c2" inputmode="decimal" value="0"></div>
-            </div>
-            <div class="row">
-              <div><label>Competitor price #3</label><input id="c3" inputmode="decimal" value="0"></div>
-              <div>
-                <label>Positioning</label>
-                <select id="positioning">
-                  <option value="undercut">Undercut slightly</option>
-                  <option value="match">Match market</option>
-                  <option value="premium">Premium (if your offer is better)</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="row">
-              <div>
-                <label>Buffer above break-even (%)</label>
-                <input id="floorBuffer" inputmode="decimal" value="5">
-                <div class="small">“Don’t go below” = break-even + buffer</div>
-              </div>
-              <div style="display:flex;align-items:end;gap:10px;flex-wrap:wrap">
-                <button class="btn primary" id="runCompBtn" type="button">Run competitor mode</button>
-                <span class="pill" id="compToast">—</span>
-              </div>
-            </div>
-
-            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
-              <button class="btn" id="useSuggestedBtn" type="button" disabled>Use suggested price</button>
-              <button class="btn" id="saveScenarioBtn" type="button">Save scenario (PRO)</button>
-              <span class="pill" id="scenarioToast">—</span>
-            </div>
-
-            <div class="pGrid" style="margin-top:10px">
-              <div class="pItem"><div class="t">Market reference (median)</div><div class="v" id="compMedian">—</div></div>
-              <div class="pItem"><div class="t">Suggested price</div><div class="v" id="compSuggest">—</div><div class="small" id="compWhy">—</div></div>
-              <div class="pItem"><div class="t">Don’t go below</div><div class="v" id="compFloor">—</div><div class="small">Break-even + buffer</div></div>
-              <div class="pItem"><div class="t">Reality check</div><div class="v" id="compCheck">—</div><div class="small" id="compCheck2">—</div></div>
-            </div>
-
-            <ul class="pList" id="compBullets">
-              <li>Tip: use “Don’t go below” as your personal floor price.</li>
-            </ul>
-          </div>
-        </div>
-
-        <div id="bulkBox" style="display:none">
-          <div class="small" id="bulkLimitLine">Loading bulk limits…</div>
-
-          <div class="divider"></div>
-
-          <div id="bulkPasteBox">
-            <div class="title" style="margin:0 0 6px;font-size:14px">Paste rows</div>
-            <div class="small">Paste: <b>Sell, Cost, Ship, Misc</b> (comma or tab).</div>
-            <textarea id="bulkPaste" placeholder="Example:
-12.99, 6.20, 0.00, 0.20
-19.99, 9.50, 0.00, 0.30"></textarea>
-            <div class="actions" style="margin-top:10px">
-              <button class="btn" id="bulkImportBtn" type="button">Import into table</button>
-              <button class="btn" id="bulkFillExampleBtn" type="button">Fill example</button>
-              <span class="pill" id="bulkImportStatus">—</span>
-            </div>
-          </div>
-
-          <div class="divider"></div>
-
-          <div class="actions" id="bulkTools">
-            <button class="btn primary" id="bulkRunBtn" type="button">Run bulk</button>
-            <button class="btn" id="bulkAddRowBtn" type="button">+ Add row</button>
-            <button class="btn" id="bulkClearBtn" type="button">Clear rows</button>
-            <button class="btn" id="bulkApplyFeesBtn" type="button">Apply current fees to all</button>
-            <button class="btn" id="bulkExportBtn" type="button">Export bulk CSV</button>
-            <span class="pill" id="bulkStatus">—</span>
-          </div>
-
-          <div style="margin-top:10px" class="bulkWrap">
-            <table id="bulkTable">
-              <thead>
-                <tr>
-                  <th style="width:56px">#</th>
-                  <th>Sell</th>
-                  <th>Cost</th>
-                  <th>Ship</th>
-                  <th>Misc</th>
-                  <th>Fee %</th>
-                  <th>Fixed</th>
-                  <th>Ads %</th>
-                  <th>Return %</th>
-                  <th>Profit</th>
-                  <th>Margin</th>
-                  <th style="width:90px">Action</th>
-                </tr>
-              </thead>
-              <tbody id="bulkTbody"></tbody>
-            </table>
-          </div>
-
-          <div class="note">
-            <b>Trial rules:</b> max <b>3 rows</b> and <b>1 bulk run per day</b>. PRO is unlimited.
-          </div>
-        </div>
-
-        <div class="divider"></div>
-        <div class="small">
-          <b>Disclaimer:</b> estimates only (not financial/legal/tax advice). Not affiliated with any platform.
-          FX depends on your entered rate (no live rates). See
-          <a href="terms.html">Terms</a> and
-          <a href="privacy.html">Privacy</a>.
-        </div>
-      </div>
-
-      <!-- RIGHT -->
+    <div class="row">
       <div>
-        <div class="card" id="proCard">
-          <div class="panel" id="insightsBox">
-            <div class="pHead">
-              <div>
-                <div style="font-weight:900">Insights (PRO)</div>
-                <div class="small">Decision support from your inputs (estimates only).</div>
-              </div>
-              <span class="tag" id="insStatus">Locked</span>
-            </div>
-
-            <div class="pGrid">
-              <div class="pItem"><div class="t">Break-even price</div><div class="v" id="bePrice">—</div></div>
-              <div class="pItem">
-                <div class="t">Price for target margin</div><div class="v" id="targetMarginPrice">—</div>
-                <div class="small">Target: <span id="targetMarginVal">15%</span></div>
-              </div>
-              <div class="pItem"><div class="t">Max ads % you can afford</div><div class="v" id="maxAdsPct">—</div><div class="small">Keeps profit ≥ 0</div></div>
-              <div class="pItem"><div class="t">Risk rating</div><div class="v" id="riskLabel">—</div><div class="small" id="riskExplain">—</div></div>
-            </div>
-
-            <ul class="pList" id="insBullets"><li>Unlock PRO to see insights.</li></ul>
-
-            <div class="row" style="margin-top:10px">
-              <div>
-                <label>Target margin (%)</label>
-                <input id="targetMarginInput" inputmode="decimal" value="15">
-              </div>
-              <div style="display:flex;align-items:end;gap:10px;flex-wrap:wrap">
-                <button class="btn" id="refreshInsightsBtn" type="button">Refresh insights</button>
-                <span class="pill" id="insToast">—</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="panel" id="compBox">
-            <div class="pHead">
-              <div>
-                <div style="font-weight:900">Competitor mode (manual)</div>
-                <div class="small">Enter competitor prices you found yourself. No scraping.</div>
-              </div>
-              <span class="tag" id="compStatus">Trial limited</span>
-            </div>
-          <div class="title">PRO features</div>
-          <div class="small">Unlimited reverse + competitor + bulk, PDF export, share links, insights, saved scenarios. One-time unlock.</div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
-            <a class="btn primary" id="buyProBtn" href="https://stonevia.gumroad.com/l/goddhg" target="_blank" rel="noopener">Buy PRO</a>
-            <a class="btn" href="reviews.html">See reviews</a>
-          </div>
-        </div>
-
-        <div class="card" style="margin-top:14px">
-          <div class="title">Saved scenarios (PRO)</div>
-          <div class="small">Saved locally on this device for speed. (PRO-only to save.)</div>
-
-          <label>Saved scenarios</label>
-          <select id="scenarioSel"><option value="">—</option></select>
-
-          <div class="row">
-            <button class="btn" id="loadScenarioBtn" type="button">Load</button>
-            <button class="btn" id="deleteScenarioBtn" type="button">Delete</button>
-          </div>
-
-          <div class="divider"></div>
-
-          <label>Scenario name</label>
-          <input id="scenarioName" placeholder="e.g., Competitor median £13.49">
-
-          <div class="row">
-            <button class="btn primary" id="saveScenarioBtn2" type="button">Save current (PRO)</button>
-            <span class="pill" id="scenarioStatus">—</span>
-          </div>
-        </div>
-
-        <div class="card" id="reviewsCard" style="margin-top:14px">
-          <div class="title">Leave a review</div>
-          <div class="small">Reviews publish immediately. Spam/abuse may be removed.</div>
-
-          <label>Name (optional)</label>
-          <input id="revName" placeholder="Name">
-
-          <label>Category</label>
-          <select id="revCat">
-            <option>General</option>
-            <option>UI/UX</option>
-            <option>Accuracy</option>
-            <option>Speed</option>
-            <option>Features</option>
-          </select>
-
-          <label>Rating</label>
-          <div style="display:flex;gap:8px;flex-wrap:wrap" id="starsRow">
-            <button class="btn" type="button" data-star="1">★ 1</button>
-            <button class="btn" type="button" data-star="2">★ 2</button>
-            <button class="btn" type="button" data-star="3">★ 3</button>
-            <button class="btn" type="button" data-star="4">★ 4</button>
-            <button class="btn" type="button" data-star="5">★ 5</button>
-          </div>
-
-          <label>Review</label>
-          <input id="revMsg" placeholder="What did you like? What should we improve?">
-
-          <button class="btn primary" id="sendReview" type="button">Submit review</button>
-          <div class="toast" id="reviewStatus">—</div>
-        </div>
-
-        <div style="margin-top:14px" class="small">© <span id="yr"></span> UKwebtools • ProfitPilot</div>
+        <label>Display currency</label>
+        <select id="currency">
+          <option value="GBP">GBP (£)</option>
+          <option value="USD">USD ($)</option>
+          <option value="EUR">EUR (€)</option>
+          <option value="AUD">AUD ($)</option>
+          <option value="CAD">CAD ($)</option>
+          <option value="NZD">NZD ($)</option>
+          <option value="AED">AED</option>
+          <option value="SAR">SAR</option>
+          <option value="PKR">PKR (₨)</option>
+          <option value="INR">INR (₹)</option>
+        </select>
+      </div>
+      <div>
+        <label>Exchange rate (optional)</label>
+        <input id="fxRate" inputmode="decimal" placeholder="e.g., 1 base = 1.25 selected">
       </div>
     </div>
+
+    <div id="singleBox">
+      <div class="divider"></div>
+
+      <label>Platform preset</label>
+      <select id="preset"></select>
+
+      <div class="row">
+        <div><label>Selling price</label><input id="sellPrice" inputmode="decimal" value="0"></div>
+        <div><label>Product cost</label><input id="productCost" inputmode="decimal" value="0"></div>
+      </div>
+      <div class="row">
+        <div><label>Shipping cost</label><input id="shipCost" inputmode="decimal" value="0"></div>
+        <div><label>Packaging / misc</label><input id="miscCost" inputmode="decimal" value="0"></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="row">
+        <div><label>Platform fee (%)</label><input id="feePct" inputmode="decimal" value="0"></div>
+        <div><label>Fixed fee</label><input id="feeFixed" inputmode="decimal" value="0"></div>
+      </div>
+      <div class="row">
+        <div><label>Ads (%)</label><input id="adsPct" inputmode="decimal" value="0"></div>
+        <div><label>Return rate (%)</label><input id="returnPct" inputmode="decimal" value="0"></div>
+      </div>
+
+      <div id="reverseBox" style="display:none">
+        <div class="divider"></div>
+        <div class="title" style="margin:0 0 6px;font-size:14px">Reverse mode</div>
+        <div class="small">Trial: 3 reverse calculations total. PRO: unlimited.</div>
+        <label>Target profit</label>
+        <input id="targetProfit" inputmode="decimal" value="0">
+        <div class="small" id="reverseUsesLine" style="margin-top:8px">Reverse uses: —</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="row" id="controlsRow">
+        <button class="btn primary" id="calcBtn" type="button">Calculate</button>
+        <button class="btn" id="resetBtn" type="button">Reset</button>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+        <button class="btn" id="exportCsvBtn" type="button">Export CSV</button>
+        <button class="btn" id="pdfBtn" type="button">Export PDF (PRO)</button>
+        <button class="btn" id="shareBtn" type="button">Share link (PRO)</button>
+        <span class="pill" id="shareStatus">—</span>
+      </div>
+
+      <div class="kpi">
+        <div class="k">
+          <div class="h" id="o1h">Estimated profit</div>
+          <div class="v" id="o1v">£0.00</div>
+          <div class="hint" id="o1hint">—</div>
+        </div>
+        <div class="k">
+          <div class="h" id="o2h">Margin</div>
+          <div class="v" id="o2v">0.0%</div>
+          <div class="hint" id="o2hint">—</div>
+        </div>
+      </div>
+
+      <div class="kpi">
+        <div class="k"><div class="h">Total fees + ads</div><div class="v" id="feesOut">£0.00</div><div class="hint">Platform fee + fixed + ads</div></div>
+        <div class="k"><div class="h">Return sensitivity (expected)</div><div class="v" id="returnOut">£0.00</div><div class="hint">Expected impact from return %</div></div>
+      </div>
+
+      <div class="kpi" id="fxRow" style="display:none">
+        <div class="k" style="grid-column:1 / -1">
+          <div class="h">Converted selling price (your FX)</div>
+          <div class="v" id="fxOut">—</div>
+          <div class="hint" id="fxNote">—</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="bulkBox" style="display:none">
+      <!-- keep your existing bulkBox content exactly as it was -->
+    </div>
+
+    <div class="divider"></div>
+    <div class="small">
+      <b>Disclaimer:</b> estimates only (not financial/legal/tax advice). Not affiliated with any platform.
+      FX depends on your entered rate (no live rates). See
+      <a href="terms.html">Terms</a> and
+      <a href="privacy.html">Privacy</a>.
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div>
+    <div class="card" id="proCard">
+      <div class="title">PRO features</div>
+      <div class="small">Unlimited reverse + competitor + bulk, PDF export, share links, insights, saved scenarios. One-time unlock.</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+        <a class="btn primary" id="buyProBtn" href="https://stonevia.gumroad.com/l/goddhg" target="_blank" rel="noopener">Buy PRO</a>
+        <a class="btn" href="reviews.html">See reviews</a>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <div class="panel" id="insightsBox">
+        <!-- keep your existing insightsBox content exactly as it was -->
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <div class="panel" id="compBox">
+        <!-- keep your existing compBox content exactly as it was -->
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <div class="title">Saved scenarios (PRO)</div>
+      <!-- keep your saved scenarios content -->
+    </div>
+
+    <div class="card" id="reviewsCard" style="margin-top:14px">
+      <!-- keep your reviews card content -->
+    </div>
+
+    <div style="margin-top:14px" class="small">© <span id="yr"></span> UKwebtools • ProfitPilot</div>
+  </div>
+</div>
+
   </main>
 
   <footer class="pp-footer" role="contentinfo">
@@ -722,14 +546,8 @@
     const fxNote = document.getElementById("fxNote");
 
     // Attach "auto-clear zero" once (do NOT bind inside compute loops)
-[
-  sellPriceEl, productCostEl, shipCostEl, miscCostEl,
-  feePctEl, feeFixedEl, adsPctEl, returnPctEl,
-  targetProfitEl, fxRateEl,
-  c1, c2, c3, floorBuffer, targetMarginInput
-].forEach(autoZero);
 
-
+    
     // Insights
     const insStatus = document.getElementById("insStatus");
     const bePriceEl = document.getElementById("bePrice");
@@ -764,6 +582,13 @@
     const compCheck = document.getElementById("compCheck");
     const compCheck2 = document.getElementById("compCheck2");
     const compBullets = document.getElementById("compBullets");
+
+    [
+  sellPriceEl, productCostEl, shipCostEl, miscCostEl,
+  feePctEl, feeFixedEl, adsPctEl, returnPctEl,
+  targetProfitEl, fxRateEl,
+  c1, c2, c3, floorBuffer, targetMarginInput
+].forEach(autoZero);
 
     // Scenarios
     const scenarioSel = document.getElementById("scenarioSel");
