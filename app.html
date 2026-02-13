@@ -553,7 +553,7 @@
           <div class="title">PRO features</div>
           <div class="small">Unlimited reverse + competitor + bulk, PDF export, share links, insights, saved scenarios. One-time unlock.</div>
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
-            <a class="btn primary" href="https://stonevia.gumroad.com/l/goddhg" target="_blank" rel="noopener">Buy PRO</a>
+            <a class="btn primary" id="buyProBtn" href="https://stonevia.gumroad.com/l/goddhg" target="_blank" rel="noopener">Buy PRO</a>
             <a class="btn" href="reviews.html">See reviews</a>
           </div>
         </div>
@@ -649,6 +649,9 @@
   </footer>
 
   <script type="module">
+    document.getElementById("buyProBtn")?.addEventListener("click", () => {
+  track("buy_pro_clicked");
+});
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
     const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
@@ -669,7 +672,12 @@
     storageKey: "profitpilot_auth"
   }
 });
-
+// --- GA4 tracking helper ---
+function track(eventName, params = {}) {
+  try {
+    if (typeof gtag === "function") gtag("event", eventName, params);
+  } catch (e) {}
+}
 
     // DOM
     const accessPill = document.getElementById("accessPill");
@@ -987,6 +995,7 @@
       CURRENT_PROFILE = profile;
 
       if (profile.paid){
+        track("pro_user_active");
         accessPill.textContent = "Unlocked (PRO)";
         accessPill.className = "pill ok";
         reverseUsesLine.textContent = "Reverse uses: Unlimited (PRO)";
@@ -1053,6 +1062,7 @@
     }
 
     document.getElementById("exportCsvBtn").addEventListener("click", ()=>{
+  track("export_csv_clicked", { mode: MODE, pro: !!CURRENT_PROFILE?.paid });
       const p = payload();
       const rows = Object.entries(p).map(([k,v])=>[k,String(v ?? "")]);
       rows.unshift(["Field","Value"]);
@@ -1062,6 +1072,7 @@
     });
 
     pdfBtn.addEventListener("click", ()=>{
+  track("export_pdf_clicked", { pro: !!CURRENT_PROFILE?.paid });
       if (!CURRENT_PROFILE?.paid){ shareStatus.textContent="PDF is PRO."; return; }
       shareStatus.textContent="Preparing PDF…";
       setTimeout(()=>window.print(), 150);
@@ -1074,6 +1085,7 @@
     }
 
     shareBtn.addEventListener("click", ()=>{
+  track("share_clicked", { pro: !!CURRENT_PROFILE?.paid });
       if (!CURRENT_PROFILE?.paid){ shareStatus.textContent="Share is PRO."; return; }
       const token = base64urlEncode(JSON.stringify(payload()));
       const url = `${location.origin}/share.html#s=${token}`;
@@ -1272,6 +1284,7 @@
     }
 
     runCompBtn.addEventListener("click", async ()=>{
+  track("competitor_run_clicked", { pro: !!CURRENT_PROFILE?.paid });
       compToast.textContent = "Running…";
       try{
         if (!CURRENT_PROFILE) throw new Error("Loading… try again in 2 seconds.");
@@ -1533,6 +1546,7 @@
     bulkApplyFeesBtn.addEventListener("click", ()=>applyFeesToAll());
 
     bulkRunBtn.addEventListener("click", async ()=>{
+  track("bulk_run_clicked", { pro: !!CURRENT_PROFILE?.paid, rows: rowCount() });
       try{
         if (!CURRENT_PROFILE){ bulkStatus.textContent="Loading…"; return; }
 
@@ -1644,6 +1658,7 @@
     });
 
     document.getElementById("sendReview").addEventListener("click", async ()=>{
+  track("review_submit_clicked", { pro: !!CURRENT_PROFILE?.paid, stars: selectedStars });
       reviewStatus.textContent="Submitting…";
       try{
         const { data: { user } } = await supabase.auth.getUser();
@@ -1664,6 +1679,7 @@
     });
 
     document.getElementById("logoutBtn").addEventListener("click", async ()=>{
+  track("logout_clicked", { pro: !!CURRENT_PROFILE?.paid });
       await supabase.auth.signOut();
       location.href = "login.html";
     });
@@ -1727,7 +1743,8 @@
     }
 
     document.getElementById("calcBtn").addEventListener("click", async ()=>{
-      try{
+  track("calc_clicked", { mode: MODE, pro: !!CURRENT_PROFILE?.paid });
+  try{
         o1hint.style.color = "";
         if (MODE==="reverse") await computeReverseWithLimit();
         else { computeProfit(); refreshInsights(); }
