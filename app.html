@@ -649,9 +649,6 @@
   </footer>
 
   <script type="module">
-    document.getElementById("buyProBtn")?.addEventListener("click", () => {
-  track("buy_pro_clicked");
-});
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
     const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
@@ -678,6 +675,9 @@ function track(eventName, params = {}) {
     if (typeof gtag === "function") gtag("event", eventName, params);
   } catch (e) {}
 }
+document.getElementById("buyProBtn")?.addEventListener("click", () => {
+  track("buy_pro_clicked");
+});
 
     // DOM
     const accessPill = document.getElementById("accessPill");
@@ -995,7 +995,10 @@ function track(eventName, params = {}) {
       CURRENT_PROFILE = profile;
 
       if (profile.paid){
-        track("pro_user_active");
+        if (!window.__ppProTracked) {
+  window.__ppProTracked = true;
+  track("pro_user_active");
+}
         accessPill.textContent = "Unlocked (PRO)";
         accessPill.className = "pill ok";
         reverseUsesLine.textContent = "Reverse uses: Unlimited (PRO)";
