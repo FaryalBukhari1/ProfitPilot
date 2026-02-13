@@ -107,8 +107,32 @@
     .wrap{max-width:1100px;margin:0 auto;padding:18px 16px 40px}
     @media (min-width:900px){.wrap{ padding:20px 22px 44px; }}
 
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
-    @media(max-width:980px){.grid{grid-template-columns:1fr}}
+   .grid{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  margin-top:18px;
+}
+
+.wrap{
+  max-width:980px;
+  margin:0 auto;
+  padding:20px 18px 50px;
+}
+
+.card{
+  border-radius:22px;
+  padding:22px;
+}
+
+.title{
+  font-size:18px;
+}
+
+.k .v{
+  font-size:22px;
+}
+
 
     .card{
       background:var(--card);
@@ -469,7 +493,7 @@
       </div>
 
       <!-- RIGHT -->
-      <div>
+      
         <div class="card" id="proCard">
           <div class="title">PRO features</div>
           <div class="small">Unlimited reverse + competitor + bulk, PDF export, share links, insights, saved scenarios. One-time unlock.</div>
@@ -629,7 +653,7 @@
         </div>
 
         <div style="margin-top:14px" class="small">© <span id="yr"></span> UKwebtools • ProfitPilot</div>
-      </div>
+    
     </div>
   </main>
 
