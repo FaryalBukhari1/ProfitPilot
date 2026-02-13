@@ -25,194 +25,231 @@
     body{
       margin:0;
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:radial-gradient(900px 520px at 20% 0%, rgba(94,234,212,.12), transparent 55%),
+                 radial-gradient(900px 520px at 80% 0%, rgba(96,165,250,.10), transparent 55%),
+                 var(--bg);
       color:var(--txt);
-      background:
-        radial-gradient(900px 520px at 20% 0%, rgba(94,234,212,.14), transparent 55%),
-        radial-gradient(900px 520px at 80% 0%, rgba(96,165,250,.12), transparent 55%),
-        linear-gradient(180deg, #0a0f17, var(--bg));
-      min-height:100vh;
     }
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
-    :focus-visible{outline:3px solid rgba(96,165,250,.55);outline-offset:3px;border-radius:12px}
+    :focus-visible{outline:3px solid rgba(96,165,250,.55);outline-offset:3px;border-radius:10px}
 
-    .wrap{max-width:1100px;margin:0 auto;padding:18px 16px 44px}
-    .topbar{
-      position:sticky;top:10px;z-index:30;
-      background:rgba(17,24,38,.62);
+    /* ---------- ProfitPilot Nav ---------- */
+    .pp-navwrap{max-width:1200px;margin:0 auto;padding:14px 16px;position:relative;z-index:60}
+    .pp-nav{
+      display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:18px;
+      padding:12px;
       backdrop-filter:blur(10px);
+      box-shadow:0 10px 30px rgba(0,0,0,.22);
+    }
+    .pp-left,.pp-right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .pp-btn{
+      padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.06);
+      font-weight:900;text-decoration:none;color:rgba(255,255,255,.92);
+      display:inline-flex;gap:8px;align-items:center;white-space:nowrap;
+      transition:transform .08s ease, filter .08s ease;
+    }
+    .pp-btn:hover{transform:translateY(-1px);filter:brightness(1.05)}
+    .pp-btn:active{transform:translateY(0)}
+    .pp-primary{
+      border:none;color:#0b1220;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      box-shadow:0 14px 28px rgba(96,165,250,.18);
+    }
+    .pp-active{
+      border-color:rgba(94,234,212,.35);
+      background:rgba(94,234,212,.10);
+      color:#eaf0ff;
+    }
+    .pp-user{
+      padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.06);
+      color:rgba(255,255,255,.80);
+      font-weight:900;
+      display:none;
+      max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    }
+    .pp-crumbs{
+      margin-top:10px;
+      font-size:12.5px;
+      color:rgba(255,255,255,.72);
+      display:flex;gap:6px;flex-wrap:wrap;align-items:center;
+    }
+    .pp-crumbs a{color:rgba(94,234,212,.95);font-weight:900;text-decoration:none}
+    .pp-sep{opacity:.55}
+
+    /* ---------- Card ---------- */
+    .wrap{max-width:560px;margin:22px auto 44px;padding:0 14px}
+    .card{
+      background:linear-gradient(180deg,rgba(94,234,212,.10),transparent 60%),var(--card);
       border:1px solid var(--line);
       border-radius:18px;
-      box-shadow:var(--shadow);
-      padding:10px;
-      display:flex;align-items:center;justify-content:space-between;gap:12px;
-    }
-    .brand{display:flex;align-items:center;gap:10px;min-width:220px}
-    .logo{
-      width:40px;height:40px;border-radius:14px;
-      border:1px solid var(--line);
-      background:linear-gradient(135deg, rgba(94,234,212,.18), rgba(96,165,250,.14));
-      display:flex;align-items:center;justify-content:center;
-      font-weight:1000;
-      user-select:none;
-    }
-    .title{font-weight:1000;line-height:1.05}
-    .sub{font-size:12px;color:var(--muted);font-weight:750;margin-top:3px}
-    @media(max-width:760px){.sub{display:none}.brand{min-width:auto}}
-
-    .nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
-    .btn{
-      padding:10px 14px;border-radius:999px;border:1px solid var(--line);
-      background:rgba(255,255,255,.06);color:var(--txt);
-      display:inline-flex;gap:8px;align-items:center;cursor:pointer;
-      box-shadow:0 4px 16px rgba(0,0,0,.18);
-      user-select:none;white-space:nowrap;
-      text-decoration:none;
-    }
-    .btn.primary{border-color:rgba(94,234,212,.30);background:rgba(94,234,212,.12)}
-    .btn.ghost{background:transparent;box-shadow:none}
-    .btn:disabled{opacity:.55;cursor:not-allowed}
-
-    .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:16px;margin-top:16px}
-    @media(max-width:980px){.grid{grid-template-columns:1fr}}
-
-    .card{
-      background:rgba(17,24,38,.72);
-      border:1px solid var(--line);
-      border-radius:22px;
-      padding:18px;
+      padding:20px;
       box-shadow:var(--shadow);
     }
-    h1{margin:0 0 6px;font-size:22px}
-    .small{font-size:12.8px;color:var(--muted);line-height:1.7}
-    .divider{height:1px;background:var(--line);margin:14px 0}
+    h1{margin:0 0 10px;font-size:22px;letter-spacing:-.02em}
+    .subtitle{margin:0 0 14px;color:var(--muted);font-size:13px;line-height:1.6}
 
-    label{display:block;font-size:12px;color:var(--muted);margin:10px 0 6px}
+    label{font-size:12px;color:var(--muted);margin-top:14px;display:block}
+    .field{position:relative}
     input{
       width:100%;
-      padding:12px 12px;
+      padding:12px 44px 12px 12px;
       border-radius:14px;
       border:1px solid var(--line);
-      background:rgba(255,255,255,.06);
+      background:var(--card2);
       color:var(--txt);
       outline:none;
     }
     input:focus{border-color:rgba(94,234,212,.35)}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    @media(max-width:560px){.row{grid-template-columns:1fr}}
-
-    .inline{
-      display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
-      margin-top:8px;
-      font-size:12px;
-    }
-    .pill{
-      padding:8px 10px;border-radius:999px;border:1px solid var(--line);
-      background:rgba(255,255,255,.06);font-size:12px;color:var(--muted);
-      display:inline-flex;gap:8px;align-items:center;white-space:nowrap
-    }
-    .pill.ok{border-color:rgba(52,211,153,.30);background:rgba(52,211,153,.10);color:var(--txt)}
-    .pill.bad{border-color:rgba(251,113,133,.30);background:rgba(251,113,133,.10);color:var(--txt)}
-    .toast{margin-top:10px;font-size:12.6px;color:var(--muted);line-height:1.6}
-    .toast b{color:var(--txt)}
-    .ok{color:var(--ok);font-weight:900}
-    .bad{color:var(--danger);font-weight:900}
-
-    .pwRow{position:relative}
-    .pwBtn{
-      position:absolute;right:10px;top:50%;transform:translateY(-50%);
-      border:1px solid var(--line);
+    .iconbtn{
+      position:absolute;right:8px;top:50%;
+      transform:translateY(-50%);
+      border:1px solid rgba(255,255,255,.10);
       background:rgba(255,255,255,.06);
-      color:var(--txt);
-      border-radius:999px;
-      padding:7px 10px;
+      color:rgba(255,255,255,.88);
+      border-radius:12px;
+      padding:8px 10px;
       cursor:pointer;
+      font-weight:900;
       font-size:12px;
+      user-select:none;
+    }
+    .iconbtn:hover{filter:brightness(1.1)}
+    .row{
+      display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
+      margin-top:10px;align-items:center;
     }
 
-    .foot{margin-top:14px;font-size:12.5px;color:rgba(255,255,255,.70)}
+    .btn{
+      width:100%;
+      margin-top:14px;
+      padding:12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.05);
+      color:var(--txt);
+      cursor:pointer;
+      font-weight:1000;
+      transition:transform .08s ease, filter .08s ease, opacity .08s ease;
+    }
+    .btn:hover{transform:translateY(-1px);filter:brightness(1.05)}
+    .btn:active{transform:translateY(0)}
+    .btn.primary{
+      border:none;
+      color:#0b1220;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      box-shadow:0 14px 28px rgba(96,165,250,.18);
+    }
+    .btn:disabled{opacity:.55;cursor:not-allowed;transform:none;filter:none}
+
+    .note{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.6}
+    .msg{
+      margin-top:12px;
+      font-size:12.5px;
+      line-height:1.6;
+      color:var(--muted);
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      word-break:break-word;
+    }
+    .msg.ok{border-color:rgba(52,211,153,.28);background:rgba(52,211,153,.08);color:rgba(234,240,255,.92)}
+    .msg.bad{border-color:rgba(251,113,133,.28);background:rgba(251,113,133,.08);color:rgba(234,240,255,.92)}
+
+    .tiny{font-size:12px;color:var(--muted)}
+    .divider{height:1px;background:rgba(255,255,255,.08);margin:14px 0}
   </style>
+
+  <script type="application/ld+json" id="ppBreadcrumbJson"></script>
 </head>
 
 <body>
-  <div class="wrap">
-    <div class="topbar" role="navigation" aria-label="Primary">
-      <div class="brand">
-        <div class="logo" aria-hidden="true">PP</div>
-        <div>
-          <div class="title">ProfitPilot</div>
-          <div class="sub">Account access</div>
-        </div>
+  <!-- NAV -->
+  <div class="pp-navwrap" role="navigation" aria-label="Primary">
+    <div class="pp-nav">
+      <div class="pp-left">
+        <a class="pp-btn" href="https://ukwebtools.com/">← UKwebtools</a>
+        <a class="pp-btn" href="index.html">Home</a>
+        <a class="pp-btn" href="pricing.html">Pricing</a>
+        <a class="pp-btn" href="reviews.html">Reviews</a>
+        <a class="pp-btn" href="help.html">How to use</a>
+        <a class="pp-btn" href="privacy.html">Privacy</a>
+        <a class="pp-btn" href="terms.html">Terms</a>
+        <a class="pp-btn" href="faq.html">FAQ</a>
       </div>
-      <div class="nav">
-        <a class="btn ghost" href="https://ukwebtools.com/" rel="nofollow">← UKwebtools</a>
-        <a class="btn ghost" href="terms.html">Terms</a>
-        <a class="btn ghost" href="faq.html">FAQ</a>
-        <button class="btn primary" id="modeLogin" type="button">Log in</button>
-        <button class="btn" id="modeSignup" type="button">Sign up</button>
+
+      <div class="pp-right">
+        <span class="pp-user" id="ppUserChip">—</span>
+
+        <!-- Signed OUT -->
+        <a class="pp-btn pp-active" id="ppLoginBtn" href="login.html">Log in</a>
+        <a class="pp-btn pp-primary" id="ppSignupBtn" href="signup.html">Sign up</a>
+
+        <!-- Signed IN -->
+        <a class="pp-btn pp-primary" id="ppOpenBtn" href="app.html" style="display:none">Open app</a>
+        <a class="pp-btn" id="ppLogoutBtn" href="#" style="display:none">Log out</a>
       </div>
     </div>
 
-    <div class="grid">
-      <div class="card">
-        <h1 id="formTitle">Log in</h1>
-        <div class="small" id="formSub">Access your account and PRO status.</div>
+    <div class="pp-crumbs" aria-label="Breadcrumb">
+      <a href="https://ukwebtools.com/">UKwebtools</a>
+      <span class="pp-sep">›</span>
+      <a href="index.html">ProfitPilot</a>
+      <span class="pp-sep">›</span>
+      <span>Log in</span>
+    </div>
+  </div>
 
-        <div class="divider"></div>
+  <!-- CONTENT -->
+  <div class="wrap">
+    <div class="card">
+      <h1>Log in</h1>
+      <p class="subtitle">Access your account and PRO status.</p>
 
-        <label for="email">Email</label>
-        <input id="email" name="email" autocomplete="email" inputmode="email" placeholder="you@example.com">
-
-        <label for="password">Password</label>
-        <div class="pwRow">
-          <input id="password" name="password" autocomplete="current-password" type="password" placeholder="••••••••">
-          <button class="pwBtn" id="togglePw" type="button">Show</button>
-        </div>
-
-        <div class="inline">
-          <a href="#" id="forgotLink">Forgot password?</a>
-          <a href="#" id="resendLink">Need verification email?</a>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="row">
-          <button class="btn primary" id="submitBtn" type="button">Log in</button>
-          <button class="btn" id="altBtn" type="button">Create account</button>
-        </div>
-
-        <div class="toast" id="status">—</div>
+      <label for="email">Email</label>
+      <div class="field">
+        <input id="email" type="email" placeholder="you@example.com" autocomplete="email" inputmode="email"/>
       </div>
 
-      <div class="card">
-        <div style="font-weight:1000;margin-bottom:6px">Notes</div>
-        <div class="small">
-          • This page uses Supabase Auth (email + password).<br>
-          • If your email provider delays verification, use “Need verification email?”.<br>
-          • After login you’ll be sent to <b>app.html</b>.
-        </div>
+      <label for="password">Password</label>
+      <div class="field">
+        <input id="password" type="password" placeholder="••••••••" autocomplete="current-password"/>
+        <button class="iconbtn" id="togglePw" type="button" aria-label="Show password">Show</button>
+      </div>
 
-        <div class="divider"></div>
+      <div class="row">
+        <a class="tiny" href="reset.html">Forgot password?</a>
+        <a class="tiny" href="verify.html">Need verification email?</a>
+      </div>
 
-        <div class="small">
-          If login still fails, open DevTools → Console and copy the <b>first red error line</b>.
-        </div>
+      <button class="btn primary" id="loginBtn" type="button">Log in</button>
+      <button class="btn" id="goSignupBtn" type="button">Create account</button>
 
-        <div class="foot">© <span id="yr"></span> UKwebtools • ProfitPilot</div>
+      <div class="msg" id="msgBox">—</div>
+
+      <div class="divider"></div>
+
+      <div class="note">
+        Trouble logging in? Email <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a>
       </div>
     </div>
   </div>
 
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-    // ---------- CONFIG ----------
+  (async ()=>{
+    // ✅ Supabase (public anon key is OK in frontend)
     const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
     const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
 
-    // IMPORTANT:
-    // - Keep storageKey same as app.html
-    // - detectSessionInUrl true helps when Supabase returns tokens in URL after certain flows
+    // ✅ IMPORTANT: same storageKey must be used on ALL pages (login/app/etc)
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON, {
       auth: {
         persistSession: true,
@@ -223,189 +260,189 @@
       }
     });
 
-    // ---------- DOM ----------
-    const yr = document.getElementById("yr");
-    yr.textContent = new Date().getFullYear();
+    // Breadcrumb JSON-LD
+    const base = "https://profitpilot.ukwebtools.com/";
+    const bc = document.getElementById("ppBreadcrumbJson");
+    if (bc){
+      bc.textContent = JSON.stringify({
+        "@context":"https://schema.org",
+        "@type":"BreadcrumbList",
+        "itemListElement":[
+          {"@type":"ListItem","position":1,"name":"UKwebtools","item":"https://ukwebtools.com/"},
+          {"@type":"ListItem","position":2,"name":"ProfitPilot","item": base + "index.html"},
+          {"@type":"ListItem","position":3,"name":"Log in","item": base + "login.html"}
+        ]
+      });
+    }
 
-    const modeLogin = document.getElementById("modeLogin");
-    const modeSignup = document.getElementById("modeSignup");
-    const formTitle = document.getElementById("formTitle");
-    const formSub = document.getElementById("formSub");
-    const submitBtn = document.getElementById("submitBtn");
-    const altBtn = document.getElementById("altBtn");
-    const statusEl = document.getElementById("status");
-
+    // Elements
+    const msgBox = document.getElementById("msgBox");
     const emailEl = document.getElementById("email");
-    const passEl = document.getElementById("password");
+    const pwEl = document.getElementById("password");
+    const loginBtn = document.getElementById("loginBtn");
+    const goSignupBtn = document.getElementById("goSignupBtn");
     const togglePw = document.getElementById("togglePw");
 
-    const forgotLink = document.getElementById("forgotLink");
-    const resendLink = document.getElementById("resendLink");
+    // Nav auth elements
+    const userChip = document.getElementById("ppUserChip");
+    const loginNavBtn = document.getElementById("ppLoginBtn");
+    const signupNavBtn = document.getElementById("ppSignupBtn");
+    const openNavBtn = document.getElementById("ppOpenBtn");
+    const logoutNavBtn = document.getElementById("ppLogoutBtn");
 
-    function setStatus(msg, type=""){
-      statusEl.className = "toast";
-      statusEl.textContent = msg;
-      if (type === "ok") statusEl.innerHTML = `<span class="ok">✓</span> ${msg}`;
-      if (type === "bad") statusEl.innerHTML = `<span class="bad">✕</span> ${msg}`;
+    function setMsg(text, type=""){
+      msgBox.textContent = text || "—";
+      msgBox.classList.remove("ok","bad");
+      if (type === "ok") msgBox.classList.add("ok");
+      if (type === "bad") msgBox.classList.add("bad");
     }
 
-    function cleanEmail(v){ return String(v||"").trim().toLowerCase(); }
-    function cleanPass(v){ return String(v||"").trim(); }
-
-    let MODE = "login"; // "login" | "signup"
-
-    function setMode(m){
-      MODE = m;
-      if (m === "login"){
-        formTitle.textContent = "Log in";
-        formSub.textContent = "Access your account and PRO status.";
-        submitBtn.textContent = "Log in";
-        altBtn.textContent = "Create account";
-        modeLogin.classList.add("primary");
-        modeSignup.classList.remove("primary");
-      } else {
-        formTitle.textContent = "Sign up";
-        formSub.textContent = "Create an account. Check your inbox for verification if required.";
-        submitBtn.textContent = "Create account";
-        altBtn.textContent = "I already have an account";
-        modeSignup.classList.add("primary");
-        modeLogin.classList.remove("primary");
-      }
-      setStatus("—");
+    function setLoading(on){
+      loginBtn.disabled = on;
+      goSignupBtn.disabled = on;
+      loginBtn.textContent = on ? "Logging in…" : "Log in";
     }
 
-    // ensure primary style toggles properly
-    function applyPrimaryStyles(){
-      // simple way: toggle classes explicitly (CSS uses .btn.primary)
-      modeLogin.classList.remove("primary");
-      modeSignup.classList.remove("primary");
-      if (MODE === "login") modeLogin.classList.add("primary");
-      else modeSignup.classList.add("primary");
+    function friendlyAuthError(message){
+      const m = String(message || "").toLowerCase();
+      if (m.includes("invalid login credentials")) return "Email or password is incorrect.";
+      if (m.includes("email not confirmed")) return "Please verify your email first (check spam too).";
+      if (m.includes("too many requests")) return "Too many attempts. Wait a bit and try again.";
+      if (m.includes("user not found")) return "No account found with that email.";
+      if (m.includes("invalid email")) return "That email address looks invalid.";
+      if (m.includes("network")) return "Network error. Check your connection and try again.";
+      return message || "Login failed. Please try again.";
     }
 
-    modeLogin.addEventListener("click", ()=>{ setMode("login"); applyPrimaryStyles(); });
-    modeSignup.addEventListener("click", ()=>{ setMode("signup"); applyPrimaryStyles(); });
-
-    altBtn.addEventListener("click", ()=>{
-      setMode(MODE === "login" ? "signup" : "login");
-      applyPrimaryStyles();
+    // Show real JS errors in the box
+    window.addEventListener("error", (e) => {
+      console.error("Window error:", e.error || e.message);
+      setMsg("JS error: " + (e.message || "unknown"), "bad");
+    });
+    window.addEventListener("unhandledrejection", (e) => {
+      console.error("Unhandled promise rejection:", e.reason);
+      setMsg("JS error: " + (e.reason?.message || String(e.reason)), "bad");
     });
 
+    // Show/hide password
     togglePw.addEventListener("click", ()=>{
-      const isPw = passEl.type === "password";
-      passEl.type = isPw ? "text" : "password";
+      const isPw = pwEl.type === "password";
+      pwEl.type = isPw ? "text" : "password";
       togglePw.textContent = isPw ? "Hide" : "Show";
+      togglePw.setAttribute("aria-label", isPw ? "Hide password" : "Show password");
+      pwEl.focus();
     });
 
-    async function goApp(){
-      // hard redirect to avoid weird history states
-      location.href = "app.html";
-    }
-
-    async function doLogin(email, password){
-      setStatus("Logging in…");
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) throw error;
-      if (!data?.session) {
-        // Sometimes session may not be immediately available; check again
-        const { data: s2 } = await supabase.auth.getSession();
-        if (!s2?.session) throw new Error("Login succeeded but no session found. Try again.");
-      }
-      setStatus("Logged in. Redirecting…", "ok");
-      await goApp();
-    }
-
-    async function doSignup(email, password){
-      setStatus("Creating account…");
-      // Send users back to login page after email confirmation if Supabase uses confirmation links
-      const emailRedirectTo = new URL("login.html", location.origin).toString();
-
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: { emailRedirectTo }
+    // Enter to submit
+    [emailEl, pwEl].forEach(el=>{
+      el.addEventListener("keydown", (e)=>{
+        if (e.key === "Enter") loginBtn.click();
       });
-      if (error) throw error;
+    });
 
-      // If session exists, they may be auto-confirmed; otherwise they must verify email
-      if (data?.session){
-        setStatus("Account created. Redirecting…", "ok");
-        await goApp();
+    goSignupBtn.addEventListener("click", ()=> location.href = "signup.html");
+
+    // Nav auth UI
+    async function refreshAuthUI(){
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (session?.user?.email){
+        userChip.style.display = "inline-flex";
+        userChip.textContent = session.user.email;
+
+        loginNavBtn.style.display = "none";
+        signupNavBtn.style.display = "none";
+
+        openNavBtn.style.display = "inline-flex";
+        logoutNavBtn.style.display = "inline-flex";
       } else {
-        setStatus("Account created. Check your email to verify, then log in.", "ok");
-        setMode("login");
-        applyPrimaryStyles();
+        userChip.style.display = "none";
+
+        loginNavBtn.style.display = "inline-flex";
+        signupNavBtn.style.display = "inline-flex";
+
+        openNavBtn.style.display = "none";
+        logoutNavBtn.style.display = "none";
       }
     }
 
-    submitBtn.addEventListener("click", async ()=>{
-      try{
-        const email = cleanEmail(emailEl.value);
-        const password = cleanPass(passEl.value);
-
-        if (!email) throw new Error("Enter your email.");
-        if (!password || password.length < 6) throw new Error("Enter a password (min 6 characters).");
-
-        if (MODE === "login") await doLogin(email, password);
-        else await doSignup(email, password);
-      } catch(e){
-        setStatus(e?.message || "Failed.", "bad");
-        console.error("AUTH ERROR:", e);
-      }
-    });
-
-    forgotLink.addEventListener("click", async (e)=>{
+    logoutNavBtn.addEventListener("click", async (e)=>{
       e.preventDefault();
-      try{
-        const email = cleanEmail(emailEl.value);
-        if (!email) throw new Error("Type your email first, then click “Forgot password?”.");
-        setStatus("Sending reset email…");
-        const redirectTo = new URL("login.html", location.origin).toString();
-        const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
-        if (error) throw error;
-        setStatus("Password reset email sent. Check your inbox/spam.", "ok");
-      } catch(err){
-        setStatus(err?.message || "Failed.", "bad");
-        console.error("RESET ERROR:", err);
-      }
+      await supabase.auth.signOut();
+      setMsg("Signed out.", "ok");
+      await refreshAuthUI();
     });
 
-    resendLink.addEventListener("click", async (e)=>{
-      e.preventDefault();
-      try{
-        const email = cleanEmail(emailEl.value);
-        if (!email) throw new Error("Type your email first, then click “Need verification email?”.");
-        setStatus("Resending verification email…");
-        const { error } = await supabase.auth.resend({
-          type: "signup",
-          email
-        });
-        if (error) throw error;
-        setStatus("Verification email resent. Check inbox/spam.", "ok");
-      } catch(err){
-        setStatus(err?.message || "Failed.", "bad");
-        console.error("RESEND ERROR:", err);
-      }
-    });
+    // If already signed in, show continue/sign-out controls (NO illegal top-level return)
+    setMsg("—");
+    const { data: { session } } = await supabase.auth.getSession();
 
-    // ---------- BOOT ----------
-    // Never use top-level return. Always branch using if/else inside the async IIFE.
-    (async ()=>{
-      try{
-        setStatus("Checking session…");
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session?.user){
-          // already logged in
-          setStatus("Already logged in. Redirecting…", "ok");
-          await goApp();
-        } else {
-          setStatus("—");
+    if (session?.user){
+      setMsg("You’re already signed in on this device.", "ok");
+
+      // Continue
+      loginBtn.textContent = "Continue to app";
+      loginBtn.onclick = () => location.replace("app.html");
+
+      // Sign out
+      goSignupBtn.textContent = "Sign out";
+      goSignupBtn.onclick = async () => {
+        await supabase.auth.signOut();
+        setMsg("Signed out. Please log in again.", "ok");
+
+        // reset buttons
+        loginBtn.textContent = "Log in";
+        goSignupBtn.textContent = "Create account";
+        loginBtn.onclick = null;
+        goSignupBtn.onclick = () => location.href="signup.html";
+      };
+
+      await refreshAuthUI();
+    } else {
+      // Normal boot
+      await refreshAuthUI();
+      supabase.auth.onAuthStateChange(()=>refreshAuthUI());
+
+      // Login action
+      loginBtn.addEventListener("click", async ()=>{
+        const email = emailEl.value.trim();
+        const password = pwEl.value;
+
+        if (!email){ setMsg("Please enter your email.", "bad"); emailEl.focus(); return; }
+        if (!password){ setMsg("Please enter your password.", "bad"); pwEl.focus(); return; }
+
+        setLoading(true);
+        setMsg("Logging in…");
+
+        try{
+          const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+          if (error){
+            console.error("signInWithPassword error:", error);
+            setLoading(false);
+            setMsg(friendlyAuthError(error.message), "bad");
+            return;
+          }
+
+          // Confirm session saved
+          const { data: s2, error: e2 } = await supabase.auth.getSession();
+          if (e2 || !s2?.session){
+            console.error("getSession after login failed:", e2, s2);
+            setLoading(false);
+            setMsg("Login succeeded but browser did not save session. Try another browser or disable extensions.", "bad");
+            return;
+          }
+
+          setMsg("Success. Redirecting…", "ok");
+          location.replace("app.html");
+        } catch(err){
+          console.error("Login exception:", err);
+          setLoading(false);
+          setMsg("Unexpected error: " + (err?.message || String(err)), "bad");
         }
-      } catch(e){
-        setStatus("Auth boot failed: " + (e?.message || "unknown"), "bad");
-        console.error("BOOT ERROR:", e);
-      }
-    })();
-  </script>
+      });
+    }
+  })();
+</script>
 </body>
 </html>
