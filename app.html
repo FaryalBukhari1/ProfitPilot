@@ -658,14 +658,15 @@
     const TRIAL_BULK_RUNS_PER_DAY = 1;
 
     // IMPORTANT: do NOT set custom storageKey unless login.html uses the same key.
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true,
-        flowType: "pkce"
-      }
-    });
+   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+    flowType: "pkce",
+    storageKey: "profitpilot_auth"
+  }
+});
 
     // --- GA4 tracking helper ---
     function track(eventName, params = {}) {
@@ -1743,51 +1744,62 @@
       }
     });
 
-    // Boot
-    (async ()=>{
-      try{
-        accessPill.textContent="Checking session…";
+   // Boot (session-safe, no redirect loop)
+(async ()=>{
+  try{
+    accessPill.textContent = "Checking session…";
 
-        // Robust auth check: session OR user
-        const { data: { session } } = await supabase.auth.getSession();
-        const { data: { user } } = await supabase.auth.getUser();
+    const wait = (ms)=>new Promise(r=>setTimeout(r, ms));
+    let session = null;
+    let user = null;
 
-        if (!session && !user){
-          location.href="login.html";
-          return;
-        }
+    // Give Supabase time to hydrate session from storage
+    for (let i = 0; i < 8; i++){
+      const sRes = await supabase.auth.getSession();
+      session = sRes?.data?.session || null;
 
-        if (!user){
-          location.href="login.html";
-          return;
-        }
+      const uRes = await supabase.auth.getUser();
+      user = uRes?.data?.user || null;
 
-        CURRENT_USER = user;
+      if (session && user) break;
+      await wait(300);
+    }
 
-        // Privacy: never show full email in UI
-        const accountLink = document.getElementById("accountLink");
-        if (accountLink) accountLink.textContent = "Account";
+    // If truly not logged in → redirect
+    if (!session || !user){
+      console.warn("No valid session found. Redirecting.");
+      location.href = "login.html";
+      return;
+    }
 
-        const prof = await rpcEnsureProfile();
-        updateAccessUI(prof);
+    CURRENT_USER = user;
 
-        clearBulkRows();
-        const initialRows = prof.paid ? 5 : TRIAL_BULK_MAX_ROWS;
-        for (let i=0;i<initialRows;i++) addBulkRow();
+    // Never expose email
+    const accountLink = document.getElementById("accountLink");
+    if (accountLink) accountLink.textContent = "Account";
 
-        setMode("profit");
-        computeProfit();
-        refreshInsights();
-        refreshScenarioDropdown();
-        useSuggestedBtn.disabled = true;
+    const prof = await rpcEnsureProfile();
+    updateAccessUI(prof);
 
-        tryImportFromHash();
-      } catch(e){
-        console.error("BOOT ERROR:", e);
-        accessPill.textContent = "Access check failed: " + (e?.message || "unknown");
-        accessPill.className = "pill bad";
-      }
-    })();
+    clearBulkRows();
+    const initialRows = prof.paid ? 5 : TRIAL_BULK_MAX_ROWS;
+    for (let i=0; i<initialRows; i++) addBulkRow();
+
+    setMode("profit");
+    computeProfit();
+    refreshInsights();
+    refreshScenarioDropdown();
+    useSuggestedBtn.disabled = true;
+
+    tryImportFromHash();
+
+  } catch(e){
+    console.error("BOOT ERROR:", e);
+    accessPill.textContent = "Access check failed";
+    accessPill.className = "pill bad";
+  }
+})();
+
   </script>
 </body>
 </html>
