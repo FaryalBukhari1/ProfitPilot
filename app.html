@@ -29,6 +29,11 @@
       --f-muted:rgba(255,255,255,.68);
     }
 
+    #insightsBox,
+#compBox {
+  margin-top:14px;
+}
+
     *{box-sizing:border-box}
     body{
       margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--txt);
@@ -317,8 +322,6 @@
           <label>Platform preset</label>
           <select id="preset"></select>
 
-          </select>
-
           <div class="row">
             <div><label>Selling price</label><input id="sellPrice" inputmode="decimal" value="0"></div>
             <div><label>Product cost</label><input id="productCost" inputmode="decimal" value="0"></div>
@@ -388,47 +391,7 @@
             </div>
           </div>
 
-          <div class="panel" id="insightsBox">
-            <div class="pHead">
-              <div>
-                <div style="font-weight:900">Insights (PRO)</div>
-                <div class="small">Decision support from your inputs (estimates only).</div>
-              </div>
-              <span class="tag" id="insStatus">Locked</span>
-            </div>
-
-            <div class="pGrid">
-              <div class="pItem"><div class="t">Break-even price</div><div class="v" id="bePrice">—</div></div>
-              <div class="pItem">
-                <div class="t">Price for target margin</div><div class="v" id="targetMarginPrice">—</div>
-                <div class="small">Target: <span id="targetMarginVal">15%</span></div>
-              </div>
-              <div class="pItem"><div class="t">Max ads % you can afford</div><div class="v" id="maxAdsPct">—</div><div class="small">Keeps profit ≥ 0</div></div>
-              <div class="pItem"><div class="t">Risk rating</div><div class="v" id="riskLabel">—</div><div class="small" id="riskExplain">—</div></div>
-            </div>
-
-            <ul class="pList" id="insBullets"><li>Unlock PRO to see insights.</li></ul>
-
-            <div class="row" style="margin-top:10px">
-              <div>
-                <label>Target margin (%)</label>
-                <input id="targetMarginInput" inputmode="decimal" value="15">
-              </div>
-              <div style="display:flex;align-items:end;gap:10px;flex-wrap:wrap">
-                <button class="btn" id="refreshInsightsBtn" type="button">Refresh insights</button>
-                <span class="pill" id="insToast">—</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="panel" id="compBox">
-            <div class="pHead">
-              <div>
-                <div style="font-weight:900">Competitor mode (manual)</div>
-                <div class="small">Enter competitor prices you found yourself. No scraping.</div>
-              </div>
-              <span class="tag" id="compStatus">Trial limited</span>
-            </div>
+        
 
             <div class="small" id="compUsesLine" style="margin-top:6px">Competitor uses: —</div>
 
@@ -547,6 +510,47 @@
       <!-- RIGHT -->
       <div>
         <div class="card" id="proCard">
+          <div class="panel" id="insightsBox">
+            <div class="pHead">
+              <div>
+                <div style="font-weight:900">Insights (PRO)</div>
+                <div class="small">Decision support from your inputs (estimates only).</div>
+              </div>
+              <span class="tag" id="insStatus">Locked</span>
+            </div>
+
+            <div class="pGrid">
+              <div class="pItem"><div class="t">Break-even price</div><div class="v" id="bePrice">—</div></div>
+              <div class="pItem">
+                <div class="t">Price for target margin</div><div class="v" id="targetMarginPrice">—</div>
+                <div class="small">Target: <span id="targetMarginVal">15%</span></div>
+              </div>
+              <div class="pItem"><div class="t">Max ads % you can afford</div><div class="v" id="maxAdsPct">—</div><div class="small">Keeps profit ≥ 0</div></div>
+              <div class="pItem"><div class="t">Risk rating</div><div class="v" id="riskLabel">—</div><div class="small" id="riskExplain">—</div></div>
+            </div>
+
+            <ul class="pList" id="insBullets"><li>Unlock PRO to see insights.</li></ul>
+
+            <div class="row" style="margin-top:10px">
+              <div>
+                <label>Target margin (%)</label>
+                <input id="targetMarginInput" inputmode="decimal" value="15">
+              </div>
+              <div style="display:flex;align-items:end;gap:10px;flex-wrap:wrap">
+                <button class="btn" id="refreshInsightsBtn" type="button">Refresh insights</button>
+                <span class="pill" id="insToast">—</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel" id="compBox">
+            <div class="pHead">
+              <div>
+                <div style="font-weight:900">Competitor mode (manual)</div>
+                <div class="small">Enter competitor prices you found yourself. No scraping.</div>
+              </div>
+              <span class="tag" id="compStatus">Trial limited</span>
+            </div>
           <div class="title">PRO features</div>
           <div class="small">Unlimited reverse + competitor + bulk, PDF export, share links, insights, saved scenarios. One-time unlock.</div>
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
@@ -717,6 +721,15 @@
     const fxOut = document.getElementById("fxOut");
     const fxNote = document.getElementById("fxNote");
 
+    // Attach "auto-clear zero" once (do NOT bind inside compute loops)
+[
+  sellPriceEl, productCostEl, shipCostEl, miscCostEl,
+  feePctEl, feeFixedEl, adsPctEl, returnPctEl,
+  targetProfitEl, fxRateEl,
+  c1, c2, c3, floorBuffer, targetMarginInput
+].forEach(autoZero);
+
+
     // Insights
     const insStatus = document.getElementById("insStatus");
     const bePriceEl = document.getElementById("bePrice");
@@ -837,11 +850,19 @@
       { id:"etsy_typical", name:"Etsy (typical example)", feePct:9.5, feeFixed:0.20, adsPct:0, returnPct:3 },
       { id:"shopify_card_only", name:"Shopify (card fee example)", feePct:2.0, feeFixed:0.20, adsPct:0, returnPct:2 },
     ];
-    PRESETS.forEach(p=>{
-      const opt = document.createElement("option");
-      opt.value = p.id; opt.textContent = p.name;
-      presetSel.appendChild(opt);
-    });
+    // Populate presets (defensive: avoid duplicates)
+presetSel.innerHTML = "";
+const seen = new Set();
+PRESETS.forEach(p=>{
+  if (seen.has(p.id)) return;
+  seen.add(p.id);
+  const opt = document.createElement("option");
+  opt.value = p.id;
+  opt.textContent = p.name;
+  presetSel.appendChild(opt);
+});
+presetSel.value = "manual";
+
     presetSel.value = "manual";
     presetSel.addEventListener("change", ()=>{
       const p = PRESETS.find(x=>x.id===presetSel.value) || PRESETS[0];
@@ -876,12 +897,6 @@
       const returnPct = clamp(n(returnPctEl.value),0,99);
 
       const r = computeRowProfit(sell,cost,ship,misc,feePct,feeFixed,adsPct,returnPct);
-      [
-  sellPriceEl, productCostEl, shipCostEl, miscCostEl,
-  feePctEl, feeFixedEl, adsPctEl, returnPctEl,
-  targetProfitEl, fxRateEl,
-  c1, c2, c3, floorBuffer, targetMarginInput
-].forEach(autoZero);
 
       o1v.textContent = money(r.profit);
       o2v.textContent = pct(r.margin);
