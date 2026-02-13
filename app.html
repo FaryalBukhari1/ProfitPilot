@@ -315,8 +315,8 @@
           <div class="divider"></div>
 
           <label>Platform preset</label>
-          <select id="preset">
-            <option value="manual">Manual (enter fees yourself)</option>
+          <select id="preset"></select>
+
           </select>
 
           <div class="row">
@@ -785,6 +785,16 @@
     const CURRENCY_SYMBOL = { GBP:"£", USD:"$", EUR:"€", AUD:"$", CAD:"$", NZD:"$", AED:"AED ", SAR:"SAR ", PKR:"₨", INR:"₹" };
     function sym(){ return CURRENCY_SYMBOL[currencyEl.value || "GBP"] || ""; }
     function n(v){ const x = parseFloat(String(v).replace(/,/g,"")); return Number.isFinite(x) ? x : 0; }
+    function autoZero(el){
+  el.addEventListener("focus", ()=>{
+    const v = String(el.value ?? "").trim();
+    if (v === "0" || v === "0.0" || v === "0.00") el.value = "";
+  });
+  el.addEventListener("blur", ()=>{
+    const v = String(el.value ?? "").trim();
+    if (v === "") el.value = "0";
+  });
+}
     function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
     function money(x){ return sym() + (Number.isFinite(x) ? x : 0).toFixed(2); }
     function pct(x){ return (Number.isFinite(x) ? x : 0).toFixed(1) + "%"; }
@@ -866,6 +876,12 @@
       const returnPct = clamp(n(returnPctEl.value),0,99);
 
       const r = computeRowProfit(sell,cost,ship,misc,feePct,feeFixed,adsPct,returnPct);
+      [
+  sellPriceEl, productCostEl, shipCostEl, miscCostEl,
+  feePctEl, feeFixedEl, adsPctEl, returnPctEl,
+  targetProfitEl, fxRateEl,
+  c1, c2, c3, floorBuffer, targetMarginInput
+].forEach(autoZero);
 
       o1v.textContent = money(r.profit);
       o2v.textContent = pct(r.margin);
@@ -968,6 +984,16 @@
       if (error) throw new Error(error.message || "consume_bulk_run failed");
       return data;
     }
+    async function hasUserReview(userId){
+  const { data, error } = await supabase
+    .from("reviews")
+    .select("id")
+    .eq("user_id", userId)
+    .limit(1);
+
+  if (error) throw error;
+  return (data && data.length > 0);
+}
 
     function enableProUI(isPro){
       pdfBtn.disabled = !isPro;
@@ -1416,6 +1442,7 @@
       inp.className = "mini";
       inp.inputMode = "decimal";
       inp.value = String(value ?? "0");
+      autoZero(inp);
       return inp;
     }
     function renumberBulkRows(){ [...bulkTbody.children].forEach((tr,i)=> tr.children[0].textContent = String(i+1)); }
@@ -1777,6 +1804,14 @@
     // Never expose email
     const accountLink = document.getElementById("accountLink");
     if (accountLink) accountLink.textContent = "Account";
+
+    try{
+  const already = await hasUserReview(user.id);
+  const reviewsCard = document.getElementById("reviewsCard");
+  if (reviewsCard) reviewsCard.style.display = already ? "none" : "block";
+} catch(e){
+  console.warn("Review check failed:", e);
+}
 
     const prof = await rpcEnsureProfile();
     updateAccessUI(prof);
