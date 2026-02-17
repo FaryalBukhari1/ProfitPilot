@@ -74,7 +74,7 @@ a:hover{text-decoration:underline}
   border:1px solid var(--line);
   border-radius:18px;
   padding:14px 18px;
-  box-shadow:0 10px 30px rgba(16,24,40,.06);
+  box-shadow:0 4px 14px rgba(16,24,40,.05);
 }
 
 .pp-row{
@@ -177,9 +177,66 @@ a:hover{text-decoration:underline}
   padding:28px;
   box-shadow:0 25px 70px rgba(16,24,40,.08);
 }
+/* ================= HERO BLOCK SYSTEM ================= */
+
+.heroBlock{
+  margin-top:60px;
+  padding:40px;
+  border-radius:32px;
+  background:#fff;
+  border:1px solid rgba(16,24,40,.06);
+  box-shadow:
+    0 60px 160px rgba(16,24,40,.10);
+  position:relative;
+  overflow:hidden;
+}
+
+.heroBlock::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(800px 400px at 20% 0%, rgba(14,165,164,.06), transparent 60%),
+    radial-gradient(800px 400px at 80% 0%, rgba(79,70,229,.06), transparent 60%);
+  pointer-events:none;
+}
+
+.heroBlock .title{
+  font-size:32px;
+  margin-bottom:10px;
+}
+
+.heroBlock .small{
+  font-size:15px;
+  margin-bottom:25px;
+}
+    .heroBlock{
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.heroBlock:hover{
+  transform:translateY(-3px);
+  box-shadow:0 80px 180px rgba(16,24,40,.12);
+}
 
 
-/* ================= HERO CALCULATOR ================= */
+    /* Calculator Engine */
+
+/* Pricing Intelligence */
+.heroInsights{
+  border:1px solid rgba(14,165,164,.30);
+  box-shadow:0 80px 200px rgba(14,165,164,.18);
+}
+
+/* Competitor Engine */
+.heroCompetitor{
+  border:1px solid rgba(244,114,182,.30);
+  box-shadow:0 80px 200px rgba(244,114,182,.18);
+}
+
+
+
+/* ================= HERO Pricing Engine ================= */
 
 #calcCard{
   border:1px solid rgba(79,70,229,.18);
@@ -205,7 +262,7 @@ a:hover{text-decoration:underline}
   background:var(--line);
   margin:28px 0;
 }
-      /* ================= INSIGHTS HERO ================= */
+      /* ================= Pricing Intelligence HERO ================= */
 
 .insightsHero{
   margin-top:40px;
@@ -338,7 +395,6 @@ input,select,textarea{
   color:#fff;
 }
 
-</style>
 
   </style>
 </head>
@@ -374,8 +430,16 @@ input,select,textarea{
     <div class="banner" id="importBanner">Imported shared calculation ✅</div>
 
     <div class="grid">
+      <div class="card" id="proCard">
+          <div class="title">PRO features</div>
+          <div class="small">Unlimited reverse + competitor + bulk, PDF export, share links, insights, saved scenarios. One-time unlock.</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+            <a class="btn primary" id="buyProBtn" href="https://stonevia.gumroad.com/l/goddhg" target="_blank" rel="noopener">Buy PRO</a>
+            <a class="btn" href="reviews.html">See reviews</a>
+          </div>
+        </div>
       <!-- LEFT -->
-     <div class="card" id="calcCard">
+     <section class="heroBlock" id="calcCard">
         <div class="title">Pricing Command Center</div>
 <div class="small">Know your real profit after fees, ads and returns. Reverse = target profit → required price. Bulk = test multiple items fast.</div>
 
@@ -611,19 +675,13 @@ input,select,textarea{
       
         
 
-        <div class="card insightsHero" id="insightsBox">
+        <section class="heroBlock heroInsights" id="insightsBox">
+
 
             <div class="pHead">
               <div>
 
-                <div class="card" id="proCard">
-          <div class="title">PRO features</div>
-          <div class="small">Unlimited reverse + competitor + bulk, PDF export, share links, insights, saved scenarios. One-time unlock.</div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
-            <a class="btn primary" id="buyProBtn" href="https://stonevia.gumroad.com/l/goddhg" target="_blank" rel="noopener">Buy PRO</a>
-            <a class="btn" href="reviews.html">See reviews</a>
-          </div>
-        </div>
+                
                 <div class="title">Pricing Intelligence (PRO)</div>
 
                 <div class="small">Decision support from your inputs (estimates only).</div>
@@ -634,6 +692,17 @@ input,select,textarea{
             <div class="pGrid">
               <div class="pItem"><div class="t">Break-even price</div><div class="v" id="bePrice">—</div></div>
               <div class="pItem">
+                .pItem .t{
+  font-size:13px;
+  color:#64748b;
+  font-weight:700;
+}
+
+.pItem .v{
+  font-size:26px;
+  font-weight:1000;
+}
+
                 <div class="t">Price for target margin</div><div class="v" id="targetMarginPrice">—</div>
                 <div class="small">Target: <span id="targetMarginVal">15%</span></div>
               </div>
@@ -656,8 +725,9 @@ input,select,textarea{
           </div>
         </div>
 
-        <div class="card" style="margin-top:14px">
-          <div class="panel" id="compBox">
+        
+          <section class="heroBlock heroCompetitor" id="compBox">
+
             <div class="pHead">
               <div>
                 <div style="font-weight:900">Competitor mode (manual)</div>
@@ -691,7 +761,7 @@ input,select,textarea{
                 <div class="small">“Don’t go below” = break-even + buffer</div>
               </div>
               <div style="display:flex;align-items:end;gap:10px;flex-wrap:wrap">
-                <button class="btn primary" id="runCompBtn" type="button">Run competitor mode</button>
+                <button class="heroBtn active" id="runCompBtn" type="button">
                 <span class="pill" id="compToast">—</span>
               </div>
             </div>
@@ -713,30 +783,33 @@ input,select,textarea{
               <li>Tip: use “Don’t go below” as your personal floor price.</li>
             </ul>
           </div>
-        </div>
 
-        <div class="card" style="margin-top:14px">
-          <div class="title">Saved scenarios (PRO)</div>
-          <div class="small">Saved locally on this device for speed. (PRO-only to save.)</div>
+            <section class="heroBlock">
+  <div class="title">Saved scenarios (PRO)</div>
+  <div class="small">Saved locally on this device for speed. (PRO-only to save.)</div>
 
-          <label>Saved scenarios</label>
-          <select id="scenarioSel"><option value="">—</option></select>
+  <label>Saved scenarios</label>
+  <select id="scenarioSel"><option value="">—</option></select>
 
-          <div class="row">
-            <button class="btn" id="loadScenarioBtn" type="button">Load</button>
-            <button class="btn" id="deleteScenarioBtn" type="button">Delete</button>
-          </div>
+  <div class="row">
+    <button class="btn" id="loadScenarioBtn" type="button">Load</button>
+    <button class="btn" id="deleteScenarioBtn" type="button">Delete</button>
+  </div>
 
-          <div class="divider"></div>
+  <div class="divider"></div>
 
-          <label>Scenario name</label>
-          <input id="scenarioName" placeholder="e.g., Competitor median £13.49">
+  <label>Scenario name</label>
+  <input id="scenarioName" placeholder="e.g., Competitor median £13.49">
 
-          <div class="row">
-            <button class="btn primary" id="saveScenarioBtn2" type="button">Save current (PRO)</button>
-            <span class="pill" id="scenarioStatus">—</span>
-          </div>
-        </div>
+  <div class="row">
+    <button class="btn primary" id="saveScenarioBtn2" type="button">Save current (PRO)</button>
+    <span class="pill" id="scenarioStatus">—</span>
+  </div>
+</section>
+
+      
+
+    
 
         <div class="card" id="reviewsCard" style="margin-top:14px">
           <div class="title">Leave a review</div>
@@ -944,7 +1017,7 @@ input,select,textarea{
     const refreshInsightsBtn = document.getElementById("refreshInsightsBtn");
     const insToast = document.getElementById("insToast");
 
-    // Competitor
+    // Market Positioning Engine
     const compStatus = document.getElementById("compStatus");
     const compUsesLine = document.getElementById("compUsesLine");
     const runCompBtn = document.getElementById("runCompBtn");
@@ -1744,7 +1817,7 @@ function setMode(m){
     targetMarginInput?.addEventListener("input", ()=>refreshInsights());
 
     // ---------------------------
-    // Competitor mode
+    // Market Positioning Engine mode
     // ---------------------------
     let LAST_COMP_SUGGEST = null;
 
