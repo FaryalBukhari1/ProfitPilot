@@ -346,6 +346,10 @@
 
           <label>Platform preset</label>
           <select id="preset"></select>
+          <label id="catLabel" style="display:none;margin-top:10px">Category (for accurate fees)</label>
+<select id="category" style="display:none"></select>
+<div class="small" id="presetNote" style="margin-top:8px">—</div>
+
 
           <div class="row">
             <div><label>Selling price</label><input id="sellPrice" inputmode="decimal" value="0"></div>
@@ -910,32 +914,227 @@
     // ---------------------------
     // Presets (defensive)
     // ---------------------------
-   const PRESETS = [
-  { id:"manual", name:"Manual (enter fees yourself)", feePct:0, feeFixed:0, adsPct:0, returnPct:0 },
+   // ---------------------------
+// Presets (Country + Category + Dynamic fixed fee rules)
+// ---------------------------
 
-  // Etsy UK = 6.5% transaction + 4% processing + £0.20 fixed
-  { id:"etsy_uk", name:"Etsy UK (10.5% + £0.20)", feePct:10.5, feeFixed:0.20, adsPct:0, returnPct:3 },
+// Etsy: transaction fee is 6.5% (global) :contentReference[oaicite:1]{index=1}
+// Etsy Payments: varies by country; UK example is 4% + £0.20 :contentReference[oaicite:2]{index=2}
+//
+// eBay UK business sellers: % depends on category; plus per-order fee that depends on order total
+// £0.30 for orders <= £10, £0.40 for orders > £10 :contentReference[oaicite:3]{index=3}
+//
+// Amazon UK: Individual plan £0.75 per unit; referral fee varies by category, most between 8% and 15% :contentReference[oaicite:4]{index=4}
+//
+// TikTok Shop: commission exists and is category-based; rates can change & depend on program.
+// We include it as “enter your commission %” by default. :contentReference[oaicite:5]{index=5}
 
-  // eBay UK business sellers: % varies by category + per-order fee.
-  // Use these as "typical" presets, but keep in mind category % differs.
-  { id:"ebay_uk_12_40p", name:"eBay UK (~12% + £0.40 per order)", feePct:12.0, feeFixed:0.40, adsPct:0, returnPct:4 },
-  { id:"ebay_uk_128_40p", name:"eBay UK (~12.8% + £0.40 per order)", feePct:12.8, feeFixed:0.40, adsPct:0, returnPct:4 },
+const PRESETS = [
+  {
+    id: "manual",
+    label: "Manual (enter fees yourself)",
+    note: "Use this when you already know your exact fees.",
+    base: { feePct: 0, feeFixed: 0, adsPct: 0, returnPct: 0 },
+    categories: null,
+    dynamicFixed: null
+  },
 
-  // Optional: cheaper fixed fee scenario for small orders (≤ £10)
-  { id:"ebay_uk_12_30p", name:"eBay UK (small orders: ~12% + £0.30)", feePct:12.0, feeFixed:0.30, adsPct:0, returnPct:4 },
+  // -------- Etsy --------
+  {
+    id: "etsy_uk",
+    label: "Etsy (UK) — 6.5% + (Payments 4% + £0.20)",
+    note: "Includes transaction fee (6.5%) + Etsy Payments UK (4% + £0.20). Listing fee (£0.15) is per listing, not per order.",
+    base: { feePct: 10.5, feeFixed: 0.20, adsPct: 0, returnPct: 3 },
+    categories: null,
+    dynamicFixed: null
+  },
+  {
+    id: "etsy_us",
+    label: "Etsy (US) — 6.5% + (Payments 3% + $0.25)",
+    note: "Includes transaction fee (6.5%) + Etsy Payments US (3% + $0.25).",
+    base: { feePct: 9.5, feeFixed: 0.25, adsPct: 0, returnPct: 3 },
+    categories: null,
+    dynamicFixed: null
+  },
 
-  // TikTok Shop: commission varies, but 9% is widely reported for UK baseline.
-  // Fixed fee depends on fulfilment/program; keep fixed 0 unless you confirm your exact plan.
-  { id:"tiktokshop_uk_9", name:"TikTok Shop UK (9% baseline — no fixed)", feePct:9.0, feeFixed:0.00, adsPct:0, returnPct:5 },
+  // -------- eBay UK (category-based + dynamic per-order fee) --------
+  {
+    id: "ebay_uk",
+    label: "eBay (UK Business) — category-based % + per-order fee",
+    note: "Choose category to autofill % (edit if needed). Per-order fee auto-adjusts: £0.30 (≤£10), £0.40 (>£10).",
+    base: { feePct: 0, feeFixed: 0, adsPct: 0, returnPct: 4 },
+    dynamicFixed: "ebay_uk_order_fee",
+    categories: [
+      { id:"ebay_uk_custom", name:"Custom (enter your category % from eBay rate card)", feePct: 0 },
 
-  // Amazon: Individual plan has £0.75 per unit; referral % varies by category.
-  { id:"amazon_uk_individual_15", name:"Amazon UK (Individual: 15% + £0.75/unit)", feePct:15.0, feeFixed:0.75, adsPct:0, returnPct:6 },
+      // ⚠ These are *starter defaults* only. Replace with your exact rate-card values if you want 100% accuracy by category.
+      // If you prefer strict accuracy only, keep feePct = 0 for all and force manual entry.
+      { id:"ebay_uk_typical_12_8", name:"Typical example (~12.8%)", feePct: 12.8 },
+      { id:"ebay_uk_typical_12_0", name:"Typical example (~12.0%)", feePct: 12.0 },
+    ]
+  },
 
-  // Direct store payment examples
-  { id:"shopify_stripe_uk", name:"Shopify (Stripe example: 2% + £0.20)", feePct:2.0, feeFixed:0.20, adsPct:0, returnPct:2 },
-  { id:"woocommerce_stripe_uk", name:"WooCommerce (Stripe example: 2% + £0.20)", feePct:2.0, feeFixed:0.20, adsPct:0, returnPct:2 },
+  // -------- Amazon UK (category-based; optional per-item fee for Individual plan) --------
+  {
+    id: "amazon_uk_individual",
+    label: "Amazon (UK Individual) — category % + £0.75 per unit",
+    note: "Select a category % (varies by category). £0.75 per-item fee is included (Individual plan).",
+    base: { feePct: 0, feeFixed: 0.75, adsPct: 0, returnPct: 6 },
+    dynamicFixed: null,
+    categories: [
+      { id:"amazon_uk_custom", name:"Custom (enter referral % for your category)", feePct: 0 },
+
+      // Same policy as above: starter defaults only. You can replace with exact category rates later.
+      { id:"amazon_uk_15", name:"Common range example (15%)", feePct: 15.0 },
+      { id:"amazon_uk_12", name:"Common range example (12%)", feePct: 12.0 },
+      { id:"amazon_uk_8",  name:"Common range example (8%)",  feePct: 8.0 },
+    ]
+  },
+
+  // -------- TikTok Shop (UK) --------
+  {
+    id: "tiktokshop_uk",
+    label: "TikTok Shop (UK) — enter your commission %",
+    note: "TikTok Shop commission is category/program dependent. Use Custom and enter your current commission %.",
+    base: { feePct: 0, feeFixed: 0, adsPct: 0, returnPct: 5 },
+    categories: [
+      { id:"tiktok_uk_custom", name:"Custom (enter your commission %)", feePct: 0 },
+    ],
+    dynamicFixed: null
+  },
+
+  // -------- Card processors (country examples) --------
+  {
+    id: "stripe_uk_example",
+    label: "Card payments (UK example) — 2.0% + £0.20",
+    note: "This models a payment processor fee (not a marketplace commission).",
+    base: { feePct: 2.0, feeFixed: 0.20, adsPct: 0, returnPct: 2 },
+    categories: null,
+    dynamicFixed: null
+  },
 ];
 
+// DOM additions
+const catLabel = document.getElementById("catLabel");
+const categorySel = document.getElementById("category");
+const presetNote = document.getElementById("presetNote");
+
+function getPresetById(id){
+  return PRESETS.find(p => p.id === id) || PRESETS[0];
+}
+
+function setFeesFromPreset(preset, categoryObj=null){
+  const base = preset.base || { feePct:0, feeFixed:0, adsPct:0, returnPct:0 };
+
+  const feePct = (categoryObj && typeof categoryObj.feePct === "number") ? categoryObj.feePct : (base.feePct ?? 0);
+
+  feePctEl.value   = String(feePct);
+  feeFixedEl.value = String(base.feeFixed ?? 0);
+  adsPctEl.value   = String(base.adsPct ?? 0);
+  returnPctEl.value= String(base.returnPct ?? 0);
+
+  // dynamic fixed fee rules (eBay UK per-order fee)
+  if (preset.dynamicFixed === "ebay_uk_order_fee"){
+    feeFixedEl.disabled = true;
+    feeFixedEl.title = "Auto-set by eBay UK per-order fee rule";
+    updateDynamicFixedFee(); // set immediately
+  } else {
+    feeFixedEl.disabled = false;
+    feeFixedEl.title = "";
+  }
+
+  if (presetNote) presetNote.textContent = preset.note || "—";
+}
+
+function showCategories(preset){
+  const cats = preset.categories;
+  if (!catLabel || !categorySel) return;
+
+  if (!cats || !cats.length){
+    catLabel.style.display = "none";
+    categorySel.style.display = "none";
+    categorySel.innerHTML = "";
+    return;
+  }
+
+  catLabel.style.display = "block";
+  categorySel.style.display = "block";
+  categorySel.innerHTML = "";
+
+  cats.forEach(c=>{
+    const opt = document.createElement("option");
+    opt.value = c.id;
+    opt.textContent = c.name;
+    categorySel.appendChild(opt);
+  });
+
+  categorySel.value = cats[0].id;
+}
+
+// eBay UK per-order fee rule: £0.30 (≤£10), £0.40 (>£10) :contentReference[oaicite:6]{index=6}
+function updateDynamicFixedFee(){
+  const preset = getPresetById(presetSel.value);
+  if (preset.dynamicFixed !== "ebay_uk_order_fee") return;
+
+  const sell = n(sellPriceEl?.value);
+  const fixed = (sell > 10) ? 0.40 : 0.30;
+  feeFixedEl.value = fixed.toFixed(2);
+}
+
+// Build preset dropdown (detailed labels already include country/platform)
+if (presetSel){
+  presetSel.innerHTML = "";
+  PRESETS.forEach(p=>{
+    const opt = document.createElement("option");
+    opt.value = p.id;
+    opt.textContent = p.label;
+    presetSel.appendChild(opt);
+  });
+
+  presetSel.value = "manual";
+
+  presetSel.addEventListener("change", ()=>{
+    const preset = getPresetById(presetSel.value);
+    showCategories(preset);
+
+    // Use selected category (if exists) to set fee %
+    let catObj = null;
+    if (preset.categories && preset.categories.length && categorySel){
+      catObj = preset.categories.find(x=>x.id===categorySel.value) || preset.categories[0];
+    }
+
+    setFeesFromPreset(preset, catObj);
+    compute(); refreshInsights();
+  });
+}
+
+// Category change => update fee %
+categorySel?.addEventListener("change", ()=>{
+  const preset = getPresetById(presetSel.value);
+  if (!preset.categories) return;
+
+  const catObj = preset.categories.find(x=>x.id===categorySel.value) || null;
+  setFeesFromPreset(preset, catObj);
+  compute(); refreshInsights();
+});
+
+// Keep dynamic fixed fee updated if sell price changes
+sellPriceEl?.addEventListener("input", ()=>{
+  updateDynamicFixedFee();
+});
+
+// Init on load
+(function initPresetUI(){
+  const preset = getPresetById(presetSel.value || "manual");
+  showCategories(preset);
+
+  let catObj = null;
+  if (preset.categories && preset.categories.length && categorySel){
+    catObj = preset.categories[0];
+  }
+
+  setFeesFromPreset(preset, catObj);
+})();
 
     if (presetSel){
       presetSel.innerHTML = "";
