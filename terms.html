@@ -1,24 +1,29 @@
-<p>
-These Terms are provided by <b>Stonevia Commerce</b>, operating the ProfitPilot tool on ukwebtools.com.
-</p>
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
+
   <title>Terms — ProfitPilot</title>
-  <meta name="description" content="Terms of use for ProfitPilot by UKwebtools.">
-  <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
+  <meta name="description" content="Terms of use for ProfitPilot by Stonevia Commerce. Includes estimates disclaimer, payments via Paddle, refunds, acceptable use, and legal terms.">
   <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://profitpilot.ukwebtools.com/terms.html">
+  <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
 
   <style>
     :root{
       --bg:#f7f9fc; --bg2:#eef3ff;
       --txt:#0b1220; --muted:#5b6474;
-      --card:#fff; --line:rgba(16,24,40,.10);
+      --card:rgba(255,255,255,.75); --line:rgba(16,24,40,.10);
       --accent:#0ea5a4; --accent2:#4f46e5;
       --shadow:0 14px 36px rgba(16,24,40,.08);
       --shadow2:0 8px 22px rgba(16,24,40,.06);
+      --radius:22px;
+
+      --f-bg:#0b0f14;
+      --f-line:rgba(255,255,255,.10);
+      --f-txt:rgba(255,255,255,.92);
+      --f-muted:rgba(255,255,255,.68);
     }
     *{box-sizing:border-box}
     body{
@@ -28,16 +33,19 @@ These Terms are provided by <b>Stonevia Commerce</b>, operating the ProfitPilot 
         radial-gradient(900px 520px at 84% 0%, rgba(79,70,229,.12), transparent 55%),
         linear-gradient(180deg,var(--bg2),var(--bg));
     }
-    a{text-decoration:none;color:inherit}
-    .wrap{max-width:980px;margin:0 auto;padding:18px 16px 50px}
+    a{text-decoration:none}
+    a.link{color:var(--accent);font-weight:900}
+    a.link:hover{text-decoration:underline}
 
-    /* UNIVERSAL NAV (single) */
+    .wrap{max-width:980px;margin:0 auto;padding:18px 16px 24px}
+
+    /* NAV */
     .pp-navwrap{max-width:1200px;margin:0 auto;padding:14px 0;position:relative;z-index:50}
     .pp-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
     .pp-left,.pp-right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .pp-btn{
       padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
-      background:#fff;font-weight:800;text-decoration:none;color:#0b1220;
+      background:#fff;font-weight:900;color:#0b1220;
       box-shadow:0 8px 18px rgba(16,24,40,.06);
       display:inline-flex;gap:8px;align-items:center;
       transition:transform .08s ease;
@@ -46,20 +54,12 @@ These Terms are provided by <b>Stonevia Commerce</b>, operating the ProfitPilot 
     .pp-btn:active{transform:translateY(0)}
     .pp-primary{
       border:none;color:#fff;
-      background:linear-gradient(135deg,#0ea5a4,#4f46e5);
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
       box-shadow:0 14px 28px rgba(79,70,229,.16);
     }
     .pp-active{
       border-color:rgba(14,165,164,.35);
       background:rgba(14,165,164,.08);
-    }
-    .pp-user{
-      padding:10px 14px;border-radius:999px;border:1px solid rgba(16,24,40,.10);
-      background:rgba(255,255,255,.75);
-      color:rgba(16,24,40,.72);
-      font-weight:800;
-      display:none;
-      max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
     }
     .pp-crumbs{
       margin-top:10px;
@@ -67,53 +67,109 @@ These Terms are provided by <b>Stonevia Commerce</b>, operating the ProfitPilot 
       color:rgba(16,24,40,.62);
       display:flex;gap:6px;flex-wrap:wrap;align-items:center;
     }
-    .pp-crumbs a{color:rgba(14,165,164,.95);font-weight:800;text-decoration:none}
+    .pp-crumbs a{color:rgba(14,165,164,.95);font-weight:900}
     .pp-sep{opacity:.55}
 
     .card{
-      margin-top:14px;background:rgba(255,255,255,.75);
-      border:1px solid var(--line);border-radius:22px;padding:20px;
+      margin-top:14px;
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:20px;
       box-shadow:var(--shadow);
     }
     h1{margin:0 0 8px;font-size:28px;letter-spacing:-.02em}
     h2{margin:20px 0 8px;font-size:18px}
     p,li{color:var(--muted);line-height:1.75}
     ul{margin:8px 0 0;padding-left:18px}
-    footer{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:12.5px;line-height:1.7}
-    .fine a{color:var(--accent);font-weight:800}
+    .meta{font-size:12px;color:rgba(16,24,40,.62);line-height:1.6;margin:0 0 12px}
+
+    /* FOOTER (crawl-friendly + policy links) */
+    .pp-footer{
+      margin-top:18px;
+      background:radial-gradient(900px 520px at 20% 0%, rgba(94,234,212,.10), transparent 55%),
+                 radial-gradient(900px 520px at 80% 0%, rgba(96,165,250,.10), transparent 55%),
+                 var(--f-bg);
+      border-top:1px solid rgba(255,255,255,.08);
+      padding:22px 0;
+    }
+    .pp-footbox{
+      border:1px solid var(--f-line);
+      background:rgba(255,255,255,.04);
+      border-radius:18px;
+      padding:16px;
+      max-width:980px;
+      margin:0 auto;
+    }
+    .pp-footgrid{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:16px;
+      align-items:start;
+      padding:0 14px;
+    }
+    @media(max-width:880px){.pp-footgrid{grid-template-columns:1fr}}
+    .pp-footbrand b{color:var(--f-txt);font-weight:1000}
+    .pp-footmut{
+      margin-top:8px;
+      color:var(--f-muted);
+      font-size:12.6px;
+      line-height:1.75;
+      max-width:760px;
+      font-weight:650;
+    }
+    .pp-footmut a{color:rgba(94,234,212,.95);font-weight:900}
+    .pp-footlinks{
+      display:flex;flex-wrap:wrap;gap:10px;
+      justify-content:flex-end;
+    }
+    @media(max-width:880px){.pp-footlinks{justify-content:flex-start}}
+    .pp-footlinks a{
+      padding:9px 12px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.06);
+      color:var(--f-txt);
+      font-weight:900;
+      display:inline-flex;align-items:center;gap:8px;
+      transition:transform .08s ease;
+    }
+    .pp-footlinks a:hover{transform:translateY(-1px)}
+    .pp-footbottom{
+      margin-top:14px;padding-top:14px;
+      border-top:1px solid rgba(255,255,255,.10);
+      display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;
+      color:rgba(255,255,255,.72);
+      font-size:12.5px;line-height:1.75;
+      padding:0 14px;
+    }
+    .pp-footbottom a{color:rgba(94,234,212,.95);font-weight:900}
   </style>
 </head>
 
 <body>
   <div class="wrap">
 
-    <!-- SINGLE NAV -->
+    <!-- NAV -->
     <div class="pp-navwrap" role="navigation" aria-label="Primary">
       <div class="pp-nav">
         <div class="pp-left">
-          <a class="pp-btn" href="https://ukwebtools.com/" data-nav="ukwebtools">← UKwebtools</a>
-          <a class="pp-btn" href="index.html" data-nav="home">Home</a>
-          <a class="pp-btn" href="reviews.html" data-nav="reviews">Reviews</a>
-          <a class="pp-btn" href="privacy.html" data-nav="privacy">Privacy</a>
-          <a class="pp-btn pp-active" href="terms.html" data-nav="terms">Terms</a>
+          <a class="pp-btn" href="https://ukwebtools.com/">← UKwebtools</a>
+          <a class="pp-btn" href="https://profitpilot.ukwebtools.com/index.html">Home</a>
+          <a class="pp-btn" href="https://profitpilot.ukwebtools.com/reviews.html">Reviews</a>
+          <a class="pp-btn" href="https://profitpilot.ukwebtools.com/privacy.html">Privacy</a>
+          <a class="pp-btn" href="https://profitpilot.ukwebtools.com/refunds.html">Refunds</a>
+          <a class="pp-btn pp-active" href="https://profitpilot.ukwebtools.com/terms.html">Terms</a>
         </div>
 
         <div class="pp-right">
-          <span class="pp-user" id="ppUserChip">Signed in</span>
-
-          <!-- Signed OUT -->
-          <a class="pp-btn pp-primary" id="ppAuthBtn" href="login.html">Log in</a>
-
-          <!-- Signed IN -->
-          <a class="pp-btn pp-primary" id="ppOpenBtn" href="app.html" style="display:none">Open app</a>
-          <a class="pp-btn" id="ppLogoutBtn" href="#" style="display:none">Log out</a>
+          <a class="pp-btn pp-primary" href="https://profitpilot.ukwebtools.com/login.html">Account</a>
         </div>
       </div>
 
       <div class="pp-crumbs" aria-label="Breadcrumb">
-        <a href="https://ukwebtools.com/">UKwebtools</a>
+        <a class="link" href="https://ukwebtools.com/">UKwebtools</a>
         <span class="pp-sep">›</span>
-        <a href="index.html">ProfitPilot</a>
+        <a class="link" href="https://profitpilot.ukwebtools.com/index.html">ProfitPilot</a>
         <span class="pp-sep">›</span>
         <span>Terms</span>
       </div>
@@ -133,102 +189,99 @@ These Terms are provided by <b>Stonevia Commerce</b>, operating the ProfitPilot 
 
     <div class="card">
       <h1>Terms of Use</h1>
-      <p style="margin:0 0 12px"><span style="font-size:12px;color:var(--muted)">Last updated: <span id="d"></span></span></p>
+      <p class="meta"><b>Last updated:</b> <span id="d">08 February 2026</span></p>
+
+      <p>
+        These Terms are provided by <b>Stonevia Commerce</b>, operating the ProfitPilot tool on the UKwebtools domain.
+        By accessing or using ProfitPilot, you agree to these Terms.
+      </p>
 
       <h2>1) Estimates only</h2>
       <p>
-        ProfitPilot provides estimates based on your inputs. Results are not guaranteed and are not financial, legal, or tax advice.
-        You are responsible for decisions you make using the tool.
+        ProfitPilot provides estimates based on your inputs. Outputs depend entirely on the information you enter and your assumptions.
+        Results are not guaranteed and nothing on ProfitPilot is financial, legal, or tax advice. You are responsible for decisions you make using the tool.
       </p>
 
       <h2>2) No affiliation</h2>
       <p>
-        ProfitPilot is an independent tool by UKwebtools. We are not affiliated with or endorsed by any marketplace, platform, or payment provider.
+        ProfitPilot is an independent tool. We are not affiliated with or endorsed by any marketplace, platform, or payment provider.
       </p>
 
       <h2>3) Accounts and access</h2>
       <ul>
         <li>You are responsible for keeping your login secure.</li>
         <li>Trial limits and feature limits may apply and may change as the product improves.</li>
-        <li>PRO access is a one-time unlock as described on the Pricing page.</li>
       </ul>
 
-      <h2>4) Purchases</h2>
+      <h2>4) Purchases, payments, and taxes</h2>
       <p>
-        Payments are processed by our payment provider (currently Paddle or another provider shown at checkout).
-        Taxes/VAT and receipts are handled during checkout based on your location and applicable rules.
+        Payments for ProfitPilot are processed by <b>Paddle</b> as Merchant of Record. Paddle may calculate, collect, and remit taxes (including VAT) where required.
+        Receipts and payment confirmations are issued by Paddle.
       </p>
 
-      <h2>5) Reviews</h2>
+      <h2>5) Refunds</h2>
       <p>
-        Reviews you submit may appear publicly. Do not include sensitive personal information. We may remove illegal content, spam, or abuse.
+        Refunds are handled in accordance with Paddle’s Checkout Buyer Terms and applicable consumer protection laws.
+        If you are purchasing as a consumer, you may request a refund within <b>14 days</b> of purchase (the day after the transaction is completed).
+        Details and refund instructions are available on our <a class="link" href="https://profitpilot.ukwebtools.com/refunds.html">Refund Policy</a> page.
       </p>
 
-      <h2>6) Acceptable use</h2>
+      <h2>6) Reviews</h2>
+      <p>
+        Reviews you submit may appear publicly. Do not include sensitive personal information.
+        We may remove content that is illegal, spam, or abusive.
+      </p>
+
+      <h2>7) Acceptable use</h2>
       <ul>
         <li>No attempts to bypass access controls or limits.</li>
         <li>No attacks, scraping, or abuse of infrastructure.</li>
         <li>No illegal use.</li>
       </ul>
 
-      <h2>7) Support</h2>
-      <p>Email: <a href="mailto:support@ukwebtools.com" style="color:var(--accent);font-weight:800">support@ukwebtools.com</a></p>
+      <h2>8) Support</h2>
+      <p>
+        Email: <a class="link" href="mailto:support@ukwebtools.com">support@ukwebtools.com</a>
+      </p>
 
-      <footer class="fine">
-        <div>© <span id="yr"></span> UKwebtools • ProfitPilot</div>
-        <div><a href="privacy.html">Privacy</a> · <a href="reviews.html">Reviews</a></div>
-      </footer>
+      <h2>9) Governing law</h2>
+      <p>
+        These Terms are governed by the laws of England and Wales. Courts of England and Wales will have exclusive jurisdiction,
+        except where consumer protection laws provide otherwise.
+      </p>
     </div>
   </div>
 
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+  <footer class="pp-footer" role="contentinfo">
+    <div class="pp-footbox">
+      <div class="pp-footgrid">
+        <div class="pp-footbrand">
+          <div><b>ProfitPilot</b></div>
+          <div class="pp-footmut">
+            <b>Legal entity:</b> Stonevia Commerce.<br>
+            Need help? <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a>
+          </div>
+        </div>
 
-    const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
-    const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+        <div class="pp-footlinks" aria-label="Footer links">
+          <a href="https://profitpilot.ukwebtools.com/index.html">Home</a>
+          <a href="https://profitpilot.ukwebtools.com/pricing.html">Pricing</a>
+          <a href="https://profitpilot.ukwebtools.com/refunds.html">Refund Policy</a>
+          <a href="https://profitpilot.ukwebtools.com/terms.html">Terms</a>
+          <a href="https://profitpilot.ukwebtools.com/privacy.html">Privacy</a>
+          <a href="https://profitpilot.ukwebtools.com/faq.html">FAQ</a>
+        </div>
+      </div>
 
-    // Dates
+      <div class="pp-footbottom">
+        <div>© <span id="yr"></span> UKwebtools • ProfitPilot</div>
+        <div><a href="https://ukwebtools.com/" rel="nofollow">UKwebtools</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
     document.getElementById("yr").textContent = new Date().getFullYear();
-    document.getElementById("d").textContent = new Date().toLocaleDateString();
-
-    // Auth UI
-    const userChip = document.getElementById("ppUserChip");
-    const authBtn = document.getElementById("ppAuthBtn");
-    const openBtn = document.getElementById("ppOpenBtn");
-    const logoutBtn = document.getElementById("ppLogoutBtn");
-
-    async function refreshAuthUI(){
-      const { data: { session } } = await supabase.auth.getSession();
-
-      if (session?.user?.email){
-        userChip.style.display = "inline-flex";
-        userChip.textContent = session.user.email;
-
-        authBtn.style.display = "none";
-        openBtn.style.display = "inline-flex";
-        logoutBtn.style.display = "inline-flex";
-      } else {
-        userChip.style.display = "none";
-
-        authBtn.style.display = "inline-flex";
-        openBtn.style.display = "none";
-        logoutBtn.style.display = "none";
-      }
-    }
-
-    logoutBtn.addEventListener("click", async (e)=>{
-      e.preventDefault();
-      await supabase.auth.signOut();
-      location.href = "login.html";
-    });
-
-    await refreshAuthUI();
-    supabase.auth.onAuthStateChange(()=>refreshAuthUI());
   </script>
 </body>
 </html>
-
-<div>
-Legal entity: <b>Stonevia Commerce</b>
-</div>
