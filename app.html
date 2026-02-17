@@ -201,7 +201,7 @@
 }
 
 .wrap{
-  max-width:980px;
+  max-width:1050px;
   margin:0 auto;
   padding:20px 18px 50px;
 }
@@ -212,9 +212,24 @@
 }
     
 #calcCard{
-  background:linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.85));
-  border:1px solid rgba(14,165,164,.22);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,255,255,.90));
+  border:1px solid rgba(14,165,164,.35);
+  box-shadow:
+    0 25px 60px rgba(14,165,164,.18),
+    0 10px 30px rgba(16,24,40,.10);
+  transform:translateY(-4px);
 }
+#calcCard{
+  animation:cardFloat 6s ease-in-out infinite;
+}
+
+@keyframes cardFloat{
+  0%{ transform:translateY(-4px); }
+  50%{ transform:translateY(-8px); }
+  100%{ transform:translateY(-4px); }
+}
+
 
 .title{
   font-size:18px;
@@ -233,10 +248,33 @@
       box-shadow:var(--shadow);
     }
 
-    .title{font-weight:900;margin:0 0 10px}
-    .small{font-size:12px;color:var(--muted);line-height:1.75}
-    .divider{height:1px;background:var(--line);margin:14px 0}
-    .kpi{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+    .title{
+  font-size:22px;
+  font-weight:1000;
+  margin:0 0 14px;
+  letter-spacing:-.2px;
+  color:#0f172a;
+}
+
+.small{
+  font-size:14px;
+  color:#334155;   /* darker for readability */
+  line-height:1.7;
+}
+
+.divider{
+  height:1px;
+  background:rgba(15,23,42,.08);
+  margin:18px 0;
+}
+
+.kpi{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin-top:16px;
+}
+
     @media(max-width:560px){.kpi{grid-template-columns:1fr}}
     .k{border:1px solid var(--line);background:rgba(255,255,255,.76);border-radius:18px;padding:14px}
     .k .h{font-size:12px;color:var(--muted)}
@@ -251,11 +289,24 @@
 
     .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     @media(max-width:560px){.row{grid-template-columns:1fr}}
-    label{display:block;font-size:12px;color:var(--muted);margin:10px 0 6px}
+    label{
+  display:block;
+  font-size:13px;
+  font-weight:700;
+  color:#1e293b;
+  margin:12px 0 8px;
+}
+
     input,select,textarea{
-      width:100%;padding:12px;border-radius:14px;border:1px solid var(--line);
-      background:rgba(255,255,255,.94);color:var(--txt);outline:none;
-    }
+  width:100%;
+  padding:14px 16px;
+  font-size:15px;
+  border-radius:16px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.98);
+  color:var(--txt);
+}
+
     textarea{min-height:110px;resize:vertical}
     input:focus,select:focus,textarea:focus{border-color:rgba(14,165,164,.35)}
 
