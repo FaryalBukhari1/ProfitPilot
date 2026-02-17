@@ -52,7 +52,14 @@
     .skip:focus{left:12px}
 
     .pp-wrap{max-width:1200px;margin:0 auto;padding:0 16px}
-    .pp-header{position:sticky; top:10px; z-index:100; margin:14px auto 0}
+    .pp-header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  margin:0;
+  padding:10px 0 0; /* keeps spacing without “floating” */
+}
+
     .pp-headerbar{
       background:rgba(255,255,255,.78);
       border:1px solid var(--line);
@@ -99,12 +106,19 @@
 
 /* Make them feel alive */
 .pill:hover{
-  transform:translateY(-2px);
+  .pill:hover{
   box-shadow:0 12px 28px rgba(14,165,164,.25);
 }
+
 .pill{
   letter-spacing:.2px;
 }
+      /* Stop header/nav from shifting on hover */
+.pp-header .pill:hover,
+.pp-header .btn:hover{
+  transform:none !important;
+}
+
     /* HERO MODE BUTTONS */
 .heroModes{
   display:flex;
@@ -308,11 +322,12 @@
     @media(max-width:560px){.row{grid-template-columns:1fr}}
     label{
   display:block;
-  font-size:13px;
-  font-weight:700;
-  color:#1e293b;
-  margin:12px 0 8px;
+  font-size:13.5px;
+  color:rgba(11,18,32,.72);
+  margin:10px 0 6px;
+  font-weight:800;
 }
+
 
     input,select,textarea{
   width:100%;
@@ -1113,6 +1128,11 @@ heroBtns.forEach(btn=>{
 function updateTargetCurrencyLabel(){
   if (tpCurrency) tpCurrency.textContent = sym();
 }
+    function updateTargetProfitLabel(){
+  const el = document.getElementById("tpSym");
+  if (el) el.textContent = sym().trim() || "£";
+}
+
 
 currencyEl?.addEventListener("change", updateTargetCurrencyLabel);
 updateTargetCurrencyLabel();
