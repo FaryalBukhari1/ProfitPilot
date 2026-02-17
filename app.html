@@ -34,10 +34,10 @@
     body{
       margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--txt);
       background:
-        radial-gradient(900px 500px at 20% 0%, rgba(14,165,164,.16), transparent 55%),
-        radial-gradient(900px 500px at 80% 0%, rgba(79,70,229,.12), transparent 55%),
-        linear-gradient(180deg, var(--bg2), var(--bg));
-    }
+  radial-gradient(900px 500px at 20% 0%, rgba(14,165,164,.08), transparent 55%),
+  radial-gradient(900px 500px at 80% 0%, rgba(79,70,229,.08), transparent 55%),
+  linear-gradient(180deg, var(--bg2), var(--bg));
+
     a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
     :focus-visible{outline:3px solid rgba(79,70,229,.55);outline-offset:3px;border-radius:12px}
@@ -207,9 +207,10 @@
 }
 
 .card{
-  border-radius:22px;
-  padding:22px;
+  border-radius:24px;
+  padding:24px;
 }
+
     
 #calcCard{
   background:
@@ -221,14 +222,30 @@
   transform:translateY(-4px);
 }
 #calcCard{
-  animation:cardFloat 6s ease-in-out infinite;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,1), rgba(255,255,255,.96));
+  border:1px solid rgba(79,70,229,.18);
+  box-shadow:
+    0 40px 80px rgba(15,23,42,.08),
+    0 15px 30px rgba(79,70,229,.06);
+  border-radius:26px;
+  position:relative;
+}
+#calcCard::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:26px;
+  padding:1px;
+  background:linear-gradient(135deg, rgba(14,165,164,.35), rgba(79,70,229,.35));
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events:none;
 }
 
-@keyframes cardFloat{
-  0%{ transform:translateY(-4px); }
-  50%{ transform:translateY(-8px); }
-  100%{ transform:translateY(-4px); }
-}
 
 
 .title{
