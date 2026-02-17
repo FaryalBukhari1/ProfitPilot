@@ -53,7 +53,7 @@
 
     .pp-wrap{max-width:920px;margin:0 auto;padding:0 14px}
 
-    /* Header (ONLY 3 LINKS) */
+    /* Header */
     .pp-header{position:sticky; top:10px; z-index:100; margin:14px auto 0}
     .pp-headerbar{
       background:var(--h-bg);
@@ -99,14 +99,6 @@
       border:none;color:#fff;
       background:linear-gradient(135deg,var(--accent),var(--accent2));
       box-shadow:0 16px 34px rgba(79,70,229,.16);
-    }
-    .pp-chip{
-      padding:10px 14px;border-radius:999px;border:1px solid var(--line);
-      background:rgba(255,255,255,.70);
-      color:rgba(16,24,40,.70);
-      font-weight:900;max-width:260px;
-      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-      display:none;
     }
     @media(max-width:760px){
       .pp-sub{display:none}
@@ -251,9 +243,8 @@
 
           <nav class="pp-nav" aria-label="Main">
             <a class="pp-btn ghost" href="https://ukwebtools.com/" rel="nofollow">← UKwebtools</a>
-            <a class="pp-btn" href="help.html">How to use</a>
-            <span class="pp-chip" id="userChip">—</span>
-            <a class="pp-btn primary" id="accountBtn" href="login.html">Account</a>
+            <a class="pp-btn" href="https://profitpilot.ukwebtools.com/help.html">How to use</a>
+            <a class="pp-btn primary" id="accountBtn" href="https://profitpilot.ukwebtools.com/login.html">Account</a>
             <a class="pp-btn" id="logoutBtn" href="#" style="display:none">Log out</a>
           </nav>
         </div>
@@ -277,45 +268,45 @@
     <section class="hero" aria-label="Refund policy hero">
       <h1>Refund Policy</h1>
       <p class="lead">
-        ProfitPilot is operated by <b>Stonevia Commerce</b>. This policy explains how refunds are handled and how to request one.
+        ProfitPilot is operated by <b>Stonevia Commerce</b>. This page explains how refunds are handled and how to request one.
       </p>
     </section>
 
+    <!-- ✅ Paddle-compliant content (exact window + no qualifiers) -->
     <section class="card" aria-label="Refund policy content">
+
       <div class="kicker">Overview</div>
       <div class="title">How refunds work</div>
       <div class="small">
-        Payments for ProfitPilot are processed by our payment provider. Refund requests are handled according to the provider’s
-        checkout process and applicable consumer protection laws.
+        Payments for ProfitPilot are processed by <strong>Paddle</strong>, our Merchant of Record.
+        Refunds are handled in accordance with Paddle’s checkout process, Paddle’s buyer terms,
+        and applicable consumer protection laws.
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="title">Refund window</div>
+      <div class="small">
+        If you are purchasing as a consumer, you may request a refund within <strong>14 days</strong> of purchase
+        (the day after the transaction is completed). Refund requests are reviewed and processed by Paddle
+        in line with their buyer terms and applicable law.
       </div>
 
       <div class="divider"></div>
 
       <div class="title">How to request a refund</div>
       <div class="small">
-        If you believe you are entitled to a refund:
+        To request a refund:
         <ul>
-          <li><b>Use the “receipt email”</b> from your payment provider (recommended). It typically includes a self-serve help/refund link.</li>
-          <li>Or email us at <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a> with your purchase email and any receipt/order reference you have.</li>
-        </ul>
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="title">Eligibility & fair use</div>
-      <div class="small">
-        We review refund requests fairly and in line with applicable law. We also reserve the right to refuse refunds in cases of:
-        <ul>
-          <li>Misuse, abuse, or fraudulent activity</li>
-          <li>Excessive or repeated refund requests</li>
-          <li>Chargeback abuse</li>
+          <li><strong>Use your Paddle receipt email</strong> (recommended). It typically includes a secure self-service help/refund link.</li>
+          <li>Or email us at <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a> with your purchase email address and any receipt/order reference you have.</li>
         </ul>
       </div>
 
       <div class="divider"></div>
 
       <div class="notice">
-        <b>Important:</b> ProfitPilot is a digital tool. Outputs are estimates based on the inputs you provide.
+        <b>Important:</b> ProfitPilot is a digital estimation tool. Outputs depend on your inputs and assumptions.
         It is not financial, tax, or legal advice, and we do not guarantee profit outcomes.
       </div>
 
@@ -324,10 +315,11 @@
       <div class="small">
         Last updated: <span id="updated">—</span>
       </div>
+
     </section>
   </main>
 
-  <!-- Footer (all links) -->
+  <!-- Footer (use absolute URLs so Paddle can crawl reliably) -->
   <footer class="pp-footer" role="contentinfo">
     <div class="pp-footbox">
       <div class="pp-footgrid">
@@ -341,13 +333,13 @@
         </div>
 
         <div class="pp-footlinks" aria-label="Footer links">
-          <a href="index.html">Home</a>
-          <a href="pricing.html">Pricing</a>
-          <a href="reviews.html">Reviews</a>
-          <a href="refunds.html">Refund Policy</a>
-          <a href="faq.html">FAQ</a>
-          <a href="terms.html">Terms &amp; Conditions</a>
-          <a href="privacy.html">Privacy</a>
+          <a href="https://profitpilot.ukwebtools.com/index.html">Home</a>
+          <a href="https://profitpilot.ukwebtools.com/pricing.html">Pricing</a>
+          <a href="https://profitpilot.ukwebtools.com/reviews.html">Reviews</a>
+          <a href="https://profitpilot.ukwebtools.com/refunds.html">Refund Policy</a>
+          <a href="https://profitpilot.ukwebtools.com/faq.html">FAQ</a>
+          <a href="https://profitpilot.ukwebtools.com/terms.html">Terms &amp; Conditions</a>
+          <a href="https://profitpilot.ukwebtools.com/privacy.html">Privacy</a>
         </div>
       </div>
 
@@ -365,40 +357,27 @@
     const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
-    // Footer year
+    // Footer year + explicit last-updated (today)
     document.getElementById("yr").textContent = new Date().getFullYear();
+    document.getElementById("updated").textContent = new Date().toLocaleDateString(undefined, {
+      year: "numeric", month: "long", day: "numeric"
+    });
 
-    // Update date (set your date here if you want)
-    document.getElementById("updated").textContent = new Date().toLocaleDateString();
-
-    function safeText(s){ return String(s || "").replace(/\s+/g, " ").trim(); }
-
-    // Auth UI
-    const userChip = document.getElementById("userChip");
+    // Auth UI (NO email display)
     const accountBtn = document.getElementById("accountBtn");
     const logoutBtn = document.getElementById("logoutBtn");
 
     async function refreshAuthUI(){
       const { data: { session } } = await supabase.auth.getSession();
-      const email = safeText(session?.user?.email);
+      const isAuthed = !!session?.user;
 
-      if (email){
-        userChip.style.display = "inline-flex";
-        userChip.textContent = email;
-        userChip.title = email;
-
+      if (isAuthed){
         accountBtn.textContent = "Open app";
-        accountBtn.href = "app.html";
-
+        accountBtn.href = "https://profitpilot.ukwebtools.com/app.html";
         logoutBtn.style.display = "inline-flex";
       } else {
-        userChip.style.display = "none";
-        userChip.textContent = "—";
-        userChip.title = "";
-
         accountBtn.textContent = "Account";
-        accountBtn.href = "login.html";
-
+        accountBtn.href = "https://profitpilot.ukwebtools.com/login.html";
         logoutBtn.style.display = "none";
       }
     }
@@ -406,7 +385,7 @@
     logoutBtn.addEventListener("click", async (e)=>{
       e.preventDefault();
       try { await supabase.auth.signOut(); }
-      finally { location.href = "login.html"; }
+      finally { location.href = "https://profitpilot.ukwebtools.com/login.html"; }
     });
 
     await refreshAuthUI();
