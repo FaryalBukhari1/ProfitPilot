@@ -783,64 +783,99 @@ input,select,textarea{
           </div>
         </div>
 
-        
           <section class="heroBlock heroCompetitor" id="compBox">
 
-            <div class="pHead">
-              <div>
-                <div style="font-weight:900">Competitor mode (manual)</div>
-                <div class="small">Enter competitor prices you found yourself. No scraping.</div>
-              </div>
-              <span class="tag" id="compStatus">Trial limited</span>
-            </div>
+  <div class="pHead">
+    <div>
+      <div class="title">Competitor Positioning Engine</div>
+      <div class="small">Enter competitor prices you found yourself. No scraping.</div>
+    </div>
+    <span class="tag" id="compStatus">Trial limited</span>
+  </div>
 
-            <div class="small" id="compUsesLine" style="margin-top:6px">Competitor uses: —</div>
+  <div class="small" id="compUsesLine" style="margin-top:8px">Competitor uses: —</div>
 
-            <div class="row" style="margin-top:8px">
-              <div><label>Competitor price #1</label><input id="c1" inputmode="decimal" value="0"></div>
-              <div><label>Competitor price #2</label><input id="c2" inputmode="decimal" value="0"></div>
-            </div>
-            <div class="row">
-              <div><label>Competitor price #3</label><input id="c3" inputmode="decimal" value="0"></div>
-              <div>
-                <label>Positioning</label>
-                <select id="positioning">
-                  <option value="undercut">Undercut slightly</option>
-                  <option value="match">Match market</option>
-                  <option value="premium">Premium (if your offer is better)</option>
-                </select>
-              </div>
-            </div>
+  <div class="row" style="margin-top:20px">
+    <div>
+      <label>Competitor price #1</label>
+      <input id="c1" inputmode="decimal" value="0">
+    </div>
+    <div>
+      <label>Competitor price #2</label>
+      <input id="c2" inputmode="decimal" value="0">
+    </div>
+  </div>
 
-            <div class="row">
-              <div>
-                <label>Buffer above break-even (%)</label>
-                <input id="floorBuffer" inputmode="decimal" value="5">
-                <div class="small">“Don’t go below” = break-even + buffer</div>
-              </div>
-              <div style="display:flex;align-items:end;gap:10px;flex-wrap:wrap">
-                <button class="btn primary" id="runCompBtn" type="button">Run competitor mode</button>
-<span class="pill" id="compToast">—</span>
+  <div class="row">
+    <div>
+      <label>Competitor price #3</label>
+      <input id="c3" inputmode="decimal" value="0">
+    </div>
+    <div>
+      <label>Positioning</label>
+      <select id="positioning">
+        <option value="undercut">Undercut slightly</option>
+        <option value="match">Match market</option>
+        <option value="premium">Premium (if your offer is better)</option>
+      </select>
+    </div>
+  </div>
 
-            </div>
+  <div class="row">
+    <div>
+      <label>Buffer above break-even (%)</label>
+      <input id="floorBuffer" inputmode="decimal" value="5">
+      <div class="small">“Don’t go below” = break-even + buffer</div>
+    </div>
+    <div style="display:flex;align-items:end;gap:10px;flex-wrap:wrap">
+      <button class="btn primary" id="runCompBtn" type="button">
+        Run competitor mode
+      </button>
+      <span class="pill" id="compToast">—</span>
+    </div>
+  </div>
 
-            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
-              <button class="btn" id="useSuggestedBtn" type="button" disabled>Use suggested price</button>
-              <button class="btn" id="saveScenarioBtn" type="button">Save scenario (PRO)</button>
-              <span class="pill" id="scenarioToast">—</span>
-            </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+    <button class="btn" id="useSuggestedBtn" type="button" disabled>
+      Use suggested price
+    </button>
+    <button class="btn" id="saveScenarioBtn" type="button">
+      Save scenario (PRO)
+    </button>
+    <span class="pill" id="scenarioToast">—</span>
+  </div>
 
-            <div class="pGrid" style="margin-top:10px">
-              <div class="pItem"><div class="t">Market reference (median)</div><div class="v" id="compMedian">—</div></div>
-              <div class="pItem"><div class="t">Suggested price</div><div class="v" id="compSuggest">—</div><div class="small" id="compWhy">—</div></div>
-              <div class="pItem"><div class="t">Don’t go below</div><div class="v" id="compFloor">—</div><div class="small">Break-even + buffer</div></div>
-              <div class="pItem"><div class="t">Reality check</div><div class="v" id="compCheck">—</div><div class="small" id="compCheck2">—</div></div>
-            </div>
+  <div class="pGrid" style="margin-top:24px">
+    <div class="pItem">
+      <div class="t">Market reference (median)</div>
+      <div class="v" id="compMedian">—</div>
+    </div>
 
-            <ul class="pList" id="compBullets">
-              <li>Tip: use “Don’t go below” as your personal floor price.</li>
-            </ul>
-          </div>
+    <div class="pItem">
+      <div class="t">Suggested price</div>
+      <div class="v" id="compSuggest">—</div>
+      <div class="small" id="compWhy">—</div>
+    </div>
+
+    <div class="pItem">
+      <div class="t">Don’t go below</div>
+      <div class="v" id="compFloor">—</div>
+      <div class="small">Break-even + buffer</div>
+    </div>
+
+    <div class="pItem">
+      <div class="t">Reality check</div>
+      <div class="v" id="compCheck">—</div>
+      <div class="small" id="compCheck2">—</div>
+    </div>
+  </div>
+
+  <ul class="pList">
+    <li>Tip: use “Don’t go below” as your personal floor price.</li>
+  </ul>
+
+</section>
+     
 
             <section class="heroBlock">
   <div class="title">Saved scenarios (PRO)</div>
