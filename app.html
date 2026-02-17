@@ -494,8 +494,13 @@
             <div class="divider"></div>
             <div class="title" style="margin:0 0 6px;font-size:14px">Reverse mode</div>
             <div class="small">Trial: 3 reverse calculations total. PRO: unlimited.</div>
-            <label>Target profit</label>
-            <input id="targetProfit" inputmode="decimal" value="0">
+            <label>Target profit (<span id="tpCurrency">£</span> per sale)</label>
+
+<input id="targetProfit" inputmode="decimal" value="0">
+            <div class="small" id="reverseHint">—</div>
+
+<div class="small">Enter the amount you want to earn per sale (e.g., 5.00 means £5 profit, not 5%).</div>
+
             <div class="small" id="reverseUsesLine" style="margin-top:8px">Reverse uses: —</div>
           </div>
 
@@ -908,6 +913,8 @@
     const bulkImportStatus = document.getElementById("bulkImportStatus");
     const importBanner = document.getElementById("importBanner");
     const proCard = document.getElementById("proCard");
+    const reverseHint = document.getElementById("reverseHint");
+
 
     const pdfBtn = document.getElementById("pdfBtn");
     const shareBtn = document.getElementById("shareBtn");
@@ -994,9 +1001,6 @@
     const bulkTbody = document.getElementById("bulkTbody");
 
     // Tabs
-    const tabProfit = document.getElementById("tabProfit");
-    const tabReverse = document.getElementById("tabReverse");
-    const tabBulk = document.getElementById("tabBulk");
     const singleBox = document.getElementById("singleBox");
     const reverseBox = document.getElementById("reverseBox");
     const bulkBox = document.getElementById("bulkBox");
@@ -1036,6 +1040,15 @@ heroBtns.forEach(btn=>{
     // Currency formatting
     // ---------------------------
     function sym(){ return CURRENCY_SYMBOL[currencyEl?.value || "GBP"] || ""; }
+    const tpCurrency = document.getElementById("tpCurrency");
+
+function updateTargetCurrencyLabel(){
+  if (tpCurrency) tpCurrency.textContent = sym();
+}
+
+currencyEl?.addEventListener("change", updateTargetCurrencyLabel);
+updateTargetCurrencyLabel();
+
     function money(x){ return sym() + (Number.isFinite(x) ? x : 0).toFixed(2); }
     function pct(x){ return (Number.isFinite(x) ? x : 0).toFixed(1) + "%"; }
 
@@ -1380,29 +1393,76 @@ sellPriceEl?.addEventListener("input", ()=>{
       if (o2hint) o2hint.textContent = "Implied margin at that selling price.";
       updateFXLine(sell);
     }
+    function updateReverseHint(){
+  if (!reverseHint) return;
+
+  const sell = n(sellPriceEl?.value);
+  const target = n(targetProfitEl?.value);
+
+  if (target <= 0){
+    reverseHint.textContent = "Enter desired profit per sale (currency amount, not %).";
+    reverseHint.style.color = "";
+    return;
+  }
+
+  if (sell > 0){
+    const approxMargin = (target / sell) * 100;
+
+    reverseHint.textContent =
+      `${money(target)} profit on ${money(sell)} sale ≈ ${approxMargin.toFixed(1)}% margin.`;
+
+    if (approxMargin > 60){
+      reverseHint.style.color = "var(--bad)";
+    } else if (approxMargin < 5){
+      reverseHint.style.color = "var(--warn)";
+    } else {
+      reverseHint.style.color = "var(--ok)";
+    }
+  } else {
+    reverseHint.textContent =
+      `${money(target)} profit per sale (currency amount, not %).`;
+    reverseHint.style.color = "";
+  }
+}
+   
 
     // ---------------------------
     // Modes / Tabs
     // ---------------------------
     let MODE = "profit";
-    function setMode(m){
-      MODE = m;
-      tabProfit?.classList.toggle("active", m==="profit");
-      tabReverse?.classList.toggle("active", m==="reverse");
-      tabBulk?.classList.toggle("active", m==="bulk");
 
-      if (singleBox) singleBox.style.display = (m==="bulk") ? "none" : "block";
-      if (bulkBox) bulkBox.style.display = (m==="bulk") ? "block" : "none";
-      if (reverseBox) reverseBox.style.display = (m==="reverse") ? "block" : "none";
+function setMode(m){
+  MODE = m;
 
-      if (m==="profit"){ if(o1h) o1h.textContent="Estimated profit"; if(o2h) o2h.textContent="Margin"; }
-      if (m==="reverse"){ if(o1h) o1h.textContent="Required selling price"; if(o2h) o2h.textContent="Implied margin"; }
+  // Sync hero buttons
+  document.querySelectorAll(".heroBtn").forEach(btn=>{
+    btn.classList.toggle("active", btn.dataset.mode === m);
+  });
 
-      compute(); refreshInsights();
-    }
-    tabProfit?.addEventListener("click", ()=>setMode("profit"));
-    tabReverse?.addEventListener("click", ()=>setMode("reverse"));
-    tabBulk?.addEventListener("click", ()=>setMode("bulk"));
+  if (singleBox) singleBox.style.display = (m==="bulk") ? "none" : "block";
+  if (bulkBox) bulkBox.style.display = (m==="bulk") ? "block" : "none";
+  if (reverseBox) reverseBox.style.display = (m==="reverse") ? "block" : "none";
+
+  if (m==="profit"){
+    if(o1h) o1h.textContent="Estimated profit";
+    if(o2h) o2h.textContent="Margin";
+  }
+
+  if (m==="reverse"){
+    if(o1h) o1h.textContent="Required selling price";
+    if(o2h) o2h.textContent="Implied margin";
+  }
+
+  // Smooth scroll when switching to Bulk
+  if (m === "bulk"){
+    bulkBox?.scrollIntoView({ behavior:"smooth", block:"start" });
+  }
+
+  updateReverseHint();
+  compute();
+  refreshInsights();
+}
+
 
     function compute(){
       if (MODE==="profit") return computeProfit();
@@ -2258,10 +2318,19 @@ sellPriceEl?.addEventListener("input", ()=>{
 
     // Live compute updates
     [
-      sellPriceEl, productCostEl, shipCostEl, miscCostEl,
-      feePctEl, feeFixedEl, adsPctEl, returnPctEl,
-      fxRateEl, currencyEl
-    ].filter(Boolean).forEach(el=> el.addEventListener("input", ()=>{ computeProfit(); refreshInsights(); }));
+  sellPriceEl, productCostEl, shipCostEl, miscCostEl,
+  feePctEl, feeFixedEl, adsPctEl, returnPctEl,
+  fxRateEl, currencyEl
+].filter(Boolean).forEach(el=> 
+  el.addEventListener("input", ()=>{
+    computeProfit();
+    refreshInsights();
+    updateReverseHint();
+  })
+);
+    
+    targetProfitEl?.addEventListener("input", updateReverseHint);
+
 
     async function computeReverseWithLimit(){
       if (!CURRENT_PROFILE?.paid){
