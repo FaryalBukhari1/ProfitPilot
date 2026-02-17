@@ -139,6 +139,68 @@
       line-height:1.6;
     }
 
+    /* --- Owner actions (⋯ menu) --- */
+.reviewTopRight{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.dotsWrap{
+  position:relative;
+}
+
+.dotsBtn{
+  width:34px;height:34px;
+  border-radius:12px;
+  border:1px solid rgba(16,24,40,.10);
+  background:rgba(255,255,255,.88);
+  cursor:pointer;
+  font-weight:1000;
+  line-height:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.dotsBtn:hover{
+  filter:brightness(.98);
+}
+
+.dotsMenu{
+  position:absolute;
+  right:0;
+  top:38px;
+  min-width:150px;
+  border-radius:14px;
+  border:1px solid rgba(16,24,40,.10);
+  background:#fff;
+  box-shadow:0 20px 60px rgba(16,24,40,.14);
+  display:none;
+  overflow:hidden;
+  z-index:20;
+}
+
+.dotsMenu button{
+  width:100%;
+  padding:10px 12px;
+  border:none;
+  background:#fff;
+  text-align:left;
+  cursor:pointer;
+  font-weight:900;
+  font-size:13px;
+}
+
+.dotsMenu button:hover{
+  background:rgba(16,24,40,.05);
+}
+
+.dotsMenu .danger{
+  color:var(--bad);
+}
+
+
     footer{margin-top:18px;color:rgba(16,24,40,.58);font-size:12.5px;line-height:1.7}
   </style>
 </head>
@@ -152,6 +214,47 @@
         <div>
           <div><b>ProfitPilot</b></div>
           <div class="sub">Public reviews</div>
+          <!-- Edit Review Modal (hidden by default) -->
+<div id="editModal" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.35);padding:18px">
+  <div style="max-width:520px;margin:8vh auto;background:#fff;border-radius:18px;border:1px solid rgba(16,24,40,.12);box-shadow:0 30px 80px rgba(16,24,40,.25);padding:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+      <div style="font-weight:1000;font-size:16px">Edit your review</div>
+      <button class="btn" id="closeEditModal" type="button">Close</button>
+    </div>
+
+    <div class="hr"></div>
+
+    <label style="display:block;font-size:12px;font-weight:1000;margin:8px 0 6px">Name (optional)</label>
+    <input id="editName" placeholder="Name" style="width:100%;padding:12px 14px;border-radius:14px;border:1px solid rgba(16,24,40,.12)">
+
+    <label style="display:block;font-size:12px;font-weight:1000;margin:12px 0 6px">Category</label>
+    <select id="editCategory" style="width:100%;padding:12px 14px;border-radius:14px;border:1px solid rgba(16,24,40,.12)">
+      <option>General</option>
+      <option>UI/UX</option>
+      <option>Accuracy</option>
+      <option>Speed</option>
+      <option>Features</option>
+    </select>
+
+    <label style="display:block;font-size:12px;font-weight:1000;margin:12px 0 6px">Rating</label>
+    <select id="editRating" style="width:100%;padding:12px 14px;border-radius:14px;border:1px solid rgba(16,24,40,.12)">
+      <option value="5">★★★★★ (5)</option>
+      <option value="4">★★★★☆ (4)</option>
+      <option value="3">★★★☆☆ (3)</option>
+      <option value="2">★★☆☆☆ (2)</option>
+      <option value="1">★☆☆☆☆ (1)</option>
+    </select>
+
+    <label style="display:block;font-size:12px;font-weight:1000;margin:12px 0 6px">Review</label>
+    <textarea id="editMessage" rows="4" style="width:100%;padding:12px 14px;border-radius:14px;border:1px solid rgba(16,24,40,.12)"></textarea>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center">
+      <button class="btn primary" id="saveEditReview" type="button">Save changes</button>
+      <span class="tag" id="editStatus">—</span>
+    </div>
+  </div>
+</div>
+
         </div>
       </div>
 
@@ -220,226 +323,216 @@
   </div>
 
 <script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-  const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
-  const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
+const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
+const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
 
-  // MUST match your app/login pages:
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON, {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true,
-      flowType: "pkce",
-      storageKey: "profitpilot_auth"
-    }
-  });
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+    flowType: "pkce",
+    storageKey: "profitpilot_auth"
+  }
+});
 
-  document.getElementById("yr").textContent = new Date().getFullYear();
+document.getElementById("yr").textContent = new Date().getFullYear();
 
-  const avgOut = document.getElementById("avgOut");
-  const countOut = document.getElementById("countOut");
-  const starsOut = document.getElementById("starsOut");
-  const reviewsBox = document.getElementById("reviews");
-  const status = document.getElementById("status");
-  const moreBtn = document.getElementById("moreBtn");
-  const moreStatus = document.getElementById("moreStatus");
-  const meLine = document.getElementById("meLine");
-  const leaveBtn = document.getElementById("leaveBtn");
-  const openBtn = document.getElementById("openBtn");
-  const logoutBtn = document.getElementById("logoutBtn");
-  const errorBox = document.getElementById("errorBox");
+const avgOut = document.getElementById("avgOut");
+const countOut = document.getElementById("countOut");
+const starsOut = document.getElementById("starsOut");
+const reviewsBox = document.getElementById("reviews");
+const status = document.getElementById("status");
+const moreBtn = document.getElementById("moreBtn");
+const moreStatus = document.getElementById("moreStatus");
+const meLine = document.getElementById("meLine");
+const leaveBtn = document.getElementById("leaveBtn");
+const openBtn = document.getElementById("openBtn");
+const logoutBtn = document.getElementById("logoutBtn");
+const errorBox = document.getElementById("errorBox");
 
-  function showError(msg){
-    errorBox.style.display = "block";
-    errorBox.textContent = msg;
+let CURRENT_USER_ID = null;
+let page = 0;
+const PAGE_SIZE = 10;
+let loading = false;
+
+function showError(msg){
+  errorBox.style.display = "block";
+  errorBox.textContent = msg;
+}
+
+function escapeHtml(s){
+  return String(s ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#39;");
+}
+
+function stars(n){
+  const r = Math.max(0, Math.min(5, Math.round(Number(n) || 0)));
+  return "★".repeat(r) + "☆".repeat(5-r);
+}
+
+async function refreshAuthUI(){
+  const { data: { session } } = await supabase.auth.getSession();
+  const loggedIn = !!session?.user;
+  CURRENT_USER_ID = session?.user?.id || null;
+
+  if (loggedIn){
+    openBtn.textContent = "Open app";
+    openBtn.href = "app.html";
+    logoutBtn.style.display = "inline-flex";
+    meLine.textContent = "You’re logged in. Open the app to leave or edit your review.";
+    leaveBtn.textContent = "Open app to leave/edit your review";
+    leaveBtn.href = "app.html";
+  } else {
+    openBtn.textContent = "Log in";
+    openBtn.href = "login.html";
+    logoutBtn.style.display = "none";
+    meLine.textContent = "You’re viewing publicly. Log in to leave or edit your review.";
+    leaveBtn.textContent = "Log in to leave/edit your review";
+    leaveBtn.href = "login.html";
+  }
+}
+
+logoutBtn.addEventListener("click", async (e)=>{
+  e.preventDefault();
+  await supabase.auth.signOut();
+  location.reload();
+});
+
+function setMoreLoading(on){
+  loading = !!on;
+  moreBtn.disabled = !!on;
+  moreBtn.textContent = on ? "Loading…" : "Load more";
+}
+
+async function loadSummary(){
+  const { count } = await supabase
+    .from("reviews")
+    .select("id", { count: "exact", head: true })
+    .eq("approved", true);
+
+  const total = count || 0;
+  countOut.textContent = total ? `${total} review(s)` : "No reviews yet";
+
+  if (!total){
+    avgOut.textContent = "—";
+    starsOut.textContent = "—";
+    return;
   }
 
-  function escapeHtml(s){
-    return String(s ?? "")
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#39;");
-  }
-  function stars(n){
-    const r = Math.max(0, Math.min(5, Math.round(Number(n) || 0)));
-    return "★".repeat(r) + "☆".repeat(5-r);
-  }
+  const { data } = await supabase
+    .from("reviews")
+    .select("rating")
+    .eq("approved", true)
+    .limit(1000);
 
-  async function refreshAuthUI(){
-    const { data: { session } } = await supabase.auth.getSession();
-    const loggedIn = !!session?.user;
+  const ratings = (data || []).map(x=>Number(x.rating)||0).filter(x=>x>=1 && x<=5);
+  const avg = ratings.reduce((s,x)=>s+x,0) / ratings.length;
 
-    // PRIVACY: do NOT show email anywhere.
-    if (loggedIn){
-      openBtn.textContent = "Open app";
-      openBtn.href = "app.html";
-      logoutBtn.style.display = "inline-flex";
+  avgOut.textContent = avg.toFixed(1);
+  starsOut.textContent = stars(avg);
+}
 
-      meLine.textContent = "You’re logged in. Open the app to leave or edit your review.";
-      leaveBtn.textContent = "Open app to leave/edit your review";
-      leaveBtn.href = "app.html";
-    } else {
-      openBtn.textContent = "Log in";
-      openBtn.href = "login.html";
-      logoutBtn.style.display = "none";
+async function loadPage(reset=false){
+  if (loading) return;
+  setMoreLoading(true);
 
-      meLine.textContent = "You’re viewing publicly. Log in to leave or edit your review.";
-      leaveBtn.textContent = "Log in to leave/edit your review";
-      leaveBtn.href = "login.html";
-    }
+  if (reset){
+    page = 0;
+    reviewsBox.innerHTML = "";
   }
 
-  logoutBtn.addEventListener("click", async (e)=>{
-    e.preventDefault();
-    await supabase.auth.signOut();
-    location.href = "reviews.html";
-  });
+  const from = page * PAGE_SIZE;
+  const to = from + PAGE_SIZE - 1;
 
-  // Pagination
-  let page = 0;
-  const PAGE_SIZE = 10;
-  let loading = false;
+  const { data } = await supabase
+    .from("reviews")
+    .select("id,user_id,created_at,name,rating,category,message")
+    .eq("approved", true)
+    .order("created_at", { ascending:false })
+    .range(from, to);
 
-  function setMoreLoading(on){
-    loading = !!on;
-    moreBtn.disabled = !!on;
-    moreBtn.textContent = on ? "Loading…" : "Load more";
-  }
-
-  async function loadSummary(){
-    // Count (approved only)
-    const { count, error: countErr } = await supabase
-      .from("reviews")
-      .select("id", { count: "exact", head: true })
-      .eq("approved", true);
-
-    if (countErr){
-      avgOut.textContent = "—";
-      starsOut.textContent = "—";
-      countOut.textContent = "Summary unavailable";
-      showError("Reviews summary failed to load. Check RLS: allow SELECT on reviews where approved=true.");
-      return;
-    }
-
-    const total = count || 0;
-    countOut.textContent = total ? `${total} review(s)` : "No reviews yet";
-
-    if (!total){
-      avgOut.textContent = "—";
-      starsOut.textContent = "—";
-      return;
-    }
-
-    // Ratings (limit 1000 is fine early stage)
-    const { data, error } = await supabase
-      .from("reviews")
-      .select("rating")
-      .eq("approved", true)
-      .order("created_at", { ascending: false })
-      .limit(1000);
-
-    if (error || !data){
-      avgOut.textContent = "—";
-      starsOut.textContent = "—";
-      return;
-    }
-
-    const ratings = data.map(x=>Number(x.rating)||0).filter(x=>x>=1 && x<=5);
-    if (!ratings.length){
-      avgOut.textContent = "—";
-      starsOut.textContent = "—";
-      return;
-    }
-
-    const avg = ratings.reduce((s,x)=>s+x,0) / ratings.length;
-    avgOut.textContent = avg.toFixed(1);
-    starsOut.textContent = stars(avg);
-  }
-
-  async function loadPage(reset=false){
-    if (loading) return;
-    setMoreLoading(true);
-
-    if (reset){
-      page = 0;
-      reviewsBox.innerHTML = "";
-      moreBtn.disabled = false;
-      moreBtn.textContent = "Load more";
-    }
-
-    status.textContent = "Loading…";
-    moreStatus.textContent = "—";
-
-    const from = page * PAGE_SIZE;
-    const to = from + PAGE_SIZE - 1;
-
-    const { data, error } = await supabase
-      .from("reviews")
-      .select("created_at,name,rating,category,message")
-      .eq("approved", true)
-      .order("created_at", { ascending:false })
-      .range(from, to);
-
-    if (error){
-      status.textContent = "Could not load reviews.";
-      moreStatus.textContent = "Error";
-      showError("Reviews list failed to load. Likely RLS blocks SELECT. Allow SELECT where approved=true.");
-      setMoreLoading(false);
-      return;
-    }
-
-    if (!data || data.length === 0){
-      status.textContent = (from === 0) ? "No reviews yet." : "No more reviews.";
-      moreStatus.textContent = "End";
-      moreBtn.disabled = true;
-      moreBtn.textContent = "End";
-      return;
-    }
-
-    status.textContent = "Showing latest reviews.";
-    data.forEach(r=>{
-      const div = document.createElement("div");
-      div.className = "review";
-
-      const cat = escapeHtml(r.category || "General");
-      const name = escapeHtml(r.name || "Anonymous");
-      const msg = escapeHtml(r.message || "");
-      const date = new Date(r.created_at).toLocaleDateString();
-      const rating = Number(r.rating) || 0;
-
-      div.innerHTML = `
-        <div class="meta">
-          <div class="stars">${stars(rating)} <span class="tag">${cat}</span></div>
-          <div class="muted">${date}</div>
-        </div>
-        <div class="small" style="margin-top:8px"><b>${name}</b> — ${msg}</div>
-      `;
-      reviewsBox.appendChild(div);
-    });
-
-    page++;
-    moreStatus.textContent = `Loaded ${data.length}`;
+  if (!data || data.length === 0){
+    status.textContent = (from === 0) ? "No reviews yet." : "No more reviews.";
+    moreBtn.disabled = true;
     setMoreLoading(false);
+    return;
   }
 
-  moreBtn.addEventListener("click", ()=>loadPage(false));
+  status.textContent = "Showing latest reviews.";
 
-  // Boot (with hard error capture so page never "goes blank")
-  window.addEventListener("error", (e)=> showError("JS error: " + (e.message || "unknown")));
-  window.addEventListener("unhandledrejection", (e)=> showError("JS error: " + (e.reason?.message || String(e.reason))));
+  data.forEach(r=>{
+    const div = document.createElement("div");
+    div.className = "review";
+    div.dataset.id = r.id;
+    div.dataset.userId = r.user_id;
 
-  try{
-    await refreshAuthUI();
-    supabase.auth.onAuthStateChange(()=>refreshAuthUI());
+    const isOwner = CURRENT_USER_ID && r.user_id === CURRENT_USER_ID;
+
+    div.innerHTML = `
+      <div class="meta">
+        <div class="stars">${stars(r.rating)} <span class="tag">${escapeHtml(r.category||"General")}</span></div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="muted">${new Date(r.created_at).toLocaleDateString()}</div>
+          ${isOwner ? `<button class="btn ghost small editBtn">Edit</button>
+                       <button class="btn ghost small deleteBtn" style="color:#ef4444">Delete</button>` : ``}
+        </div>
+      </div>
+      <div class="small" style="margin-top:8px"><b>${escapeHtml(r.name||"Anonymous")}</b> — ${escapeHtml(r.message||"")}</div>
+    `;
+
+    reviewsBox.appendChild(div);
+  });
+
+  page++;
+  setMoreLoading(false);
+}
+
+reviewsBox.addEventListener("click", async (e)=>{
+  const card = e.target.closest(".review");
+  if (!card) return;
+
+  const id = card.dataset.id;
+
+  if (e.target.classList.contains("deleteBtn")){
+    if (!confirm("Delete your review?")) return;
+    await supabase.from("reviews").delete().eq("id", id);
     await loadSummary();
     await loadPage(true);
-  } catch(e){
-    showError("Boot error: " + (e?.message || "unknown"));
   }
+
+  if (e.target.classList.contains("editBtn")){
+    const { data } = await supabase.from("reviews").select("*").eq("id", id).limit(1);
+    if (!data?.[0]) return;
+
+    const newMessage = prompt("Edit your review:", data[0].message);
+    if (newMessage === null) return;
+
+    await supabase.from("reviews")
+      .update({ message: newMessage })
+      .eq("id", id);
+
+    await loadPage(true);
+  }
+});
+
+moreBtn.addEventListener("click", ()=>loadPage(false));
+
+try{
+  await refreshAuthUI();
+  supabase.auth.onAuthStateChange(()=>refreshAuthUI());
+  await loadSummary();
+  await loadPage(true);
+}catch(e){
+  showError(e.message);
+}
 </script>
+
 </body>
 </html>
