@@ -178,6 +178,7 @@ a:hover{text-decoration:underline}
   box-shadow:0 25px 70px rgba(16,24,40,.08);
 }
 
+
 /* ================= HERO CALCULATOR ================= */
 
 #calcCard{
@@ -203,6 +204,41 @@ a:hover{text-decoration:underline}
   height:1px;
   background:var(--line);
   margin:28px 0;
+}
+      /* ================= INSIGHTS HERO ================= */
+
+.insightsHero{
+  margin-top:40px;
+  border:1px solid rgba(79,70,229,.25);
+  background:
+    linear-gradient(135deg, rgba(79,70,229,.08), rgba(14,165,164,.08));
+  box-shadow:
+    0 70px 160px rgba(79,70,229,.18);
+}
+
+/* Bigger title */
+.insightsHero .title{
+  font-size:28px;
+}
+
+/* Stronger metric tiles */
+.insightsHero .pItem{
+  background:#fff;
+  border:1px solid rgba(16,24,40,.06);
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 20px 60px rgba(16,24,40,.08);
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+
+.insightsHero .pItem:hover{
+  transform:translateY(-4px);
+  box-shadow:0 30px 80px rgba(16,24,40,.12);
+}
+
+.insightsHero .pItem .v{
+  font-size:24px;
+  font-weight:1000;
 }
 
 /* ================= MODE BUTTONS ================= */
@@ -573,7 +609,14 @@ input,select,textarea{
 
       <!-- RIGHT -->
       
-        <div class="card" id="proCard">
+        
+
+        <div class="card insightsHero" id="insightsBox">
+
+            <div class="pHead">
+              <div>
+
+                <div class="card" id="proCard">
           <div class="title">PRO features</div>
           <div class="small">Unlimited reverse + competitor + bulk, PDF export, share links, insights, saved scenarios. One-time unlock.</div>
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
@@ -581,12 +624,8 @@ input,select,textarea{
             <a class="btn" href="reviews.html">See reviews</a>
           </div>
         </div>
+                <div class="title">Pricing Intelligence (PRO)</div>
 
-        <div class="card" style="margin-top:14px">
-          <div class="panel" id="insightsBox">
-            <div class="pHead">
-              <div>
-                <div style="font-weight:900">Insights (PRO)</div>
                 <div class="small">Decision support from your inputs (estimates only).</div>
               </div>
               <span class="tag" id="insStatus">Locked</span>
