@@ -308,8 +308,16 @@
     <div class="grid">
       <!-- LEFT -->
      <div class="card" id="calcCard">
-        <div class="title">Calculator</div>
-        <div class="small">Profit = normal. Reverse = target profit → required selling price. Bulk = multiple items.</div>
+        <div class="title">Pricing Command Center</div>
+<div class="small">Know your real profit after fees, ads and returns. Reverse = target profit → required price. Bulk = test multiple items fast.</div>
+
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 0">
+  <span class="pill ok">Profit clarity</span>
+  <span class="pill">Reverse pricing</span>
+  <span class="pill">Bulk testing</span>
+  <span class="pill">Competitor positioning</span>
+</div>
+
 
         <div class="tabs">
           <div class="tab active" id="tabProfit">Profit</div>
@@ -344,11 +352,18 @@
         <div id="singleBox">
           <div class="divider"></div>
 
-          <label>Platform preset</label>
-          <select id="preset"></select>
-          <label id="catLabel" style="display:none;margin-top:10px">Category (for accurate fees)</label>
+          <label>Marketplace & fee profile</label>
+<select id="preset"></select>
+
+<label id="catLabel" style="display:none;margin-top:10px">Category (for accurate fees)</label>
 <select id="category" style="display:none"></select>
+
 <div class="small" id="presetNote" style="margin-top:8px">—</div>
+
+<div class="small" style="margin-top:6px;color:#6b7280;">
+  Preset percentages are baseline examples unless marked “Custom”.
+</div>
+
 
 
           <div class="row">
@@ -494,12 +509,14 @@
         <div class="divider"></div>
 
         <div class="small">
-          <b>Disclaimer:</b> estimates only (not financial/legal/tax advice). Not affiliated with any platform.
-          FX depends on your entered rate (no live rates). See
-          <a href="terms.html">Terms</a> and
-          <a href="privacy.html">Privacy</a>.
-        </div>
-      </div>
+  <b>Important:</b> All outputs are estimates based solely on your inputs and assumptions. 
+  Fee presets are simplified examples and may not reflect current category rates, promotions, payment plans, VAT, or regional variations. 
+  Always verify exact fees directly with your platform before making pricing decisions. 
+  This tool provides no financial, legal, tax, or business advice and carries no profit guarantees. 
+  ProfitPilot is an independent tool and is not affiliated with or endorsed by any marketplace or payment provider. 
+  See <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy</a>.
+</div>
+ 
 
       <!-- RIGHT -->
       
@@ -924,6 +941,19 @@
 // eBay UK business sellers: % depends on category; plus per-order fee that depends on order total
 // £0.30 for orders <= £10, £0.40 for orders > £10 
 //
+    {
+  id: "ebay_uk_personal",
+  label: "eBay (UK Personal) — category-based % + per-order fee",
+  note: "Personal seller fees vary by category and listing type. Choose a category % (or use Custom). Per-order fee auto-adjusts: £0.30 (≤£10), £0.40 (>£10).",
+  base: { feePct: 0, feeFixed: 0, adsPct: 0, returnPct: 4 },
+  dynamicFixed: "ebay_uk_order_fee",
+  categories: [
+    { id:"ebay_ukp_custom", name:"Custom (enter your category % from eBay rate card)", feePct: 0 },
+    { id:"ebay_ukp_typical_12_8", name:"Typical example (~12.8%)", feePct: 12.8 },
+    { id:"ebay_ukp_typical_12_0", name:"Typical example (~12.0%)", feePct: 12.0 },
+  ]
+},
+
 // Amazon UK: Individual plan £0.75 per unit; referral fee varies by category, most between 8% and 15% 
 //
 // TikTok Shop: commission exists and is category-based; rates can change & depend on program.
@@ -932,7 +962,8 @@ const PRESETS = [
   {
     id: "manual",
     label: "Manual (enter fees yourself)",
-    note: "Use this when you already know your exact fees.",
+    note: "Manual mode: enter fee %, fixed fee, ads %, and return % exactly as your platform shows."
+
     base: { feePct: 0, feeFixed: 0, adsPct: 0, returnPct: 0 },
     categories: null,
     dynamicFixed: null
@@ -1101,6 +1132,15 @@ if (presetSel){
     if (preset.categories && preset.categories.length && categorySel){
       catObj = preset.categories.find(x=>x.id===categorySel.value) || preset.categories[0];
     }
+    if (preset.categories && preset.categories.length){
+  categorySel.style.borderColor = "rgba(79,70,229,.35)";
+} else {
+  categorySel.style.borderColor = "";
+}
+
+if (preset.categories && preset.categories.length && categorySel){
+  categorySel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
 
     setFeesFromPreset(preset, catObj);
     compute(); refreshInsights();
@@ -1393,6 +1433,13 @@ sellPriceEl?.addEventListener("input", ()=>{
       [sellPriceEl, productCostEl, shipCostEl, miscCostEl, feePctEl, feeFixedEl, adsPctEl, returnPctEl, targetProfitEl].filter(Boolean).forEach(el=>el.value="0");
       if (fxRateEl) fxRateEl.value = "";
       if (presetSel) presetSel.value = "manual";
+      if (presetSel){
+  const preset = getPresetById("manual");
+  showCategories(preset);
+  setFeesFromPreset(preset, null);
+  updateDynamicFixedFee();
+}
+
       if (c1) c1.value = "0"; if (c2) c2.value = "0"; if (c3) c3.value = "0";
       if (positioning) positioning.value = "undercut";
       if (floorBuffer) floorBuffer.value = "5";
