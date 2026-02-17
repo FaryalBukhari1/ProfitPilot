@@ -941,19 +941,6 @@
 // eBay UK business sellers: % depends on category; plus per-order fee that depends on order total
 // £0.30 for orders <= £10, £0.40 for orders > £10 
 //
-    {
-  id: "ebay_uk_personal",
-  label: "eBay (UK Personal) — category-based % + per-order fee",
-  note: "Personal seller fees vary by category and listing type. Choose a category % (or use Custom). Per-order fee auto-adjusts: £0.30 (≤£10), £0.40 (>£10).",
-  base: { feePct: 0, feeFixed: 0, adsPct: 0, returnPct: 4 },
-  dynamicFixed: "ebay_uk_order_fee",
-  categories: [
-    { id:"ebay_ukp_custom", name:"Custom (enter your category % from eBay rate card)", feePct: 0 },
-    { id:"ebay_ukp_typical_12_8", name:"Typical example (~12.8%)", feePct: 12.8 },
-    { id:"ebay_ukp_typical_12_0", name:"Typical example (~12.0%)", feePct: 12.0 },
-  ]
-},
-
 // Amazon UK: Individual plan £0.75 per unit; referral fee varies by category, most between 8% and 15% 
 //
 // TikTok Shop: commission exists and is category-based; rates can change & depend on program.
@@ -962,7 +949,7 @@ const PRESETS = [
   {
     id: "manual",
     label: "Manual (enter fees yourself)",
-    note: "Manual mode: enter fee %, fixed fee, ads %, and return % exactly as your platform shows."
+    note: "Manual mode: enter fee %, fixed fee, ads %, and return % exactly as your platform shows.",
 
     base: { feePct: 0, feeFixed: 0, adsPct: 0, returnPct: 0 },
     categories: null,
@@ -1003,6 +990,19 @@ const PRESETS = [
       { id:"ebay_uk_typical_12_0", name:"Typical example (~12.0%)", feePct: 12.0 },
     ]
   },
+    {
+  id: "ebay_uk_personal",
+  label: "eBay (UK Personal) — category-based % + per-order fee",
+  note: "Personal seller fees vary by category and listing type. Use Custom for accuracy. Per-order fee auto-adjusts: £0.30 (≤£10), £0.40 (>£10).",
+  base: { feePct: 0, feeFixed: 0, adsPct: 0, returnPct: 4 },
+  dynamicFixed: "ebay_uk_order_fee",
+  categories: [
+    { id:"ebay_ukp_custom", name:"Custom (enter your category % from eBay rate card)", feePct: 0 },
+    { id:"ebay_ukp_typical_12_8", name:"Example only (~12.8% — verify category rate)", feePct: 12.8 },
+    { id:"ebay_ukp_typical_12_0", name:"Example only (~12.0% — verify category rate)", feePct: 12.0 },
+  ]
+},
+
 
   // -------- Amazon UK (category-based; optional per-item fee for Individual plan) --------
   {
