@@ -594,7 +594,7 @@ input,select,textarea{
             <a class="btn ghost" href="https://ukwebtools.com/" rel="nofollow">← Ukwebtools</a>
             <a class="btn ghost" href="help.html">How to use</a>
             <a class="btn primary" href="login.html" id="accountLink">Account</a>
-            <span class="pill" id="accessPill">Checking access…</span>
+            <span class="pill" id="accessPill">—</span>
             <button class="btn" id="logoutBtn" type="button">Log out</button>
           </nav>
         </div>
@@ -2632,7 +2632,6 @@ function setMode(m){
     // ---------------------------
     (async ()=>{
       try{
-        if (accessPill) accessPill.textContent = "Checking session…";
 
         const wait = (ms)=>new Promise(r=>setTimeout(r, ms));
         let session = null;
@@ -2651,10 +2650,14 @@ function setMode(m){
         }
 
         if (!session || !user){
-          console.warn("No valid session found. Redirecting.");
-          location.href = "login.html";
-          return;
-        }
+  if (accessPill){
+    accessPill.textContent = "Trial";
+    accessPill.className = "pill warn";
+  }
+  location.href = "login.html";
+  return;
+}
+
 
         CURRENT_USER = user;
 
@@ -2689,9 +2692,10 @@ if (existingReview){
       } catch(e){
         console.error("BOOT ERROR:", e);
         if (accessPill){
-          accessPill.textContent = "Access check failed";
-          accessPill.className = "pill bad";
-        }
+  accessPill.textContent = "Trial";
+  accessPill.className = "pill warn";
+}
+
       }
     })();
   </script>
