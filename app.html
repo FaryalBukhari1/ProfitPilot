@@ -177,6 +177,78 @@ a:hover{text-decoration:underline}
   padding:28px;
   box-shadow:0 25px 70px rgba(16,24,40,.08);
 }
+
+    /* ================= INSIGHTS / COMP DASHBOARD ================= */
+
+.pHead{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:14px;
+  position:relative;
+  z-index:1;
+}
+
+.tag{
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid rgba(16,24,40,.10);
+  background:#fff;
+  font-size:12px;
+  font-weight:900;
+}
+
+.pGrid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:18px;
+  margin-top:18px;
+  position:relative;
+  z-index:1;
+}
+
+.pItem{
+  background:#fff;
+  border:1px solid rgba(16,24,40,.08);
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 22px 60px rgba(16,24,40,.08);
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+
+.pItem:hover{
+  transform:translateY(-4px);
+  box-shadow:0 32px 90px rgba(16,24,40,.12);
+}
+
+.pItem .t{
+  font-size:12px;
+  color:#64748b;
+  font-weight:900;
+  letter-spacing:.3px;
+  text-transform:uppercase;
+}
+
+.pItem .v{
+  font-size:26px;
+  font-weight:1000;
+  margin-top:10px;
+  min-height:32px; /* stops ugly jumps when it shows "—" */
+}
+
+.pList{
+  margin:16px 0 0;
+  padding-left:18px;
+  color:#334155;
+  position:relative;
+  z-index:1;
+}
+
+.pList li{
+  margin:8px 0;
+  line-height:1.5;
+}
+
 /* ================= HERO BLOCK SYSTEM ================= */
 
 .heroBlock{
@@ -264,7 +336,7 @@ a:hover{text-decoration:underline}
 }
       /* ================= Pricing Intelligence HERO ================= */
 
-.insightsHero{
+.heroInsights{
   margin-top:40px;
   border:1px solid rgba(79,70,229,.25);
   background:
@@ -274,12 +346,12 @@ a:hover{text-decoration:underline}
 }
 
 /* Bigger title */
-.insightsHero .title{
+.heroInsights .title{
   font-size:28px;
 }
 
 /* Stronger metric tiles */
-.insightsHero .pItem{
+.heroInsights .pItem{
   background:#fff;
   border:1px solid rgba(16,24,40,.06);
   border-radius:18px;
@@ -288,12 +360,12 @@ a:hover{text-decoration:underline}
   transition:transform .15s ease, box-shadow .15s ease;
 }
 
-.insightsHero .pItem:hover{
+.heroInsights .pItem:hover{
   transform:translateY(-4px);
   box-shadow:0 30px 80px rgba(16,24,40,.12);
 }
 
-.insightsHero .pItem .v{
+.heroInsights .pItem .v{
   font-size:24px;
   font-weight:1000;
 }
@@ -691,21 +763,7 @@ input,select,textarea{
 
             <div class="pGrid">
               <div class="pItem"><div class="t">Break-even price</div><div class="v" id="bePrice">—</div></div>
-              <div class="pItem">
-                .pItem .t{
-  font-size:13px;
-  color:#64748b;
-  font-weight:700;
-}
-
-.pItem .v{
-  font-size:26px;
-  font-weight:1000;
-}
-
-                <div class="t">Price for target margin</div><div class="v" id="targetMarginPrice">—</div>
-                <div class="small">Target: <span id="targetMarginVal">15%</span></div>
-              </div>
+              
               <div class="pItem"><div class="t">Max ads % you can afford</div><div class="v" id="maxAdsPct">—</div><div class="small">Keeps profit ≥ 0</div></div>
               <div class="pItem"><div class="t">Risk rating</div><div class="v" id="riskLabel">—</div><div class="small" id="riskExplain">—</div></div>
             </div>
@@ -761,9 +819,9 @@ input,select,textarea{
                 <div class="small">“Don’t go below” = break-even + buffer</div>
               </div>
               <div style="display:flex;align-items:end;gap:10px;flex-wrap:wrap">
-                <button class="heroBtn active" id="runCompBtn" type="button">
-                <span class="pill" id="compToast">—</span>
-              </div>
+                <button class="btn primary" id="runCompBtn" type="button">Run competitor mode</button>
+<span class="pill" id="compToast">—</span>
+
             </div>
 
             <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
