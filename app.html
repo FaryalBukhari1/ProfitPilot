@@ -910,12 +910,32 @@
     // ---------------------------
     // Presets (defensive)
     // ---------------------------
-    const PRESETS = [
-      { id:"manual", name:"Manual (enter fees yourself)", feePct:0, feeFixed:0, adsPct:0, returnPct:0 },
-      { id:"ebay_uk_typical", name:"eBay UK (typical example)", feePct:12.8, feeFixed:0.30, adsPct:0, returnPct:3 },
-      { id:"etsy_typical", name:"Etsy (typical example)", feePct:9.5, feeFixed:0.20, adsPct:0, returnPct:3 },
-      { id:"shopify_card_only", name:"Shopify (card fee example)", feePct:2.0, feeFixed:0.20, adsPct:0, returnPct:2 },
-    ];
+   const PRESETS = [
+  { id:"manual", name:"Manual (enter fees yourself)", feePct:0, feeFixed:0, adsPct:0, returnPct:0 },
+
+  // Etsy UK = 6.5% transaction + 4% processing + £0.20 fixed
+  { id:"etsy_uk", name:"Etsy UK (10.5% + £0.20)", feePct:10.5, feeFixed:0.20, adsPct:0, returnPct:3 },
+
+  // eBay UK business sellers: % varies by category + per-order fee.
+  // Use these as "typical" presets, but keep in mind category % differs.
+  { id:"ebay_uk_12_40p", name:"eBay UK (~12% + £0.40 per order)", feePct:12.0, feeFixed:0.40, adsPct:0, returnPct:4 },
+  { id:"ebay_uk_128_40p", name:"eBay UK (~12.8% + £0.40 per order)", feePct:12.8, feeFixed:0.40, adsPct:0, returnPct:4 },
+
+  // Optional: cheaper fixed fee scenario for small orders (≤ £10)
+  { id:"ebay_uk_12_30p", name:"eBay UK (small orders: ~12% + £0.30)", feePct:12.0, feeFixed:0.30, adsPct:0, returnPct:4 },
+
+  // TikTok Shop: commission varies, but 9% is widely reported for UK baseline.
+  // Fixed fee depends on fulfilment/program; keep fixed 0 unless you confirm your exact plan.
+  { id:"tiktokshop_uk_9", name:"TikTok Shop UK (9% baseline — no fixed)", feePct:9.0, feeFixed:0.00, adsPct:0, returnPct:5 },
+
+  // Amazon: Individual plan has £0.75 per unit; referral % varies by category.
+  { id:"amazon_uk_individual_15", name:"Amazon UK (Individual: 15% + £0.75/unit)", feePct:15.0, feeFixed:0.75, adsPct:0, returnPct:6 },
+
+  // Direct store payment examples
+  { id:"shopify_stripe_uk", name:"Shopify (Stripe example: 2% + £0.20)", feePct:2.0, feeFixed:0.20, adsPct:0, returnPct:2 },
+  { id:"woocommerce_stripe_uk", name:"WooCommerce (Stripe example: 2% + £0.20)", feePct:2.0, feeFixed:0.20, adsPct:0, returnPct:2 },
+];
+
 
     if (presetSel){
       presetSel.innerHTML = "";
