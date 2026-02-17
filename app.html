@@ -105,6 +105,74 @@
 .pill{
   letter-spacing:.2px;
 }
+    /* HERO MODE BUTTONS */
+.heroModes{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin:14px 0 0;
+}
+
+.heroBtn{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:14px 22px;
+  border-radius:999px;
+  border:1px solid rgba(14,165,164,.35);
+  background:linear-gradient(135deg, rgba(14,165,164,.18), rgba(79,70,229,.18));
+  font-weight:900;
+  font-size:14px;
+  cursor:pointer;
+  color:var(--txt);
+  box-shadow:0 10px 25px rgba(14,165,164,.15);
+  transition:all .25s ease;
+  position:relative;
+  overflow:hidden;
+}
+
+/* SVG icon */
+.heroBtn svg{
+  width:18px;
+  height:18px;
+}
+
+/* Hover lift */
+.heroBtn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 14px 35px rgba(14,165,164,.25);
+}
+
+/* Active state */
+.heroBtn.active{
+  background:linear-gradient(135deg, rgba(14,165,164,.35), rgba(79,70,229,.35));
+  box-shadow:0 0 0 2px rgba(14,165,164,.35),
+             0 15px 40px rgba(14,165,164,.35);
+}
+
+/* Soft animated glow */
+.heroBtn::after{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border-radius:999px;
+  background:radial-gradient(circle at 30% 30%, rgba(14,165,164,.35), transparent 60%);
+  opacity:0;
+  transition:opacity .4s ease;
+  z-index:-1;
+}
+
+.heroBtn.active::after{
+  opacity:.6;
+  animation:glowPulse 2.5s infinite ease-in-out;
+}
+
+@keyframes glowPulse{
+  0%{opacity:.4}
+  50%{opacity:.8}
+  100%{opacity:.4}
+}
+
 
     .pill.ok{border-color:rgba(14,165,164,.30);background:rgba(14,165,164,.10);color:var(--txt)}
     .pill.warn{border-color:rgba(245,158,11,.30);background:rgba(245,158,11,.10);color:var(--txt)}
@@ -329,19 +397,35 @@
         <div class="title">Pricing Command Center</div>
 <div class="small">Know your real profit after fees, ads and returns. Reverse = target profit → required price. Bulk = test multiple items fast.</div>
 
-<div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 0">
-  <button class="pill ok" type="button">Profit clarity</button>
-  <button class="pill ok" type="button">Reverse pricing</button>
-  <button class="pill ok" type="button">Bulk testing</button>
-  <button class="pill ok" type="button">Competitor positioning</button>
+<div class="heroModes">
+  <button class="heroBtn active" data-mode="profit" type="button">
+    <svg viewBox="0 0 24 24" fill="none">
+      <path d="M4 16l4-4 4 4 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Profit Clarity
+  </button>
+
+  <button class="heroBtn" data-mode="reverse" type="button">
+    <svg viewBox="0 0 24 24" fill="none">
+      <path d="M4 12h16M12 4l8 8-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Reverse Pricing
+  </button>
+
+  <button class="heroBtn" data-mode="bulk" type="button">
+    <svg viewBox="0 0 24 24" fill="none">
+      <rect x="4" y="4" width="6" height="6" stroke="currentColor" stroke-width="2"/>
+      <rect x="14" y="4" width="6" height="6" stroke="currentColor" stroke-width="2"/>
+      <rect x="4" y="14" width="6" height="6" stroke="currentColor" stroke-width="2"/>
+      <rect x="14" y="14" width="6" height="6" stroke="currentColor" stroke-width="2"/>
+    </svg>
+    Bulk Testing
+  </button>
 </div>
 
 
-        <div class="tabs">
-          <div class="tab active" id="tabProfit">Profit</div>
-          <div class="tab" id="tabReverse">Reverse</div>
-          <div class="tab" id="tabBulk">Bulk</div>
-        </div>
+
+       
 
         <div class="divider"></div>
 
@@ -916,6 +1000,25 @@
     const singleBox = document.getElementById("singleBox");
     const reverseBox = document.getElementById("reverseBox");
     const bulkBox = document.getElementById("bulkBox");
+
+    // HERO BUTTON MODE SWITCH
+const heroBtns = document.querySelectorAll(".heroBtn");
+
+heroBtns.forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    const mode = btn.dataset.mode;
+
+    // Remove active from all
+    heroBtns.forEach(b=>b.classList.remove("active"));
+
+    // Activate clicked
+    btn.classList.add("active");
+
+    // Switch mode
+    setMode(mode);
+  });
+});
+
 
     // Footer years
     document.getElementById("yr").textContent = new Date().getFullYear();
