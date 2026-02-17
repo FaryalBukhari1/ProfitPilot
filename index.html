@@ -3,30 +3,30 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
+
   <!-- Google Analytics (GA4) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-F12747YWBN"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-F12747YWBN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-F12747YWBN', { anonymize_ip: true });
+  </script>
 
-  gtag('config', 'G-F12747YWBN', {
-    anonymize_ip: true
-  });
-</script>
-
-
-  <title>ProfitPilot — Listing Profit & Pricing Calculator</title>
-  <meta name="description" content="ProfitPilot helps you estimate profit & margin, reverse-calculate target selling price, and run bulk checks. 5-day free trial. One-time PRO unlock.">
+  <!-- SEO -->
+  <title>ProfitPilot — Pricing Intelligence for Online Sellers</title>
+  <meta name="description" content="Calculate true profit & margin, reverse-calculate the selling price you need for a target profit, and run bulk checks. Built for marketplace and store sellers worldwide. Trial available. One-time PRO unlock.">
   <meta name="robots" content="index,follow">
-  <link rel="canonical" href="https://profitpilot.ukwebtools.com/index.html">
+
+  <!-- Canonical: prefer clean root -->
+  <link rel="canonical" href="https://profitpilot.ukwebtools.com/">
   <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
 
   <!-- Open Graph / Twitter -->
-  <meta property="og:title" content="ProfitPilot — Listing Profit & Pricing Calculator">
-  <meta property="og:description" content="Estimate profit & margin, reverse-calculate target selling price, and run bulk checks. 5-day free trial. One-time PRO unlock.">
+  <meta property="og:title" content="ProfitPilot — Pricing Intelligence for Online Sellers">
+  <meta property="og:description" content="Calculate true profit & margin, reverse-calculate target selling price, and run bulk checks. Trial available. One-time PRO unlock.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://profitpilot.ukwebtools.com/index.html">
+  <meta property="og:url" content="https://profitpilot.ukwebtools.com/">
   <meta name="twitter:card" content="summary">
 
   <style>
@@ -79,7 +79,7 @@
 
     .pp-wrap{max-width:1150px;margin:0 auto;padding:0 14px}
 
-    /* ================= HEADER (ONLY 3 LINKS) ================= */
+    /* ================= HEADER ================= */
     .pp-header{position:sticky; top:10px; z-index:100; margin:14px auto 0}
     .pp-headerbar{
       background:var(--h-bg);
@@ -147,7 +147,7 @@
       .pp-brand{min-width:auto}
     }
 
-    /* ================= PAGE CONTENT (your previous “best designed” section) ================= */
+    /* ================= HERO ================= */
     .hero{
       margin-top:14px;
       background:linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.70));
@@ -165,13 +165,13 @@
       filter:blur(2px);
       pointer-events:none;
     }
-    h1{margin:0;font-size:32px;letter-spacing:-.6px;line-height:1.12}
+    h1{margin:0;font-size:34px;letter-spacing:-.7px;line-height:1.12}
     .lead{
       margin:10px 0 0;
       color:rgba(16,24,40,.70);
       line-height:1.75;
       font-weight:650;
-      max-width:960px;
+      max-width:980px;
     }
     .heroActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
     .heroFine{margin-top:10px;color:rgba(16,24,40,.62);font-size:12.7px;line-height:1.7}
@@ -186,6 +186,7 @@
 
     .grid{display:grid;grid-template-columns:1.25fr .75fr;gap:14px;margin-top:14px}
     @media(max-width:980px){.grid{grid-template-columns:1fr}}
+
     .card{
       background:var(--card);
       border:1px solid var(--line);
@@ -230,7 +231,30 @@
     }
     .stars{font-weight:1000;letter-spacing:.8px}
 
-    /* ================= FOOTER (DARK, ALL OTHER LINKS) ================= */
+    /* callout */
+    .callout{
+      border:1px solid rgba(14,165,164,.28);
+      background:rgba(14,165,164,.06);
+      border-radius:18px;
+      padding:14px;
+      margin-top:12px;
+    }
+    .callout b{font-weight:1000}
+    .miniGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+    @media(max-width:560px){.miniGrid{grid-template-columns:1fr}}
+    .mini{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.72);
+      border-radius:16px;
+      padding:12px;
+    }
+
+    /* ================= FOOTER ================= */
     .pp-footer{
       margin-top:26px;
       background:radial-gradient(900px 520px at 20% 0%, rgba(94,234,212,.10), transparent 55%),
@@ -299,7 +323,7 @@
 <body>
   <a class="skip" href="#content">Skip to content</a>
 
-  <!-- ====== HEADER: ONLY 3 NAV ITEMS ====== -->
+  <!-- ====== HEADER ====== -->
   <header class="pp-header" role="navigation" aria-label="Primary">
     <div class="pp-wrap">
       <div class="pp-headerbar">
@@ -314,11 +338,13 @@
 
           <nav class="pp-nav" aria-label="Main">
             <a class="pp-btn ghost" href="https://ukwebtools.com/" rel="nofollow">← UKwebtools</a>
-
             <a class="pp-btn" href="help.html">How to use</a>
 
-            <span class="pp-chip" id="userChip">—</span>
-            <a class="pp-btn primary" id="accountBtn" href="login.html">Account</a>
+            <!-- Privacy-safe chip: no email display -->
+            <span class="pp-chip" id="userChip" aria-live="polite">—</span>
+
+            <a class="pp-btn primary" id="openAppBtn" href="app.html">Open app</a>
+            <a class="pp-btn" id="accountBtn" href="login.html" style="display:none">Account</a>
             <a class="pp-btn" id="logoutBtn" href="#" style="display:none">Log out</a>
           </nav>
         </div>
@@ -331,44 +357,136 @@
         "@type":"BreadcrumbList",
         "itemListElement":[
           {"@type":"ListItem","position":1,"name":"UKwebtools","item":"https://ukwebtools.com/"},
-          {"@type":"ListItem","position":2,"name":"ProfitPilot","item":"https://profitpilot.ukwebtools.com/index.html"}
+          {"@type":"ListItem","position":2,"name":"ProfitPilot","item":"https://profitpilot.ukwebtools.com/"}
+        ]
+      }
+      </script>
+
+      <!-- Product schema -->
+      <script type="application/ld+json">
+      {
+        "@context":"https://schema.org",
+        "@type":"SoftwareApplication",
+        "name":"ProfitPilot",
+        "applicationCategory":"BusinessApplication",
+        "operatingSystem":"Web",
+        "description":"Pricing intelligence tool for online sellers to calculate profit & margin, reverse-calculate target selling price, and run bulk checks.",
+        "offers":{
+          "@type":"Offer",
+          "price":"9.99",
+          "priceCurrency":"GBP",
+          "category":"one-time purchase"
+        }
+      }
+      </script>
+
+      <!-- FAQ schema (supports SEO) -->
+      <script type="application/ld+json">
+      {
+        "@context":"https://schema.org",
+        "@type":"FAQPage",
+        "mainEntity":[
+          {
+            "@type":"Question",
+            "name":"Can I reverse-calculate the selling price from a target profit?",
+            "acceptedAnswer":{"@type":"Answer","text":"Yes. Use Reverse mode: enter your target profit and ProfitPilot calculates the selling price you need based on your inputs."}
+          },
+          {
+            "@type":"Question",
+            "name":"Is PRO a subscription?",
+            "acceptedAnswer":{"@type":"Answer","text":"No. PRO is a one-time unlock. No recurring fees."}
+          },
+          {
+            "@type":"Question",
+            "name":"Does ProfitPilot work globally?",
+            "acceptedAnswer":{"@type":"Answer","text":"Yes. You can choose a currency and optionally set a manual FX rate. Results are estimates based on your inputs."}
+          },
+          {
+            "@type":"Question",
+            "name":"Is ProfitPilot affiliated with marketplaces?",
+            "acceptedAnswer":{"@type":"Answer","text":"No. ProfitPilot is an independent tool and is not affiliated with or endorsed by any marketplace, platform, or payment provider."}
+          }
         ]
       }
       </script>
     </div>
   </header>
 
-  <!-- ====== MAIN CONTENT (RECOVERED) ====== -->
+  <!-- ====== MAIN CONTENT ====== -->
   <main class="pp-wrap" id="content" role="main">
+    <!-- HERO -->
     <section class="hero" aria-label="Hero">
-      <h1>Price smarter. Protect your margin. Scale with confidence.</h1>
+      <h1>Stop guessing your profit. Price with precision.</h1>
       <p class="lead">
-        Estimate profit and margin, reverse-calculate the selling price you need for a target profit,
-        and run bulk checks across multiple products — using only your own inputs.
+        ProfitPilot is pricing intelligence for online sellers: calculate true profit and margin, reverse-calculate
+        the selling price you need for a target profit, and run bulk checks across multiple products — using your own inputs.
       </p>
 
-      <!-- ✅ changed: removed the 3 hero buttons, added platforms + dropshipper line -->
-      <div class="pillrow" aria-label="Platforms where it helps">
-        <span class="pill">Best for dropshippers</span>
+      <div class="heroActions" aria-label="Primary actions">
+        <a class="pp-btn primary" id="launchBtn" href="app.html">Launch ProfitPilot →</a>
+        <a class="pp-btn" id="exampleBtn" href="#example">See a real example</a>
+        <a class="pp-btn ghost" href="pricing.html">PRO details</a>
+      </div>
+
+      <div class="pillrow" aria-label="Works with">
+        <span class="pill">Marketplace sellers</span>
+        <span class="pill">Store sellers</span>
+        <span class="pill">Dropshipping</span>
         <span class="pill">eBay</span>
         <span class="pill">Amazon</span>
         <span class="pill">Etsy</span>
+        <span class="pill">Shopify</span>
+        <span class="pill">WooCommerce</span>
         <span class="pill">Facebook Marketplace</span>
         <span class="pill">Vinted</span>
         <span class="pill">Depop</span>
-        <span class="pill">Shopify</span>
-        <span class="pill">WooCommerce</span>
       </div>
 
       <div class="pillrow" aria-label="Highlights">
-        <span class="pill">5-day trial</span>
+        <span class="pill">Trial available</span>
         <span class="pill">One-time PRO unlock</span>
         <span class="pill">No subscriptions</span>
         <span class="pill">Your inputs only</span>
       </div>
 
       <div class="heroFine">
-        <b>Independent tool:</b> not affiliated with any marketplace. <b>Estimates only:</b> outputs depend on your inputs. No profit guarantees.
+        <b>Independent tool:</b> not affiliated with any marketplace/platform/payment provider.
+        <b>Estimates only:</b> outputs depend on your inputs and assumptions; no profit guarantees.
+      </div>
+
+      <!-- LIVE EXAMPLE (high-converting) -->
+      <div class="callout" id="example" aria-label="Live example">
+        <div class="title" style="margin:0">Example: know your margin before you list</div>
+        <div class="small" style="margin-top:6px">
+          This is what sellers should see <b>before</b> hitting “Publish”.
+        </div>
+
+        <div class="miniGrid" role="list" aria-label="Example metrics">
+          <div class="mini" role="listitem">
+            <div class="h">Selling price</div>
+            <div class="v">£24.99</div>
+            <div class="small">What your customer pays</div>
+          </div>
+          <div class="mini" role="listitem">
+            <div class="h">Total costs</div>
+            <div class="v">£13.92</div>
+            <div class="small">COGS + fees + ads (example)</div>
+          </div>
+          <div class="mini" role="listitem">
+            <div class="h">Net profit</div>
+            <div class="v">£11.07</div>
+            <div class="small">After costs (example)</div>
+          </div>
+          <div class="mini" role="listitem">
+            <div class="h">Margin</div>
+            <div class="v">44%</div>
+            <div class="small">Profit ÷ selling price</div>
+          </div>
+        </div>
+
+        <div class="small" style="margin-top:10px">
+          Want your own numbers? <a id="exampleCta" href="app.html"><b>Open the calculator →</b></a>
+        </div>
       </div>
     </section>
 
@@ -383,6 +501,19 @@
           <li>Use <b>Reverse</b> for target profit → required selling price.</li>
           <li>Use <b>Bulk</b> table to check multiple listings fast.</li>
         </ul>
+
+        <div class="divider"></div>
+
+        <h2 class="title">The margin leak problem</h2>
+        <ul class="list">
+          <li>Hidden fees quietly shrink margin.</li>
+          <li>Underpricing makes “sales” meaningless.</li>
+          <li>Ad spend and returns can flip profit negative.</li>
+          <li>Scaling without precision compounds mistakes.</li>
+        </ul>
+        <div class="small" style="margin-top:8px">
+          ProfitPilot is built for <b>margin control</b> — decisions backed by numbers, not instinct.
+        </div>
 
         <div class="divider"></div>
 
@@ -414,7 +545,7 @@
         <h2 class="title">Quick answers</h2>
         <div class="faqgrid">
           <div class="faq">
-            <b>Why is checkout higher than £9.99?</b>
+            <b>Why is checkout higher than the listed price?</b>
             <div class="small">VAT/sales tax may be added by the payment provider where required by law.</div>
           </div>
           <div class="faq">
@@ -477,7 +608,7 @@
 
           <div style="display:flex;gap:10px;flex-wrap:wrap">
             <a class="pp-btn" href="reviews.html">See all reviews</a>
-            <a class="pp-btn" id="reviewCta" href="app.html">Log in to submit/edit review</a>
+            <a class="pp-btn" id="reviewCta" href="login.html">Log in to submit/edit review</a>
           </div>
 
           <div class="small" style="margin-top:10px">
@@ -488,7 +619,7 @@
     </div>
   </main>
 
-  <!-- ====== FOOTER: ALL OTHER LINKS (NO REPEATS) ====== -->
+  <!-- ====== FOOTER ====== -->
   <footer class="pp-footer" role="contentinfo">
     <div class="pp-wrap">
       <div class="pp-footbox">
@@ -530,10 +661,25 @@
 
     // Checkout link
     const CHECKOUT_URL = "https://stonevia.gumroad.com/l/goddhg";
-    document.getElementById("buyBtn").href = CHECKOUT_URL;
+    const buyBtn = document.getElementById("buyBtn");
+    buyBtn.href = CHECKOUT_URL;
 
     // Year
     document.getElementById("yr").textContent = new Date().getFullYear();
+
+    // Basic GA helpers
+    function track(name, params){
+      try{
+        if (typeof gtag === "function") gtag("event", name, params || {});
+      }catch(e){}
+    }
+
+    // Track key clicks
+    document.getElementById("launchBtn").addEventListener("click", ()=> track("open_app_clicked", { location: "hero" }));
+    document.getElementById("openAppBtn").addEventListener("click", ()=> track("open_app_clicked", { location: "header" }));
+    document.getElementById("exampleBtn").addEventListener("click", ()=> track("see_example_clicked", { location: "hero" }));
+    document.getElementById("exampleCta").addEventListener("click", ()=> track("open_app_clicked", { location: "example" }));
+    buyBtn.addEventListener("click", ()=> track("buy_pro_clicked", { location: "pricing_card" }));
 
     function safeText(s){ return String(s || "").replace(/\s+/g, " ").trim(); }
     function escapeHtml(s){
@@ -545,11 +691,23 @@
         .replaceAll("'","&#039;");
     }
 
-    // Auth UI
+    // Auth UI (privacy safe: no email shown)
     const userChip = document.getElementById("userChip");
     const accountBtn = document.getElementById("accountBtn");
     const logoutBtn = document.getElementById("logoutBtn");
     const reviewCta = document.getElementById("reviewCta");
+    const openAppBtn = document.getElementById("openAppBtn");
+
+    function maskEmail(email){
+      // Minimal masking: j***@domain.com (optional)
+      email = safeText(email);
+      const at = email.indexOf("@");
+      if (at <= 1) return "Signed in";
+      const name = email.slice(0, at);
+      const domain = email.slice(at + 1);
+      const masked = name[0] + "***";
+      return `Signed in (${masked}@${domain})`;
+    }
 
     async function refreshAuthUI(){
       const { data: { session } } = await supabase.auth.getSession();
@@ -557,11 +715,13 @@
 
       if (email){
         userChip.style.display = "inline-flex";
-        userChip.textContent = email;
-        userChip.title = email;
+        // Choose ONE:
+        // userChip.textContent = "Signed in";
+        userChip.textContent = "Signed in"; // strongest privacy; no email at all
+        userChip.title = "You are signed in";
 
-        accountBtn.textContent = "Open app";
-        accountBtn.href = "app.html";
+        openAppBtn.style.display = "inline-flex";
+        accountBtn.style.display = "none";
 
         reviewCta.textContent = "Open app to submit/edit review";
         reviewCta.href = "app.html";
@@ -572,8 +732,8 @@
         userChip.textContent = "—";
         userChip.title = "";
 
-        accountBtn.textContent = "Account";
-        accountBtn.href = "login.html";
+        openAppBtn.style.display = "inline-flex";
+        accountBtn.style.display = "none";
 
         reviewCta.textContent = "Log in to submit/edit review";
         reviewCta.href = "login.html";
