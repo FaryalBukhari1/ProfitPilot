@@ -918,17 +918,16 @@
 // Presets (Country + Category + Dynamic fixed fee rules)
 // ---------------------------
 
-// Etsy: transaction fee is 6.5% (global) :contentReference[oaicite:1]{index=1}
-// Etsy Payments: varies by country; UK example is 4% + £0.20 :contentReference[oaicite:2]{index=2}
+// Etsy: transaction fee is 6.5% (global) 
+// Etsy Payments: varies by country; UK example is 4% + £0.20 
 //
 // eBay UK business sellers: % depends on category; plus per-order fee that depends on order total
-// £0.30 for orders <= £10, £0.40 for orders > £10 :contentReference[oaicite:3]{index=3}
+// £0.30 for orders <= £10, £0.40 for orders > £10 
 //
-// Amazon UK: Individual plan £0.75 per unit; referral fee varies by category, most between 8% and 15% :contentReference[oaicite:4]{index=4}
+// Amazon UK: Individual plan £0.75 per unit; referral fee varies by category, most between 8% and 15% 
 //
 // TikTok Shop: commission exists and is category-based; rates can change & depend on program.
-// We include it as “enter your commission %” by default. :contentReference[oaicite:5]{index=5}
-
+// We include it as “enter your commission %” by default. 
 const PRESETS = [
   {
     id: "manual",
@@ -1071,7 +1070,7 @@ function showCategories(preset){
   categorySel.value = cats[0].id;
 }
 
-// eBay UK per-order fee rule: £0.30 (≤£10), £0.40 (>£10) :contentReference[oaicite:6]{index=6}
+// eBay UK per-order fee rule: £0.30 (≤£10), £0.40 (>£10) 
 function updateDynamicFixedFee(){
   const preset = getPresetById(presetSel.value);
   if (preset.dynamicFixed !== "ebay_uk_order_fee") return;
@@ -1136,31 +1135,7 @@ sellPriceEl?.addEventListener("input", ()=>{
   setFeesFromPreset(preset, catObj);
 })();
 
-    if (presetSel){
-      presetSel.innerHTML = "";
-      const seen = new Set();
-      PRESETS.forEach(p=>{
-        if (seen.has(p.id)) return;
-        seen.add(p.id);
-        const opt = document.createElement("option");
-        opt.value = p.id;
-        opt.textContent = p.name;
-        presetSel.appendChild(opt);
-      });
-      presetSel.value = "manual";
-
-      presetSel.addEventListener("change", ()=>{
-        const p = PRESETS.find(x=>x.id===presetSel.value) || PRESETS[0];
-        if (p.id !== "manual"){
-          feePctEl.value = String(p.feePct ?? 0);
-          feeFixedEl.value = String(p.feeFixed ?? 0);
-          adsPctEl.value = String(p.adsPct ?? 0);
-          returnPctEl.value = String(p.returnPct ?? 0);
-        }
-        compute(); refreshInsights();
-      });
-    }
-
+  
     // ---------------------------
     // Core math
     // ---------------------------
