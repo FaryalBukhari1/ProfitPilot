@@ -863,7 +863,158 @@ input:focus, select:focus, textarea:focus{
 .pp-footbottom{
   border-top: 1px solid rgba(255,255,255,.08) !important;
 }
+/* ================= TRUST BAR ================= */
+.pp-trust{
+  margin-top:10px;
+  padding-top:10px;
+  border-top:1px solid var(--line);
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
 
+.pp-trustitem{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 12px;
+  border-radius:999px;
+  background:rgba(16,24,40,.03);
+  border:1px solid rgba(16,24,40,.06);
+  font-size:12.5px;
+  color:var(--muted);
+}
+
+.pp-trusttxt b{ color:var(--txt); }
+
+.pp-stars{
+  letter-spacing:1px;
+  font-size:12px;
+  color:rgba(14,165,164,.95);
+}
+
+.pp-dot{
+  width:8px;
+  height:8px;
+  border-radius:999px;
+  background:rgba(14,165,164,.9);
+  display:inline-block;
+}
+
+/* mobile: keep it neat */
+@media(max-width:640px){
+  .pp-trustitem{ width:100%; justify-content:flex-start; }
+}
+/* Skip link (accessibility) */
+.skip{
+  position:absolute;
+  left:-999px;
+  top:10px;
+  background:#fff;
+  border:1px solid var(--line);
+  padding:10px 12px;
+  border-radius:12px;
+  z-index:9999;
+}
+.skip:focus{
+  left:12px;
+}
+
+/* Small UI helpers */
+.hint{
+  margin-top:8px;
+  font-size:12.5px;
+  color:var(--muted);
+  line-height:1.4;
+}
+
+.toast{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:rgba(16,24,40,.03);
+  font-size:12.5px;
+  color:var(--muted);
+}
+
+/* Bulk table styling */
+.bulkWrap{
+  overflow:auto;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#fff;
+}
+
+#bulkTable{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  min-width:900px;
+}
+
+#bulkTable th, 
+#bulkTable td{
+  padding:10px;
+  border-bottom:1px solid rgba(16,24,40,.06);
+  font-size:13px;
+  text-align:left;
+  vertical-align:middle;
+}
+
+#bulkTable th{
+  position:sticky;
+  top:0;
+  background:#fff;
+  z-index:2;
+}
+
+input.mini{
+  width:100%;
+  padding:8px 10px;
+  border-radius:12px;
+  border:1px solid rgba(16,24,40,.10);
+  font-size:13px;
+}
+/* Bulk table */
+.bulkWrap{
+  overflow:auto;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#fff;
+}
+
+#bulkTable{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  min-width:900px;
+}
+
+#bulkTable th, #bulkTable td{
+  padding:10px;
+  border-bottom:1px solid rgba(16,24,40,.06);
+  font-size:13px;
+  text-align:left;
+  vertical-align:middle;
+}
+
+#bulkTable th{
+  position:sticky;
+  top:0;
+  background:#fff;
+  z-index:2;
+}
+
+input.mini{
+  width:100%;
+  padding:8px 10px;
+  border-radius:12px;
+  border:1px solid rgba(16,24,40,.10);
+  font-size:13px;
+}
+
+    
   </style>
 </head>
 
@@ -881,6 +1032,29 @@ input:focus, select:focus, textarea:focus{
               <div class="pp-sub">Independent tool by UKwebtools</div>
             </div>
           </div>
+          <!-- Trust Bar -->
+<div class="pp-trust" aria-label="Trust highlights">
+  <div class="pp-trustitem" title="User feedback">
+    <span class="pp-stars" aria-hidden="true">★★★★★</span>
+    <span class="pp-trusttxt"><b>Transparent</b> estimates (you control inputs)</span>
+  </div>
+
+  <div class="pp-trustitem" title="Payments">
+    <span class="pp-dot" aria-hidden="true"></span>
+    <span class="pp-trusttxt"><b>One-time</b> PRO unlock (Gumroad checkout)</span>
+  </div>
+
+  <div class="pp-trustitem" title="Privacy">
+    <span class="pp-dot" aria-hidden="true"></span>
+    <span class="pp-trusttxt"><b>No scraping</b> • competitor prices entered by you</span>
+  </div>
+
+  <div class="pp-trustitem" title="Speed">
+    <span class="pp-dot" aria-hidden="true"></span>
+    <span class="pp-trusttxt"><b>Fast</b> — runs locally in your browser</span>
+  </div>
+</div>
+
 
           <nav class="pp-nav" aria-label="Main">
             <a class="btn ghost" href="https://ukwebtools.com/" rel="nofollow">← Ukwebtools</a>
