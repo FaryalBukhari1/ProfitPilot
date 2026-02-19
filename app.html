@@ -1,7 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="day">
 <head>
   <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+
+  <title>ProfitPilot — App</title>
+  <meta name="description" content="ProfitPilot: profit calculator with reverse pricing, bulk table, insights, competitor mode, export, share and saved presets.">
+  <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
 
   <!-- Google Analytics (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-F12747YWBN"></script>
@@ -12,533 +17,526 @@
     gtag('config', 'G-F12747YWBN', { anonymize_ip: true });
   </script>
 
-  <script type="text/javascript">
+  <!-- Microsoft Clarity -->
+  <script>
     (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "vjsgka2ywg");
-</script>
+  </script>
 
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>ProfitPilot — App</title>
-  <meta name="description" content="ProfitPilot: profit calculator with reverse pricing, bulk table, insights, competitor mode, export, share and saved presets.">
-  <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
+  <style>
+    /* =========================
+      PROFITPILOT — FIXED, CLEAN
+      (no duplicate IDs, working layout)
+      ========================= */
 
- <style>
-/* =========================
-   PROFITPILOT — CLEAN CSS
-   (single source of truth)
-   ========================= */
+    :root{
+      --bg:#f6f8fb;
+      --bg2:#eef2ff;
+      --txt:#0b1220;
+      --muted:#5b6474;
+      --card:#ffffff;
+      --line:rgba(16,24,40,.08);
+      --accent:#0ea5a4;
+      --accent2:#4f46e5;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+      --ok:#0ea5a4;
+      --shadow:0 10px 30px rgba(16,24,40,.06);
+      --shadow2:0 18px 60px rgba(16,24,40,.08);
+      --ring:rgba(79,70,229,.55);
+      --inputBg:#fff;
+    }
 
-:root{
-  --bg:#f6f8fb;
-  --bg2:#eef2ff;
-  --txt:#0b1220;
-  --muted:#5b6474;
-  --card:#ffffff;
-  --line:rgba(16,24,40,.08);
-  --accent:#0ea5a4;
-  --accent2:#4f46e5;
-  --warn:#f59e0b;
-  --bad:#ef4444;
-  --ok:#0ea5a4;
+    :root[data-theme="day"]{
+      --bg:#f6f8fb;
+      --bg2:#eef2ff;
+      --txt:#0b1220;
+      --muted:#5b6474;
+      --card:#ffffff;
+      --line:rgba(16,24,40,.08);
+      --inputBg:#fff;
+    }
 
-  --shadow:0 10px 30px rgba(16,24,40,.06);
-  --shadow2:0 18px 60px rgba(16,24,40,.08);
-}
+    :root[data-theme="soft"]{
+      --bg:#fbfbff;
+      --bg2:#f3f4ff;
+      --txt:#0b1220;
+      --muted:#5b6474;
+      --card:#ffffff;
+      --line:rgba(16,24,40,.10);
+      --inputBg:#fff;
+    }
 
-/* Themes */
-:root[data-theme="day"]{
-  --bg:#f6f8fb;
-  --bg2:#eef2ff;
-  --txt:#0b1220;
-  --card:#ffffff;
-  --line:rgba(16,24,40,.08);
-}
-:root[data-theme="soft"]{
-  --bg:#fbfbff;
-  --bg2:#f3f4ff;
-  --txt:#0b1220;
-  --card:#ffffff;
-  --line:rgba(16,24,40,.10);
-}
-:root[data-theme="midnight"]{
-  --bg:#0b1220;
-  --bg2:#0f172a;
-  --txt:#eaf0ff;
-  --card:#111827;
-  --line:rgba(255,255,255,.10);
-}
+    :root[data-theme="midnight"]{
+      --bg:#0b1220;
+      --bg2:#0f172a;
+      --txt:#eaf0ff;
+      --muted:rgba(226,232,240,.70);
+      --card:#111827;
+      --line:rgba(255,255,255,.10);
+      --inputBg:#0b1220;
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+      --shadow2:0 18px 60px rgba(0,0,0,.45);
+      --ring:rgba(14,165,164,.55);
+    }
 
-/* Base */
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  color:var(--txt);
-  background:linear-gradient(180deg,var(--bg2),var(--bg));
-}
+    /* Custom theme uses CSS vars saved in localStorage */
+    :root[data-theme="custom"]{
+      /* values injected by JS on load */
+    }
 
-a{color:var(--accent);text-decoration:none}
-a:hover{text-decoration:underline}
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--txt);
+      background:linear-gradient(180deg,var(--bg2),var(--bg));
+      min-height:100vh;
+    }
 
-:focus-visible{
-  outline:3px solid rgba(79,70,229,.55);
-  outline-offset:3px;
-  border-radius:12px;
-}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
 
-/* Skip link */
-.skip{
-  position:absolute;
-  left:-999px;
-  top:10px;
-  background:#fff;
-  border:1px solid var(--line);
-  padding:10px 12px;
-  border-radius:12px;
-  z-index:9999;
-}
-.skip:focus{ left:12px; }
+    :focus-visible{
+      outline:3px solid var(--ring);
+      outline-offset:3px;
+      border-radius:12px;
+    }
 
-/* Banner */
-.banner{
-  display:none;
-  margin-bottom:20px;
-  padding:12px 16px;
-  border-radius:14px;
-  background:rgba(14,165,164,.08);
-  border:1px solid rgba(14,165,164,.25);
-  font-weight:600;
-}
+    .skip{
+      position:absolute;
+      left:-999px; top:10px;
+      background:var(--card);
+      border:1px solid var(--line);
+      padding:10px 12px;
+      border-radius:12px;
+      z-index:9999;
+    }
+    .skip:focus{ left:12px; }
 
-/* Header (static) */
-.pp-header{ position:relative; margin:0; padding:14px 0; }
-.pp-wrap{ max-width:1200px; margin:0 auto; padding:0 20px; }
+    .pp-header{ position:relative; margin:0; padding:14px 0; }
+    .pp-wrap{ max-width:1200px; margin:0 auto; padding:0 20px; }
 
-.pp-headerbar{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:12px 14px;
-  box-shadow:var(--shadow);
-}
+    .pp-headerbar{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px 14px;
+      box-shadow:var(--shadow);
+    }
 
-.pp-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:16px;
-}
+    .pp-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      flex-wrap:wrap;
+    }
 
-.pp-brand{ display:flex; align-items:center; gap:12px; }
-.pp-logo{
-  width:38px; height:38px;
-  border-radius:12px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:1000;
-  background:rgba(16,24,40,.04);
-  border:1px solid var(--line);
-}
-.pp-title{ font-weight:1000; font-size:15px; }
-.pp-sub{ font-size:12px; color:var(--muted); }
-.pp-nav{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .pp-brand{ display:flex; align-items:center; gap:12px; }
+    .pp-logo{
+      width:38px; height:38px;
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:1000;
+      background:rgba(16,24,40,.04);
+      border:1px solid var(--line);
+    }
+    .pp-title{ font-weight:1000; font-size:15px; }
+    .pp-sub{ font-size:12px; color:var(--muted); }
 
-/* Buttons */
-.btn{
-  padding:10px 14px;
-  border-radius:999px;
-  border:1px solid var(--line);
-  background:#fff;
-  font-weight:800;
-  cursor:pointer;
-  white-space:nowrap;
-  box-shadow:none;
-  transition:background .15s ease;
-}
-.btn:hover{ background:rgba(16,24,40,.03); }
-.btn.primary{
-  background:#0ea5a4;
-  color:#fff;
-  border-color:transparent;
-}
-.btn.primary:hover{ background:#0b9a99; }
-.btn.ghost{ background:transparent; }
+    .pp-nav{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
 
-/* Pills */
-.pill{
-  padding:8px 14px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:800;
-  border:1px solid var(--line);
-  background:#fff;
-}
-.pill.ok{color:var(--ok)}
-.pill.warn{color:var(--warn)}
-.pill.bad{color:var(--bad)}
+    .btn{
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:var(--inputBg);
+      color:var(--txt);
+      font-weight:800;
+      cursor:pointer;
+      white-space:nowrap;
+      transition:background .15s ease;
+    }
+    .btn:hover{ background:rgba(16,24,40,.03); }
+    .btn.primary{
+      background:var(--accent);
+      color:#fff;
+      border-color:transparent;
+    }
+    .btn.primary:hover{ filter:brightness(.95); }
+    .btn.ghost{ background:transparent; }
 
-/* Layout */
-.wrap{
-  max-width:1100px;
-  margin:26px auto 90px;
-  padding:0 18px;
-}
-.grid{
-  display:grid;
-  grid-template-columns:1.6fr 1fr;
-  gap:22px;
-  align-items:start;
-}
-.rightSide{ display:flex; flex-direction:column; gap:22px; }
-@media (max-width:1000px){ .grid{ grid-template-columns:1fr; } }
+    .pill{
+      padding:8px 14px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
+      border:1px solid var(--line);
+      background:var(--inputBg);
+      color:var(--txt);
+    }
+    .pill.ok{color:var(--ok)}
+    .pill.warn{color:var(--warn)}
+    .pill.bad{color:var(--bad)}
 
-/* Cards + Hero blocks (one consistent style) */
-.card, .heroBlock{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:18px;
-  box-shadow:var(--shadow2);
-  padding:22px;
-}
-.heroBlock{ margin-top:60px; overflow:hidden; }
-.heroBlock::before, .heroBlock::after{ display:none; }
+    /* Trust bar (you had HTML but no CSS) */
+    .pp-trust{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:center;
+      padding:8px 0 0;
+      width:100%;
+    }
+    .pp-trustitem{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(16,24,40,.02);
+      font-size:12.5px;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .pp-stars{ letter-spacing:1px; color:#f59e0b; font-weight:900; }
+    .pp-dot{
+      width:8px;height:8px;border-radius:999px;
+      background:var(--accent);
+      display:inline-block;
+      box-shadow:0 0 0 3px rgba(14,165,164,.12);
+    }
+    .pp-trusttxt b{ color:var(--txt); }
 
-/* Typography */
-.title{
-  font-size:20px;
-  font-weight:1000;
-  margin:0 0 10px;
-  line-height:1.2;
-  letter-spacing:-0.2px;
-}
-.small{
-  font-size:13.5px;
-  color:var(--muted);
-  line-height:1.55;
-}
-.divider{ height:1px; background:var(--line); margin:18px 0; }
-.hint{
-  margin-top:8px;
-  font-size:12.5px;
-  color:var(--muted);
-  line-height:1.4;
-}
-.toast{
-  margin-top:10px;
-  padding:10px 12px;
-  border-radius:14px;
-  border:1px solid var(--line);
-  background:rgba(16,24,40,.03);
-  font-size:12.5px;
-  color:var(--muted);
-}
+    /* Layout */
+    .wrap{
+      max-width:1100px;
+      margin:26px auto 90px;
+      padding:0 18px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:1.6fr 1fr;
+      gap:22px;
+      align-items:start;
+    }
+    @media (max-width:1000px){ .grid{ grid-template-columns:1fr; } }
 
-/* Forms */
-label{
-  font-size:13px;
-  font-weight:900;
-  margin:12px 0 6px;
-  display:block;
-}
-input,select,textarea{
-  width:100%;
-  padding:12px 14px;
-  border-radius:14px;
-  border:1px solid rgba(16,24,40,.10);
-  font-size:15px;
-  background:#fff;
-}
-input:focus, select:focus, textarea:focus{
-  outline:none;
-  border-color:rgba(14,165,164,.45);
-  box-shadow:0 0 0 4px rgba(14,165,164,.10);
-}
-.row{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-}
-@media(max-width:640px){ .row{ grid-template-columns:1fr; } }
+    .card, .heroBlock{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:18px;
+      box-shadow:var(--shadow2);
+      padding:22px;
+    }
 
-/* KPI */
-.kpi{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px; }
-@media(max-width:640px){ .kpi{ grid-template-columns:1fr; } }
-.k{
-  border-radius:16px;
-  padding:16px;
-  border:1px solid rgba(16,24,40,.08);
-  background:rgba(16,24,40,.02);
-}
-.k .h{ font-size:12px; color:var(--muted); font-weight:800; }
-.k .v{ font-size:22px; font-weight:1000; margin-top:8px; }
-.kpiTop .k{ background:#fff; }
-.kpiTop .v{ font-size:24px; }
+    .title{
+      font-size:20px;
+      font-weight:1000;
+      margin:0 0 10px;
+      line-height:1.2;
+      letter-spacing:-0.2px;
+    }
+    .small{
+      font-size:13.5px;
+      color:var(--muted);
+      line-height:1.55;
+    }
+    .divider{ height:1px; background:var(--line); margin:18px 0; }
 
-/* Good/bad */
-.good{ color:var(--ok); font-weight:900; }
-.bad{ color:var(--bad); font-weight:900; }
+    label{
+      font-size:13px;
+      font-weight:900;
+      margin:12px 0 6px;
+      display:block;
+    }
+    input,select,textarea{
+      width:100%;
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid rgba(16,24,40,.10);
+      font-size:15px;
+      background:var(--inputBg);
+      color:var(--txt);
+    }
+    :root[data-theme="midnight"] input,
+    :root[data-theme="midnight"] select,
+    :root[data-theme="midnight"] textarea{
+      border-color:rgba(255,255,255,.14);
+    }
 
-/* Insights / tiles */
-.pHead{ display:flex; justify-content:space-between; align-items:flex-start; gap:14px; }
-.tag{
-  padding:6px 12px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:800;
-  background:rgba(16,24,40,.05);
-  color:#64748b;
-  border:1px solid rgba(16,24,40,.08);
-}
-.tag.pro{
-  background:rgba(14,165,164,.12);
-  border-color:rgba(14,165,164,.30);
-  color:#0ea5a4;
-}
-.pGrid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:18px;
-  margin-top:18px;
-}
-.pItem{
-  border-radius:16px;
-  box-shadow:none;
-  background:rgba(16,24,40,.02);
-  border:1px solid rgba(16,24,40,.06);
-  padding:18px;
-}
-.pItem .t{
-  font-size:12px;
-  color:#64748b;
-  font-weight:900;
-  letter-spacing:.3px;
-  text-transform:uppercase;
-}
-.pItem .v{
-  font-size:24px;
-  font-weight:1000;
-  margin-top:10px;
-  min-height:32px;
-}
-.pList{ margin:16px 0 0; padding-left:18px; color:var(--txt); }
-.pList li{ margin:8px 0; line-height:1.5; }
+    input:focus, select:focus, textarea:focus{
+      outline:none;
+      border-color:rgba(14,165,164,.45);
+      box-shadow:0 0 0 4px rgba(14,165,164,.10);
+    }
 
-/* Remove hover jumping (premium) */
-.pItem:hover, .heroBlock:hover{ transform:none; box-shadow:var(--shadow2); }
+    .row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
+    @media(max-width:640px){ .row{ grid-template-columns:1fr; } }
 
-/* Special cards */
-#calcCard{ padding:26px; }
-#proCard{
-  background:linear-gradient(135deg, rgba(14,165,164,.10), rgba(79,70,229,.10));
-  border:1px solid rgba(14,165,164,.22);
-  box-shadow:0 12px 40px rgba(16,24,40,.08);
-}
+    .kpi{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px; }
+    @media(max-width:640px){ .kpi{ grid-template-columns:1fr; } }
 
-/* Mode buttons */
-.heroModes{ display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
-.heroBtn{
-  padding:10px 14px;
-  border-radius:999px;
-  background:rgba(16,24,40,.03);
-  border:1px solid rgba(16,24,40,.10);
-  font-weight:900;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.heroBtn svg{ width:18px; height:18px; }
-.heroBtn.active{
-  background:rgba(14,165,164,.12);
-  border-color:rgba(14,165,164,.35);
-}
+    .k{
+      border-radius:16px;
+      padding:16px;
+      border:1px solid rgba(16,24,40,.08);
+      background:rgba(16,24,40,.02);
+    }
+    :root[data-theme="midnight"] .k{
+      border-color:rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+    }
+    .k .h{ font-size:12px; color:var(--muted); font-weight:800; }
+    .k .v{ font-size:22px; font-weight:1000; margin-top:8px; }
 
-/* Bulk table */
-.bulkWrap{
-  overflow:auto;
-  border:1px solid var(--line);
-  border-radius:16px;
-  background:#fff;
-}
-#bulkTable{
-  width:100%;
-  border-collapse:separate;
-  border-spacing:0;
-  min-width:900px;
-}
-#bulkTable th, #bulkTable td{
-  padding:10px;
-  border-bottom:1px solid rgba(16,24,40,.06);
-  font-size:13px;
-  text-align:left;
-  vertical-align:middle;
-}
-#bulkTable th{
-  position:sticky;
-  top:0;
-  background:#fff;
-  z-index:2;
-}
-input.mini{
-  width:100%;
-  padding:8px 10px;
-  border-radius:12px;
-  border:1px solid rgba(16,24,40,.10);
-  font-size:13px;
-}
+    .good{ color:var(--ok); font-weight:900; }
+    .bad{ color:var(--bad); font-weight:900; }
+    .hint{ margin-top:8px; font-size:12.5px; color:var(--muted); line-height:1.4; }
 
-/* Footer */
-.pp-footer{
-  margin-top:80px;
-  padding:44px 0;
-  background:#0f172a;
-  color:#cbd5e1;
-}
-.pp-footbox{ max-width:1100px; margin:auto; padding:0 20px; }
-.pp-footgrid{ display:grid; grid-template-columns:1fr 1fr; gap:40px; }
-@media(max-width:768px){ .pp-footgrid{ grid-template-columns:1fr; } }
+    #proCard{
+      background:linear-gradient(135deg, rgba(14,165,164,.10), rgba(79,70,229,.10));
+      border:1px solid rgba(14,165,164,.22);
+      box-shadow:0 12px 40px rgba(16,24,40,.08);
+      margin-bottom:16px;
+    }
 
-.pp-footbrand b{ color:#fff; font-size:18px; }
-.pp-footmut{ margin-top:10px; font-size:13px; line-height:1.6; color:rgba(226,232,240,.70); }
-.pp-footlinks{ display:flex; flex-wrap:wrap; gap:12px; }
-.pp-footlinks a{ color:#cbd5e1; font-weight:600; font-size:14px; text-decoration:none; opacity:.85; }
-.pp-footlinks a:hover{ opacity:1; }
+    /* Mode buttons */
+    .heroModes{ display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
+    .heroBtn{
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(16,24,40,.03);
+      border:1px solid rgba(16,24,40,.10);
+      font-weight:900;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:var(--txt);
+    }
+    .heroBtn svg{ width:18px; height:18px; }
+    .heroBtn.active{
+      background:rgba(14,165,164,.12);
+      border-color:rgba(14,165,164,.35);
+    }
 
-.pp-footbottom{
-  margin-top:40px;
-  padding-top:20px;
-  border-top:1px solid rgba(255,255,255,.08);
-  display:flex;
-  justify-content:space-between;
-  font-size:13px;
-  color:rgba(226,232,240,.60);
-}
-@media(max-width:768px){
-  .pp-footbottom{ flex-direction:column; gap:10px; }
-}
-   /* =========================
-   SaaS Layout Upgrade (Tabs + Summary + Advanced)
-   Paste at END of <style>
-   ========================= */
+    /* Advanced toggle */
+    .ppAdvanced{
+      margin-top:14px;
+      border:1px solid rgba(16,24,40,.08);
+      border-radius:16px;
+      overflow:hidden;
+      background:var(--inputBg);
+    }
+    :root[data-theme="midnight"] .ppAdvanced{
+      border-color:rgba(255,255,255,.10);
+    }
+    .ppAdvancedBtn{
+      width:100%;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:12px 14px;
+      border:0;
+      background:rgba(16,24,40,.02);
+      font-weight:1000;
+      cursor:pointer;
+      color:var(--txt);
+    }
+    .ppAdvancedBody{ display:none; padding:14px; }
+    .ppAdvanced.open .ppAdvancedBody{ display:block; }
 
-/* Right column becomes a compact sidebar */
-.rightSide{
-  position: sticky;
-  top: 18px;
-  align-self: start;
-}
+    /* Right column sticky */
+    .rightSide{
+      position:sticky;
+      top:18px;
+      align-self:start;
+      display:flex;
+      flex-direction:column;
+      gap:22px;
+    }
+    @media (max-width:1000px){ .rightSide{ position:static; } }
 
-/* Summary card */
-.ppSummary .title{ margin-bottom:6px !important; }
-.ppSummaryGrid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:12px;
-}
-.ppSumItem{
-  border:1px solid rgba(16,24,40,.08);
-  border-radius:14px;
-  padding:12px;
-  background:rgba(16,24,40,.02);
-}
-.ppSumItem .h{
-  font-size:11px;
-  font-weight:900;
-  color:var(--muted);
-  text-transform:uppercase;
-  letter-spacing:.3px;
-}
-.ppSumItem .v{
-  font-size:18px;
-  font-weight:1000;
-  margin-top:6px;
-}
+    /* Summary card */
+    .ppSummaryGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:12px;
+    }
+    @media (max-width:1000px){ .ppSummaryGrid{ grid-template-columns:1fr; } }
 
-/* Tabs shell */
-.ppTabs{
-  border:1px solid rgba(16,24,40,.08);
-  border-radius:18px;
-  overflow:hidden;
-  background:#fff;
-}
-.ppTabBar{
-  display:flex;
-  gap:6px;
-  padding:10px;
-  border-bottom:1px solid rgba(16,24,40,.08);
-  background:rgba(16,24,40,.02);
-  flex-wrap:wrap;
-}
-.ppTabBtn{
-  appearance:none;
-  border:1px solid rgba(16,24,40,.10);
-  background:#fff;
-  padding:8px 12px;
-  border-radius:999px;
-  font-weight:900;
-  font-size:12.5px;
-  cursor:pointer;
-}
-.ppTabBtn.active{
-  border-color:rgba(14,165,164,.35);
-  background:rgba(14,165,164,.10);
-}
-.ppTabPanel{
-  display:none;
-  padding:16px;
-}
-.ppTabPanel.active{ display:block; }
+    .ppSumItem{
+      border:1px solid rgba(16,24,40,.08);
+      border-radius:14px;
+      padding:12px;
+      background:rgba(16,24,40,.02);
+    }
+    :root[data-theme="midnight"] .ppSumItem{
+      border-color:rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+    }
+    .ppSumItem .h{
+      font-size:11px;
+      font-weight:900;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.3px;
+    }
+    .ppSumItem .v{
+      font-size:18px;
+      font-weight:1000;
+      margin-top:6px;
+      color:var(--txt);
+    }
 
-/* Make right-side sections NOT look like giant hero blocks */
-.rightSide .heroBlock{
-  margin-top:0 !important;
-  padding:0 !important;
-  border:none !important;
-  box-shadow:none !important;
-  background:transparent !important;
-}
-.rightSide .heroBlock .pHead{ margin-bottom:12px; }
-.rightSide .pGrid{ margin-top:10px; }
+    /* Tabs */
+    .ppTabs{
+      border:1px solid rgba(16,24,40,.08);
+      border-radius:18px;
+      overflow:hidden;
+      background:var(--card);
+      box-shadow:var(--shadow2);
+    }
+    :root[data-theme="midnight"] .ppTabs{
+      border-color:rgba(255,255,255,.10);
+    }
+    .ppTabBar{
+      display:flex;
+      gap:6px;
+      padding:10px;
+      border-bottom:1px solid rgba(16,24,40,.08);
+      background:rgba(16,24,40,.02);
+      flex-wrap:wrap;
+    }
+    :root[data-theme="midnight"] .ppTabBar{
+      border-bottom-color:rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+    }
+    .ppTabBtn{
+      appearance:none;
+      border:1px solid rgba(16,24,40,.10);
+      background:var(--inputBg);
+      padding:8px 12px;
+      border-radius:999px;
+      font-weight:900;
+      font-size:12.5px;
+      cursor:pointer;
+      color:var(--txt);
+    }
+    :root[data-theme="midnight"] .ppTabBtn{
+      border-color:rgba(255,255,255,.14);
+    }
+    .ppTabBtn.active{
+      border-color:rgba(14,165,164,.35);
+      background:rgba(14,165,164,.10);
+    }
+    .ppTabPanel{ display:none; padding:16px; }
+    .ppTabPanel.active{ display:block; }
 
-/* Advanced inputs toggle on left */
-.ppAdvanced{
-  margin-top:14px;
-  border:1px solid rgba(16,24,40,.08);
-  border-radius:16px;
-  overflow:hidden;
-  background:#fff;
-}
-.ppAdvancedBtn{
-  width:100%;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  padding:12px 14px;
-  border:0;
-  background:rgba(16,24,40,.02);
-  font-weight:1000;
-  cursor:pointer;
-}
-.ppAdvancedBody{
-  display:none;
-  padding:14px;
-}
-.ppAdvanced.open .ppAdvancedBody{ display:block; }
+    /* Bulk table */
+    .bulkWrap{
+      overflow:auto;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:var(--inputBg);
+    }
+    #bulkTable{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      min-width:900px;
+    }
+    #bulkTable th, #bulkTable td{
+      padding:10px;
+      border-bottom:1px solid rgba(16,24,40,.06);
+      font-size:13px;
+      text-align:left;
+      vertical-align:middle;
+    }
+    :root[data-theme="midnight"] #bulkTable th,
+    :root[data-theme="midnight"] #bulkTable td{
+      border-bottom-color:rgba(255,255,255,.08);
+    }
+    #bulkTable th{
+      position:sticky;
+      top:0;
+      background:var(--inputBg);
+      z-index:2;
+    }
+    input.mini{
+      width:100%;
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid rgba(16,24,40,.10);
+      font-size:13px;
+      background:var(--inputBg);
+      color:var(--txt);
+    }
+    :root[data-theme="midnight"] input.mini{
+      border-color:rgba(255,255,255,.14);
+    }
 
-/* Mobile: remove sticky to avoid weirdness */
-@media (max-width: 1000px){
-  .rightSide{ position: static; }
-  .ppSummaryGrid{ grid-template-columns:1fr; }
-}
+    /* Footer */
+    .pp-footer{
+      margin-top:80px;
+      padding:44px 0;
+      background:#0f172a;
+      color:#cbd5e1;
+    }
+    .pp-footbox{ max-width:1100px; margin:auto; padding:0 20px; }
+    .pp-footgrid{ display:grid; grid-template-columns:1fr 1fr; gap:40px; }
+    @media(max-width:768px){ .pp-footgrid{ grid-template-columns:1fr; } }
+    .pp-footbrand b{ color:#fff; font-size:18px; }
+    .pp-footmut{ margin-top:10px; font-size:13px; line-height:1.6; color:rgba(226,232,240,.70); }
+    .pp-footlinks{ display:flex; flex-wrap:wrap; gap:12px; }
+    .pp-footlinks a{ color:#cbd5e1; font-weight:600; font-size:14px; text-decoration:none; opacity:.85; }
+    .pp-footlinks a:hover{ opacity:1; }
+    .pp-footbottom{
+      margin-top:40px;
+      padding-top:20px;
+      border-top:1px solid rgba(255,255,255,.08);
+      display:flex;
+      justify-content:space-between;
+      font-size:13px;
+      color:rgba(226,232,240,.60);
+    }
+    @media(max-width:768px){ .pp-footbottom{ flex-direction:column; gap:10px; } }
 
-</style>
-
+    /* Small inline controls for custom theme */
+    .pp-miniControl{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:var(--inputBg);
+      font-size:12px;
+      color:var(--muted);
+      font-weight:800;
+    }
+    .pp-miniControl input[type="color"]{
+      width:28px;height:28px;
+      padding:0;border:0;background:transparent;
+      border-radius:10px;
+      cursor:pointer;
+    }
+  </style>
 </head>
 
 <body>
@@ -555,56 +553,62 @@ input.mini{
               <div class="pp-sub">Independent tool by UKwebtools</div>
             </div>
           </div>
-          <!-- Trust Bar -->
-<div class="pp-trust" aria-label="Trust highlights">
-  <div class="pp-trustitem" title="User feedback">
-    <span class="pp-stars" aria-hidden="true">★★★★★</span>
-    <span class="pp-trusttxt"><b>Transparent</b> estimates (you control inputs)</span>
-  </div>
-
-  <div class="pp-trustitem" title="Payments">
-    <span class="pp-dot" aria-hidden="true"></span>
-    <span class="pp-trusttxt"><b>One-time</b> PRO unlock (Gumroad checkout)</span>
-  </div>
-
-  <div class="pp-trustitem" title="Privacy">
-    <span class="pp-dot" aria-hidden="true"></span>
-    <span class="pp-trusttxt"><b>No scraping</b> • competitor prices entered by you</span>
-  </div>
-
-  <div class="pp-trustitem" title="Speed">
-    <span class="pp-dot" aria-hidden="true"></span>
-    <span class="pp-trusttxt"><b>Fast</b> — runs locally in your browser</span>
-  </div>
-</div>
-
 
           <nav class="pp-nav" aria-label="Main">
             <a class="btn ghost" href="https://ukwebtools.com/" rel="nofollow">← Ukwebtools</a>
             <a class="btn ghost" href="help.html">How to use</a>
             <a class="btn primary" href="login.html" id="accountLink">Account</a>
             <span class="pill" id="accessPill">—</span>
+
             <select class="btn" id="themeSel" aria-label="Theme">
-  <option value="day">Day</option>
-  <option value="soft">Soft</option>
-  <option value="midnight">Midnight</option>
-</select>
+              <option value="day">Day</option>
+              <option value="soft">Soft</option>
+              <option value="midnight">Midnight</option>
+              <option value="custom">Custom</option>
+            </select>
+
+            <div class="pp-miniControl" title="Custom theme controls (select Theme → Custom)">
+              Accent
+              <input type="color" id="accentPick" value="#0ea5a4" aria-label="Accent color">
+              Background
+              <input type="color" id="bgPick" value="#f6f8fb" aria-label="Background color">
+            </div>
+
             <button class="btn" id="logoutBtn" type="button">Log out</button>
           </nav>
+
+          <!-- Trust Bar -->
+          <div class="pp-trust" aria-label="Trust highlights">
+            <div class="pp-trustitem" title="User feedback">
+              <span class="pp-stars" aria-hidden="true">★★★★★</span>
+              <span class="pp-trusttxt"><b>Transparent</b> estimates (you control inputs)</span>
+            </div>
+            <div class="pp-trustitem" title="Payments">
+              <span class="pp-dot" aria-hidden="true"></span>
+              <span class="pp-trusttxt"><b>One-time</b> PRO unlock (Gumroad checkout)</span>
+            </div>
+            <div class="pp-trustitem" title="Privacy">
+              <span class="pp-dot" aria-hidden="true"></span>
+              <span class="pp-trusttxt"><b>No scraping</b> • competitor prices entered by you</span>
+            </div>
+            <div class="pp-trustitem" title="Speed">
+              <span class="pp-dot" aria-hidden="true"></span>
+              <span class="pp-trusttxt"><b>Fast</b> — runs locally in your browser</span>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
   </header>
 
   <main class="wrap" id="content">
-    <div class="banner" id="importBanner" style="display:none;"></div>
-
     <div class="grid">
 
-  <!-- LEFT COLUMN -->
-  <div>
-    <div class="card" id="proCard">
+      <!-- LEFT COLUMN -->
+      <div>
 
+        <div class="card" id="proCard">
           <div class="title">PRO features</div>
           <div class="small">Unlimited reverse + competitor + bulk, PDF export, share links, insights, saved scenarios. One-time unlock.</div>
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
@@ -612,92 +616,66 @@ input.mini{
             <a class="btn" href="reviews.html">See reviews</a>
           </div>
         </div>
-      <!-- LEFT -->
-     <section class="heroBlock" id="calcCard">
-        <div class="title">Pricing Command Center</div>
-<div class="small">Know your real profit after fees, ads and returns. Reverse = target profit → required price. Bulk = test multiple items fast.</div>
-<div class="kpi kpiTop">
-  <div class="k">
-    <div class="h">Profit</div>
-    <div class="v" id="kpiProfitTop">—</div>
-  </div>
-  <div class="k">
-    <div class="h">Margin</div>
-    <div class="v" id="kpiMarginTop">—</div>
-  </div>
-</div>
 
-<div class="heroModes">
-  <button class="heroBtn active" data-mode="profit" type="button">
-    <svg viewBox="0 0 24 24" fill="none">
-      <path d="M4 16l4-4 4 4 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    Profit Clarity
-  </button>
+        <section class="heroBlock" id="calcCard">
+          <div class="title">Pricing Command Center</div>
+          <div class="small">Know your real profit after fees, ads and returns. Reverse = target profit → required price. Bulk = test multiple items fast.</div>
 
-  <button class="heroBtn" data-mode="reverse" type="button">
-    <svg viewBox="0 0 24 24" fill="none">
-      <path d="M4 12h16M12 4l8 8-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    Reverse Pricing
-  </button>
-
-  <button class="heroBtn" data-mode="bulk" type="button">
-    <svg viewBox="0 0 24 24" fill="none">
-      <rect x="4" y="4" width="6" height="6" stroke="currentColor" stroke-width="2"/>
-      <rect x="14" y="4" width="6" height="6" stroke="currentColor" stroke-width="2"/>
-      <rect x="4" y="14" width="6" height="6" stroke="currentColor" stroke-width="2"/>
-      <rect x="14" y="14" width="6" height="6" stroke="currentColor" stroke-width="2"/>
-    </svg>
-    Bulk Testing
-  </button>
-</div>
-
-       <div class="ppAdvanced" id="advBox">
-  <button class="ppAdvancedBtn" type="button" id="advToggle">
-    Advanced inputs (fees, ads, returns)
-    <span>▼</span>
-  </button>
-
-  <div class="ppAdvancedBody">
-
-    <div class="row">
-      <div><label>Platform fee (%)</label><input id="feePct" inputmode="decimal" value="0"></div>
-      <div><label>Fixed fee</label><input id="feeFixed" inputmode="decimal" value="0"></div>
-    </div>
-
-    <div class="row">
-      <div><label>Ads (%)</label><input id="adsPct" inputmode="decimal" value="0"></div>
-      <div><label>Return rate (%)</label><input id="returnPct" inputmode="decimal" value="0"></div>
-    </div>
-
-  </div>
-</div>
-
-           
-            <label>Exchange rate (optional)</label>
-            <input id="fxRate" inputmode="decimal" placeholder="e.g., 1 base = 1.25 selected" value="">
+          <div class="kpi">
+            <div class="k">
+              <div class="h">Profit</div>
+              <div class="v" id="kpiProfitTop">—</div>
+            </div>
+            <div class="k">
+              <div class="h">Margin</div>
+              <div class="v" id="kpiMarginTop">—</div>
+            </div>
           </div>
-        </div>
 
-        <div id="singleBox">
+          <div class="heroModes">
+            <button class="heroBtn active" data-mode="profit" type="button">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M4 16l4-4 4 4 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Profit Clarity
+            </button>
+            <button class="heroBtn" data-mode="reverse" type="button">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M4 12h16M12 4l8 8-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Reverse Pricing
+            </button>
+            <button class="heroBtn" data-mode="bulk" type="button">
+              <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="6" height="6" stroke="currentColor" stroke-width="2"/><rect x="14" y="4" width="6" height="6" stroke="currentColor" stroke-width="2"/><rect x="4" y="14" width="6" height="6" stroke="currentColor" stroke-width="2"/><rect x="14" y="14" width="6" height="6" stroke="currentColor" stroke-width="2"/></svg>
+              Bulk Testing
+            </button>
+          </div>
+
           <div class="divider"></div>
 
+          <!-- Core inputs -->
+          <label>Currency</label>
+          <select id="currency">
+            <option value="GBP">GBP (£)</option>
+            <option value="USD">USD ($)</option>
+            <option value="EUR">EUR (€)</option>
+            <option value="AUD">AUD ($)</option>
+            <option value="CAD">CAD ($)</option>
+            <option value="NZD">NZD ($)</option>
+            <option value="AED">AED</option>
+            <option value="SAR">SAR</option>
+            <option value="PKR">PKR (₨)</option>
+            <option value="INR">INR (₹)</option>
+          </select>
+
           <label>Marketplace & fee profile</label>
-<select id="preset"></select>
+          <select id="preset"></select>
 
-<label id="catLabel" style="display:none;margin-top:10px">Category (for accurate fees)</label>
-<select id="category" style="display:none"></select>
+          <label id="catLabel" style="display:none;margin-top:10px">Category (for accurate fees)</label>
+          <select id="category" style="display:none"></select>
 
-<div class="small" id="presetNote" style="margin-top:8px">—</div>
+          <div class="small" id="presetNote" style="margin-top:8px">—</div>
+          <div class="small" style="margin-top:6px;color:var(--muted);">
+            Preset percentages are baseline examples unless marked “Custom”.
+          </div>
 
-<div class="small" style="margin-top:6px;color:#6b7280;">
-  Preset percentages are baseline examples unless marked “Custom”.
-</div>
-
-
-
-          <div class="row">
+          <div class="row" style="margin-top:10px">
             <div><label>Selling price</label><input id="sellPrice" inputmode="decimal" value="0"></div>
             <div><label>Product cost</label><input id="productCost" inputmode="decimal" value="0"></div>
           </div>
@@ -707,231 +685,401 @@ input.mini{
             <div><label>Packaging / misc</label><input id="miscCost" inputmode="decimal" value="0"></div>
           </div>
 
-          <div class="divider"></div>
+          <div class="ppAdvanced" id="advBox">
+            <button class="ppAdvancedBtn" type="button" id="advToggle">
+              Advanced inputs (fees, ads, returns)
+              <span id="advChevron">▼</span>
+            </button>
+            <div class="ppAdvancedBody">
+              <div class="row">
+                <div><label>Platform fee (%)</label><input id="feePct" inputmode="decimal" value="0"></div>
+                <div><label>Fixed fee</label><input id="feeFixed" inputmode="decimal" value="0"></div>
+              </div>
+              <div class="row">
+                <div><label>Ads (%)</label><input id="adsPct" inputmode="decimal" value="0"></div>
+                <div><label>Return rate (%)</label><input id="returnPct" inputmode="decimal" value="0"></div>
+              </div>
 
-          <div class="row">
-            <div><label>Platform fee (%)</label><input id="feePct" inputmode="decimal" value="0"></div>
-            <div><label>Fixed fee</label><input id="feeFixed" inputmode="decimal" value="0"></div>
+              <label>Exchange rate (optional)</label>
+              <input id="fxRate" inputmode="decimal" placeholder="e.g., 1 base = 1.25 selected" value="">
+            </div>
           </div>
 
-          <div class="row">
-            <div><label>Ads (%)</label><input id="adsPct" inputmode="decimal" value="0"></div>
-            <div><label>Return rate (%)</label><input id="returnPct" inputmode="decimal" value="0"></div>
-          </div>
+          <div id="singleBox">
+            <div id="reverseBox" style="display:none">
+              <div class="divider"></div>
+              <div class="title" style="margin:0 0 6px;font-size:14px">Reverse mode</div>
+              <div class="small">Trial: 3 reverse calculations total. PRO: unlimited.</div>
 
-          <div id="reverseBox" style="display:none">
+              <label>Target profit (<span id="tpCurrency">£</span> per sale)</label>
+              <input id="targetProfit" inputmode="decimal" value="0">
+
+              <div class="small" id="reverseHint" style="margin-top:8px">—</div>
+              <div class="small">Enter the amount you want to earn per sale (e.g., 5.00 means £5 profit, not 5%).</div>
+              <div class="small" id="reverseUsesLine" style="margin-top:8px">Reverse uses: —</div>
+            </div>
+
             <div class="divider"></div>
-            <div class="title" style="margin:0 0 6px;font-size:14px">Reverse mode</div>
-            <div class="small">Trial: 3 reverse calculations total. PRO: unlimited.</div>
-            <label>Target profit (<span id="tpCurrency">£</span> per sale)</label>
 
-<input id="targetProfit" inputmode="decimal" value="0">
-            <div class="small" id="reverseHint">—</div>
-
-<div class="small">Enter the amount you want to earn per sale (e.g., 5.00 means £5 profit, not 5%).</div>
-
-            <div class="small" id="reverseUsesLine" style="margin-top:8px">Reverse uses: —</div>
-          </div>
-
-          <div class="divider"></div>
-
-          <div class="row" id="controlsRow">
-            <button class="btn primary" id="calcBtn" type="button">Calculate</button>
-            <button class="btn" id="resetBtn" type="button">Reset</button>
-          </div>
-
-          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
-            <button class="btn" id="exportCsvBtn" type="button">Export CSV</button>
-            <button class="btn" id="pdfBtn" type="button">Export PDF (PRO)</button>
-            <button class="btn" id="shareBtn" type="button">Share link (PRO)</button>
-            <span class="pill" id="shareStatus">—</span>
-          </div>
-
-          <div class="kpi">
-            <div class="k">
-              <div class="h" id="o1h">Estimated profit</div>
-              <div class="v" id="o1v">£0.00</div>
-              <div class="hint" id="o1hint">—</div>
+            <div class="row">
+              <button class="btn primary" id="calcBtn" type="button">Calculate</button>
+              <button class="btn" id="resetBtn" type="button">Reset</button>
             </div>
-            <div class="k">
-              <div class="h" id="o2h">Margin</div>
-              <div class="v" id="o2v">0.0%</div>
-              <div class="hint" id="o2hint">—</div>
-            </div>
-          </div>
 
-          <div class="kpi">
-            <div class="k">
-              <div class="h">Total fees + ads</div>
-              <div class="v" id="feesOut">£0.00</div>
-              <div class="hint">Platform fee + fixed + ads</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+              <button class="btn" id="exportCsvBtn" type="button">Export CSV</button>
+              <button class="btn" id="pdfBtn" type="button">Export PDF (PRO)</button>
+              <button class="btn" id="shareBtn" type="button">Share link (PRO)</button>
+              <span class="pill" id="shareStatus">—</span>
             </div>
-            <div class="k">
-              <div class="h">Return sensitivity (expected)</div>
-              <div class="v" id="returnOut">£0.00</div>
-              <div class="hint">Expected impact from return %</div>
+
+            <div class="kpi">
+              <div class="k">
+                <div class="h" id="o1h">Estimated profit</div>
+                <div class="v" id="o1v">£0.00</div>
+                <div class="hint" id="o1hint">—</div>
+              </div>
+              <div class="k">
+                <div class="h" id="o2h">Margin</div>
+                <div class="v" id="o2v">0.0%</div>
+                <div class="hint" id="o2hint">—</div>
+              </div>
+            </div>
+
+            <div class="kpi">
+              <div class="k">
+                <div class="h">Total fees + ads</div>
+                <div class="v" id="feesOut">£0.00</div>
+                <div class="hint">Platform fee + fixed + ads</div>
+              </div>
+              <div class="k">
+                <div class="h">Return sensitivity (expected)</div>
+                <div class="v" id="returnOut">£0.00</div>
+                <div class="hint">Expected impact from return %</div>
+              </div>
+            </div>
+
+            <div class="kpi" id="fxRow" style="display:none">
+              <div class="k" style="grid-column:1 / -1">
+                <div class="h">Converted selling price (your FX)</div>
+                <div class="v" id="fxOut">—</div>
+                <div class="hint" id="fxNote">—</div>
+              </div>
             </div>
           </div>
 
-          <div class="kpi" id="fxRow" style="display:none">
-            <div class="k" style="grid-column:1 / -1">
-              <div class="h">Converted selling price (your FX)</div>
-              <div class="v" id="fxOut">—</div>
-              <div class="hint" id="fxNote">—</div>
-            </div>
-          </div>
-        </div>
+          <!-- BULK -->
+          <div id="bulkBox" style="display:none">
+            <div class="divider"></div>
 
-        <!-- BULK -->
-        <div id="bulkBox" style="display:none">
-          <div class="divider"></div>
+            <div class="title" style="margin:0 0 6px;font-size:14px">Bulk mode</div>
+            <div class="small" id="bulkLimitLine">Loading bulk limits…</div>
 
-          <div class="title" style="margin:0 0 6px;font-size:14px">Bulk mode</div>
-          <div class="small" id="bulkLimitLine">Loading bulk limits…</div>
+            <div class="divider"></div>
 
-          <div class="divider"></div>
-
-          <div id="bulkPasteBox">
-            <div class="title" style="margin:0 0 6px;font-size:14px">Paste rows</div>
-            <div class="small">Paste: <b>Sell, Cost, Ship, Misc</b> (comma or tab). Optional columns: Fee%, Fixed, Ads%, Return%.</div>
-            <textarea id="bulkPaste" placeholder="Example:
+            <div id="bulkPasteBox">
+              <div class="title" style="margin:0 0 6px;font-size:14px">Paste rows</div>
+              <div class="small">Paste: <b>Sell, Cost, Ship, Misc</b> (comma or tab). Optional columns: Fee%, Fixed, Ads%, Return%.</div>
+              <textarea id="bulkPaste" placeholder="Example:
 12.99, 6.20, 0.00, 0.20
 19.99, 9.50, 0.00, 0.30"></textarea>
-            <div class="actions" style="margin-top:10px">
-              <button class="btn" id="bulkImportBtn" type="button">Import into table</button>
-              <button class="btn" id="bulkFillExampleBtn" type="button">Fill example</button>
-              <span class="pill" id="bulkImportStatus">—</span>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+                <button class="btn" id="bulkImportBtn" type="button">Import into table</button>
+                <button class="btn" id="bulkFillExampleBtn" type="button">Fill example</button>
+                <span class="pill" id="bulkImportStatus">—</span>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div style="display:flex;gap:10px;flex-wrap:wrap" id="bulkTools">
+              <button class="btn primary" id="bulkRunBtn" type="button">Run bulk</button>
+              <button class="btn" id="bulkAddRowBtn" type="button">+ Add row</button>
+              <button class="btn" id="bulkClearBtn" type="button">Clear rows</button>
+              <button class="btn" id="bulkApplyFeesBtn" type="button">Apply current fees to all</button>
+              <button class="btn" id="bulkExportBtn" type="button">Export bulk CSV</button>
+              <span class="pill" id="bulkStatus">—</span>
+            </div>
+
+            <div style="margin-top:10px" class="bulkWrap">
+              <table id="bulkTable">
+                <thead>
+                  <tr>
+                    <th style="width:56px">#</th>
+                    <th>Sell</th>
+                    <th>Cost</th>
+                    <th>Ship</th>
+                    <th>Misc</th>
+                    <th>Fee %</th>
+                    <th>Fixed</th>
+                    <th>Ads %</th>
+                    <th>Return %</th>
+                    <th>Profit</th>
+                    <th>Margin</th>
+                    <th style="width:90px">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="bulkTbody"></tbody>
+              </table>
+            </div>
+
+            <div class="small" style="margin-top:10px">
+              <b>Trial rules:</b> max <b>3 rows</b> and <b>1 bulk run per day</b>. PRO is unlimited.
             </div>
           </div>
 
           <div class="divider"></div>
+          <div class="small">
+            <b>Important:</b> All outputs are estimates based solely on your inputs and assumptions.
+            Fee presets are simplified examples and may not reflect current category rates, promotions, payment plans, VAT, or regional variations.
+            Always verify exact fees directly with your platform before making pricing decisions.
+            This tool provides no financial, legal, tax, or business advice and carries no profit guarantees.
+            ProfitPilot is an independent tool and is not affiliated with or endorsed by any marketplace or payment provider.
+            See <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy</a>.
+          </div>
+        </section>
+      </div>
 
-          <div class="actions" id="bulkTools">
-            <button class="btn primary" id="bulkRunBtn" type="button">Run bulk</button>
-            <button class="btn" id="bulkAddRowBtn" type="button">+ Add row</button>
-            <button class="btn" id="bulkClearBtn" type="button">Clear rows</button>
-            <button class="btn" id="bulkApplyFeesBtn" type="button">Apply current fees to all</button>
-            <button class="btn" id="bulkExportBtn" type="button">Export bulk CSV</button>
-            <span class="pill" id="bulkStatus">—</span>
+      <!-- RIGHT COLUMN -->
+      <aside class="rightSide">
+
+        <div class="card ppSummary">
+          <div class="title">Summary</div>
+          <div class="small">Live overview based on your inputs.</div>
+
+          <div class="ppSummaryGrid">
+            <div class="ppSumItem">
+              <div class="h">Profit</div>
+              <div class="v" id="sumProfit">—</div>
+            </div>
+            <div class="ppSumItem">
+              <div class="h">Margin</div>
+              <div class="v" id="sumMargin">—</div>
+            </div>
+            <div class="ppSumItem">
+              <div class="h">Break-even</div>
+              <div class="v" id="sumBreakEven">—</div>
+            </div>
+            <div class="ppSumItem">
+              <div class="h">Risk</div>
+              <div class="v" id="sumRisk">—</div>
+            </div>
           </div>
 
-          <div style="margin-top:10px" class="bulkWrap">
-            <table id="bulkTable">
-              <thead>
-                <tr>
-                  <th style="width:56px">#</th>
-                  <th>Sell</th>
-                  <th>Cost</th>
-                  <th>Ship</th>
-                  <th>Misc</th>
-                  <th>Fee %</th>
-                  <th>Fixed</th>
-                  <th>Ads %</th>
-                  <th>Return %</th>
-                  <th>Profit</th>
-                  <th>Margin</th>
-                  <th style="width:90px">Action</th>
-                </tr>
-              </thead>
-              <tbody id="bulkTbody"></tbody>
-            </table>
-          </div>
-
-          <div class="note">
-            <b>Trial rules:</b> max <b>3 rows</b> and <b>1 bulk run per day</b>. PRO is unlimited.
+          <div class="small" style="margin-top:10px">
+            Unlock PRO for competitor engine, insights & saved scenarios.
           </div>
         </div>
 
-        <div class="divider"></div>
+        <div class="ppTabs">
+          <div class="ppTabBar">
+            <button class="ppTabBtn active" data-tab="insightsTab" type="button">Insights</button>
+            <button class="ppTabBtn" data-tab="competitorTab" type="button">Competitor</button>
+            <button class="ppTabBtn" data-tab="savedTab" type="button">Saved</button>
+            <button class="ppTabBtn" data-tab="reviewsTab" type="button">Reviews</button>
+          </div>
 
-        <div class="small">
-  <b>Important:</b> All outputs are estimates based solely on your inputs and assumptions. 
-  Fee presets are simplified examples and may not reflect current category rates, promotions, payment plans, VAT, or regional variations. 
-  Always verify exact fees directly with your platform before making pricing decisions. 
-  This tool provides no financial, legal, tax, or business advice and carries no profit guarantees. 
-  ProfitPilot is an independent tool and is not affiliated with or endorsed by any marketplace or payment provider. 
-  See <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy</a>.
-</div>
- </section>
+          <!-- INSIGHTS -->
+          <div class="ppTabPanel active" id="insightsTab">
+            <section id="insightsBox">
+              <div class="pHead" style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+                <div>
+                  <div class="title" style="font-size:16px;margin:0">Insights</div>
+                  <div class="small">Break-even, target margin, max ads and risk signals.</div>
+                </div>
+                <span class="pill" id="insStatus">—</span>
+              </div>
 
-<div class="rightSide">
+              <div class="divider"></div>
 
-  <!-- SUMMARY CARD -->
-  <div class="card ppSummary">
-    <div class="title">Summary</div>
-    <div class="small">Live overview based on your inputs.</div>
+              <label>Target margin: <span id="targetMarginVal">15%</span></label>
+              <input id="targetMarginInput" inputmode="decimal" value="15">
 
-    <div class="ppSummaryGrid">
-      <div class="ppSumItem">
-        <div class="h">Profit</div>
-        <div class="v" id="sumProfit">—</div>
-      </div>
+              <div class="kpi">
+                <div class="k">
+                  <div class="h">Break-even price</div>
+                  <div class="v" id="bePrice">—</div>
+                </div>
+                <div class="k">
+                  <div class="h">Price for target margin</div>
+                  <div class="v" id="targetMarginPrice">—</div>
+                </div>
+              </div>
 
-      <div class="ppSumItem">
-        <div class="h">Margin</div>
-        <div class="v" id="sumMargin">—</div>
-      </div>
+              <div class="kpi">
+                <div class="k">
+                  <div class="h">Max ads % before loss</div>
+                  <div class="v" id="maxAdsPct">—</div>
+                </div>
+                <div class="k">
+                  <div class="h">Risk</div>
+                  <div class="v" id="riskLabel">—</div>
+                  <div class="hint" id="riskExplain">—</div>
+                </div>
+              </div>
 
-      <div class="ppSumItem">
-        <div class="h">Break-even</div>
-        <div class="v" id="sumBreakEven">—</div>
-      </div>
+              <div class="divider"></div>
 
-      <div class="ppSumItem">
-        <div class="h">Risk</div>
-        <div class="v" id="sumRisk">—</div>
-      </div>
-    </div>
+              <ul id="insBullets" class="small" style="margin:0;padding-left:18px"></ul>
 
-    <div class="small" style="margin-top:10px">
-      Unlock PRO for competitor engine, insights & saved scenarios.
-    </div>
-  </div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+                <button class="btn" id="refreshInsightsBtn" type="button">Refresh insights</button>
+                <span class="pill" id="insToast">—</span>
+              </div>
+            </section>
+          </div>
 
-  <!-- TABS WRAPPER -->
-  <div class="ppTabs">
+          <!-- COMPETITOR -->
+          <div class="ppTabPanel" id="competitorTab">
+            <section id="compBox">
+              <div class="pHead" style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+                <div>
+                  <div class="title" style="font-size:16px;margin:0">Market Positioning</div>
+                  <div class="small">Enter competitor prices you found yourself (no scraping).</div>
+                </div>
+                <span class="pill" id="compStatus">—</span>
+              </div>
 
-    <div class="ppTabBar">
-      <button class="ppTabBtn active" data-tab="insightsTab">Insights</button>
-      <button class="ppTabBtn" data-tab="competitorTab">Competitor</button>
-      <button class="ppTabBtn" data-tab="savedTab">Saved</button>
-      <button class="ppTabBtn" data-tab="reviewsTab">Reviews</button>
-    </div>
+              <div class="divider"></div>
 
-    <!-- INSIGHTS -->
-    <div class="ppTabPanel active" id="insightsTab">
-      <div id="insightsMount"></div>
-    </div>
+              <div class="row">
+                <div><label>Competitor 1</label><input id="c1" inputmode="decimal" value="0"></div>
+                <div><label>Competitor 2</label><input id="c2" inputmode="decimal" value="0"></div>
+              </div>
+              <div class="row">
+                <div><label>Competitor 3</label><input id="c3" inputmode="decimal" value="0"></div>
+                <div>
+                  <label>Positioning</label>
+                  <select id="positioning">
+                    <option value="undercut">Undercut slightly</option>
+                    <option value="match">Match median</option>
+                    <option value="premium">Premium</option>
+                  </select>
+                </div>
+              </div>
 
-    <!-- COMPETITOR -->
-    <div class="ppTabPanel" id="competitorTab">
-      <div id="competitorMount"></div>
-    </div>
+              <div class="row">
+                <div>
+                  <label>Floor buffer (%)</label>
+                  <input id="floorBuffer" inputmode="decimal" value="5">
+                </div>
+                <div>
+                  <label>&nbsp;</label>
+                  <button class="btn primary" id="runCompBtn" type="button">Run competitor mode</button>
+                </div>
+              </div>
 
-    <!-- SAVED -->
-    <div class="ppTabPanel" id="savedTab">
-      <div id="savedMount"></div>
-    </div>
+              <div class="small" id="compUsesLine" style="margin-top:6px">Competitor uses: —</div>
+              <div class="divider"></div>
 
-    <!-- REVIEWS -->
-    <div class="ppTabPanel" id="reviewsTab">
-      <div id="reviewsMount"></div>
-    </div>
+              <div class="kpi">
+                <div class="k">
+                  <div class="h">Median</div>
+                  <div class="v" id="compMedian">—</div>
+                </div>
+                <div class="k">
+                  <div class="h">Suggested</div>
+                  <div class="v" id="compSuggest">—</div>
+                  <div class="hint" id="compWhy">—</div>
+                </div>
+              </div>
 
-  </div>
+              <div class="kpi">
+                <div class="k">
+                  <div class="h">Safe floor</div>
+                  <div class="v" id="compFloor">—</div>
+                </div>
+                <div class="k">
+                  <div class="h">Check</div>
+                  <div class="v" id="compCheck">—</div>
+                  <div class="hint" id="compCheck2">—</div>
+                </div>
+              </div>
 
-</div>
+              <div class="divider"></div>
 
-          <label>Review</label>
-          <input id="revMsg" placeholder="What did you like? What should we improve?">
+              <ul id="compBullets" class="small" style="margin:0;padding-left:18px"></ul>
 
-          <button class="btn primary" id="sendReview" type="button">Submit / Update review</button>
-          <div class="toast" id="reviewStatus">—</div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+                <button class="btn" id="useSuggestedBtn" type="button" disabled>Use suggested price</button>
+                <button class="btn" id="saveScenarioBtn" type="button">Save scenario (PRO)</button>
+              </div>
+
+              <div class="small" id="compToast" style="margin-top:10px">—</div>
+              <div class="small" id="scenarioToast" style="margin-top:6px">—</div>
+            </section>
+          </div>
+
+          <!-- SAVED -->
+          <div class="ppTabPanel" id="savedTab">
+            <section id="savedBox">
+              <div class="title" style="font-size:16px;margin:0 0 6px">Saved scenarios</div>
+              <div class="small">Store and reload pricing setups (PRO).</div>
+
+              <div class="divider"></div>
+
+              <label>Scenario</label>
+              <select id="scenarioSel">
+                <option value="">—</option>
+              </select>
+
+              <label>Scenario name</label>
+              <input id="scenarioName" placeholder="e.g., eBay — undercut — 15% margin">
+
+              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+                <button class="btn" id="saveScenarioBtn2" type="button">Save scenario (PRO)</button>
+                <button class="btn" id="loadScenarioBtn" type="button">Load</button>
+                <button class="btn" id="deleteScenarioBtn" type="button">Delete</button>
+              </div>
+
+              <div class="small" id="scenarioStatus" style="margin-top:10px">—</div>
+            </section>
+          </div>
+
+          <!-- REVIEWS -->
+          <div class="ppTabPanel" id="reviewsTab">
+            <section id="reviewsCard">
+              <div class="title" style="font-size:16px;margin:0 0 6px">Leave a review</div>
+              <div class="small">One review per account (editable).</div>
+
+              <div class="divider"></div>
+
+              <label>Your name (optional)</label>
+              <input id="revName" placeholder="e.g., Faryal">
+
+              <label>Category</label>
+              <select id="revCat">
+                <option>General</option>
+                <option>eBay</option>
+                <option>Etsy</option>
+                <option>Amazon</option>
+                <option>Shopify</option>
+              </select>
+
+              <label>Stars</label>
+              <div id="starsRow" style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="btn" type="button" data-star="1">1</button>
+                <button class="btn" type="button" data-star="2">2</button>
+                <button class="btn" type="button" data-star="3">3</button>
+                <button class="btn" type="button" data-star="4">4</button>
+                <button class="btn" type="button" data-star="5">5</button>
+              </div>
+
+              <label>Review</label>
+              <input id="revMsg" placeholder="What did you like? What should we improve?">
+
+              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+                <button class="btn primary" id="sendReview" type="button">Submit / Update review</button>
+              </div>
+
+              <div class="small" id="reviewStatus" style="margin-top:10px">—</div>
+            </section>
+          </div>
         </div>
 
-        <div style="margin-top:14px" class="small">© <span id="yr"></span> UKwebtools • ProfitPilot</div>
-  </div>
-    
+        <div class="small" style="margin-top:14px">© <span id="yr"></span> UKwebtools • ProfitPilot</div>
+      </aside>
+
     </div>
   </main>
 
@@ -987,14 +1135,11 @@ input.mini{
       }
     });
 
-    // --- GA4 tracking helper ---
     function track(eventName, params = {}) {
       try { if (typeof gtag === "function") gtag("event", eventName, params); } catch (e) {}
     }
 
-    // ---------------------------
-    // Helpers (define BEFORE use)
-    // ---------------------------
+    // Helpers
     const CURRENCY_SYMBOL = { GBP:"£", USD:"$", EUR:"€", AUD:"$", CAD:"$", NZD:"$", AED:"AED ", SAR:"SAR ", PKR:"₨", INR:"₹" };
 
     function n(v){ const x = parseFloat(String(v ?? "").replace(/,/g,"")); return Number.isFinite(x) ? x : 0; }
@@ -1004,14 +1149,13 @@ input.mini{
       const y = d.getUTCFullYear();
       const m = String(d.getUTCMonth()+1).padStart(2,"0");
       const day = String(d.getUTCDate()).padStart(2,"0");
-      return `${y}-${m}-${day}`;
+      return \`\${y}-\${m}-\${day}\`;
     }
     function daysLeft(trialStartISO){
       const start = new Date(trialStartISO).getTime();
       const elapsedDays = (Date.now() - start) / (1000*60*60*24);
       return Math.max(0, Math.ceil(TRIAL_DAYS - elapsedDays));
     }
-
     function autoZero(el){
       if (!el) return;
       el.addEventListener("focus", ()=>{
@@ -1024,7 +1168,7 @@ input.mini{
       });
     }
 
-    function csvEscape(s){ const t = String(s ?? ""); return /[",\n]/.test(t) ? `"${t.replaceAll('"','""')}"` : t; }
+    function csvEscape(s){ const t = String(s ?? ""); return /[",\\n]/.test(t) ? \`"\${t.replaceAll('"','""')}"\` : t; }
     function downloadText(filename, text){
       const blob = new Blob([text], {type:"text/plain;charset=utf-8"});
       const url = URL.createObjectURL(blob);
@@ -1047,16 +1191,13 @@ input.mini{
       return new TextDecoder().decode(bytes);
     }
 
-    // ---------------------------
     // DOM
-    // ---------------------------
     const accessPill = document.getElementById("accessPill");
     const reverseUsesLine = document.getElementById("reverseUsesLine");
     const bulkLimitLine = document.getElementById("bulkLimitLine");
     const shareStatus = document.getElementById("shareStatus");
     const bulkStatus = document.getElementById("bulkStatus");
     const bulkImportStatus = document.getElementById("bulkImportStatus");
-    const importBanner = document.getElementById("importBanner");
     const proCard = document.getElementById("proCard");
     const reverseHint = document.getElementById("reverseHint");
 
@@ -1066,6 +1207,9 @@ input.mini{
     const currencyEl = document.getElementById("currency");
     const fxRateEl = document.getElementById("fxRate");
     const presetSel = document.getElementById("preset");
+    const catLabel = document.getElementById("catLabel");
+    const categorySel = document.getElementById("category");
+    const presetNote = document.getElementById("presetNote");
 
     const sellPriceEl = document.getElementById("sellPrice");
     const productCostEl = document.getElementById("productCost");
@@ -1085,145 +1229,13 @@ input.mini{
     const o2hint = document.getElementById("o2hint");
     const feesOut = document.getElementById("feesOut");
     const returnOut = document.getElementById("returnOut");
-
     const fxRow = document.getElementById("fxRow");
     const fxOut = document.getElementById("fxOut");
     const fxNote = document.getElementById("fxNote");
 
-    const themeSel = document.getElementById("themeSel");
-function setTheme(t){
-  document.documentElement.setAttribute("data-theme", t);
-  try{ localStorage.setItem("pp_theme", t); }catch(e){}
-}
-(function initTheme(){
-  const saved = (localStorage.getItem("pp_theme") || "day");
-  setTheme(saved);
-  if (themeSel) themeSel.value = saved;
-})();
-themeSel?.addEventListener("change", ()=> setTheme(themeSel.value));
-// ---------------------------
-// Tabs (right column)
-// ---------------------------
-(function initTabs(){
-  const tabBtns = document.querySelectorAll(".ppTabBtn");
-  const panels = document.querySelectorAll(".ppTabPanel");
-  tabBtns.forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-      const id = btn.dataset.tab;
-      tabBtns.forEach(b=>b.classList.toggle("active", b===btn));
-      panels.forEach(p=>p.classList.toggle("active", p.id === id));
-    });
-  });
-})();
+    const tpCurrency = document.getElementById("tpCurrency");
 
-// ---------------------------
-// Summary live updates
-// ---------------------------
-function updateSummaryUI(){
-  const profitTxt = document.getElementById("o1v")?.textContent || "—";
-  const marginTxt = document.getElementById("o2v")?.textContent || "—";
-
-  // Break-even uses your solver (already in your code)
-  let beTxt = "—";
-  try{
-    const be = solveBreakEvenPrice();
-    if (be && Number.isFinite(be)) beTxt = money(be);
-  }catch(e){}
-
-  // Risk uses the same logic you already use in insights
-  let riskTxt = "—";
-  try{
-    const sell = n(sellPriceEl?.value);
-    const C = n(productCostEl?.value) + n(shipCostEl?.value) + n(miscCostEl?.value);
-    const feePct = clamp(n(feePctEl?.value),0,99);
-    const feeFixed = clamp(n(feeFixedEl?.value),0,999999);
-    const adsPct = clamp(n(adsPctEl?.value),0,99);
-    const retPct = clamp(n(returnPctEl?.value),0,99);
-
-    const fees = totalFees(sell, feePct, feeFixed, adsPct);
-    const retImpact = sell * (retPct/100);
-    const profit = sell - (C + fees);
-    const margin = sell > 0 ? (profit/sell)*100 : 0;
-
-    const ra = riskAssessment(profit, margin, retImpact, fees);
-    riskTxt = ra.label || "—";
-  }catch(e){}
-
-  const sp = document.getElementById("sumProfit");
-  const sm = document.getElementById("sumMargin");
-  const sb = document.getElementById("sumBreakEven");
-  const sr = document.getElementById("sumRisk");
-  if (sp) sp.textContent = profitTxt;
-  if (sm) sm.textContent = marginTxt;
-  if (sb) sb.textContent = beTxt;
-  if (sr) sr.textContent = riskTxt;
-}
-    // =========================
-// Move existing sections into tab panels
-// =========================
-function mountRightSections(){
-  const insights = document.getElementById("insightsBox");
-  const comp = document.getElementById("compBox");
-  const saved = document.getElementById("savedBox") || 
-                document.querySelector('#scenarioSel')?.closest("section");
-  const reviews = document.getElementById("reviewsCard");
-
-  if (insights) document.getElementById("insightsMount")?.appendChild(insights);
-  if (comp) document.getElementById("competitorMount")?.appendChild(comp);
-  if (saved) document.getElementById("savedMount")?.appendChild(saved);
-  if (reviews) document.getElementById("reviewsMount")?.appendChild(reviews);
-}
-
-mountRightSections();
-
-// =========================
-// Tabs logic
-// =========================
-document.querySelectorAll(".ppTabBtn").forEach(btn=>{
-  btn.addEventListener("click", ()=>{
-    const id = btn.dataset.tab;
-
-    document.querySelectorAll(".ppTabBtn")
-      .forEach(b=>b.classList.toggle("active", b===btn));
-
-    document.querySelectorAll(".ppTabPanel")
-      .forEach(p=>p.classList.toggle("active", p.id===id));
-  });
-});
-
-// =========================
-// Live Summary update
-// =========================
-function updateSummaryUI(){
-  const p = document.getElementById("o1v")?.textContent || "—";
-  const m = document.getElementById("o2v")?.textContent || "—";
-
-  document.getElementById("sumProfit").textContent = p;
-  document.getElementById("sumMargin").textContent = m;
-
-  try{
-    const be = solveBreakEvenPrice();
-    if (be) document.getElementById("sumBreakEven").textContent = money(be);
-  }catch(e){}
-
-  try{
-    const sell = parseFloat(document.getElementById("sellPrice")?.value||0);
-    const cost = parseFloat(document.getElementById("productCost")?.value||0);
-    const risk = sell - cost <= 0 ? "High" : "Moderate";
-    document.getElementById("sumRisk").textContent = risk;
-  }catch(e){}
-}
-
-
-    // Advanced toggle
-const advBox = document.getElementById("advBox");
-const advToggle = document.getElementById("advToggle");
-advToggle?.addEventListener("click", ()=>{
-  advBox?.classList.toggle("open");
-});
-
-
-    // Insights
+    // Right side (tabs + insights + competitor + saved)
     const insStatus = document.getElementById("insStatus");
     const bePriceEl = document.getElementById("bePrice");
     const targetMarginPriceEl = document.getElementById("targetMarginPrice");
@@ -1236,7 +1248,6 @@ advToggle?.addEventListener("click", ()=>{
     const refreshInsightsBtn = document.getElementById("refreshInsightsBtn");
     const insToast = document.getElementById("insToast");
 
-    // Market Positioning Engine
     const compStatus = document.getElementById("compStatus");
     const compUsesLine = document.getElementById("compUsesLine");
     const runCompBtn = document.getElementById("runCompBtn");
@@ -1258,7 +1269,6 @@ advToggle?.addEventListener("click", ()=>{
     const compCheck2 = document.getElementById("compCheck2");
     const compBullets = document.getElementById("compBullets");
 
-    // Scenarios
     const scenarioSel = document.getElementById("scenarioSel");
     const scenarioName = document.getElementById("scenarioName");
     const saveScenarioBtn2 = document.getElementById("saveScenarioBtn2");
@@ -1277,35 +1287,16 @@ advToggle?.addEventListener("click", ()=>{
     const bulkFillExampleBtn = document.getElementById("bulkFillExampleBtn");
     const bulkTbody = document.getElementById("bulkTbody");
 
-    // Tabs
+    // Boxes
     const singleBox = document.getElementById("singleBox");
     const reverseBox = document.getElementById("reverseBox");
     const bulkBox = document.getElementById("bulkBox");
-
-    // HERO BUTTON MODE SWITCH
-const heroBtns = document.querySelectorAll(".heroBtn");
-
-heroBtns.forEach(btn=>{
-  btn.addEventListener("click", ()=>{
-    const mode = btn.dataset.mode;
-
-    // Remove active from all
-    heroBtns.forEach(b=>b.classList.remove("active"));
-
-    // Activate clicked
-    btn.classList.add("active");
-
-    // Switch mode
-    setMode(mode);
-  });
-});
-
 
     // Footer years
     document.getElementById("yr").textContent = new Date().getFullYear();
     document.getElementById("yr2").textContent = new Date().getFullYear();
 
-    // Attach autoZero (safe)
+    // AutoZero attach
     [
       sellPriceEl, productCostEl, shipCostEl, miscCostEl,
       feePctEl, feeFixedEl, adsPctEl, returnPctEl,
@@ -1313,26 +1304,13 @@ heroBtns.forEach(btn=>{
       c1, c2, c3, floorBuffer, targetMarginInput
     ].filter(Boolean).forEach(autoZero);
 
-    // ---------------------------
     // Currency formatting
-    // ---------------------------
     function sym(){ return CURRENCY_SYMBOL[currencyEl?.value || "GBP"] || ""; }
-    const tpCurrency = document.getElementById("tpCurrency");
-
-function updateTargetCurrencyLabel(){
-  if (tpCurrency) tpCurrency.textContent = sym();
-}
-    function updateTargetProfitLabel(){
-  const el = document.getElementById("tpSym");
-  if (el) el.textContent = sym().trim() || "£";
-}
-
-
-currencyEl?.addEventListener("change", updateTargetCurrencyLabel);
-updateTargetCurrencyLabel();
-
     function money(x){ return sym() + (Number.isFinite(x) ? x : 0).toFixed(2); }
     function pct(x){ return (Number.isFinite(x) ? x : 0).toFixed(1) + "%"; }
+    function updateTargetCurrencyLabel(){ if (tpCurrency) tpCurrency.textContent = sym(); }
+    currencyEl?.addEventListener("change", ()=>{ updateTargetCurrencyLabel(); computeProfit(); refreshInsights(); updateSummaryUI(); });
+    updateTargetCurrencyLabel();
 
     function updateFXLine(sell){
       const r = n(fxRateEl?.value);
@@ -1340,261 +1318,250 @@ updateTargetCurrencyLabel();
       if (r > 0 && sell > 0){
         fxRow.style.display = "block";
         fxOut.textContent = (sell * r).toFixed(2);
-        fxNote.textContent = `Converted using your rate: ${sell.toFixed(2)} × ${r}`;
-      } else fxRow.style.display = "none";
+        fxNote.textContent = \`Converted using your rate: \${sell.toFixed(2)} × \${r}\`;
+      } else {
+        fxRow.style.display = "none";
+      }
     }
 
-    // ---------------------------
-    // Presets (defensive)
-    // ---------------------------
-   // ---------------------------
-// Presets (Country + Category + Dynamic fixed fee rules)
-// ---------------------------
+    // Theme + Custom theme controls
+    const themeSel = document.getElementById("themeSel");
+    const accentPick = document.getElementById("accentPick");
+    const bgPick = document.getElementById("bgPick");
 
-// Etsy: transaction fee is 6.5% (global) 
-// Etsy Payments: varies by country; UK example is 4% + £0.20 
-//
-// eBay UK business sellers: % depends on category; plus per-order fee that depends on order total
-// £0.30 for orders <= £10, £0.40 for orders > £10 
-//
-// Amazon UK: Individual plan £0.75 per unit; referral fee varies by category, most between 8% and 15% 
-//
-// TikTok Shop: commission exists and is category-based; rates can change & depend on program.
-// We include it as “enter your commission %” by default. 
-const PRESETS = [
-  {
-    id: "manual",
-    label: "Manual (enter fees yourself)",
-    note: "Manual mode: enter fee %, fixed fee, ads %, and return % exactly as your platform shows.",
-
-    base: { feePct: 0, feeFixed: 0, adsPct: 0, returnPct: 0 },
-    categories: null,
-    dynamicFixed: null
-  },
-
-  // -------- Etsy --------
-  {
-    id: "etsy_uk",
-    label: "Etsy (UK) — 6.5% + (Payments 4% + £0.20)",
-    note: "Includes transaction fee (6.5%) + Etsy Payments UK (4% + £0.20). Listing fee (£0.15) is per listing, not per order.",
-    base: { feePct: 10.5, feeFixed: 0.20, adsPct: 0, returnPct: 3 },
-    categories: null,
-    dynamicFixed: null
-  },
-  {
-    id: "etsy_us",
-    label: "Etsy (US) — 6.5% + (Payments 3% + $0.25)",
-    note: "Includes transaction fee (6.5%) + Etsy Payments US (3% + $0.25).",
-    base: { feePct: 9.5, feeFixed: 0.25, adsPct: 0, returnPct: 3 },
-    categories: null,
-    dynamicFixed: null
-  },
-
-  // -------- eBay UK (category-based + dynamic per-order fee) --------
-  {
-    id: "ebay_uk",
-    label: "eBay (UK Business) — category-based % + per-order fee",
-    note: "Choose category to autofill % (edit if needed). Per-order fee auto-adjusts: £0.30 (≤£10), £0.40 (>£10).",
-    base: { feePct: 0, feeFixed: 0, adsPct: 0, returnPct: 4 },
-    dynamicFixed: "ebay_uk_order_fee",
-    categories: [
-      { id:"ebay_uk_custom", name:"Custom (enter your category % from eBay rate card)", feePct: 0 },
-
-      // ⚠ These are *starter defaults* only. Replace with your exact rate-card values if you want 100% accuracy by category.
-      // If you prefer strict accuracy only, keep feePct = 0 for all and force manual entry.
-      { id:"ebay_uk_typical_12_8", name:"Typical example (~12.8%)", feePct: 12.8 },
-      { id:"ebay_uk_typical_12_0", name:"Typical example (~12.0%)", feePct: 12.0 },
-    ]
-  },
-    {
-  id: "ebay_uk_personal",
-  label: "eBay (UK Personal) — category-based % + per-order fee",
-  note: "Personal seller fees vary by category and listing type. Use Custom for accuracy. Per-order fee auto-adjusts: £0.30 (≤£10), £0.40 (>£10).",
-  base: { feePct: 0, feeFixed: 0, adsPct: 0, returnPct: 4 },
-  dynamicFixed: "ebay_uk_order_fee",
-  categories: [
-    { id:"ebay_ukp_custom", name:"Custom (enter your category % from eBay rate card)", feePct: 0 },
-    { id:"ebay_ukp_typical_12_8", name:"Example only (~12.8% — verify category rate)", feePct: 12.8 },
-    { id:"ebay_ukp_typical_12_0", name:"Example only (~12.0% — verify category rate)", feePct: 12.0 },
-  ]
-},
-
-
-  // -------- Amazon UK (category-based; optional per-item fee for Individual plan) --------
-  {
-    id: "amazon_uk_individual",
-    label: "Amazon (UK Individual) — category % + £0.75 per unit",
-    note: "Select a category % (varies by category). £0.75 per-item fee is included (Individual plan).",
-    base: { feePct: 0, feeFixed: 0.75, adsPct: 0, returnPct: 6 },
-    dynamicFixed: null,
-    categories: [
-      { id:"amazon_uk_custom", name:"Custom (enter referral % for your category)", feePct: 0 },
-
-      // Same policy as above: starter defaults only. You can replace with exact category rates later.
-      { id:"amazon_uk_15", name:"Common range example (15%)", feePct: 15.0 },
-      { id:"amazon_uk_12", name:"Common range example (12%)", feePct: 12.0 },
-      { id:"amazon_uk_8",  name:"Common range example (8%)",  feePct: 8.0 },
-    ]
-  },
-
-  // -------- TikTok Shop (UK) --------
-  {
-    id: "tiktokshop_uk",
-    label: "TikTok Shop (UK) — enter your commission %",
-    note: "TikTok Shop commission is category/program dependent. Use Custom and enter your current commission %.",
-    base: { feePct: 0, feeFixed: 0, adsPct: 0, returnPct: 5 },
-    categories: [
-      { id:"tiktok_uk_custom", name:"Custom (enter your commission %)", feePct: 0 },
-    ],
-    dynamicFixed: null
-  },
-
-  // -------- Card processors (country examples) --------
-  {
-    id: "stripe_uk_example",
-    label: "Card payments (UK example) — 2.0% + £0.20",
-    note: "This models a payment processor fee (not a marketplace commission).",
-    base: { feePct: 2.0, feeFixed: 0.20, adsPct: 0, returnPct: 2 },
-    categories: null,
-    dynamicFixed: null
-  },
-];
-
-// DOM additions
-const catLabel = document.getElementById("catLabel");
-const categorySel = document.getElementById("category");
-const presetNote = document.getElementById("presetNote");
-
-function getPresetById(id){
-  return PRESETS.find(p => p.id === id) || PRESETS[0];
-}
-
-function setFeesFromPreset(preset, categoryObj=null){
-  const base = preset.base || { feePct:0, feeFixed:0, adsPct:0, returnPct:0 };
-
-  const feePct = (categoryObj && typeof categoryObj.feePct === "number") ? categoryObj.feePct : (base.feePct ?? 0);
-
-  feePctEl.value   = String(feePct);
-  feeFixedEl.value = String(base.feeFixed ?? 0);
-  adsPctEl.value   = String(base.adsPct ?? 0);
-  returnPctEl.value= String(base.returnPct ?? 0);
-
-  // dynamic fixed fee rules (eBay UK per-order fee)
-  if (preset.dynamicFixed === "ebay_uk_order_fee"){
-    feeFixedEl.disabled = true;
-    feeFixedEl.title = "Auto-set by eBay UK per-order fee rule";
-    updateDynamicFixedFee(); // set immediately
-  } else {
-    feeFixedEl.disabled = false;
-    feeFixedEl.title = "";
-  }
-
-  if (presetNote) presetNote.textContent = preset.note || "—";
-}
-
-function showCategories(preset){
-  const cats = preset.categories;
-  if (!catLabel || !categorySel) return;
-
-  if (!cats || !cats.length){
-    catLabel.style.display = "none";
-    categorySel.style.display = "none";
-    categorySel.innerHTML = "";
-    return;
-  }
-
-  catLabel.style.display = "block";
-  categorySel.style.display = "block";
-  categorySel.innerHTML = "";
-
-  cats.forEach(c=>{
-    const opt = document.createElement("option");
-    opt.value = c.id;
-    opt.textContent = c.name;
-    categorySel.appendChild(opt);
-  });
-
-  categorySel.value = cats[0].id;
-}
-
-// eBay UK per-order fee rule: £0.30 (≤£10), £0.40 (>£10) 
-function updateDynamicFixedFee(){
-  const preset = getPresetById(presetSel.value);
-  if (preset.dynamicFixed !== "ebay_uk_order_fee") return;
-
-  const sell = n(sellPriceEl?.value);
-  const fixed = (sell > 10) ? 0.40 : 0.30;
-  feeFixedEl.value = fixed.toFixed(2);
-}
-
-// Build preset dropdown (detailed labels already include country/platform)
-if (presetSel){
-  presetSel.innerHTML = "";
-  PRESETS.forEach(p=>{
-    const opt = document.createElement("option");
-    opt.value = p.id;
-    opt.textContent = p.label;
-    presetSel.appendChild(opt);
-  });
-
-  presetSel.value = "manual";
-
-  presetSel.addEventListener("change", ()=>{
-    const preset = getPresetById(presetSel.value);
-    showCategories(preset);
-
-    // Use selected category (if exists) to set fee %
-    let catObj = null;
-    if (preset.categories && preset.categories.length && categorySel){
-      catObj = preset.categories.find(x=>x.id===categorySel.value) || preset.categories[0];
+    function applyCustomThemeVars(){
+      const a = localStorage.getItem("pp_custom_accent") || "#0ea5a4";
+      const b = localStorage.getItem("pp_custom_bg") || "#f6f8fb";
+      document.documentElement.style.setProperty("--accent", a);
+      document.documentElement.style.setProperty("--bg", b);
+      // derive bg2 lightly
+      document.documentElement.style.setProperty("--bg2", b);
+      if (accentPick) accentPick.value = a;
+      if (bgPick) bgPick.value = b;
     }
-    if (preset.categories && preset.categories.length){
-  categorySel.style.borderColor = "rgba(79,70,229,.35)";
-} else {
-  categorySel.style.borderColor = "";
-}
 
-if (preset.categories && preset.categories.length && categorySel){
-  categorySel.scrollIntoView({ behavior: "smooth", block: "nearest" });
-}
+    function setTheme(t){
+      document.documentElement.setAttribute("data-theme", t);
+      try{ localStorage.setItem("pp_theme", t); }catch(e){}
+      if (t === "custom") applyCustomThemeVars();
+    }
 
-    setFeesFromPreset(preset, catObj);
-    compute(); refreshInsights();
-  });
-}
+    (function initTheme(){
+      const saved = (localStorage.getItem("pp_theme") || "day");
+      setTheme(saved);
+      if (themeSel) themeSel.value = saved;
+      applyCustomThemeVars();
+    })();
 
-// Category change => update fee %
-categorySel?.addEventListener("change", ()=>{
-  const preset = getPresetById(presetSel.value);
-  if (!preset.categories) return;
+    themeSel?.addEventListener("change", ()=> setTheme(themeSel.value));
 
-  const catObj = preset.categories.find(x=>x.id===categorySel.value) || null;
-  setFeesFromPreset(preset, catObj);
-  compute(); refreshInsights();
-});
+    function saveCustomVars(){
+      localStorage.setItem("pp_custom_accent", accentPick?.value || "#0ea5a4");
+      localStorage.setItem("pp_custom_bg", bgPick?.value || "#f6f8fb");
+      if (document.documentElement.getAttribute("data-theme") === "custom"){
+        applyCustomThemeVars();
+      }
+    }
+    accentPick?.addEventListener("input", saveCustomVars);
+    bgPick?.addEventListener("input", saveCustomVars);
 
-// Keep dynamic fixed fee updated if sell price changes
-sellPriceEl?.addEventListener("input", ()=>{
-  updateDynamicFixedFee();
-});
+    // Tabs
+    (function initTabs(){
+      const tabBtns = document.querySelectorAll(".ppTabBtn");
+      const panels = document.querySelectorAll(".ppTabPanel");
+      tabBtns.forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          const id = btn.dataset.tab;
+          tabBtns.forEach(b=>b.classList.toggle("active", b===btn));
+          panels.forEach(p=>p.classList.toggle("active", p.id === id));
+        });
+      });
+    })();
 
-// Init on load
-(function initPresetUI(){
-  const preset = getPresetById(presetSel.value || "manual");
-  showCategories(preset);
+    // Advanced toggle
+    const advBox = document.getElementById("advBox");
+    const advToggle = document.getElementById("advToggle");
+    advToggle?.addEventListener("click", ()=>{
+      advBox?.classList.toggle("open");
+    });
 
-  let catObj = null;
-  if (preset.categories && preset.categories.length && categorySel){
-    catObj = preset.categories[0];
-  }
+    // Presets (same intent as your version, but stable)
+    const PRESETS = [
+      {
+        id: "manual",
+        label: "Manual (enter fees yourself)",
+        note: "Manual mode: enter fee %, fixed fee, ads %, and return % exactly as your platform shows.",
+        base: { feePct: 0, feeFixed: 0, adsPct: 0, returnPct: 0 },
+        categories: null,
+        dynamicFixed: null
+      },
+      {
+        id: "etsy_uk",
+        label: "Etsy (UK) — 6.5% + (Payments 4% + £0.20)",
+        note: "Includes transaction fee (6.5%) + Etsy Payments UK (4% + £0.20). Listing fee (£0.15) is per listing, not per order.",
+        base: { feePct: 10.5, feeFixed: 0.20, adsPct: 0, returnPct: 3 },
+        categories: null,
+        dynamicFixed: null
+      },
+      {
+        id: "etsy_us",
+        label: "Etsy (US) — 6.5% + (Payments 3% + $0.25)",
+        note: "Includes transaction fee (6.5%) + Etsy Payments US (3% + $0.25).",
+        base: { feePct: 9.5, feeFixed: 0.25, adsPct: 0, returnPct: 3 },
+        categories: null,
+        dynamicFixed: null
+      },
+      {
+        id: "ebay_uk",
+        label: "eBay (UK Business) — category-based % + per-order fee",
+        note: "Choose category to autofill % (edit if needed). Per-order fee auto-adjusts: £0.30 (≤£10), £0.40 (>£10).",
+        base: { feePct: 0, feeFixed: 0, adsPct: 0, returnPct: 4 },
+        dynamicFixed: "ebay_uk_order_fee",
+        categories: [
+          { id:"ebay_uk_custom", name:"Custom (enter your category % from eBay rate card)", feePct: 0 },
+          { id:"ebay_uk_typical_12_8", name:"Typical example (~12.8%)", feePct: 12.8 },
+          { id:"ebay_uk_typical_12_0", name:"Typical example (~12.0%)", feePct: 12.0 },
+        ]
+      },
+      {
+        id: "amazon_uk_individual",
+        label: "Amazon (UK Individual) — category % + £0.75 per unit",
+        note: "Select a category % (varies by category). £0.75 per-item fee included (Individual plan).",
+        base: { feePct: 0, feeFixed: 0.75, adsPct: 0, returnPct: 6 },
+        dynamicFixed: null,
+        categories: [
+          { id:"amazon_uk_custom", name:"Custom (enter referral % for your category)", feePct: 0 },
+          { id:"amazon_uk_15", name:"Common range example (15%)", feePct: 15.0 },
+          { id:"amazon_uk_12", name:"Common range example (12%)", feePct: 12.0 },
+          { id:"amazon_uk_8",  name:"Common range example (8%)",  feePct: 8.0 },
+        ]
+      },
+      {
+        id: "tiktokshop_uk",
+        label: "TikTok Shop (UK) — enter your commission %",
+        note: "TikTok Shop commission is category/program dependent. Use Custom and enter your current commission %.",
+        base: { feePct: 0, feeFixed: 0, adsPct: 0, returnPct: 5 },
+        categories: [{ id:"tiktok_uk_custom", name:"Custom (enter your commission %)", feePct: 0 }],
+        dynamicFixed: null
+      },
+      {
+        id: "stripe_uk_example",
+        label: "Card payments (UK example) — 2.0% + £0.20",
+        note: "This models a payment processor fee (not a marketplace commission).",
+        base: { feePct: 2.0, feeFixed: 0.20, adsPct: 0, returnPct: 2 },
+        categories: null,
+        dynamicFixed: null
+      },
+    ];
 
-  setFeesFromPreset(preset, catObj);
-})();
+    function getPresetById(id){
+      return PRESETS.find(p => p.id === id) || PRESETS[0];
+    }
 
-  
-    // ---------------------------
+    function showCategories(preset){
+      const cats = preset.categories;
+      if (!catLabel || !categorySel) return;
+
+      if (!cats || !cats.length){
+        catLabel.style.display = "none";
+        categorySel.style.display = "none";
+        categorySel.innerHTML = "";
+        return;
+      }
+
+      catLabel.style.display = "block";
+      categorySel.style.display = "block";
+      categorySel.innerHTML = "";
+
+      cats.forEach(c=>{
+        const opt = document.createElement("option");
+        opt.value = c.id;
+        opt.textContent = c.name;
+        categorySel.appendChild(opt);
+      });
+
+      categorySel.value = cats[0].id;
+    }
+
+    function updateDynamicFixedFee(){
+      const preset = getPresetById(presetSel.value);
+      if (preset.dynamicFixed !== "ebay_uk_order_fee") return;
+      const sell = n(sellPriceEl?.value);
+      const fixed = (sell > 10) ? 0.40 : 0.30;
+      feeFixedEl.value = fixed.toFixed(2);
+    }
+
+    function setFeesFromPreset(preset, categoryObj=null){
+      const base = preset.base || { feePct:0, feeFixed:0, adsPct:0, returnPct:0 };
+      const feePct = (categoryObj && typeof categoryObj.feePct === "number") ? categoryObj.feePct : (base.feePct ?? 0);
+
+      feePctEl.value = String(feePct);
+      feeFixedEl.value = String(base.feeFixed ?? 0);
+      adsPctEl.value = String(base.adsPct ?? 0);
+      returnPctEl.value = String(base.returnPct ?? 0);
+
+      if (preset.dynamicFixed === "ebay_uk_order_fee"){
+        feeFixedEl.disabled = true;
+        feeFixedEl.title = "Auto-set by eBay UK per-order fee rule";
+        updateDynamicFixedFee();
+      } else {
+        feeFixedEl.disabled = false;
+        feeFixedEl.title = "";
+      }
+
+      if (presetNote) presetNote.textContent = preset.note || "—";
+    }
+
+    // Build preset dropdown
+    if (presetSel){
+      presetSel.innerHTML = "";
+      PRESETS.forEach(p=>{
+        const opt = document.createElement("option");
+        opt.value = p.id;
+        opt.textContent = p.label;
+        presetSel.appendChild(opt);
+      });
+      presetSel.value = "manual";
+    }
+
+    presetSel?.addEventListener("change", ()=>{
+      const preset = getPresetById(presetSel.value);
+      showCategories(preset);
+
+      let catObj = null;
+      if (preset.categories && preset.categories.length && categorySel){
+        catObj = preset.categories.find(x=>x.id===categorySel.value) || preset.categories[0];
+      }
+      setFeesFromPreset(preset, catObj);
+      compute();
+      refreshInsights();
+      updateSummaryUI();
+    });
+
+    categorySel?.addEventListener("change", ()=>{
+      const preset = getPresetById(presetSel.value);
+      if (!preset.categories) return;
+      const catObj = preset.categories.find(x=>x.id===categorySel.value) || null;
+      setFeesFromPreset(preset, catObj);
+      compute();
+      refreshInsights();
+      updateSummaryUI();
+    });
+
+    sellPriceEl?.addEventListener("input", ()=>{ updateDynamicFixedFee(); });
+
+    // Init presets
+    (function initPresetUI(){
+      const preset = getPresetById(presetSel.value || "manual");
+      showCategories(preset);
+      let catObj = null;
+      if (preset.categories && preset.categories.length && categorySel){
+        catObj = preset.categories[0];
+      }
+      setFeesFromPreset(preset, catObj);
+    })();
+
     // Core math
-    // ---------------------------
     function totalFees(sell, feePct, feeFixed, adsPct){
       return sell * (feePct/100) + feeFixed + sell * (adsPct/100);
     }
@@ -1619,23 +1586,23 @@ sellPriceEl?.addEventListener("input", ()=>{
 
       const r = computeRowProfit(sell,cost,ship,misc,feePct,feeFixed,adsPct,returnPct);
 
-      if (o1v) o1v.textContent = money(r.profit);
-      if (o2v) o2v.textContent = pct(r.margin);
-      document.getElementById("kpiProfitTop")?.textContent = money(r.profit);
-document.getElementById("kpiMarginTop")?.textContent = pct(r.margin);
+      o1v.textContent = money(r.profit);
+      o2v.textContent = pct(r.margin);
+      document.getElementById("kpiProfitTop").textContent = money(r.profit);
+      document.getElementById("kpiMarginTop").textContent = pct(r.margin);
 
-      if (feesOut) feesOut.textContent = money(r.fees);
-      if (returnOut) returnOut.textContent = money(r.expectedReturnImpact);
+      feesOut.textContent = money(r.fees);
+      returnOut.textContent = money(r.expectedReturnImpact);
 
       if (sell<=0){
-        if (o1hint) o1hint.textContent="Enter a selling price.";
-        if (o2hint) o2hint.textContent="—";
+        o1hint.textContent="Enter a selling price.";
+        o2hint.textContent="—";
       } else if (r.profit<0){
-        if (o1hint) o1hint.textContent="Loss on this pricing.";
-        if (o2hint) o2hint.textContent="Adjust price or costs.";
+        o1hint.textContent="Loss on this pricing.";
+        o2hint.textContent="Adjust price or costs.";
       } else {
-        if (o1hint) o1hint.textContent="OK (based on your inputs).";
-        if (o2hint) o2hint.textContent="—";
+        o1hint.textContent="OK (based on your inputs).";
+        o2hint.textContent="—";
       }
 
       updateFXLine(sell);
@@ -1658,96 +1625,82 @@ document.getElementById("kpiMarginTop")?.textContent = pct(r.margin);
     function computeReverse(){
       const target = n(targetProfitEl?.value);
       if (target<=0){
-        if (o1v) o1v.textContent="—";
-        if (o2v) o2v.textContent="—";
-        if (o1hint) o1hint.textContent="Enter a target profit.";
-        if (o2hint) o2hint.textContent="—";
+        o1v.textContent="—";
+        o2v.textContent="—";
+        o1hint.textContent="Enter a target profit.";
+        o2hint.textContent="—";
         return;
       }
       const sell = reverseSellPriceForTargetProfit(target);
       if (!sell){
-        if (o1hint) o1hint.textContent="Reverse calc failed. Check fee % values.";
-        if (o2hint) o2hint.textContent="—";
+        o1hint.textContent="Reverse calc failed. Check fee % values.";
+        o2hint.textContent="—";
         return;
       }
-      if (sellPriceEl) sellPriceEl.value = sell.toFixed(2);
+      sellPriceEl.value = sell.toFixed(2);
       computeProfit();
 
-      if (o1v) o1v.textContent = money(sell);
-      if (o1hint) o1hint.textContent = `Required selling price to target ~${money(target)} profit (estimate).`;
-      if (o2hint) o2hint.textContent = "Implied margin at that selling price.";
+      o1v.textContent = money(sell);
+      o1hint.textContent = \`Required selling price to target ~\${money(target)} profit (estimate).\`;
+      o2hint.textContent = "Implied margin at that selling price.";
       updateFXLine(sell);
     }
+
     function updateReverseHint(){
-  if (!reverseHint) return;
+      if (!reverseHint) return;
 
-  const sell = n(sellPriceEl?.value);
-  const target = n(targetProfitEl?.value);
+      const sell = n(sellPriceEl?.value);
+      const target = n(targetProfitEl?.value);
 
-  if (target <= 0){
-    reverseHint.textContent = "Enter desired profit per sale (currency amount, not %).";
-    reverseHint.style.color = "";
-    return;
-  }
+      if (target <= 0){
+        reverseHint.textContent = "Enter desired profit per sale (currency amount, not %).";
+        reverseHint.style.color = "";
+        return;
+      }
 
-  if (sell > 0){
-    const approxMargin = (target / sell) * 100;
+      if (sell > 0){
+        const approxMargin = (target / sell) * 100;
+        reverseHint.textContent = \`\${money(target)} profit on \${money(sell)} sale ≈ \${approxMargin.toFixed(1)}% margin.\`;
 
-    reverseHint.textContent =
-      `${money(target)} profit on ${money(sell)} sale ≈ ${approxMargin.toFixed(1)}% margin.`;
-
-    if (approxMargin > 60){
-      reverseHint.style.color = "var(--bad)";
-    } else if (approxMargin < 5){
-      reverseHint.style.color = "var(--warn)";
-    } else {
-      reverseHint.style.color = "var(--ok)";
+        if (approxMargin > 60) reverseHint.style.color = "var(--bad)";
+        else if (approxMargin < 5) reverseHint.style.color = "var(--warn)";
+        else reverseHint.style.color = "var(--ok)";
+      } else {
+        reverseHint.textContent = \`\${money(target)} profit per sale (currency amount, not %).\`;
+        reverseHint.style.color = "";
+      }
     }
-  } else {
-    reverseHint.textContent =
-      `${money(target)} profit per sale (currency amount, not %).`;
-    reverseHint.style.color = "";
-  }
-}
-   
 
-    // ---------------------------
-    // Modes / Tabs
-    // ---------------------------
+    // Modes
     let MODE = "profit";
+    function setMode(m){
+      MODE = m;
 
-function setMode(m){
-  MODE = m;
+      document.querySelectorAll(".heroBtn").forEach(btn=>{
+        btn.classList.toggle("active", btn.dataset.mode === m);
+      });
 
-  // Sync hero buttons
-  document.querySelectorAll(".heroBtn").forEach(btn=>{
-    btn.classList.toggle("active", btn.dataset.mode === m);
-  });
+      if (singleBox) singleBox.style.display = (m==="bulk") ? "none" : "block";
+      if (bulkBox) bulkBox.style.display = (m==="bulk") ? "block" : "none";
+      if (reverseBox) reverseBox.style.display = (m==="reverse") ? "block" : "none";
 
-  if (singleBox) singleBox.style.display = (m==="bulk") ? "none" : "block";
-  if (bulkBox) bulkBox.style.display = (m==="bulk") ? "block" : "none";
-  if (reverseBox) reverseBox.style.display = (m==="reverse") ? "block" : "none";
+      if (m==="profit"){
+        o1h.textContent="Estimated profit";
+        o2h.textContent="Margin";
+      } else if (m==="reverse"){
+        o1h.textContent="Required selling price";
+        o2h.textContent="Implied margin";
+      }
 
-  if (m==="profit"){
-    if(o1h) o1h.textContent="Estimated profit";
-    if(o2h) o2h.textContent="Margin";
-  }
+      updateReverseHint();
+      compute();
+      refreshInsights();
+      updateSummaryUI();
+    }
 
-  if (m==="reverse"){
-    if(o1h) o1h.textContent="Required selling price";
-    if(o2h) o2h.textContent="Implied margin";
-  }
-
-  // Smooth scroll when switching to Bulk
-  if (m === "bulk"){
-    bulkBox?.scrollIntoView({ behavior:"smooth", block:"start" });
-  }
-
-  updateReverseHint();
-  compute();
-  refreshInsights();
-}
-
+    document.querySelectorAll(".heroBtn").forEach(btn=>{
+      btn.addEventListener("click", ()=> setMode(btn.dataset.mode));
+    });
 
     function compute(){
       if (MODE==="profit") return computeProfit();
@@ -1755,9 +1708,7 @@ function setMode(m){
       return computeProfit();
     }
 
-    // ---------------------------
     // Supabase RPC + access
-    // ---------------------------
     let CURRENT_PROFILE = null;
     let CURRENT_USER = null;
 
@@ -1791,20 +1742,10 @@ function setMode(m){
       if (proCard) proCard.style.display = isPro ? "none" : "block";
     }
 
-    function updateProTags(){
-  const pro = !!CURRENT_PROFILE?.paid;
-  if (compStatus) compStatus.classList.toggle("pro", pro);
-  if (insStatus) insStatus.classList.toggle("pro", pro);
-}
-
     function updateAccessUI(profile){
       CURRENT_PROFILE = profile;
 
       if (profile?.paid){
-        if (!window.__ppProTracked) {
-          window.__ppProTracked = true;
-          track("pro_user_active");
-        }
         if (accessPill){ accessPill.textContent = "Unlocked (PRO)"; accessPill.className = "pill ok"; }
         if (reverseUsesLine) reverseUsesLine.textContent = "Reverse uses: Unlimited (PRO)";
         if (compUsesLine) compUsesLine.textContent = "Competitor uses: Unlimited (PRO)";
@@ -1816,13 +1757,13 @@ function setMode(m){
       }
 
       enableProUI(false);
-      if (reverseUsesLine) reverseUsesLine.textContent = `Reverse uses: ${(profile?.reverse_uses ?? 0)}/${TRIAL_REVERSE_LIMIT} (Trial)`;
-      if (compUsesLine) compUsesLine.textContent = `Competitor uses: ${(profile?.comp_uses ?? 0)}/${TRIAL_COMP_LIMIT} (Trial)`;
+      if (reverseUsesLine) reverseUsesLine.textContent = \`Reverse uses: \${(profile?.reverse_uses ?? 0)}/\${TRIAL_REVERSE_LIMIT} (Trial)\`;
+      if (compUsesLine) compUsesLine.textContent = \`Competitor uses: \${(profile?.comp_uses ?? 0)}/\${TRIAL_COMP_LIMIT} (Trial)\`;
 
       const left = daysLeft(profile?.trial_start);
       if (accessPill){
         if (left > 0){
-          accessPill.textContent = `Trial active • ${left} day(s) left`;
+          accessPill.textContent = \`Trial active • \${left} day(s) left\`;
           accessPill.className = "pill warn";
         } else {
           accessPill.textContent = "Trial ended • PRO required";
@@ -1846,18 +1787,17 @@ function setMode(m){
       const day = todayKeyUTC();
       const usedToday = (CURRENT_PROFILE.bulk_day === day) ? Number(CURRENT_PROFILE.bulk_runs_today || 0) : 0;
       const runsLeft = Math.max(0, TRIAL_BULK_RUNS_PER_DAY - usedToday);
-      bulkLimitLine.textContent = `Trial: max ${TRIAL_BULK_MAX_ROWS} rows • ${runsLeft}/${TRIAL_BULK_RUNS_PER_DAY} bulk run(s) left today.`;
+      bulkLimitLine.textContent = \`Trial: max \${TRIAL_BULK_MAX_ROWS} rows • \${runsLeft}/\${TRIAL_BULK_RUNS_PER_DAY} bulk run(s) left today.\`;
     }
 
-    // ---------------------------
     // Export / Share
-    // ---------------------------
     function payload(){
       return {
         mode: MODE,
         currency: currencyEl?.value,
         fxRate: fxRateEl?.value || "",
         preset: presetSel?.value,
+        category: categorySel?.value || "",
         sellPrice: sellPriceEl?.value,
         productCost: productCostEl?.value,
         shipCost: shipCostEl?.value,
@@ -1879,7 +1819,7 @@ function setMode(m){
       const p = payload();
       const rows = Object.entries(p).map(([k,v])=>[k,String(v ?? "")]);
       rows.unshift(["Field","Value"]);
-      const csv = rows.map(r=>r.map(csvEscape).join(",")).join("\n");
+      const csv = rows.map(r=>r.map(csvEscape).join(",")).join("\\n");
       downloadText("profitpilot-export.csv", csv);
       if (shareStatus) shareStatus.textContent = "CSV exported.";
     });
@@ -1895,40 +1835,35 @@ function setMode(m){
       track("share_clicked", { pro: !!CURRENT_PROFILE?.paid });
       if (!CURRENT_PROFILE?.paid){ if (shareStatus) shareStatus.textContent="Share is PRO."; return; }
       const token = base64urlEncode(JSON.stringify(payload()));
-      const url = `${location.origin}/share.html#s=${token}`;
+      const url = \`\${location.origin}/share.html#s=\${token}\`;
       navigator.clipboard?.writeText(url).catch(()=>{});
       if (shareStatus) shareStatus.textContent="Share link copied.";
     });
 
     // Reset
     document.getElementById("resetBtn")?.addEventListener("click", ()=>{
-      [sellPriceEl, productCostEl, shipCostEl, miscCostEl, feePctEl, feeFixedEl, adsPctEl, returnPctEl, targetProfitEl].filter(Boolean).forEach(el=>el.value="0");
-      if (fxRateEl) fxRateEl.value = "";
-      if (presetSel) presetSel.value = "manual";
-      if (presetSel){
-  const preset = getPresetById("manual");
-  showCategories(preset);
-  setFeesFromPreset(preset, null);
-  updateDynamicFixedFee();
-}
+      [sellPriceEl, productCostEl, shipCostEl, miscCostEl, feePctEl, feeFixedEl, adsPctEl, returnPctEl, targetProfitEl].forEach(el=>el.value="0");
+      fxRateEl.value = "";
+      presetSel.value = "manual";
+      const preset = getPresetById("manual");
+      showCategories(preset);
+      setFeesFromPreset(preset, null);
+      updateDynamicFixedFee();
 
-      if (c1) c1.value = "0"; if (c2) c2.value = "0"; if (c3) c3.value = "0";
-      if (positioning) positioning.value = "undercut";
-      if (floorBuffer) floorBuffer.value = "5";
-      if (shareStatus) shareStatus.textContent = "—";
-      if (bulkPasteEl) bulkPasteEl.value = "";
+      if (c1) c1.value="0"; if (c2) c2.value="0"; if (c3) c3.value="0";
+      if (positioning) positioning.value="undercut";
+      if (floorBuffer) floorBuffer.value="5";
+      if (targetMarginInput) targetMarginInput.value="15";
+      if (shareStatus) shareStatus.textContent="—";
+      if (bulkPasteEl) bulkPasteEl.value="";
       clearBulkRows();
-      if (importBanner) importBanner.style.display = "none";
-      if (targetMarginInput) targetMarginInput.value = "15";
       setMode("profit");
       refreshInsights();
-      if (compToast) compToast.textContent = "—";
-      if (scenarioToast) scenarioToast.textContent = "—";
+      if (compToast) compToast.textContent="—";
+      if (scenarioToast) scenarioToast.textContent="—";
     });
 
-    // ---------------------------
-    // INSIGHTS (PRO)
-    // ---------------------------
+    // Insights (PRO)
     function solvePriceForMargin(targetMarginPct){
       const C = n(productCostEl?.value) + n(shipCostEl?.value) + n(miscCostEl?.value);
       const pctFees = (clamp(n(feePctEl?.value),0,99) + clamp(n(adsPctEl?.value),0,99))/100;
@@ -1960,6 +1895,7 @@ function setMode(m){
       const bullets = [];
       let label = "Balanced";
       let explain = "Looks workable based on your inputs.";
+
       if (profit < 0){
         label = "High risk"; explain = "Pricing below cost + fees.";
         bullets.push("You are losing money on this price. Raise price or reduce costs/fees.");
@@ -1972,13 +1908,15 @@ function setMode(m){
       } else {
         bullets.push("Margin seems reasonable for many categories (still depends on your business).");
       }
+
       if (fees > Math.max(0, profit) * 2) bullets.push("Fees + ads consume a large share of profit. Watch promo spend.");
       if (returnImpact > Math.max(0, profit) * 0.7) bullets.push("Return sensitivity is high relative to profit. Consider buffer pricing or better QC.");
+
       return { label, explain, bullets };
     }
 
     function refreshInsights(){
-      if (!insStatus || !bePriceEl || !targetMarginPriceEl || !maxAdsPctEl || !riskLabelEl || !riskExplainEl || !insBullets || !targetMarginInput || !targetMarginVal || !insToast) return;
+      if (!insStatus) return;
 
       const isPro = !!CURRENT_PROFILE?.paid;
 
@@ -1994,66 +1932,62 @@ function setMode(m){
       const profit = sell - (C + fees);
       const margin = sell > 0 ? (profit/sell)*100 : 0;
 
-      const targetM = clamp(n(targetMarginInput.value), 0, 80);
-      targetMarginVal.textContent = targetM.toFixed(0) + "%";
+      const targetM = clamp(n(targetMarginInput?.value), 0, 80);
+      if (targetMarginVal) targetMarginVal.textContent = targetM.toFixed(0) + "%";
 
       if (!isPro){
-        bePriceEl.textContent = "—";
-        targetMarginPriceEl.textContent = "—";
-        maxAdsPctEl.textContent = "—";
-        riskLabelEl.textContent = "Locked";
-        riskExplainEl.textContent = "Unlock PRO to see insights.";
-        insBullets.innerHTML = `
-          <li>Break-even price</li>
-          <li>Price to hit a target margin</li>
-          <li>Max ads % you can afford</li>
-          <li>Risk signals</li>
-        `;
+        if (bePriceEl) bePriceEl.textContent = "—";
+        if (targetMarginPriceEl) targetMarginPriceEl.textContent = "—";
+        if (maxAdsPctEl) maxAdsPctEl.textContent = "—";
+        if (riskLabelEl) riskLabelEl.textContent = "Locked";
+        if (riskExplainEl) riskExplainEl.textContent = "Unlock PRO to see insights.";
+        if (insBullets) insBullets.innerHTML = [
+          "Break-even price",
+          "Price to hit a target margin",
+          "Max ads % you can afford",
+          "Risk signals"
+        ].map(x=>\`<li>\${x}</li>\`).join("");
         insStatus.textContent = "Locked";
-        insToast.textContent = "—";
+        if (insToast) insToast.textContent = "—";
         return;
       }
 
       insStatus.textContent = "Unlocked";
 
       const be = solveBreakEvenPrice();
-      bePriceEl.textContent = (be && Number.isFinite(be)) ? money(be) : "—";
+      if (bePriceEl) bePriceEl.textContent = (be && Number.isFinite(be)) ? money(be) : "—";
 
       const tm = solvePriceForMargin(targetM);
-      targetMarginPriceEl.textContent = (tm && Number.isFinite(tm)) ? money(tm) : "—";
+      if (targetMarginPriceEl) targetMarginPriceEl.textContent = (tm && Number.isFinite(tm)) ? money(tm) : "—";
 
       const maxAds = maxAffordableAdsPct();
-      maxAdsPctEl.textContent = (maxAds==null) ? "—" : maxAds.toFixed(1) + "%";
+      if (maxAdsPctEl) maxAdsPctEl.textContent = (maxAds==null) ? "—" : maxAds.toFixed(1) + "%";
 
       const ra = riskAssessment(profit, margin, retImpact, fees);
-      riskLabelEl.textContent = ra.label;
-      riskExplainEl.textContent = ra.explain;
+      if (riskLabelEl) riskLabelEl.textContent = ra.label;
+      if (riskExplainEl) riskExplainEl.textContent = ra.explain;
 
       const bullets = [];
       if (sell <= 0) bullets.push("Enter a selling price to get meaningful insights.");
       else {
-        bullets.push(`Break-even is ~${(be && Number.isFinite(be)) ? money(be) : "—"} (profit ≈ 0).`);
-        bullets.push(`To target ${targetM.toFixed(0)}% margin, price is ~${(tm && Number.isFinite(tm)) ? money(tm) : "—"}.`);
-        if (maxAds != null) bullets.push(`Max ads spend before loss: ~${maxAds.toFixed(1)}% (at current price/cost).`);
+        bullets.push(\`Break-even is ~\${(be && Number.isFinite(be)) ? money(be) : "—"} (profit ≈ 0).\`);
+        bullets.push(\`To target \${targetM.toFixed(0)}% margin, price is ~\${(tm && Number.isFinite(tm)) ? money(tm) : "—"}.\`);
+        if (maxAds != null) bullets.push(\`Max ads spend before loss: ~\${maxAds.toFixed(1)}% (at current price/cost).\`);
         bullets.push(...ra.bullets);
       }
-      insBullets.innerHTML = bullets.map(x=>`<li>${x}</li>`).join("");
-      insToast.textContent = "Updated.";
+      if (insBullets) insBullets.innerHTML = bullets.map(x=>\`<li>\${x}</li>\`).join("");
+      if (insToast) insToast.textContent = "Updated.";
     }
 
-    refreshInsightsBtn?.addEventListener("click", ()=>{ refreshInsights(); if (insToast) insToast.textContent="Updated."; });
-    targetMarginInput?.addEventListener("input", ()=>refreshInsights());
+    refreshInsightsBtn?.addEventListener("click", ()=> refreshInsights());
+    targetMarginInput?.addEventListener("input", ()=>{ refreshInsights(); updateSummaryUI(); });
 
-    // ---------------------------
-    // Market Positioning Engine mode
-    // ---------------------------
+    // Competitor
     let LAST_COMP_SUGGEST = null;
-
     function median3(a,b,c){
       const arr=[a,b,c].filter(x=>x>0).sort((x,y)=>x-y);
       if (!arr.length) return null;
-      const mid = Math.floor(arr.length/2);
-      return arr[mid];
+      return arr[Math.floor(arr.length/2)];
     }
 
     function runCompetitor(){
@@ -2102,10 +2036,10 @@ function setMode(m){
 
       if (compBullets){
         const bullets = [];
-        if (floor) bullets.push(`Floor price = break-even + ${buffer.toFixed(0)}% buffer → ${money(floor)}.`);
+        if (floor) bullets.push(\`Floor price = break-even + \${buffer.toFixed(0)}% buffer → \${money(floor)}.\`);
         bullets.push("If competitors are below your floor: don’t chase them. Fix costs or pick another product.");
         bullets.push("No scraping: you manually enter prices you found yourself.");
-        compBullets.innerHTML = bullets.map(x=>`<li>${x}</li>`).join("");
+        compBullets.innerHTML = bullets.map(x=>\`<li>\${x}</li>\`).join("");
       }
     }
 
@@ -2126,8 +2060,7 @@ function setMode(m){
         refreshInsights();
         runCompetitor();
         updateReverseHint();
-  updateSummaryUI(); 
-})
+        updateSummaryUI();
 
         if (compStatus) compStatus.textContent = CURRENT_PROFILE.paid ? "Unlocked" : "Trial limited";
         if (compToast) compToast.textContent = "Done.";
@@ -2142,17 +2075,16 @@ function setMode(m){
         if (scenarioToast) scenarioToast.textContent = "Run competitor mode first.";
         return;
       }
-      if (sellPriceEl) sellPriceEl.value = LAST_COMP_SUGGEST.toFixed(2);
+      sellPriceEl.value = LAST_COMP_SUGGEST.toFixed(2);
       setMode("profit");
       computeProfit();
       refreshInsights();
+      updateSummaryUI();
       if (scenarioToast) scenarioToast.textContent = "Applied suggested price ✅";
     });
 
-    // ---------------------------
     // Scenario storage (PRO) localStorage
-    // ---------------------------
-    function scenarioKey(){ return `pp_scenarios_${CURRENT_USER?.id || "anon"}`; }
+    function scenarioKey(){ return \`pp_scenarios_\${CURRENT_USER?.id || "anon"}\`; }
     function loadScenarios(){
       try{
         const raw = localStorage.getItem(scenarioKey());
@@ -2165,16 +2097,16 @@ function setMode(m){
     }
     function refreshScenarioDropdown(){
       if (!scenarioSel) return;
-      scenarioSel.innerHTML = `<option value="">—</option>`;
+      scenarioSel.innerHTML = \`<option value="">—</option>\`;
       if (!CURRENT_USER) return;
       const arr = loadScenarios();
       arr.forEach((s, idx)=>{
         const opt = document.createElement("option");
         opt.value = String(idx);
-        opt.textContent = s.name || `Scenario #${idx+1}`;
+        opt.textContent = s.name || \`Scenario #\${idx+1}\`;
         scenarioSel.appendChild(opt);
       });
-      if (scenarioStatus) scenarioStatus.textContent = CURRENT_PROFILE?.paid ? `${arr.length} saved` : "PRO required to save";
+      if (scenarioStatus) scenarioStatus.textContent = CURRENT_PROFILE?.paid ? \`\${arr.length} saved\` : "PRO required to save";
     }
 
     function currentScenarioPayload(){
@@ -2215,9 +2147,18 @@ function setMode(m){
       const s = arr[idx];
       if (!s){ if (scenarioStatus) scenarioStatus.textContent = "Choose a scenario."; return; }
       const d = s.data || {};
+
       if (d.currency && currencyEl) currencyEl.value = d.currency;
       if (fxRateEl) fxRateEl.value = d.fxRate || "";
       if (presetSel) presetSel.value = d.preset || "manual";
+
+      // Apply preset categories if present
+      const preset = getPresetById(presetSel.value);
+      showCategories(preset);
+      if (d.category && categorySel && preset.categories?.some(x=>x.id===d.category)){
+        categorySel.value = d.category;
+      }
+
       if (sellPriceEl) sellPriceEl.value = String(d.sellPrice ?? "0");
       if (productCostEl) productCostEl.value = String(d.productCost ?? "0");
       if (shipCostEl) shipCostEl.value = String(d.shipCost ?? "0");
@@ -2233,11 +2174,19 @@ function setMode(m){
       if (c3) c3.value = String(d.c3 ?? "0");
       if (positioning) positioning.value = String(d.positioning ?? "undercut");
       if (floorBuffer) floorBuffer.value = String(d.floorBuffer ?? "5");
+
+      // Restore suggested price
       LAST_COMP_SUGGEST = (s.suggested_price != null) ? Number(s.suggested_price) : null;
       if (useSuggestedBtn) useSuggestedBtn.disabled = !(LAST_COMP_SUGGEST && Number.isFinite(LAST_COMP_SUGGEST));
+
+      // Respect dynamic fee if needed
+      setFeesFromPreset(preset, preset.categories?.find(x=>x.id===categorySel.value) || null);
+      updateDynamicFixedFee();
+
       setMode(d.mode || "profit");
-      computeProfit();
+      compute();
       refreshInsights();
+      updateSummaryUI();
       if (scenarioStatus) scenarioStatus.textContent = "Loaded ✅";
       if (scenarioToast) scenarioToast.textContent = "Scenario loaded.";
     });
@@ -2253,9 +2202,7 @@ function setMode(m){
       if (scenarioToast) scenarioToast.textContent="Scenario deleted.";
     });
 
-    // ---------------------------
-    // BULK
-    // ---------------------------
+    // Bulk
     let bulkLastRows = [];
 
     function mkCellInput(value="0"){
@@ -2266,7 +2213,6 @@ function setMode(m){
       autoZero(inp);
       return inp;
     }
-
     function renumberBulkRows(){
       if (!bulkTbody) return;
       [...bulkTbody.children].forEach((tr,i)=> tr.children[0].textContent = String(i+1));
@@ -2375,7 +2321,7 @@ function setMode(m){
     bulkAddRowBtn?.addEventListener("click", ()=>{
       if (!CURRENT_PROFILE){ if (bulkStatus) bulkStatus.textContent="Loading…"; return; }
       if (!canAddRow()){
-        if (bulkStatus) bulkStatus.textContent = `Trial limit: max ${TRIAL_BULK_MAX_ROWS} rows. Unlock PRO for unlimited.`;
+        if (bulkStatus) bulkStatus.textContent = \`Trial limit: max \${TRIAL_BULK_MAX_ROWS} rows. Unlock PRO for unlimited.\`;
         return;
       }
       addBulkRow();
@@ -2390,7 +2336,7 @@ function setMode(m){
       if (bulkStatus) bulkStatus.textContent = "Reset rows.";
     });
 
-    bulkApplyFeesBtn?.addEventListener("click", ()=>applyFeesToAll());
+    bulkApplyFeesBtn?.addEventListener("click", applyFeesToAll);
 
     bulkRunBtn?.addEventListener("click", async ()=>{
       track("bulk_run_clicked", { pro: !!CURRENT_PROFILE?.paid, rows: rowCount() });
@@ -2400,7 +2346,7 @@ function setMode(m){
         if (!CURRENT_PROFILE.paid){
           const left = daysLeft(CURRENT_PROFILE.trial_start);
           if (left <= 0) throw new Error("Trial ended. Unlock PRO to use Bulk mode.");
-          if (rowCount() > TRIAL_BULK_MAX_ROWS) throw new Error(`Trial allows max ${TRIAL_BULK_MAX_ROWS} rows.`);
+          if (rowCount() > TRIAL_BULK_MAX_ROWS) throw new Error(\`Trial allows max \${TRIAL_BULK_MAX_ROWS} rows.\`);
           const prof = await rpcConsumeBulk();
           updateAccessUI(prof);
         }
@@ -2430,7 +2376,7 @@ function setMode(m){
         });
 
         bulkLastRows = out;
-        if (bulkStatus) bulkStatus.textContent = `Processed ${out.length} row(s).`;
+        if (bulkStatus) bulkStatus.textContent = \`Processed \${out.length} row(s).\`;
         refreshBulkLimitLine();
       } catch(e){
         if (bulkStatus) bulkStatus.textContent = e?.message || "Bulk failed.";
@@ -2441,17 +2387,17 @@ function setMode(m){
     bulkExportBtn?.addEventListener("click", ()=>{
       if (!bulkLastRows.length){ if (bulkStatus) bulkStatus.textContent = "Run bulk first."; return; }
       const rows = [["sell","cost","ship","misc","feePct","feeFixed","adsPct","returnPct","fees","profit","margin"]];
-      bulkLastRows.forEach(r=> rows.push([r.sell,r.cost,r.ship,r.misc,r.feePct,r.feeFixed,r.adsPct,r.returnPct,r.fees,r.profit,r.margin]));
-      const csv = rows.map(r=>r.map(csvEscape).join(",")).join("\n");
+      bulkLastRows.forEach(r=> rows.push([r.sell,r.cost,r.ship,r.misc,r.feePct,r.feeFixed,r.adsPct,r.retPct,r.fees,r.profit,r.margin]));
+      const csv = rows.map(r=>r.map(csvEscape).join(",")).join("\\n");
       downloadText("profitpilot-bulk.csv", csv);
       if (bulkStatus) bulkStatus.textContent = "Bulk CSV exported.";
     });
 
     function parseLines(text){
-      const lines = String(text || "").split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+      const lines = String(text || "").split(/\\r?\\n/).map(x=>x.trim()).filter(Boolean);
       const rows = [];
       for (const line of lines){
-        const parts = line.includes("\t") ? line.split("\t") : line.split(",");
+        const parts = line.includes("\\t") ? line.split("\\t") : line.split(",");
         const p = parts.map(x=>x.trim()).filter(x=>x.length>0);
         if (p.length < 2) continue;
         rows.push({
@@ -2469,7 +2415,7 @@ function setMode(m){
     }
 
     bulkFillExampleBtn?.addEventListener("click", ()=>{
-      if (bulkPasteEl) bulkPasteEl.value = "12.99, 6.20, 0.00, 0.20\n19.99, 9.50, 0.00, 0.30\n29.99, 14.00, 0.00, 0.50";
+      if (bulkPasteEl) bulkPasteEl.value = "12.99, 6.20, 0.00, 0.20\\n19.99, 9.50, 0.00, 0.30\\n29.99, 14.00, 0.00, 0.50";
       if (bulkImportStatus) bulkImportStatus.textContent = "Example filled.";
     });
 
@@ -2482,16 +2428,88 @@ function setMode(m){
       for (let i=0;i<allowed;i++) addBulkRow(rows[i]);
       if (bulkImportStatus){
         bulkImportStatus.textContent = (!CURRENT_PROFILE?.paid && rows.length > allowed)
-          ? `Imported ${allowed}. Trial limit is ${TRIAL_BULK_MAX_ROWS} rows.`
-          : `Imported ${allowed} row(s).`;
+          ? \`Imported \${allowed}. Trial limit is \${TRIAL_BULK_MAX_ROWS} rows.\`
+          : \`Imported \${allowed} row(s).\`;
       }
       if (bulkStatus) bulkStatus.textContent = "Review values, then Run bulk.";
       refreshBulkLimitLine();
     });
 
-    // ---------------------------
-    // Reviews (1 per user, editable)
-    // ---------------------------
+    // Summary live updates
+    function updateSummaryUI(){
+      const profitTxt = o1v?.textContent || "—";
+      const marginTxt = o2v?.textContent || "—";
+
+      let beTxt = "—";
+      try{
+        const be = solveBreakEvenPrice();
+        if (be && Number.isFinite(be)) beTxt = money(be);
+      }catch(e){}
+
+      let riskTxt = "—";
+      try{
+        const sell = n(sellPriceEl?.value);
+        const C = n(productCostEl?.value) + n(shipCostEl?.value) + n(miscCostEl?.value);
+        const feePct = clamp(n(feePctEl?.value),0,99);
+        const feeFixed = clamp(n(feeFixedEl?.value),0,999999);
+        const adsPct = clamp(n(adsPctEl?.value),0,99);
+        const retPct = clamp(n(returnPctEl?.value),0,99);
+
+        const fees = totalFees(sell, feePct, feeFixed, adsPct);
+        const retImpact = sell * (retPct/100);
+        const profit = sell - (C + fees);
+        const margin = sell > 0 ? (profit/sell)*100 : 0;
+
+        const ra = riskAssessment(profit, margin, retImpact, fees);
+        riskTxt = ra.label || "—";
+      }catch(e){}
+
+      document.getElementById("sumProfit").textContent = profitTxt;
+      document.getElementById("sumMargin").textContent = marginTxt;
+      document.getElementById("sumBreakEven").textContent = beTxt;
+      document.getElementById("sumRisk").textContent = riskTxt;
+    }
+
+    // Live compute updates (always stable)
+    [
+      sellPriceEl, productCostEl, shipCostEl, miscCostEl,
+      feePctEl, feeFixedEl, adsPctEl, returnPctEl,
+      fxRateEl
+    ].filter(Boolean).forEach(el=>
+      el.addEventListener("input", ()=>{
+        computeProfit();
+        refreshInsights();
+        updateReverseHint();
+        updateSummaryUI();
+      })
+    );
+
+    targetProfitEl?.addEventListener("input", ()=>{ updateReverseHint(); });
+
+    async function computeReverseWithLimit(){
+      if (!CURRENT_PROFILE?.paid){
+        const left = daysLeft(CURRENT_PROFILE.trial_start);
+        if (left <= 0) throw new Error("Trial ended. Unlock PRO for Reverse mode.");
+        const prof = await rpcConsumeReverse();
+        updateAccessUI(prof);
+      }
+      computeReverse();
+      refreshInsights();
+      updateSummaryUI();
+    }
+
+    document.getElementById("calcBtn")?.addEventListener("click", async ()=>{
+      track("calc_clicked", { mode: MODE, pro: !!CURRENT_PROFILE?.paid });
+      try{
+        if (MODE==="reverse") await computeReverseWithLimit();
+        else { computeProfit(); refreshInsights(); updateSummaryUI(); }
+      } catch(e){
+        o1hint.textContent = e?.message || "Error.";
+        o1hint.style.color = "var(--bad)";
+      }
+    });
+
+    // Reviews
     let selectedStars = 5;
     const starsRow = document.getElementById("starsRow");
     const reviewStatus = document.getElementById("reviewStatus");
@@ -2500,8 +2518,9 @@ function setMode(m){
       selectedStars = nv;
       if (!starsRow) return;
       [...starsRow.querySelectorAll("button")].forEach(b=>{
-        b.style.borderColor = (parseInt(b.dataset.star,10)===nv) ? "rgba(14,165,164,.45)" : "rgba(16,24,40,.10)";
-        b.style.background = (parseInt(b.dataset.star,10)===nv) ? "rgba(14,165,164,.10)" : "rgba(255,255,255,.80)";
+        const on = (parseInt(b.dataset.star,10)===nv);
+        b.style.borderColor = on ? "rgba(14,165,164,.45)" : "rgba(16,24,40,.10)";
+        b.style.background = on ? "rgba(14,165,164,.10)" : "rgba(255,255,255,.80)";
       });
     }
     setStars(5);
@@ -2562,15 +2581,14 @@ function setMode(m){
     });
 
     // Buy button tracking
-    document.getElementById("buyProBtn")?.addEventListener("click", () => track("buy_pro_clicked"));
+    document.getElementById("buyProBtn")?.addEventListener("click", ()=> track("buy_pro_clicked"));
 
-    // ---------------------------
     // Share import
-    // ---------------------------
     function tryImportFromHash(){
       const h = location.hash || "";
       const m = h.match(/[#&](?:s|import)=([^&]+)/);
       if (!m) return;
+
       try{
         const token = decodeURIComponent(m[1]);
         const jsonStr = base64urlDecodeToString(token);
@@ -2579,6 +2597,13 @@ function setMode(m){
         if (data.currency && currencyEl) currencyEl.value = data.currency;
         if (fxRateEl) fxRateEl.value = data.fxRate || "";
         if (presetSel) presetSel.value = data.preset || "manual";
+
+        const preset = getPresetById(presetSel.value);
+        showCategories(preset);
+        if (data.category && categorySel && preset.categories?.some(x=>x.id===data.category)){
+          categorySel.value = data.category;
+        }
+
         if (sellPriceEl) sellPriceEl.value = String(data.sellPrice ?? "0");
         if (productCostEl) productCostEl.value = String(data.productCost ?? "0");
         if (shipCostEl) shipCostEl.value = String(data.shipCost ?? "0");
@@ -2595,73 +2620,24 @@ function setMode(m){
         if (positioning) positioning.value = String(data.positioning ?? "undercut");
         if (floorBuffer) floorBuffer.value = String(data.floorBuffer ?? "5");
 
-        if (importBanner){
-          importBanner.style.display = "block";
-          importBanner.textContent = "Shared pricing loaded.";
-          setTimeout(()=>{ importBanner.style.display = "none"; }, 5000);
-        }
+        // Ensure preset logic is applied (incl. dynamic fixed)
+        setFeesFromPreset(preset, preset.categories?.find(x=>x.id===categorySel.value) || null);
+        updateDynamicFixedFee();
+
+        setMode(data.mode || "profit");
       } catch(e){
-        if (importBanner){
-          importBanner.style.display = "block";
-          importBanner.textContent = "Import failed (invalid link).";
-          setTimeout(()=>{ importBanner.style.display = "none"; }, 7000);
-        }
+        // ignore bad links
       }
       history.replaceState(null, "", location.pathname);
     }
 
-    // Live compute updates
-    [
-  sellPriceEl, productCostEl, shipCostEl, miscCostEl,
-  feePctEl, feeFixedEl, adsPctEl, returnPctEl,
-  fxRateEl, currencyEl
-].filter(Boolean).forEach(el=> 
-  el.addEventListener("input", ()=>{
-    computeProfit();
-    refreshInsights();
-    updateReverseHint();
-  })
-);
-    
-    targetProfitEl?.addEventListener("input", updateReverseHint);
-
-
-    async function computeReverseWithLimit(){
-      if (!CURRENT_PROFILE?.paid){
-        const left = daysLeft(CURRENT_PROFILE.trial_start);
-        if (left <= 0) throw new Error("Trial ended. Unlock PRO for Reverse mode.");
-        const prof = await rpcConsumeReverse();
-        updateAccessUI(prof);
-      }
-      computeReverse();
-      refreshInsights();
-    }
-
-    document.getElementById("calcBtn")?.addEventListener("click", async ()=>{
-      track("calc_clicked", { mode: MODE, pro: !!CURRENT_PROFILE?.paid });
-      try{
-        if (o1hint) o1hint.style.color = "";
-        if (MODE==="reverse") await computeReverseWithLimit();
-        else { computeProfit(); refreshInsights(); }
-      } catch(e){
-        if (o1hint){
-          o1hint.textContent = e?.message || "Error.";
-          o1hint.style.color = "var(--bad)";
-        }
-      }
-    });
-
-    // ---------------------------
-    // Boot (session-safe, no redirect loop)
-    // ---------------------------
+    // Boot (session-safe)
     (async ()=>{
       try{
-
         const wait = (ms)=>new Promise(r=>setTimeout(r, ms));
         let session = null;
         let user = null;
 
-        // Give Supabase time to hydrate session from storage
         for (let i = 0; i < 8; i++){
           const sRes = await supabase.auth.getSession();
           session = sRes?.data?.session || null;
@@ -2674,24 +2650,15 @@ function setMode(m){
         }
 
         if (!session || !user){
-  if (accessPill){
-    accessPill.textContent = "Trial";
-    accessPill.className = "pill warn";
-  }
-  location.href = "login.html";
-  return;
-}
-
+          if (accessPill){
+            accessPill.textContent = "Trial";
+            accessPill.className = "pill warn";
+          }
+          location.href = "login.html";
+          return;
+        }
 
         CURRENT_USER = user;
-
-        // Hide review form if already reviewed
-const existingReview = await getUserReview(user.id);
-if (existingReview){
-  const reviewCard = document.getElementById("reviewsCard");
-  if (reviewCard) reviewCard.style.display = "none";
-}
-
 
         // Never expose email
         const accountLink = document.getElementById("accountLink");
@@ -2703,7 +2670,9 @@ if (existingReview){
         // Init bulk rows
         clearBulkRows();
         const initialRows = prof.paid ? 5 : TRIAL_BULK_MAX_ROWS;
-        for (let i=0; i<initialRows; i++) addBulkRow();
+        for (let i=0;i<initialRows;i++) addBulkRow();
+
+        tryImportFromHash();
 
         setMode("profit");
         computeProfit();
@@ -2713,15 +2682,12 @@ if (existingReview){
 
         if (useSuggestedBtn) useSuggestedBtn.disabled = true;
 
-        tryImportFromHash();
-
       } catch(e){
         console.error("BOOT ERROR:", e);
         if (accessPill){
-  accessPill.textContent = "Trial";
-  accessPill.className = "pill warn";
-}
-
+          accessPill.textContent = "Trial";
+          accessPill.className = "pill warn";
+        }
       }
     })();
   </script>
