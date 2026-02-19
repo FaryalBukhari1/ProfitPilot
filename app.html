@@ -420,6 +420,123 @@ input.mini{
 @media(max-width:768px){
   .pp-footbottom{ flex-direction:column; gap:10px; }
 }
+   /* =========================
+   SaaS Layout Upgrade (Tabs + Summary + Advanced)
+   Paste at END of <style>
+   ========================= */
+
+/* Right column becomes a compact sidebar */
+.rightSide{
+  position: sticky;
+  top: 18px;
+  align-self: start;
+}
+
+/* Summary card */
+.ppSummary .title{ margin-bottom:6px !important; }
+.ppSummaryGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:12px;
+}
+.ppSumItem{
+  border:1px solid rgba(16,24,40,.08);
+  border-radius:14px;
+  padding:12px;
+  background:rgba(16,24,40,.02);
+}
+.ppSumItem .h{
+  font-size:11px;
+  font-weight:900;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.3px;
+}
+.ppSumItem .v{
+  font-size:18px;
+  font-weight:1000;
+  margin-top:6px;
+}
+
+/* Tabs shell */
+.ppTabs{
+  border:1px solid rgba(16,24,40,.08);
+  border-radius:18px;
+  overflow:hidden;
+  background:#fff;
+}
+.ppTabBar{
+  display:flex;
+  gap:6px;
+  padding:10px;
+  border-bottom:1px solid rgba(16,24,40,.08);
+  background:rgba(16,24,40,.02);
+  flex-wrap:wrap;
+}
+.ppTabBtn{
+  appearance:none;
+  border:1px solid rgba(16,24,40,.10);
+  background:#fff;
+  padding:8px 12px;
+  border-radius:999px;
+  font-weight:900;
+  font-size:12.5px;
+  cursor:pointer;
+}
+.ppTabBtn.active{
+  border-color:rgba(14,165,164,.35);
+  background:rgba(14,165,164,.10);
+}
+.ppTabPanel{
+  display:none;
+  padding:16px;
+}
+.ppTabPanel.active{ display:block; }
+
+/* Make right-side sections NOT look like giant hero blocks */
+.rightSide .heroBlock{
+  margin-top:0 !important;
+  padding:0 !important;
+  border:none !important;
+  box-shadow:none !important;
+  background:transparent !important;
+}
+.rightSide .heroBlock .pHead{ margin-bottom:12px; }
+.rightSide .pGrid{ margin-top:10px; }
+
+/* Advanced inputs toggle on left */
+.ppAdvanced{
+  margin-top:14px;
+  border:1px solid rgba(16,24,40,.08);
+  border-radius:16px;
+  overflow:hidden;
+  background:#fff;
+}
+.ppAdvancedBtn{
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding:12px 14px;
+  border:0;
+  background:rgba(16,24,40,.02);
+  font-weight:1000;
+  cursor:pointer;
+}
+.ppAdvancedBody{
+  display:none;
+  padding:14px;
+}
+.ppAdvanced.open .ppAdvancedBody{ display:block; }
+
+/* Mobile: remove sticky to avoid weirdness */
+@media (max-width: 1000px){
+  .rightSide{ position: static; }
+  .ppSummaryGrid{ grid-template-columns:1fr; }
+}
+
 </style>
 
 </head>
@@ -536,25 +653,28 @@ input.mini{
   </button>
 </div>
 
-        <div class="divider"></div>
+       <div class="ppAdvanced" id="advBox">
+  <button class="ppAdvancedBtn" type="button" id="advToggle">
+    Advanced inputs (fees, ads, returns)
+    <span>▼</span>
+  </button>
 
-        <div class="row">
-          <div>
-            <label>Display currency</label>
-            <select id="currency">
-              <option value="GBP">GBP (£)</option>
-              <option value="USD">USD ($)</option>
-              <option value="EUR">EUR (€)</option>
-              <option value="AUD">AUD ($)</option>
-              <option value="CAD">CAD ($)</option>
-              <option value="NZD">NZD ($)</option>
-              <option value="AED">AED</option>
-              <option value="SAR">SAR</option>
-              <option value="PKR">PKR (₨)</option>
-              <option value="INR">INR (₹)</option>
-            </select>
-          </div>
-          <div>
+  <div class="ppAdvancedBody">
+
+    <div class="row">
+      <div><label>Platform fee (%)</label><input id="feePct" inputmode="decimal" value="0"></div>
+      <div><label>Fixed fee</label><input id="feeFixed" inputmode="decimal" value="0"></div>
+    </div>
+
+    <div class="row">
+      <div><label>Ads (%)</label><input id="adsPct" inputmode="decimal" value="0"></div>
+      <div><label>Return rate (%)</label><input id="returnPct" inputmode="decimal" value="0"></div>
+    </div>
+
+  </div>
+</div>
+
+           
             <label>Exchange rate (optional)</label>
             <input id="fxRate" inputmode="decimal" placeholder="e.g., 1 base = 1.25 selected" value="">
           </div>
@@ -735,205 +855,72 @@ input.mini{
  </section>
 
 <div class="rightSide">
-      <!-- RIGHT -->
-      <section class="heroBlock heroInsights" id="insightsBox">
-  <div class="pHead">
-    <div>
-      <div class="title">Pricing Intelligence (PRO)</div>
-      <div class="small">Decision support from your inputs (estimates only).</div>
-    </div>
-    <span class="tag" id="insStatus">Locked</span>
-  </div>
 
-  <div class="pGrid">
-    <div class="pItem">
-      <div class="t">Break-even price</div>
-      <div class="v" id="bePrice">—</div>
+  <!-- SUMMARY CARD -->
+  <div class="card ppSummary">
+    <div class="title">Summary</div>
+    <div class="small">Live overview based on your inputs.</div>
+
+    <div class="ppSummaryGrid">
+      <div class="ppSumItem">
+        <div class="h">Profit</div>
+        <div class="v" id="sumProfit">—</div>
+      </div>
+
+      <div class="ppSumItem">
+        <div class="h">Margin</div>
+        <div class="v" id="sumMargin">—</div>
+      </div>
+
+      <div class="ppSumItem">
+        <div class="h">Break-even</div>
+        <div class="v" id="sumBreakEven">—</div>
+      </div>
+
+      <div class="ppSumItem">
+        <div class="h">Risk</div>
+        <div class="v" id="sumRisk">—</div>
+      </div>
     </div>
 
-    <!-- IMPORTANT: your JS expects this id, so keep it -->
-    <div class="pItem">
-      <div class="t">Target margin price</div>
-      <div class="v" id="targetMarginPrice">—</div>
-      <div class="small">Price to hit target margin</div>
-    </div>
-
-    <div class="pItem">
-      <div class="t">Max ads % you can afford</div>
-      <div class="v" id="maxAdsPct">—</div>
-      <div class="small">Keeps profit ≥ 0</div>
-    </div>
-
-    <div class="pItem">
-      <div class="t">Risk rating</div>
-      <div class="v" id="riskLabel">—</div>
-      <div class="small" id="riskExplain">—</div>
+    <div class="small" style="margin-top:10px">
+      Unlock PRO for competitor engine, insights & saved scenarios.
     </div>
   </div>
 
-  <ul class="pList" id="insBullets">
-    <li>Unlock PRO to see insights.</li>
-  </ul>
+  <!-- TABS WRAPPER -->
+  <div class="ppTabs">
 
-  <!-- IMPORTANT: your JS expects both #targetMarginVal and #targetMarginInput -->
-  <div class="small" style="margin-top:10px">
-    Target margin: <b id="targetMarginVal">15%</b>
+    <div class="ppTabBar">
+      <button class="ppTabBtn active" data-tab="insightsTab">Insights</button>
+      <button class="ppTabBtn" data-tab="competitorTab">Competitor</button>
+      <button class="ppTabBtn" data-tab="savedTab">Saved</button>
+      <button class="ppTabBtn" data-tab="reviewsTab">Reviews</button>
+    </div>
+
+    <!-- INSIGHTS -->
+    <div class="ppTabPanel active" id="insightsTab">
+      <div id="insightsMount"></div>
+    </div>
+
+    <!-- COMPETITOR -->
+    <div class="ppTabPanel" id="competitorTab">
+      <div id="competitorMount"></div>
+    </div>
+
+    <!-- SAVED -->
+    <div class="ppTabPanel" id="savedTab">
+      <div id="savedMount"></div>
+    </div>
+
+    <!-- REVIEWS -->
+    <div class="ppTabPanel" id="reviewsTab">
+      <div id="reviewsMount"></div>
+    </div>
+
   </div>
 
-  <div class="row" style="margin-top:10px">
-    <div>
-      <label>Target margin (%)</label>
-      <input id="targetMarginInput" inputmode="decimal" value="15">
-    </div>
-    <div style="display:flex;align-items:end;gap:10px;flex-wrap:wrap">
-      <button class="btn" id="refreshInsightsBtn" type="button">Refresh insights</button>
-      <span class="pill" id="insToast">—</span>
-    </div>
-  </div>
-</section>
-         
-
-          <section class="heroBlock heroCompetitor" id="compBox">
-
-  <div class="pHead">
-    <div>
-      <div class="title">Competitor Positioning Engine</div>
-      <div class="small">Enter competitor prices you found yourself. No scraping.</div>
-    </div>
-    <span class="tag" id="compStatus">Trial limited</span>
-  </div>
-
-  <div class="small" id="compUsesLine" style="margin-top:8px">Competitor uses: —</div>
-
-  <div class="row" style="margin-top:20px">
-    <div>
-      <label>Competitor price #1</label>
-      <input id="c1" inputmode="decimal" value="0">
-    </div>
-    <div>
-      <label>Competitor price #2</label>
-      <input id="c2" inputmode="decimal" value="0">
-    </div>
-  </div>
-
-  <div class="row">
-    <div>
-      <label>Competitor price #3</label>
-      <input id="c3" inputmode="decimal" value="0">
-    </div>
-    <div>
-      <label>Positioning</label>
-      <select id="positioning">
-        <option value="undercut">Undercut slightly</option>
-        <option value="match">Match market</option>
-        <option value="premium">Premium (if your offer is better)</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="row">
-    <div>
-      <label>Buffer above break-even (%)</label>
-      <input id="floorBuffer" inputmode="decimal" value="5">
-      <div class="small">“Don’t go below” = break-even + buffer</div>
-    </div>
-    <div style="display:flex;align-items:end;gap:10px;flex-wrap:wrap">
-      <button class="btn primary" id="runCompBtn" type="button">
-        Run competitor mode
-      </button>
-      <span class="pill" id="compToast">—</span>
-    </div>
-  </div>
-
-  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
-    <button class="btn" id="useSuggestedBtn" type="button" disabled>
-      Use suggested price
-    </button>
-    <button class="btn" id="saveScenarioBtn" type="button">
-      Save scenario (PRO)
-    </button>
-    <span class="pill" id="scenarioToast">—</span>
-  </div>
-
-  <div class="pGrid" style="margin-top:24px">
-    <div class="pItem">
-      <div class="t">Market reference (median)</div>
-      <div class="v" id="compMedian">—</div>
-    </div>
-
-    <div class="pItem">
-      <div class="t">Suggested price</div>
-      <div class="v" id="compSuggest">—</div>
-      <div class="small" id="compWhy">—</div>
-    </div>
-
-    <div class="pItem">
-      <div class="t">Don’t go below</div>
-      <div class="v" id="compFloor">—</div>
-      <div class="small">Break-even + buffer</div>
-    </div>
-
-    <div class="pItem">
-      <div class="t">Reality check</div>
-      <div class="v" id="compCheck">—</div>
-      <div class="small" id="compCheck2">—</div>
-    </div>
-  </div>
-
-  <ul class="pList">
-    <li>Tip: use “Don’t go below” as your personal floor price.</li>
-  </ul>
-
-</section>
-     
-
-            <section class="heroBlock">
-  <div class="title">Saved scenarios (PRO)</div>
-  <div class="small">Saved locally on this device for speed. (PRO-only to save.)</div>
-
-  <label>Saved scenarios</label>
-  <select id="scenarioSel"><option value="">—</option></select>
-
-  <div class="row">
-    <button class="btn" id="loadScenarioBtn" type="button">Load</button>
-    <button class="btn" id="deleteScenarioBtn" type="button">Delete</button>
-  </div>
-
-  <div class="divider"></div>
-
-  <label>Scenario name</label>
-  <input id="scenarioName" placeholder="e.g., Competitor median £13.49">
-
-  <div class="row">
-    <button class="btn primary" id="saveScenarioBtn2" type="button">Save current (PRO)</button>
-    <span class="pill" id="scenarioStatus">—</span>
-  </div>
-</section>
-
-        <div class="card" id="reviewsCard" style="margin-top:14px">
-          <div class="title">Leave a review</div>
-          <div class="small">One review per account. You can edit it anytime.</div>
-
-          <label>Name (optional)</label>
-          <input id="revName" placeholder="Name">
-
-          <label>Category</label>
-          <select id="revCat">
-            <option>General</option>
-            <option>UI/UX</option>
-            <option>Accuracy</option>
-            <option>Speed</option>
-            <option>Features</option>
-          </select>
-
-          <label>Rating</label>
-          <div style="display:flex;gap:8px;flex-wrap:wrap" id="starsRow">
-            <button class="btn" type="button" data-star="1">★ 1</button>
-            <button class="btn" type="button" data-star="2">★ 2</button>
-            <button class="btn" type="button" data-star="3">★ 3</button>
-            <button class="btn" type="button" data-star="4">★ 4</button>
-            <button class="btn" type="button" data-star="5">★ 5</button>
-          </div>
+</div>
 
           <label>Review</label>
           <input id="revMsg" placeholder="What did you like? What should we improve?">
@@ -1114,6 +1101,126 @@ function setTheme(t){
   if (themeSel) themeSel.value = saved;
 })();
 themeSel?.addEventListener("change", ()=> setTheme(themeSel.value));
+// ---------------------------
+// Tabs (right column)
+// ---------------------------
+(function initTabs(){
+  const tabBtns = document.querySelectorAll(".ppTabBtn");
+  const panels = document.querySelectorAll(".ppTabPanel");
+  tabBtns.forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const id = btn.dataset.tab;
+      tabBtns.forEach(b=>b.classList.toggle("active", b===btn));
+      panels.forEach(p=>p.classList.toggle("active", p.id === id));
+    });
+  });
+})();
+
+// ---------------------------
+// Summary live updates
+// ---------------------------
+function updateSummaryUI(){
+  const profitTxt = document.getElementById("o1v")?.textContent || "—";
+  const marginTxt = document.getElementById("o2v")?.textContent || "—";
+
+  // Break-even uses your solver (already in your code)
+  let beTxt = "—";
+  try{
+    const be = solveBreakEvenPrice();
+    if (be && Number.isFinite(be)) beTxt = money(be);
+  }catch(e){}
+
+  // Risk uses the same logic you already use in insights
+  let riskTxt = "—";
+  try{
+    const sell = n(sellPriceEl?.value);
+    const C = n(productCostEl?.value) + n(shipCostEl?.value) + n(miscCostEl?.value);
+    const feePct = clamp(n(feePctEl?.value),0,99);
+    const feeFixed = clamp(n(feeFixedEl?.value),0,999999);
+    const adsPct = clamp(n(adsPctEl?.value),0,99);
+    const retPct = clamp(n(returnPctEl?.value),0,99);
+
+    const fees = totalFees(sell, feePct, feeFixed, adsPct);
+    const retImpact = sell * (retPct/100);
+    const profit = sell - (C + fees);
+    const margin = sell > 0 ? (profit/sell)*100 : 0;
+
+    const ra = riskAssessment(profit, margin, retImpact, fees);
+    riskTxt = ra.label || "—";
+  }catch(e){}
+
+  const sp = document.getElementById("sumProfit");
+  const sm = document.getElementById("sumMargin");
+  const sb = document.getElementById("sumBreakEven");
+  const sr = document.getElementById("sumRisk");
+  if (sp) sp.textContent = profitTxt;
+  if (sm) sm.textContent = marginTxt;
+  if (sb) sb.textContent = beTxt;
+  if (sr) sr.textContent = riskTxt;
+}
+    // =========================
+// Move existing sections into tab panels
+// =========================
+function mountRightSections(){
+  const insights = document.getElementById("insightsBox");
+  const comp = document.getElementById("compBox");
+  const saved = document.getElementById("savedBox") || 
+                document.querySelector('#scenarioSel')?.closest("section");
+  const reviews = document.getElementById("reviewsCard");
+
+  if (insights) document.getElementById("insightsMount")?.appendChild(insights);
+  if (comp) document.getElementById("competitorMount")?.appendChild(comp);
+  if (saved) document.getElementById("savedMount")?.appendChild(saved);
+  if (reviews) document.getElementById("reviewsMount")?.appendChild(reviews);
+}
+
+mountRightSections();
+
+// =========================
+// Tabs logic
+// =========================
+document.querySelectorAll(".ppTabBtn").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    const id = btn.dataset.tab;
+
+    document.querySelectorAll(".ppTabBtn")
+      .forEach(b=>b.classList.toggle("active", b===btn));
+
+    document.querySelectorAll(".ppTabPanel")
+      .forEach(p=>p.classList.toggle("active", p.id===id));
+  });
+});
+
+// =========================
+// Live Summary update
+// =========================
+function updateSummaryUI(){
+  const p = document.getElementById("o1v")?.textContent || "—";
+  const m = document.getElementById("o2v")?.textContent || "—";
+
+  document.getElementById("sumProfit").textContent = p;
+  document.getElementById("sumMargin").textContent = m;
+
+  try{
+    const be = solveBreakEvenPrice();
+    if (be) document.getElementById("sumBreakEven").textContent = money(be);
+  }catch(e){}
+
+  try{
+    const sell = parseFloat(document.getElementById("sellPrice")?.value||0);
+    const cost = parseFloat(document.getElementById("productCost")?.value||0);
+    const risk = sell - cost <= 0 ? "High" : "Moderate";
+    document.getElementById("sumRisk").textContent = risk;
+  }catch(e){}
+}
+
+
+    // Advanced toggle
+const advBox = document.getElementById("advBox");
+const advToggle = document.getElementById("advToggle");
+advToggle?.addEventListener("click", ()=>{
+  advBox?.classList.toggle("open");
+});
 
 
     // Insights
@@ -2018,6 +2125,9 @@ function setMode(m){
         computeProfit();
         refreshInsights();
         runCompetitor();
+        updateReverseHint();
+  updateSummaryUI(); 
+})
 
         if (compStatus) compStatus.textContent = CURRENT_PROFILE.paid ? "Unlocked" : "Trial limited";
         if (compToast) compToast.textContent = "Done.";
@@ -2599,6 +2709,8 @@ if (existingReview){
         computeProfit();
         refreshInsights();
         refreshScenarioDropdown();
+        updateSummaryUI();
+
         if (useSuggestedBtn) useSuggestedBtn.disabled = true;
 
         tryImportFromHash();
