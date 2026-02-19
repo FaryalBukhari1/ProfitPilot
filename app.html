@@ -25,7 +25,12 @@
   <meta name="description" content="ProfitPilot: profit calculator with reverse pricing, bulk table, insights, competitor mode, export, share and saved presets.">
   <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
 
-  <style>
+ <style>
+/* =========================
+   PROFITPILOT — CLEAN CSS
+   (single source of truth)
+   ========================= */
+
 :root{
   --bg:#f6f8fb;
   --bg2:#eef2ff;
@@ -38,8 +43,12 @@
   --warn:#f59e0b;
   --bad:#ef4444;
   --ok:#0ea5a4;
+
+  --shadow:0 10px 30px rgba(16,24,40,.06);
+  --shadow2:0 18px 60px rgba(16,24,40,.08);
 }
-    /* Themes */
+
+/* Themes */
 :root[data-theme="day"]{
   --bg:#f6f8fb;
   --bg2:#eef2ff;
@@ -62,33 +71,13 @@
   --line:rgba(255,255,255,.10);
 }
 
-body{ color:var(--txt); }
-.card,.heroBlock{ background:var(--card); border-color:var(--line); }
-.pp-headerbar{ background:var(--card); border-color:var(--line); }
-
-    .banner{
-  display:none;
-  margin-bottom:20px;
-  padding:12px 16px;
-  border-radius:14px;
-  background:rgba(14,165,164,.08);
-  border:1px solid rgba(14,165,164,.25);
-  font-weight:600;
-}
-
-
-/* ================= BASE ================= */
-
+/* Base */
 *{box-sizing:border-box}
-
 body{
   margin:0;
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
   color:var(--txt);
-  background:
-    radial-gradient(900px 500px at 20% 0%, rgba(14,165,164,.06), transparent 55%),
-    radial-gradient(900px 500px at 80% 0%, rgba(79,70,229,.06), transparent 55%),
-    linear-gradient(180deg,var(--bg2),var(--bg));
+  background:linear-gradient(180deg,var(--bg2),var(--bg));
 }
 
 a{color:var(--accent);text-decoration:none}
@@ -100,812 +89,7 @@ a:hover{text-decoration:underline}
   border-radius:12px;
 }
 
-/* ================= HEADER (STATIC) ================= */
-
-.pp-header{
-  position:relative; /* NOT sticky */
-  margin:0;
-  padding:26px 0;
-}
-
-.pp-wrap{
-  max-width:1200px;
-  margin:0 auto;
-  padding:0 20px;
-}
-
-.pp-headerbar{
-  background:#fff;
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:14px 18px;
-  box-shadow:0 4px 14px rgba(16,24,40,.05);
-}
-
-.pp-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:16px;
-}
-
-.pp-brand{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.pp-logo{
-  width:42px;
-  height:42px;
-  border-radius:14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:1000;
-  background:linear-gradient(135deg, rgba(14,165,164,.15), rgba(79,70,229,.15));
-  border:1px solid var(--line);
-}
-
-.pp-title{
-  font-weight:1000;
-  font-size:16px;
-}
-
-.pp-sub{
-  font-size:12px;
-  color:var(--muted);
-}
-
-.pp-nav{
-  display:flex;
-  gap:10px;
-  align-items:center;
-}
-
-/* ================= BUTTONS ================= */
-
-.btn{
-  padding:10px 16px;
-  border-radius:999px;
-  border:1px solid var(--line);
-  background:#fff;
-  font-weight:700;
-  cursor:pointer;
-  box-shadow:0 4px 14px rgba(16,24,40,.05);
-  transition:background .2s ease;
-  white-space:nowrap;
-}
-
-.btn.primary{
-  background:rgba(14,165,164,.12);
-  border-color:rgba(14,165,164,.35);
-}
-
-.btn:hover{
-  background:rgba(14,165,164,.08);
-}
-
-.pill{
-  padding:8px 14px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:700;
-  border:1px solid var(--line);
-  background:#fff;
-}
-
-.pill.ok{color:var(--ok)}
-.pill.warn{color:var(--warn)}
-.pill.bad{color:var(--bad)}
-
-/* ================= LAYOUT ================= */
-
-.wrap{
-  max-width:1100px;
-  margin:40px auto 80px;
-  padding:0 20px;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns: 1.6fr 1fr;
-  gap:22px;
-  align-items:start;
-}
-
-/* Right column stack */
-.rightSide{
-  display:flex;
-  flex-direction:column;
-  gap:22px;
-}
-
-/* Mobile */
-@media (max-width: 1000px){
-  .grid{ grid-template-columns:1fr; }
-}
-
-/* ================= CARDS ================= */
-
-.card{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:24px;
-  padding:28px;
-  box-shadow:0 25px 70px rgba(16,24,40,.08);
-}
-
-    /* ================= INSIGHTS / COMP DASHBOARD ================= */
-
-.pHead{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:14px;
-  position:relative;
-  z-index:1;
-}
-
-.tag{
-  padding:6px 12px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:700;
-  background:rgba(16,24,40,.05);
-  color:#64748b;
-  border:1px solid rgba(16,24,40,.08);
-}
-.tag.pro{
-  background:rgba(14,165,164,.12);
-  border-color:rgba(14,165,164,.30);
-  color:#0ea5a4;
-}
-
-
-.pGrid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:18px;
-  margin-top:18px;
-  position:relative;
-  z-index:1;
-}
-
-.pItem{
-  background:#fff;
-  border:1px solid rgba(16,24,40,.08);
-  border-radius:20px;
-  padding:20px;
-  box-shadow:0 22px 60px rgba(16,24,40,.08);
-  transition:transform .15s ease, box-shadow .15s ease;
-}
-
-.pItem:hover{
-  transform:translateY(-4px);
-  box-shadow:0 32px 90px rgba(16,24,40,.12);
-}
-
-.pItem .t{
-  font-size:12px;
-  color:#64748b;
-  font-weight:900;
-  letter-spacing:.3px;
-  text-transform:uppercase;
-}
-
-.pItem .v{
-  font-size:26px;
-  font-weight:1000;
-  margin-top:10px;
-  min-height:32px; /* stops ugly jumps when it shows "—" */
-}
-
-.pList{
-  margin:16px 0 0;
-  padding-left:18px;
-  color:#334155;
-  position:relative;
-  z-index:1;
-}
-
-.pList li{
-  margin:8px 0;
-  line-height:1.5;
-}
-
-/* ================= HERO BLOCK SYSTEM ================= */
-
-.heroBlock{
-  margin-top:60px;
-  padding:40px;
-  border-radius:32px;
-  background:#fff;
-  border:1px solid rgba(16,24,40,.06);
-  box-shadow:
-    0 60px 160px rgba(16,24,40,.10);
-  position:relative;
-  overflow:hidden;
-}
-
-.heroBlock::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:
-    radial-gradient(800px 400px at 20% 0%, rgba(14,165,164,.06), transparent 60%),
-    radial-gradient(800px 400px at 80% 0%, rgba(79,70,229,.06), transparent 60%);
-  pointer-events:none;
-}
-
-.heroBlock .title{
-  font-size:32px;
-  margin-bottom:10px;
-}
-
-.heroBlock .small{
-  font-size:15px;
-  margin-bottom:25px;
-}
-    .heroBlock{
-  transition: transform .15s ease, box-shadow .15s ease;
-}
-
-.heroBlock:hover{
-  transform:translateY(-3px);
-  box-shadow:0 80px 180px rgba(16,24,40,.12);
-}
-
-
-    /* Calculator Engine */
-
-/* Pricing Intelligence */
-.heroInsights{
-  border:1px solid rgba(14,165,164,.30);
-  box-shadow:0 80px 200px rgba(14,165,164,.18);
-}
-
-/* Competitor Engine */
-.heroCompetitor{
-  border:1px solid rgba(244,114,182,.30);
-  box-shadow:0 80px 200px rgba(244,114,182,.18);
-}
-
-    /* Soft spacing between main sections */
-.heroBlock + .heroBlock{
-  margin-top:90px;
-}
-
-/* Soft glow separator */
-.heroBlock:not(:last-child)::after{
-  content:"";
-  position:absolute;
-  bottom:-45px;
-  left:50%;
-  transform:translateX(-50%);
-  width:55%;
-  height:1px;
-  background:linear-gradient(
-    90deg,
-    transparent,
-    rgba(79,70,229,.25),
-    transparent
-  );
-  opacity:.35;
-}
-
-
-
-
-/* ================= HERO Pricing Engine ================= */
-
-#calcCard{
-  border:1px solid rgba(79,70,229,.18);
-  box-shadow:
-    0 60px 140px rgba(16,24,40,.14),
-    0 1px 0 rgba(255,255,255,.6) inset;
-}
-
-.title{
-  font-size:26px;
-  font-weight:1000;
-  margin:0 0 16px;
-}
-
-.small{
-  font-size:14px;
-  color:#334155;
-  line-height:1.6;
-}
-
-.divider{
-  height:1px;
-  background:var(--line);
-  margin:28px 0;
-}
-      /* ================= Pricing Intelligence HERO ================= */
-
-.heroInsights{
-  margin-top:40px;
-  border:1px solid rgba(79,70,229,.25);
-  background:
-    linear-gradient(135deg, rgba(79,70,229,.08), rgba(14,165,164,.08));
-  box-shadow:
-    0 70px 160px rgba(79,70,229,.18);
-}
-
-/* Bigger title */
-.heroInsights .title{
-  font-size:28px;
-}
-
-/* Stronger metric tiles */
-.heroInsights .pItem{
-  background:#fff;
-  border:1px solid rgba(16,24,40,.06);
-  border-radius:18px;
-  padding:20px;
-  box-shadow:0 20px 60px rgba(16,24,40,.08);
-  transition:transform .15s ease, box-shadow .15s ease;
-}
-
-.heroInsights .pItem:hover{
-  transform:translateY(-4px);
-  box-shadow:0 30px 80px rgba(16,24,40,.12);
-}
-
-.heroInsights .pItem .v{
-  font-size:24px;
-  font-weight:1000;
-}
-
-/* ================= MODE BUTTONS ================= */
-
-.heroModes{
-  display:flex;
-  gap:14px;
-  margin-top:20px;
-  flex-wrap:wrap;
-}
-
-.heroBtn{
-  padding:14px 24px;
-  border-radius:999px;
-  border:1px solid rgba(79,70,229,.25);
-  background:linear-gradient(135deg, rgba(14,165,164,.15), rgba(79,70,229,.15));
-  font-weight:900;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  transition:box-shadow .2s ease;
-}
-
-.heroBtn.active{
-  background:linear-gradient(135deg, rgba(14,165,164,.35), rgba(79,70,229,.35));
-  box-shadow:0 14px 45px rgba(79,70,229,.25);
-}
-
-/* ================= FORM ================= */
-
-label{
-  font-size:13px;
-  font-weight:800;
-  margin:14px 0 6px;
-  display:block;
-}
-
-input,select,textarea{
-  width:100%;
-  padding:14px 16px;
-  border-radius:14px;
-  border:1px solid var(--line);
-  font-size:15px;
-}
-
-.row{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-}
-
-@media(max-width:640px){
-  .row{grid-template-columns:1fr}
-}
-
-/* ================= KPI ================= */
-
-.kpi{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px;
-  margin-top:22px;
-}
-
-@media(max-width:640px){
-  .kpi{grid-template-columns:1fr}
-}
-
-.k{
-  background:#fff;
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:20px;
-}
-
-.k .h{
-  font-size:12px;
-  color:var(--muted);
-}
-
-.k .v{
-  font-size:24px;
-  font-weight:1000;
-  margin-top:8px;
-}
-
-.good{color:var(--ok);font-weight:900}
-.bad{color:var(--bad);font-weight:900}
-
-/* ================= FOOTER ================= */
-
-.pp-footer{
-  margin-top:100px;
-  padding:60px 0;
-  background:linear-gradient(180deg,#0f172a,#0b1220);
-  color:#cbd5e1;
-}
-
-.pp-footbox{
-  max-width:1100px;
-  margin:auto;
-  padding:0 20px;
-}
-
-.pp-footgrid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:40px;
-}
-
-.pp-footbrand b{
-  color:#ffffff;
-  font-size:18px;
-}
-
-.pp-footmut{
-  margin-top:10px;
-  font-size:13px;
-  line-height:1.6;
-  color:#94a3b8;
-}
-
-.pp-footlinks{
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
-}
-
-.pp-footlinks a{
-  color:#cbd5e1;
-  font-weight:600;
-  font-size:14px;
-  text-decoration:none;
-  opacity:.85;
-}
-
-.pp-footlinks a:hover{
-  opacity:1;
-}
-
-.pp-footbottom{
-  margin-top:40px;
-  padding-top:20px;
-  border-top:1px solid rgba(255,255,255,.1);
-  display:flex;
-  justify-content:space-between;
-  font-size:13px;
-  color:#94a3b8;
-}
-
-@media(max-width:768px){
-  .pp-footgrid{
-    grid-template-columns:1fr;
-  }
-  .pp-footbottom{
-    flex-direction:column;
-    gap:10px;
-  }
-}
-
-/* =========================================================
-   PROFITPILOT — PREMIUM UI OVERRIDE (PASTE AT END)
-   Goal: clean SaaS, less glow, less noise, better spacing.
-   ========================================================= */
-
-/* ---------- Base clean background ---------- */
-:root{
-  --bg:#f6f8fb;
-  --txt:#0b1220;
-  --muted:#5b6474;
-  --line:rgba(16,24,40,.08);
-  --card:#ffffff;
-  --shadow:0 10px 30px rgba(16,24,40,.06);
-  --shadow2:0 18px 60px rgba(16,24,40,.08);
-}
-
-body{
-  background:var(--bg) !important;
-}
-
-/* ---------- Header: slimmer + premium ---------- */
-.pp-header{ padding:14px 0 !important; }
-.pp-headerbar{
-  border-radius:16px !important;
-  padding:12px 14px !important;
-  box-shadow:var(--shadow) !important;
-}
-.pp-logo{
-  width:38px !important;
-  height:38px !important;
-  border-radius:12px !important;
-  background:rgba(16,24,40,.04) !important;
-}
-.pp-title{ font-size:15px !important; }
-.pp-sub{ font-size:12px !important; }
-
-/* ---------- Buttons: consistent + less “puffy” ---------- */
-.btn{
-  box-shadow:none !important;
-  padding:9px 14px !important;
-  border-radius:999px !important;
-  font-weight:800 !important;
-  border:1px solid var(--line) !important;
-  background:#fff !important;
-}
-.btn:hover{ background:rgba(16,24,40,.03) !important; }
-
-.btn.primary{
-  background:#0ea5a4 !important;
-  color:white !important;
-  border-color:transparent !important;
-}
-.btn.primary:hover{
-  background:#0b9a99 !important;
-}
-
-/* You used class "ghost" in HTML but didn't define it cleanly */
-.btn.ghost{
-  background:transparent !important;
-}
-
-/* ---------- Main container spacing ---------- */
-.wrap{
-  max-width:1100px !important;
-  margin:26px auto 90px !important;
-  padding:0 18px !important;
-}
-.grid{ gap:22px !important; }
-
-/* ---------- All cards: one calm style ---------- */
-.card, .heroBlock{
-  background:var(--card) !important;
-  border:1px solid var(--line) !important;
-  border-radius:18px !important;
-  box-shadow:var(--shadow2) !important;
-  padding:22px !important;
-  transform:none !important;
-}
-.heroBlock::before{ display:none !important; }
-.heroBlock::after{ display:none !important; }
-
-/* remove hover lifting everywhere */
-.pItem:hover,
-.heroBlock:hover{
-  transform:none !important;
-  box-shadow:var(--shadow2) !important;
-}
-
-/* ---------- Headings: tighter + consistent ---------- */
-.title{
-  font-size:20px !important;
-  margin:0 0 10px !important;
-}
-.small{
-  font-size:13.5px !important;
-  color:var(--muted) !important;
-}
-
-/* ---------- Hero mode buttons: calmer ---------- */
-.heroModes{ gap:10px !important; }
-.heroBtn{
-  padding:10px 14px !important;
-  border-radius:999px !important;
-  border:1px solid rgba(16,24,40,.10) !important;
-  background:rgba(16,24,40,.03) !important;
-  font-weight:900 !important;
-}
-.heroBtn svg{ width:18px; height:18px; }
-.heroBtn.active{
-  background:rgba(14,165,164,.10) !important;
-  border-color:rgba(14,165,164,.35) !important;
-  box-shadow:none !important;
-}
-
-/* ---------- Inputs: SaaS-grade ---------- */
-input, select, textarea{
-  border-radius:14px !important;
-  border:1px solid rgba(16,24,40,.10) !important;
-  background:#fff !important;
-  padding:12px 14px !important;
-}
-input:focus, select:focus, textarea:focus{
-  outline:none !important;
-  border-color:rgba(14,165,164,.45) !important;
-  box-shadow:0 0 0 4px rgba(14,165,164,.10) !important;
-}
-
-/* ---------- KPI tiles: make them look aligned ---------- */
-.kpi{ gap:14px !important; }
-.k{
-  border-radius:16px !important;
-  padding:16px !important;
-  box-shadow:none !important;
-  background:rgba(16,24,40,.02) !important;
-}
-.k .v{ font-size:22px !important; }
-
-/* ---------- Insights tiles: remove extra heavy shadows ---------- */
-.pItem{
-  border-radius:16px !important;
-  box-shadow:none !important;
-  background:rgba(16,24,40,.02) !important;
-}
-
-/* ---------- Footer: reduce contrast + make elegant ---------- */
-.pp-footer{
-  margin-top:80px !important;
-  padding:44px 0 !important;
-  background:#0b1220 !important;
-}
-.pp-footmut{ color:rgba(226,232,240,.70) !important; }
-.pp-footlinks a{ opacity:.85 !important; }
-.pp-footbottom{ color:rgba(226,232,240,.60) !important; }
-/* ✅ STEP 1: stop everything from jumping on hover (calmer = premium) */
-.pItem:hover,
-.heroBlock:hover{
-  transform:none !important;
-  box-shadow: var(--shadow2) !important;
-}
-/* ✅ STEP 2: PRO card looks designed, not like a random card */
-#proCard{
-  background: linear-gradient(135deg, rgba(14,165,164,.10), rgba(79,70,229,.10)) !important;
-  border: 1px solid rgba(14,165,164,.22) !important;
-  box-shadow: 0 12px 40px rgba(16,24,40,.08) !important;
-}
-#proCard .title{ margin-bottom: 6px !important; }
-/* ✅ STEP 3: consistent typography */
-.title{
-  font-size: 20px !important;
-  line-height: 1.2 !important;
-  letter-spacing: -0.2px;
-}
-.small{
-  color: var(--muted) !important;
-  line-height: 1.55 !important;
-}
-/* ✅ Step 6: top KPI strip = premium dashboard feel */
-.kpiTop{
-  margin-top:14px !important;
-}
-.kpiTop .k{
-  background:#fff !important;
-  border:1px solid rgba(16,24,40,.08) !important;
-}
-.kpiTop .v{
-  font-size:24px !important;
-}
-/* ✅ Step 8: consistent spacing = premium */
-.heroBlock .divider{ margin: 18px 0 !important; }
-.heroBlock label{ margin-top: 12px !important; }
-.heroBlock .row{ margin-top: 10px; }
-/* ✅ Step 9: right column = secondary (lighter cards) */
-.rightSide .heroBlock,
-.rightSide .card{
-  padding: 18px !important;
-  border-radius: 16px !important;
-  box-shadow: 0 10px 30px rgba(16,24,40,.06) !important;
-}
-
-#calcCard{
-  padding: 26px !important;
-  border-radius: 18px !important;
-  box-shadow: 0 18px 60px rgba(16,24,40,.10) !important;
-}
-/* ✅ Step 10: buttons look like SaaS */
-.btn{
-  padding: 10px 14px !important;
-  border-radius: 999px !important;
-  font-weight: 800 !important;
-  box-shadow: none !important;
-}
-.btn.primary{
-  background: #0ea5a4 !important;
-  color: #fff !important;
-  border-color: transparent !important;
-}
-.btn.primary:hover{
-  background: #0b9a99 !important;
-}
-.btn.ghost{
-  background: transparent !important;
-}
-/* ✅ Step 11: mode buttons calmer + aligned */
-.heroModes{
-  gap: 10px !important;
-  margin-top: 16px !important;
-}
-.heroBtn{
-  padding: 10px 14px !important;
-  border-radius: 999px !important;
-  background: rgba(16,24,40,.03) !important;
-  border: 1px solid rgba(16,24,40,.10) !important;
-  box-shadow: none !important;
-}
-.heroBtn.active{
-  background: rgba(14,165,164,.12) !important;
-  border-color: rgba(14,165,164,.35) !important;
-}
-/* ✅ Step 12: footer softer */
-.pp-footer{
-  background: #0f172a !important;
-}
-.pp-footbottom{
-  border-top: 1px solid rgba(255,255,255,.08) !important;
-}
-/* ================= TRUST BAR ================= */
-.pp-trust{
-  margin-top:10px;
-  padding-top:10px;
-  border-top:1px solid var(--line);
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-}
-
-.pp-trustitem{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:8px 12px;
-  border-radius:999px;
-  background:rgba(16,24,40,.03);
-  border:1px solid rgba(16,24,40,.06);
-  font-size:12.5px;
-  color:var(--muted);
-}
-
-.pp-trusttxt b{ color:var(--txt); }
-
-.pp-stars{
-  letter-spacing:1px;
-  font-size:12px;
-  color:rgba(14,165,164,.95);
-}
-
-.pp-dot{
-  width:8px;
-  height:8px;
-  border-radius:999px;
-  background:rgba(14,165,164,.9);
-  display:inline-block;
-}
-
-/* mobile: keep it neat */
-@media(max-width:640px){
-  .pp-trustitem{ width:100%; justify-content:flex-start; }
-}
-/* Skip link (accessibility) */
+/* Skip link */
 .skip{
   position:absolute;
   left:-999px;
@@ -916,18 +100,133 @@ input:focus, select:focus, textarea:focus{
   border-radius:12px;
   z-index:9999;
 }
-.skip:focus{
-  left:12px;
+.skip:focus{ left:12px; }
+
+/* Banner */
+.banner{
+  display:none;
+  margin-bottom:20px;
+  padding:12px 16px;
+  border-radius:14px;
+  background:rgba(14,165,164,.08);
+  border:1px solid rgba(14,165,164,.25);
+  font-weight:600;
 }
 
-/* Small UI helpers */
+/* Header (static) */
+.pp-header{ position:relative; margin:0; padding:14px 0; }
+.pp-wrap{ max-width:1200px; margin:0 auto; padding:0 20px; }
+
+.pp-headerbar{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:12px 14px;
+  box-shadow:var(--shadow);
+}
+
+.pp-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+}
+
+.pp-brand{ display:flex; align-items:center; gap:12px; }
+.pp-logo{
+  width:38px; height:38px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:1000;
+  background:rgba(16,24,40,.04);
+  border:1px solid var(--line);
+}
+.pp-title{ font-weight:1000; font-size:15px; }
+.pp-sub{ font-size:12px; color:var(--muted); }
+.pp-nav{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+
+/* Buttons */
+.btn{
+  padding:10px 14px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:#fff;
+  font-weight:800;
+  cursor:pointer;
+  white-space:nowrap;
+  box-shadow:none;
+  transition:background .15s ease;
+}
+.btn:hover{ background:rgba(16,24,40,.03); }
+.btn.primary{
+  background:#0ea5a4;
+  color:#fff;
+  border-color:transparent;
+}
+.btn.primary:hover{ background:#0b9a99; }
+.btn.ghost{ background:transparent; }
+
+/* Pills */
+.pill{
+  padding:8px 14px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:800;
+  border:1px solid var(--line);
+  background:#fff;
+}
+.pill.ok{color:var(--ok)}
+.pill.warn{color:var(--warn)}
+.pill.bad{color:var(--bad)}
+
+/* Layout */
+.wrap{
+  max-width:1100px;
+  margin:26px auto 90px;
+  padding:0 18px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:1.6fr 1fr;
+  gap:22px;
+  align-items:start;
+}
+.rightSide{ display:flex; flex-direction:column; gap:22px; }
+@media (max-width:1000px){ .grid{ grid-template-columns:1fr; } }
+
+/* Cards + Hero blocks (one consistent style) */
+.card, .heroBlock{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  box-shadow:var(--shadow2);
+  padding:22px;
+}
+.heroBlock{ margin-top:60px; overflow:hidden; }
+.heroBlock::before, .heroBlock::after{ display:none; }
+
+/* Typography */
+.title{
+  font-size:20px;
+  font-weight:1000;
+  margin:0 0 10px;
+  line-height:1.2;
+  letter-spacing:-0.2px;
+}
+.small{
+  font-size:13.5px;
+  color:var(--muted);
+  line-height:1.55;
+}
+.divider{ height:1px; background:var(--line); margin:18px 0; }
 .hint{
   margin-top:8px;
   font-size:12.5px;
   color:var(--muted);
   line-height:1.4;
 }
-
 .toast{
   margin-top:10px;
   padding:10px 12px;
@@ -938,44 +237,126 @@ input:focus, select:focus, textarea:focus{
   color:var(--muted);
 }
 
-/* Bulk table styling */
-.bulkWrap{
-  overflow:auto;
-  border:1px solid var(--line);
-  border-radius:16px;
-  background:#fff;
-}
-
-#bulkTable{
-  width:100%;
-  border-collapse:separate;
-  border-spacing:0;
-  min-width:900px;
-}
-
-#bulkTable th, 
-#bulkTable td{
-  padding:10px;
-  border-bottom:1px solid rgba(16,24,40,.06);
+/* Forms */
+label{
   font-size:13px;
-  text-align:left;
-  vertical-align:middle;
+  font-weight:900;
+  margin:12px 0 6px;
+  display:block;
 }
-
-#bulkTable th{
-  position:sticky;
-  top:0;
-  background:#fff;
-  z-index:2;
-}
-
-input.mini{
+input,select,textarea{
   width:100%;
-  padding:8px 10px;
-  border-radius:12px;
+  padding:12px 14px;
+  border-radius:14px;
   border:1px solid rgba(16,24,40,.10);
-  font-size:13px;
+  font-size:15px;
+  background:#fff;
 }
+input:focus, select:focus, textarea:focus{
+  outline:none;
+  border-color:rgba(14,165,164,.45);
+  box-shadow:0 0 0 4px rgba(14,165,164,.10);
+}
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+@media(max-width:640px){ .row{ grid-template-columns:1fr; } }
+
+/* KPI */
+.kpi{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px; }
+@media(max-width:640px){ .kpi{ grid-template-columns:1fr; } }
+.k{
+  border-radius:16px;
+  padding:16px;
+  border:1px solid rgba(16,24,40,.08);
+  background:rgba(16,24,40,.02);
+}
+.k .h{ font-size:12px; color:var(--muted); font-weight:800; }
+.k .v{ font-size:22px; font-weight:1000; margin-top:8px; }
+.kpiTop .k{ background:#fff; }
+.kpiTop .v{ font-size:24px; }
+
+/* Good/bad */
+.good{ color:var(--ok); font-weight:900; }
+.bad{ color:var(--bad); font-weight:900; }
+
+/* Insights / tiles */
+.pHead{ display:flex; justify-content:space-between; align-items:flex-start; gap:14px; }
+.tag{
+  padding:6px 12px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:800;
+  background:rgba(16,24,40,.05);
+  color:#64748b;
+  border:1px solid rgba(16,24,40,.08);
+}
+.tag.pro{
+  background:rgba(14,165,164,.12);
+  border-color:rgba(14,165,164,.30);
+  color:#0ea5a4;
+}
+.pGrid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:18px;
+  margin-top:18px;
+}
+.pItem{
+  border-radius:16px;
+  box-shadow:none;
+  background:rgba(16,24,40,.02);
+  border:1px solid rgba(16,24,40,.06);
+  padding:18px;
+}
+.pItem .t{
+  font-size:12px;
+  color:#64748b;
+  font-weight:900;
+  letter-spacing:.3px;
+  text-transform:uppercase;
+}
+.pItem .v{
+  font-size:24px;
+  font-weight:1000;
+  margin-top:10px;
+  min-height:32px;
+}
+.pList{ margin:16px 0 0; padding-left:18px; color:var(--txt); }
+.pList li{ margin:8px 0; line-height:1.5; }
+
+/* Remove hover jumping (premium) */
+.pItem:hover, .heroBlock:hover{ transform:none; box-shadow:var(--shadow2); }
+
+/* Special cards */
+#calcCard{ padding:26px; }
+#proCard{
+  background:linear-gradient(135deg, rgba(14,165,164,.10), rgba(79,70,229,.10));
+  border:1px solid rgba(14,165,164,.22);
+  box-shadow:0 12px 40px rgba(16,24,40,.08);
+}
+
+/* Mode buttons */
+.heroModes{ display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
+.heroBtn{
+  padding:10px 14px;
+  border-radius:999px;
+  background:rgba(16,24,40,.03);
+  border:1px solid rgba(16,24,40,.10);
+  font-weight:900;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.heroBtn svg{ width:18px; height:18px; }
+.heroBtn.active{
+  background:rgba(14,165,164,.12);
+  border-color:rgba(14,165,164,.35);
+}
+
 /* Bulk table */
 .bulkWrap{
   overflow:auto;
@@ -983,14 +364,12 @@ input.mini{
   border-radius:16px;
   background:#fff;
 }
-
 #bulkTable{
   width:100%;
   border-collapse:separate;
   border-spacing:0;
   min-width:900px;
 }
-
 #bulkTable th, #bulkTable td{
   padding:10px;
   border-bottom:1px solid rgba(16,24,40,.06);
@@ -998,14 +377,12 @@ input.mini{
   text-align:left;
   vertical-align:middle;
 }
-
 #bulkTable th{
   position:sticky;
   top:0;
   background:#fff;
   z-index:2;
 }
-
 input.mini{
   width:100%;
   padding:8px 10px;
@@ -1014,8 +391,37 @@ input.mini{
   font-size:13px;
 }
 
-    
-  </style>
+/* Footer */
+.pp-footer{
+  margin-top:80px;
+  padding:44px 0;
+  background:#0f172a;
+  color:#cbd5e1;
+}
+.pp-footbox{ max-width:1100px; margin:auto; padding:0 20px; }
+.pp-footgrid{ display:grid; grid-template-columns:1fr 1fr; gap:40px; }
+@media(max-width:768px){ .pp-footgrid{ grid-template-columns:1fr; } }
+
+.pp-footbrand b{ color:#fff; font-size:18px; }
+.pp-footmut{ margin-top:10px; font-size:13px; line-height:1.6; color:rgba(226,232,240,.70); }
+.pp-footlinks{ display:flex; flex-wrap:wrap; gap:12px; }
+.pp-footlinks a{ color:#cbd5e1; font-weight:600; font-size:14px; text-decoration:none; opacity:.85; }
+.pp-footlinks a:hover{ opacity:1; }
+
+.pp-footbottom{
+  margin-top:40px;
+  padding-top:20px;
+  border-top:1px solid rgba(255,255,255,.08);
+  display:flex;
+  justify-content:space-between;
+  font-size:13px;
+  color:rgba(226,232,240,.60);
+}
+@media(max-width:768px){
+  .pp-footbottom{ flex-direction:column; gap:10px; }
+}
+</style>
+
 </head>
 
 <body>
