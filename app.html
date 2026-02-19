@@ -39,6 +39,33 @@
   --bad:#ef4444;
   --ok:#0ea5a4;
 }
+    /* Themes */
+:root[data-theme="day"]{
+  --bg:#f6f8fb;
+  --bg2:#eef2ff;
+  --txt:#0b1220;
+  --card:#ffffff;
+  --line:rgba(16,24,40,.08);
+}
+:root[data-theme="soft"]{
+  --bg:#fbfbff;
+  --bg2:#f3f4ff;
+  --txt:#0b1220;
+  --card:#ffffff;
+  --line:rgba(16,24,40,.10);
+}
+:root[data-theme="midnight"]{
+  --bg:#0b1220;
+  --bg2:#0f172a;
+  --txt:#eaf0ff;
+  --card:#111827;
+  --line:rgba(255,255,255,.10);
+}
+
+body{ color:var(--txt); }
+.card,.heroBlock{ background:var(--card); border-color:var(--line); }
+.pp-headerbar{ background:var(--card); border-color:var(--line); }
+
     .banner{
   display:none;
   margin-bottom:20px;
@@ -181,9 +208,22 @@ a:hover{text-decoration:underline}
 }
 
 .grid{
+  display:grid;
+  grid-template-columns: 1.25fr .75fr;
+  gap:22px;
+  align-items:start;
+}
+
+/* Right column stack */
+.rightSide{
   display:flex;
   flex-direction:column;
-  gap:24px;
+  gap:22px;
+}
+
+/* Mobile */
+@media (max-width: 1000px){
+  .grid{ grid-template-columns:1fr; }
 }
 
 /* ================= CARDS ================= */
@@ -755,6 +795,11 @@ input:focus, select:focus, textarea:focus{
             <a class="btn ghost" href="help.html">How to use</a>
             <a class="btn primary" href="login.html" id="accountLink">Account</a>
             <span class="pill" id="accessPill">—</span>
+            <select class="btn" id="themeSel" aria-label="Theme">
+  <option value="day">Day</option>
+  <option value="soft">Soft</option>
+  <option value="midnight">Midnight</option>
+</select>
             <button class="btn" id="logoutBtn" type="button">Log out</button>
           </nav>
         </div>
@@ -804,10 +849,6 @@ input:focus, select:focus, textarea:focus{
     Bulk Testing
   </button>
 </div>
-
-
-
-       
 
         <div class="divider"></div>
 
@@ -1008,44 +1049,62 @@ input:focus, select:focus, textarea:focus{
  
 
       <!-- RIGHT -->
-      
-        
+      <section class="heroBlock heroInsights" id="insightsBox">
+  <div class="pHead">
+    <div>
+      <div class="title">Pricing Intelligence (PRO)</div>
+      <div class="small">Decision support from your inputs (estimates only).</div>
+    </div>
+    <span class="tag" id="insStatus">Locked</span>
+  </div>
 
-        <section class="heroBlock heroInsights" id="insightsBox">
+  <div class="pGrid">
+    <div class="pItem">
+      <div class="t">Break-even price</div>
+      <div class="v" id="bePrice">—</div>
+    </div>
 
+    <!-- IMPORTANT: your JS expects this id, so keep it -->
+    <div class="pItem">
+      <div class="t">Target margin price</div>
+      <div class="v" id="targetMarginPrice">—</div>
+      <div class="small">Price to hit target margin</div>
+    </div>
 
-            <div class="pHead">
-              <div>
+    <div class="pItem">
+      <div class="t">Max ads % you can afford</div>
+      <div class="v" id="maxAdsPct">—</div>
+      <div class="small">Keeps profit ≥ 0</div>
+    </div>
 
-                
-                <div class="title">Pricing Intelligence (PRO)</div>
+    <div class="pItem">
+      <div class="t">Risk rating</div>
+      <div class="v" id="riskLabel">—</div>
+      <div class="small" id="riskExplain">—</div>
+    </div>
+  </div>
 
-                <div class="small">Decision support from your inputs (estimates only).</div>
-              </div>
-              <span class="tag" id="insStatus">Locked</span>
-            </div>
+  <ul class="pList" id="insBullets">
+    <li>Unlock PRO to see insights.</li>
+  </ul>
 
-            <div class="pGrid">
-              <div class="pItem"><div class="t">Break-even price</div><div class="v" id="bePrice">—</div></div>
-              
-              <div class="pItem"><div class="t">Max ads % you can afford</div><div class="v" id="maxAdsPct">—</div><div class="small">Keeps profit ≥ 0</div></div>
-              <div class="pItem"><div class="t">Risk rating</div><div class="v" id="riskLabel">—</div><div class="small" id="riskExplain">—</div></div>
-            </div>
+  <!-- IMPORTANT: your JS expects both #targetMarginVal and #targetMarginInput -->
+  <div class="small" style="margin-top:10px">
+    Target margin: <b id="targetMarginVal">15%</b>
+  </div>
 
-            <ul class="pList" id="insBullets"><li>Unlock PRO to see insights.</li></ul>
-
-            <div class="row" style="margin-top:10px">
-              <div>
-                <label>Target margin (%)</label>
-                <input id="targetMarginInput" inputmode="decimal" value="15">
-              </div>
-              <div style="display:flex;align-items:end;gap:10px;flex-wrap:wrap">
-                <button class="btn" id="refreshInsightsBtn" type="button">Refresh insights</button>
-                <span class="pill" id="insToast">—</span>
-              </div>
-            </div>
-          </div>
-        </div>
+  <div class="row" style="margin-top:10px">
+    <div>
+      <label>Target margin (%)</label>
+      <input id="targetMarginInput" inputmode="decimal" value="15">
+    </div>
+    <div style="display:flex;align-items:end;gap:10px;flex-wrap:wrap">
+      <button class="btn" id="refreshInsightsBtn" type="button">Refresh insights</button>
+      <span class="pill" id="insToast">—</span>
+    </div>
+  </div>
+</section>
+         
 
           <section class="heroBlock heroCompetitor" id="compBox">
 
@@ -1330,7 +1389,6 @@ input:focus, select:focus, textarea:focus{
     const proCard = document.getElementById("proCard");
     const reverseHint = document.getElementById("reverseHint");
 
-
     const pdfBtn = document.getElementById("pdfBtn");
     const shareBtn = document.getElementById("shareBtn");
 
@@ -1360,6 +1418,19 @@ input:focus, select:focus, textarea:focus{
     const fxRow = document.getElementById("fxRow");
     const fxOut = document.getElementById("fxOut");
     const fxNote = document.getElementById("fxNote");
+
+    const themeSel = document.getElementById("themeSel");
+function setTheme(t){
+  document.documentElement.setAttribute("data-theme", t);
+  try{ localStorage.setItem("pp_theme", t); }catch(e){}
+}
+(function initTheme(){
+  const saved = (localStorage.getItem("pp_theme") || "day");
+  setTheme(saved);
+  if (themeSel) themeSel.value = saved;
+})();
+themeSel?.addEventListener("change", ()=> setTheme(themeSel.value));
+
 
     // Insights
     const insStatus = document.getElementById("insStatus");
@@ -1926,15 +1997,11 @@ function setMode(m){
       if (proCard) proCard.style.display = isPro ? "none" : "block";
     }
 
-    if (isPro){
-  compStatus.classList.add("pro");
-  insStatus.classList.add("pro");
-} else {
-  compStatus.classList.remove("pro");
-  insStatus.classList.remove("pro");
+    function updateProTags(){
+  const pro = !!CURRENT_PROFILE?.paid;
+  if (compStatus) compStatus.classList.toggle("pro", pro);
+  if (insStatus) insStatus.classList.toggle("pro", pro);
 }
-
-    
 
     function updateAccessUI(profile){
       CURRENT_PROFILE = profile;
