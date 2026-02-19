@@ -794,6 +794,21 @@ input:focus, select:focus, textarea:focus{
   color: var(--muted) !important;
   line-height: 1.55 !important;
 }
+/* ✅ Step 6: top KPI strip = premium dashboard feel */
+.kpiTop{
+  margin-top:14px !important;
+}
+.kpiTop .k{
+  background:#fff !important;
+  border:1px solid rgba(16,24,40,.08) !important;
+}
+.kpiTop .v{
+  font-size:24px !important;
+}
+/* ✅ Step 8: consistent spacing = premium */
+.heroBlock .divider{ margin: 18px 0 !important; }
+.heroBlock label{ margin-top: 12px !important; }
+.heroBlock .row{ margin-top: 10px; }
 
   </style>
 </head>
@@ -850,6 +865,16 @@ input:focus, select:focus, textarea:focus{
      <section class="heroBlock" id="calcCard">
         <div class="title">Pricing Command Center</div>
 <div class="small">Know your real profit after fees, ads and returns. Reverse = target profit → required price. Bulk = test multiple items fast.</div>
+<div class="kpi kpiTop">
+  <div class="k">
+    <div class="h">Profit</div>
+    <div class="v" id="kpiProfitTop">—</div>
+  </div>
+  <div class="k">
+    <div class="h">Margin</div>
+    <div class="v" id="kpiMarginTop">—</div>
+  </div>
+</div>
 
 <div class="heroModes">
   <button class="heroBtn active" data-mode="profit" type="button">
@@ -1855,6 +1880,9 @@ sellPriceEl?.addEventListener("input", ()=>{
 
       if (o1v) o1v.textContent = money(r.profit);
       if (o2v) o2v.textContent = pct(r.margin);
+      document.getElementById("kpiProfitTop")?.textContent = money(r.profit);
+document.getElementById("kpiMarginTop")?.textContent = pct(r.margin);
+
       if (feesOut) feesOut.textContent = money(r.fees);
       if (returnOut) returnOut.textContent = money(r.expectedReturnImpact);
 
