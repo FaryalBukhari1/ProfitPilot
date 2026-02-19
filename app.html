@@ -578,7 +578,159 @@ input,select,textarea{
   }
 }
 
+/* =========================================================
+   PROFITPILOT — PREMIUM UI OVERRIDE (PASTE AT END)
+   Goal: clean SaaS, less glow, less noise, better spacing.
+   ========================================================= */
 
+/* ---------- Base clean background ---------- */
+:root{
+  --bg:#f6f8fb;
+  --txt:#0b1220;
+  --muted:#5b6474;
+  --line:rgba(16,24,40,.08);
+  --card:#ffffff;
+  --shadow:0 10px 30px rgba(16,24,40,.06);
+  --shadow2:0 18px 60px rgba(16,24,40,.08);
+}
+
+body{
+  background:var(--bg) !important;
+}
+
+/* ---------- Header: slimmer + premium ---------- */
+.pp-header{ padding:14px 0 !important; }
+.pp-headerbar{
+  border-radius:16px !important;
+  padding:12px 14px !important;
+  box-shadow:var(--shadow) !important;
+}
+.pp-logo{
+  width:38px !important;
+  height:38px !important;
+  border-radius:12px !important;
+  background:rgba(16,24,40,.04) !important;
+}
+.pp-title{ font-size:15px !important; }
+.pp-sub{ font-size:12px !important; }
+
+/* ---------- Buttons: consistent + less “puffy” ---------- */
+.btn{
+  box-shadow:none !important;
+  padding:9px 14px !important;
+  border-radius:999px !important;
+  font-weight:800 !important;
+  border:1px solid var(--line) !important;
+  background:#fff !important;
+}
+.btn:hover{ background:rgba(16,24,40,.03) !important; }
+
+.btn.primary{
+  background:#0ea5a4 !important;
+  color:white !important;
+  border-color:transparent !important;
+}
+.btn.primary:hover{
+  background:#0b9a99 !important;
+}
+
+/* You used class "ghost" in HTML but didn't define it cleanly */
+.btn.ghost{
+  background:transparent !important;
+}
+
+/* ---------- Main container spacing ---------- */
+.wrap{
+  max-width:1100px !important;
+  margin:26px auto 90px !important;
+  padding:0 18px !important;
+}
+.grid{ gap:22px !important; }
+
+/* ---------- All cards: one calm style ---------- */
+.card, .heroBlock{
+  background:var(--card) !important;
+  border:1px solid var(--line) !important;
+  border-radius:18px !important;
+  box-shadow:var(--shadow2) !important;
+  padding:22px !important;
+  transform:none !important;
+}
+.heroBlock::before{ display:none !important; }
+.heroBlock::after{ display:none !important; }
+
+/* remove hover lifting everywhere */
+.pItem:hover,
+.heroBlock:hover{
+  transform:none !important;
+  box-shadow:var(--shadow2) !important;
+}
+
+/* ---------- Headings: tighter + consistent ---------- */
+.title{
+  font-size:20px !important;
+  margin:0 0 10px !important;
+}
+.small{
+  font-size:13.5px !important;
+  color:var(--muted) !important;
+}
+
+/* ---------- Hero mode buttons: calmer ---------- */
+.heroModes{ gap:10px !important; }
+.heroBtn{
+  padding:10px 14px !important;
+  border-radius:999px !important;
+  border:1px solid rgba(16,24,40,.10) !important;
+  background:rgba(16,24,40,.03) !important;
+  font-weight:900 !important;
+}
+.heroBtn svg{ width:18px; height:18px; }
+.heroBtn.active{
+  background:rgba(14,165,164,.10) !important;
+  border-color:rgba(14,165,164,.35) !important;
+  box-shadow:none !important;
+}
+
+/* ---------- Inputs: SaaS-grade ---------- */
+input, select, textarea{
+  border-radius:14px !important;
+  border:1px solid rgba(16,24,40,.10) !important;
+  background:#fff !important;
+  padding:12px 14px !important;
+}
+input:focus, select:focus, textarea:focus{
+  outline:none !important;
+  border-color:rgba(14,165,164,.45) !important;
+  box-shadow:0 0 0 4px rgba(14,165,164,.10) !important;
+}
+
+/* ---------- KPI tiles: make them look aligned ---------- */
+.kpi{ gap:14px !important; }
+.k{
+  border-radius:16px !important;
+  padding:16px !important;
+  box-shadow:none !important;
+  background:rgba(16,24,40,.02) !important;
+}
+.k .v{ font-size:22px !important; }
+
+/* ---------- Insights tiles: remove extra heavy shadows ---------- */
+.pItem{
+  border-radius:16px !important;
+  box-shadow:none !important;
+  background:rgba(16,24,40,.02) !important;
+}
+
+/* ---------- Footer: reduce contrast + make elegant ---------- */
+.pp-footer{
+  margin-top:80px !important;
+  padding:44px 0 !important;
+  background:#0b1220 !important;
+}
+.pp-footmut{ color:rgba(226,232,240,.70) !important; }
+.pp-footlinks a{ opacity:.85 !important; }
+.pp-footbottom{ color:rgba(226,232,240,.60) !important; }
 
   </style>
 </head>
