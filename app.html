@@ -332,8 +332,8 @@
     /* Main layout */
    .wrap{
   max-width:1100px;
-  margin:0 auto 90px;  
-  padding:0 18px;
+  margin:0 auto 90px;
+  padding:12px 18px 0;
 }
     .grid{
       display:grid;
@@ -646,6 +646,25 @@
 /* Push your content down so it never goes under the sticky header */
 main.wrap{
   padding-top: var(--ppHeaderOffset);
+}
+    /* STOP content moving behind header (make header fully solid) */
+.pp-header { backdrop-filter: none !important; }
+.pp-headerbar { background: var(--card) !important; }
+    .pp-headerbar { background: #ffffff !important; }
+:root[data-theme="midnight"] .pp-headerbar { background: #0f172a !important; }
+    /* ===== PRO HEADER SCROLL EFFECT ===== */
+
+.pp-header{
+  transition: all .25s ease;
+}
+
+.pp-header.scrolled{
+  padding: 6px 0;
+}
+
+.pp-header.scrolled .pp-headerbar{
+  box-shadow: 0 8px 24px rgba(16,24,40,.12);
+  border-radius: 14px;
 }
   </style>
 </head>
@@ -1232,6 +1251,7 @@ main.wrap{
   </footer>
 
   <script type="module">
+    
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
     const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
@@ -2727,6 +2747,16 @@ window.addEventListener("resize", setHeaderOffset);
       }
       history.replaceState(null, "", location.pathname);
     }
+
+    const header = document.querySelector(".pp-header");
+
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 20) {
+    header.classList.add("scrolled");
+  } else {
+    header.classList.remove("scrolled");
+  }
+});
 
     // Boot
     (async ()=>{
