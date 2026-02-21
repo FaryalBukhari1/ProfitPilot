@@ -146,8 +146,8 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  padding: 0;
-  backdrop-filter: none;
+  padding: 14px 0;
+  backdrop-filter:saturate(140%) blur(8px);
 }
 
 .pp-headerbar{
@@ -488,7 +488,7 @@
     /* Right column sticky */
     .rightSide{
       position:sticky;
-      top:92px; /* below sticky header */
+      top: calc(var(--ppHeaderOffset) + 12px);
       align-self:start;
       display:flex;
       flex-direction:column;
@@ -639,21 +639,13 @@
     :root{
   --headerH: 108px; /* adjust this number if needed */
 }
-
-/* Make header truly "on top" */
-.pp-header{
-  position: fixed;   /* fixed = it never pushes content underneath */
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 9999;
-  padding: 0;
+:root{
+  --ppHeaderOffset: 0px; /* JS will set this */
 }
 
-/* Push the page DOWN so it starts below header */
+/* Push your content down so it never goes under the sticky header */
 main.wrap{
-  margin-top: 0;                 
-  padding-top: var(--headerH);   
+  padding-top: var(--ppHeaderOffset);
 }
   </style>
 </head>
@@ -1360,6 +1352,20 @@ main.wrap{
     const fxNote = document.getElementById("fxNote");
 
     const tpCurrency = document.getElementById("tpCurrency");
+
+    function setHeaderOffset(){
+  const header = document.querySelector(".pp-header");
+  if (!header) return;
+
+  // how tall the sticky header is (includes both rows)
+  const h = header.offsetHeight;
+
+  // set CSS variable so main content starts below it
+  document.documentElement.style.setProperty("--ppHeaderOffset", h + "px");
+}
+
+setHeaderOffset();
+window.addEventListener("resize", setHeaderOffset);
 
     // Right side
     const insStatus = document.getElementById("insStatus");
