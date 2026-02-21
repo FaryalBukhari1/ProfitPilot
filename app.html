@@ -330,11 +330,11 @@
     .pp-trusttxt b{ color:var(--txt); }
 
     /* Main layout */
-    .wrap{
-      max-width:1100px;
-      margin:22px auto 90px;
-      padding:0 18px;
-    }
+   .wrap{
+  max-width:1100px;
+  margin:0 auto 90px;  
+  padding:0 18px;
+}
     .grid{
       display:grid;
       grid-template-columns:1.65fr 1fr;
@@ -636,6 +636,25 @@
       .pp-nav{ width:100%; justify-content:flex-start; }
       .select{ max-width:100%; }
     }
+    :root{
+  --headerH: 108px; /* adjust this number if needed */
+}
+
+/* Make header truly "on top" */
+.pp-header{
+  position: fixed;   /* fixed = it never pushes content underneath */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  padding: 0;
+}
+
+/* Push the page DOWN so it starts below header */
+main.wrap{
+  margin-top: 0;                 
+  padding-top: var(--headerH);   
+}
   </style>
 </head>
 
