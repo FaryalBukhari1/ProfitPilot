@@ -142,19 +142,14 @@
     .pp-wrap{ max-width:1200px; margin:0 auto; padding:0 20px; }
 
     /* Header */
-    .pp-header{
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  padding: 14px 0;
-  backdrop-filter:saturate(140%) blur(8px);
-}
-
-.pp-headerbar{
-  background: var(--card);
-  border-radius: 0 0 20px 20px;
-  box-shadow: none;
-}
+    .pp-header{ position:sticky; top:0; z-index:50; padding:14px 0; backdrop-filter:saturate(140%) blur(8px); }
+    .pp-headerbar{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:20px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
 
     .pp-toprow{
       display:flex;
@@ -330,11 +325,11 @@
     .pp-trusttxt b{ color:var(--txt); }
 
     /* Main layout */
-   .wrap{
-  max-width:1100px;
-  margin:0 auto 90px;
-  padding:12px 18px 0;
-}
+    .wrap{
+      max-width:1100px;
+      margin:22px auto 90px;
+      padding:0 18px;
+    }
     .grid{
       display:grid;
       grid-template-columns:1.65fr 1fr;
@@ -488,7 +483,7 @@
     /* Right column sticky */
     .rightSide{
       position:sticky;
-      top: calc(var(--ppHeaderOffset) + 12px);
+      top:92px; /* below sticky header */
       align-self:start;
       display:flex;
       flex-direction:column;
@@ -636,36 +631,6 @@
       .pp-nav{ width:100%; justify-content:flex-start; }
       .select{ max-width:100%; }
     }
-    :root{
-  --headerH: 108px; /* adjust this number if needed */
-}
-:root{
-  --ppHeaderOffset: 0px; /* JS will set this */
-}
-
-/* Push your content down so it never goes under the sticky header */
-main.wrap{
-  padding-top: var(--ppHeaderOffset);
-}
-    /* STOP content moving behind header (make header fully solid) */
-.pp-header { backdrop-filter: none !important; }
-.pp-headerbar { background: var(--card) !important; }
-    .pp-headerbar { background: #ffffff !important; }
-:root[data-theme="midnight"] .pp-headerbar { background: #0f172a !important; }
-    /* ===== PRO HEADER SCROLL EFFECT ===== */
-
-.pp-header{
-  transition: all .25s ease;
-}
-
-.pp-header.scrolled{
-  padding: 6px 0;
-}
-
-.pp-header.scrolled .pp-headerbar{
-  box-shadow: 0 8px 24px rgba(16,24,40,.12);
-  border-radius: 14px;
-}
   </style>
 </head>
 
@@ -1251,7 +1216,6 @@ main.wrap{
   </footer>
 
   <script type="module">
-    
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
     const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
@@ -1372,20 +1336,6 @@ main.wrap{
     const fxNote = document.getElementById("fxNote");
 
     const tpCurrency = document.getElementById("tpCurrency");
-
-    function setHeaderOffset(){
-  const header = document.querySelector(".pp-header");
-  if (!header) return;
-
-  // how tall the sticky header is (includes both rows)
-  const h = header.offsetHeight;
-
-  // set CSS variable so main content starts below it
-  document.documentElement.style.setProperty("--ppHeaderOffset", h + "px");
-}
-
-setHeaderOffset();
-window.addEventListener("resize", setHeaderOffset);
 
     // Right side
     const insStatus = document.getElementById("insStatus");
@@ -2747,16 +2697,6 @@ window.addEventListener("resize", setHeaderOffset);
       }
       history.replaceState(null, "", location.pathname);
     }
-
-    const header = document.querySelector(".pp-header");
-
-window.addEventListener("scroll", () => {
-  if (window.scrollY > 20) {
-    header.classList.add("scrolled");
-  } else {
-    header.classList.remove("scrolled");
-  }
-});
 
     // Boot
     (async ()=>{
