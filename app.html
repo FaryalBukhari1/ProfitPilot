@@ -1277,9 +1277,6 @@ function buildCheckoutUrl() {
   return url.toString();
 }
 
-const buyBtn = document.getElementById("buyProBtn");
-if (buyBtn) buyBtn.href = buildCheckoutUrl();
-
 // Apply to button
 const buyBtn = document.getElementById("buyProBtn");
 if (buyBtn) buyBtn.href = buildCheckoutUrl();
@@ -1899,12 +1896,12 @@ window.addEventListener("scroll", () => {
   }
 
   // 3) Lock presets + category + currency + fx
-  [presetSel, categorySel, currencyEl, fxRateEl].forEach(el=>{
-    if (!el) return;
-    el.disabled = true;
-    el.style.opacity = "0.6";
-    el.title = "Locked — requires PRO";
-  });
+  [presetSel, categorySel, fxRateEl].forEach(el=>{
+  if (!el) return;
+  el.disabled = true;
+  el.style.opacity = "0.6";
+  el.title = "Locked — requires PRO";
+});
 
   // 4) Lock advanced fields (fees/ads/returns)
   [feePctEl, feeFixedEl, adsPctEl, returnPctEl, targetProfitEl].forEach(el=>{
@@ -1984,17 +1981,46 @@ window.addEventListener("scroll", () => {
     function updateAccessUI(profile){
       CURRENT_PROFILE = profile;
 
-      if (profile?.paid){
-        if (accessPill){ accessPill.textContent = "Unlocked (PRO)"; accessPill.className = "pill ok"; }
-        if (reverseUsesLine) reverseUsesLine.textContent = "Reverse uses: Unlimited (PRO)";
-        if (compUsesLine) compUsesLine.textContent = "Competitor uses: Unlimited (PRO)";
-        enableProUI(true);
-        refreshBulkLimitLine();
-        refreshInsights();
-        refreshScenarioDropdown();
-        applyPostTrialLocks();
-        return;
-      }
+     function updateAccessUI(profile){
+  CURRENT_PROFILE = profile;
+
+  // PRO
+  if (profile?.paid){
+    if (accessPill){ accessPill.textContent = "Unlocked (PRO)"; accessPill.className = "pill ok"; }
+    if (reverseUsesLine) reverseUsesLine.textContent = "Reverse uses: Unlimited (PRO)";
+    if (compUsesLine) compUsesLine.textContent = "Competitor uses: Unlimited (PRO)";
+    enableProUI(true);
+    refreshBulkLimitLine();
+    refreshInsights();
+    refreshScenarioDropdown();
+    return;
+  }
+
+  // Not PRO
+  enableProUI(false);
+
+  const left = daysLeft(profile?.trial_start);
+
+  if (reverseUsesLine) reverseUsesLine.textContent = `Reverse uses: ${(profile?.reverse_uses ?? 0)}/${TRIAL_REVERSE_LIMIT} (Trial)`;
+  if (compUsesLine) compUsesLine.textContent = `Competitor uses: ${(profile?.comp_uses ?? 0)}/${TRIAL_COMP_LIMIT} (Trial)`;
+
+  if (accessPill){
+    if (left > 0){
+      accessPill.textContent = `Trial active • ${left} day(s) left`;
+      accessPill.className = "pill warn";
+    } else {
+      accessPill.textContent = "Trial ended • Simple mode";
+      accessPill.className = "pill bad";
+    }
+  }
+
+  refreshBulkLimitLine();
+  refreshInsights();
+  refreshScenarioDropdown();
+
+  // ✅ only lock AFTER trial ends
+  if (left <= 0) applyPostTrialLocks();
+}
 
       enableProUI(false);
       if (reverseUsesLine) reverseUsesLine.textContent = `Reverse uses: ${(profile?.reverse_uses ?? 0)}/${TRIAL_REVERSE_LIMIT} (Trial)`;
