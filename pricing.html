@@ -583,9 +583,10 @@
     document.getElementById("yr").textContent = new Date().getFullYear();
 
     // ✅ Set your checkout links here
-    const CHECKOUT_URL_PRO = "https://stonevia.gumroad.com/l/goddhg";
-    const CHECKOUT_URL_PROPLUS = "https://stonevia.gumroad.com/l/REPLACE_WITH_PROPLUS"; // <-- replace
-
+   // ✅ Paddle Hosted Checkout links
+const CHECKOUT_URL_PRO = "https://pay.paddle.io/hsc_01kjcns56g20crt51z8j2j9mqc_rrmv98b3szdmp9neyaxw5qmd5cjcb7ya";
+const CHECKOUT_URL_PROPLUS = "#"; // add PRO+ later
+    
     document.getElementById("buyProBtn").href = CHECKOUT_URL_PRO;
     document.getElementById("buyProPlusBtn").href = CHECKOUT_URL_PROPLUS;
 
