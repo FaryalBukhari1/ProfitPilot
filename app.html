@@ -20,20 +20,13 @@
   <!-- Microsoft Clarity -->
   <script>
     (function(c,l,a,r,i,t,y){
-      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)}
       t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
       y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "vjsgka2ywg");
   </script>
 
   <style>
-    /* =========================================================
-      PROFITPILOT — PREMIUM, ALIGNED, STABLE
-      - Header is now a 2-row layout (no wrap chaos)
-      - Selects have consistent styling (no "btn select" mismatch)
-      - Cleaner spacing + typography + calmer visuals
-      ========================================================= */
-
     :root{
       --bg:#f6f8fb;
       --bg2:#eef2ff;
@@ -74,16 +67,17 @@
       --inputBg:#fff;
     }
 
+    /* Soft now visibly different */
     :root[data-theme="soft"]{
-      --bg:#fbfbff;
-      --bg2:#f3f4ff;
+      --bg:#fffafc;
+      --bg2:#f4f6ff;
       --txt:#0b1220;
-      --muted:#5b6474;
+      --muted:#616a7a;
       --card:#ffffff;
-      --card2:rgba(255,255,255,.88);
-      --line:rgba(16,24,40,.12);
-      --line2:rgba(16,24,40,.09);
-      --inputBg:#fff;
+      --card2:rgba(255,255,255,.90);
+      --line:rgba(16,24,40,.10);
+      --line2:rgba(16,24,40,.07);
+      --inputBg:#ffffff;
     }
 
     :root[data-theme="midnight"]{
@@ -101,9 +95,7 @@
       --ring:rgba(14,165,164,.55);
     }
 
-    :root[data-theme="custom"]{
-      /* injected by JS */
-    }
+    :root[data-theme="custom"]{ /* injected by JS */ }
 
     *{ box-sizing:border-box; }
     html, body{ height:100%; }
@@ -138,25 +130,25 @@
     }
     .skip:focus{ left:12px; }
 
-    /* Containers */
     .pp-wrap{ max-width:1200px; margin:0 auto; padding:0 20px; }
 
     /* Header */
-    .pp-header{ position:static; top:auto; z-index:50; padding:14px 0; backdrop-filter:saturate(140%) blur(8px); }
+    .pp-header{ position:static; top:auto; z-index:50; padding:12px 0; backdrop-filter:saturate(140%) blur(8px); transition: all .25s ease; }
     .pp-headerbar{
       background:var(--card);
       border:1px solid var(--line);
       border-radius: 0 0 20px 20px;
       box-shadow:var(--shadow);
       overflow:hidden;
+      transition: all .25s ease;
     }
 
     .pp-toprow{
       display:flex;
       justify-content:space-between;
       align-items:center;
-      gap:16px;
-      padding:12px 14px;
+      gap:14px;
+      padding:10px 12px; /* tighter */
     }
 
     .pp-brand{ display:flex; align-items:center; gap:12px; min-width:220px; }
@@ -183,14 +175,6 @@
       min-width:0;
     }
 
-    /* Premium control group (no chaos) */
-    .navGroup{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex-wrap:nowrap;
-      min-width:0;
-    }
     .navScroll{
       display:flex;
       gap:10px;
@@ -200,13 +184,13 @@
       -webkit-overflow-scrolling:touch;
       padding-bottom:2px;
       max-width:100%;
+      scrollbar-width:none; /* Firefox */
     }
-    .navScroll::-webkit-scrollbar{ height:6px; }
-    .navScroll::-webkit-scrollbar-thumb{ background:rgba(16,24,40,.10); border-radius:999px; }
+    .navScroll::-webkit-scrollbar{ display:none; } /* Chrome/Safari */
 
     /* Buttons */
     .btn{
-      padding:10px 14px;
+      padding:9px 12px;
       border-radius:999px;
       border:1px solid var(--line);
       background:var(--inputBg);
@@ -242,12 +226,12 @@
     .pill.warn{ color:var(--warn); }
     .pill.bad{ color:var(--bad); }
 
-    /* Selects (DO NOT style as .btn) */
+    /* Selects */
     .select{
       appearance:none;
       -webkit-appearance:none;
       -moz-appearance:none;
-      padding:10px 38px 10px 14px;
+      padding:9px 38px 9px 12px;
       border-radius:999px;
       border:1px solid var(--line);
       background:var(--inputBg);
@@ -267,7 +251,6 @@
     }
     .select:focus{ outline:none; box-shadow:0 0 0 4px rgba(14,165,164,.12); border-color:rgba(14,165,164,.45); }
 
-    /* Custom theme controls -> only show when Custom selected */
     .pp-miniControl{
       display:none;
       align-items:center;
@@ -288,7 +271,7 @@
       cursor:pointer;
     }
 
-    /* Trust bar is now a proper second row */
+    /* Trust bar */
     .pp-trust{
       display:flex;
       gap:10px;
@@ -325,17 +308,8 @@
     .pp-trusttxt b{ color:var(--txt); }
 
     /* Main layout */
-    .wrap{
-  max-width:1100px;
-  margin:0 auto 90px;
-  padding:12px 18px 0;
-}
-    .grid{
-      display:grid;
-      grid-template-columns:1.65fr 1fr;
-      gap:22px;
-      align-items:start;
-    }
+    .wrap{ max-width:1100px; margin:0 auto 90px; padding:12px 18px 0; }
+    .grid{ display:grid; grid-template-columns:1.65fr 1fr; gap:22px; align-items:start; }
     @media (max-width:1000px){ .grid{ grid-template-columns:1fr; } }
 
     .card, .heroBlock{
@@ -346,27 +320,11 @@
       padding:22px;
     }
 
-    .title{
-      font-size:20px;
-      font-weight:1000;
-      margin:0 0 10px;
-      line-height:1.2;
-      letter-spacing:-0.3px;
-    }
-    .small{
-      font-size:13.5px;
-      color:var(--muted);
-      line-height:1.55;
-    }
+    .title{ font-size:20px; font-weight:1000; margin:0 0 10px; line-height:1.2; letter-spacing:-0.3px; }
+    .small{ font-size:13.5px; color:var(--muted); line-height:1.55; }
     .divider{ height:1px; background:var(--line2); margin:18px 0; }
 
-    label{
-      font-size:13px;
-      font-weight:1000;
-      margin:12px 0 6px;
-      display:block;
-      letter-spacing:-0.1px;
-    }
+    label{ font-size:13px; font-weight:1000; margin:12px 0 6px; display:block; letter-spacing:-0.1px; }
 
     input, select, textarea{
       width:100%;
@@ -379,20 +337,15 @@
     }
     :root[data-theme="midnight"] input,
     :root[data-theme="midnight"] select,
-    :root[data-theme="midnight"] textarea{
-      border-color:rgba(255,255,255,.16);
-    }
+    :root[data-theme="midnight"] textarea{ border-color:rgba(255,255,255,.16); }
+
     input:focus, select:focus, textarea:focus{
       outline:none;
       border-color:rgba(14,165,164,.45);
       box-shadow:0 0 0 4px rgba(14,165,164,.12);
     }
 
-    .row{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:14px;
-    }
+    .row{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
     @media(max-width:640px){ .row{ grid-template-columns:1fr; } }
 
     .kpi{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px; }
@@ -404,9 +357,8 @@
       border:1px solid var(--line2);
       background:rgba(16,24,40,.02);
     }
-    :root[data-theme="midnight"] .k{
-      background:rgba(255,255,255,.04);
-    }
+    :root[data-theme="midnight"] .k{ background:rgba(255,255,255,.04); }
+
     .k .h{ font-size:12px; color:var(--muted); font-weight:900; }
     .k .v{ font-size:22px; font-weight:1000; margin-top:8px; letter-spacing:-0.2px; }
 
@@ -450,10 +402,7 @@
     }
     .heroBtn:active{ transform:translateY(1px); }
     .heroBtn svg{ width:18px; height:18px; }
-    .heroBtn.active{
-      background:rgba(14,165,164,.12);
-      border-color:rgba(14,165,164,.40);
-    }
+    .heroBtn.active{ background:rgba(14,165,164,.12); border-color:rgba(14,165,164,.40); }
 
     /* Advanced toggle */
     .ppAdvanced{
@@ -480,24 +429,12 @@
     .ppAdvancedBody{ display:none; padding:14px; }
     .ppAdvanced.open .ppAdvancedBody{ display:block; }
 
-    /* Right column sticky */
-    .rightSide{
-      position:static;
-      top:auto;
-      align-self:start;
-      display:flex;
-      flex-direction:column;
-      gap:22px;
-    }
+    /* Right column */
+    .rightSide{ position:static; top:auto; align-self:start; display:flex; flex-direction:column; gap:22px; }
     @media (max-width:1000px){ .rightSide{ position:static; } }
 
     /* Summary card */
-    .ppSummaryGrid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-      margin-top:12px;
-    }
+    .ppSummaryGrid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px; }
     @media (max-width:1000px){ .ppSummaryGrid{ grid-template-columns:1fr; } }
 
     .ppSumItem{
@@ -514,12 +451,7 @@
       text-transform:uppercase;
       letter-spacing:.4px;
     }
-    .ppSumItem .v{
-      font-size:18px;
-      font-weight:1000;
-      margin-top:6px;
-      color:var(--txt);
-    }
+    .ppSumItem .v{ font-size:18px; font-weight:1000; margin-top:6px; color:var(--txt); }
 
     /* Tabs */
     .ppTabs{
@@ -552,11 +484,7 @@
       line-height:1;
     }
     :root[data-theme="midnight"] .ppTabBtn{ border-color:rgba(255,255,255,.16); }
-
-    .ppTabBtn.active{
-      border-color:rgba(14,165,164,.40);
-      background:rgba(14,165,164,.10);
-    }
+    .ppTabBtn.active{ border-color:rgba(14,165,164,.40); background:rgba(14,165,164,.10); }
     .ppTabPanel{ display:none; padding:16px; }
     .ppTabPanel.active{ display:block; }
 
@@ -624,27 +552,19 @@
     }
     @media(max-width:768px){ .pp-footbottom{ flex-direction:column; } }
 
-    /* Responsive: header stays clean */
     @media (max-width:900px){
       .pp-toprow{ align-items:flex-start; flex-direction:column; gap:12px; }
       .pp-brand{ width:100%; }
       .pp-nav{ width:100%; justify-content:flex-start; }
       .select{ max-width:100%; }
     }
-    /* ===== PRO HEADER SCROLL EFFECT ===== */
 
-.pp-header{
-  transition: all .25s ease;
-}
-
-.pp-header.scrolled{
-  padding: 6px 0;
-}
-
-.pp-header.scrolled .pp-headerbar{
-  box-shadow: 0 8px 24px rgba(16,24,40,.12);
-  border-radius: 14px;
-}
+    /* Header scroll */
+    .pp-header.scrolled{ padding:6px 0; }
+    .pp-header.scrolled .pp-headerbar{
+      box-shadow: 0 8px 24px rgba(16,24,40,.12);
+      border-radius: 14px;
+    }
   </style>
 </head>
 
@@ -655,7 +575,6 @@
     <div class="pp-wrap">
       <div class="pp-headerbar">
 
-        <!-- Row 1: brand + controls (stable) -->
         <div class="pp-toprow">
           <div class="pp-brand" aria-label="ProfitPilot">
             <div class="pp-logo" aria-hidden="true">PP</div>
@@ -692,7 +611,6 @@
           </nav>
         </div>
 
-        <!-- Row 2: Trust Bar (always aligned, never scattered) -->
         <div class="pp-trust" aria-label="Trust highlights">
           <div class="pp-trustitem" title="User feedback">
             <span class="pp-stars" aria-hidden="true">★★★★★</span>
@@ -765,7 +683,6 @@
 
           <div class="divider"></div>
 
-          <!-- Core inputs -->
           <label>Currency</label>
           <select id="currency">
             <option value="GBP">GBP (£)</option>
@@ -1234,25 +1151,32 @@
 
     const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
     const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
-const TRIAL_DAYS = 5;
-const TRIAL_REVERSE_LIMIT = 3;
-const TRIAL_COMP_LIMIT = 3;
-const TRIAL_BULK_MAX_ROWS = 3;
-const TRIAL_BULK_RUNS_PER_DAY = 1;
 
-let LOCKED = false;
+    const TRIAL_DAYS = 5;
+    const TRIAL_REVERSE_LIMIT = 3;
+    const TRIAL_COMP_LIMIT = 3;
+    const TRIAL_BULK_MAX_ROWS = 3;
+    const TRIAL_BULK_RUNS_PER_DAY = 1;
 
-function isTrialEnded(profile){
-  if (!profile) return false;
-  if (profile.paid) return false;          // PRO never locks
-  const left = daysLeft(profile.trial_start);
-  return left <= 0;
-}
+    let LOCKED = false;
 
-function recomputeLocked(profile){
-  LOCKED = isTrialEnded(profile);
-  return LOCKED;
-}
+    function daysLeft(trialStartISO){
+      const start = new Date(trialStartISO).getTime();
+      const elapsedDays = (Date.now() - start) / (1000*60*60*24);
+      return Math.max(0, Math.ceil(TRIAL_DAYS - elapsedDays));
+    }
+
+    function isTrialEnded(profile){
+      if (!profile) return false;
+      if (profile.paid) return false; // PRO never locks
+      const left = daysLeft(profile.trial_start);
+      return left <= 0;
+    }
+
+    function recomputeLocked(profile){
+      LOCKED = isTrialEnded(profile);
+      return LOCKED;
+    }
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON, {
       auth: {
@@ -1269,28 +1193,23 @@ function recomputeLocked(profile){
     }
 
     // ---------- Paddle checkout URL + PH discount ----------
-const CHECKOUT_URL = "https://pay.paddle.io/hsc_01kjcns56g20crt51z8j2j9mqc_rrmv98b3szdmp9neyaxw5qmd5cjcb7ya";
-const DEFAULT_CODE = "PP30PH";
-
-function getDiscountCode() {
-  const p = new URLSearchParams(location.search);
-  return (p.get("code") || p.get("discount") || "").trim() || DEFAULT_CODE;
-}
-
-function buildCheckoutUrl() {
-  const url = new URL(CHECKOUT_URL);
-  const code = getDiscountCode();
-  if (code) url.searchParams.set("discount", code);
-  return url.toString();
-}
-
-// Apply to button
-const buyBtn = document.getElementById("buyProBtn");
-if (buyBtn) buyBtn.href = buildCheckoutUrl();
+    const CHECKOUT_URL = "https://pay.paddle.io/hsc_01kjcns56g20crt51z8j2j9mqc_rrmv98b3szdmp9neyaxw5qmd5cjcb7ya";
+    const DEFAULT_CODE = "PP30PH";
+    function getDiscountCode() {
+      const p = new URLSearchParams(location.search);
+      return (p.get("code") || p.get("discount") || "").trim() || DEFAULT_CODE;
+    }
+    function buildCheckoutUrl() {
+      const url = new URL(CHECKOUT_URL);
+      const code = getDiscountCode();
+      if (code) url.searchParams.set("discount", code);
+      return url.toString();
+    }
+    const buyBtn = document.getElementById("buyProBtn");
+    if (buyBtn) buyBtn.href = buildCheckoutUrl();
 
     // Helpers
     const CURRENCY_SYMBOL = { GBP:"£", USD:"$", EUR:"€", AUD:"$", CAD:"$", NZD:"$", AED:"AED ", SAR:"SAR ", PKR:"₨", INR:"₹" };
-
     function n(v){ const x = parseFloat(String(v ?? "").replace(/,/g,"")); return Number.isFinite(x) ? x : 0; }
     function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
     function todayKeyUTC(){
@@ -1299,11 +1218,6 @@ if (buyBtn) buyBtn.href = buildCheckoutUrl();
       const m = String(d.getUTCMonth()+1).padStart(2,"0");
       const day = String(d.getUTCDate()).padStart(2,"0");
       return `${y}-${m}-${day}`;
-    }
-    function daysLeft(trialStartISO){
-      const start = new Date(trialStartISO).getTime();
-      const elapsedDays = (Date.now() - start) / (1000*60*60*24);
-      return Math.max(0, Math.ceil(TRIAL_DAYS - elapsedDays));
     }
     function autoZero(el){
       if (!el) return;
@@ -1343,6 +1257,7 @@ if (buyBtn) buyBtn.href = buildCheckoutUrl();
     // DOM
     const accessPill = document.getElementById("accessPill");
     const reverseUsesLine = document.getElementById("reverseUsesLine");
+    const compUsesLine = document.getElementById("compUsesLine");
     const bulkLimitLine = document.getElementById("bulkLimitLine");
     const shareStatus = document.getElementById("shareStatus");
     const bulkStatus = document.getElementById("bulkStatus");
@@ -1398,7 +1313,6 @@ if (buyBtn) buyBtn.href = buildCheckoutUrl();
     const insToast = document.getElementById("insToast");
 
     const compStatus = document.getElementById("compStatus");
-    const compUsesLine = document.getElementById("compUsesLine");
     const runCompBtn = document.getElementById("runCompBtn");
     const compToast = document.getElementById("compToast");
     const scenarioToast = document.getElementById("scenarioToast");
@@ -1441,6 +1355,9 @@ if (buyBtn) buyBtn.href = buildCheckoutUrl();
     const reverseBox = document.getElementById("reverseBox");
     const bulkBox = document.getElementById("bulkBox");
 
+    const advBox = document.getElementById("advBox");
+    const advToggle = document.getElementById("advToggle");
+
     // Footer years
     document.getElementById("yr").textContent = new Date().getFullYear();
     document.getElementById("yr2").textContent = new Date().getFullYear();
@@ -1473,15 +1390,13 @@ if (buyBtn) buyBtn.href = buildCheckoutUrl();
       }
     }
 
+    // Header scroll effect
     const header = document.querySelector(".pp-header");
-
-window.addEventListener("scroll", () => {
-  if (window.scrollY > 20) {
-    header.classList.add("scrolled");
-  } else {
-    header.classList.remove("scrolled");
-  }
-});
+    window.addEventListener("scroll", () => {
+      if (!header) return;
+      if (window.scrollY > 20) header.classList.add("scrolled");
+      else header.classList.remove("scrolled");
+    });
 
     // Theme + custom controls
     const themeSel = document.getElementById("themeSel");
@@ -1498,7 +1413,6 @@ window.addEventListener("scroll", () => {
       if (accentPick) accentPick.value = a;
       if (bgPick) bgPick.value = b;
     }
-
     function setTheme(t){
       document.documentElement.setAttribute("data-theme", t);
       try{ localStorage.setItem("pp_theme", t); }catch(e){}
@@ -1506,22 +1420,17 @@ window.addEventListener("scroll", () => {
       if (customControls) customControls.style.display = isCustom ? "flex" : "none";
       if (isCustom) applyCustomThemeVars();
     }
-
     (function initTheme(){
       const saved = (localStorage.getItem("pp_theme") || "day");
       setTheme(saved);
       if (themeSel) themeSel.value = saved;
       applyCustomThemeVars();
     })();
-
     themeSel?.addEventListener("change", ()=> setTheme(themeSel.value));
-
     function saveCustomVars(){
       localStorage.setItem("pp_custom_accent", accentPick?.value || "#0ea5a4");
       localStorage.setItem("pp_custom_bg", bgPick?.value || "#f6f8fb");
-      if (document.documentElement.getAttribute("data-theme") === "custom"){
-        applyCustomThemeVars();
-      }
+      if (document.documentElement.getAttribute("data-theme") === "custom") applyCustomThemeVars();
     }
     accentPick?.addEventListener("input", saveCustomVars);
     bgPick?.addEventListener("input", saveCustomVars);
@@ -1540,8 +1449,6 @@ window.addEventListener("scroll", () => {
     })();
 
     // Advanced toggle
-    const advBox = document.getElementById("advBox");
-    const advToggle = document.getElementById("advToggle");
     advToggle?.addEventListener("click", ()=> advBox?.classList.toggle("open"));
 
     // Presets
@@ -1684,9 +1591,7 @@ window.addEventListener("scroll", () => {
       const preset = getPresetById(presetSel.value || "manual");
       showCategories(preset);
       let catObj = null;
-      if (preset.categories && preset.categories.length && categorySel){
-        catObj = preset.categories[0];
-      }
+      if (preset.categories && preset.categories.length && categorySel) catObj = preset.categories[0];
       setFeesFromPreset(preset, catObj);
     })();
 
@@ -1802,11 +1707,14 @@ window.addEventListener("scroll", () => {
 
     // Modes
     let MODE = "profit";
+
     function setMode(m){
-      if (isTrialEnded(CURRENT_PROFILE) && (m === "reverse" || m === "bulk")){
-  if (shareStatus) shareStatus.textContent = "Locked — requires PRO";
-  return;
-}
+      // Use single source of truth
+      if (LOCKED && (m === "reverse" || m === "bulk")){
+        if (shareStatus) shareStatus.textContent = "Locked — requires PRO";
+        return;
+      }
+
       MODE = m;
 
       document.querySelectorAll(".heroBtn").forEach(btn=>{
@@ -1876,199 +1784,134 @@ window.addEventListener("scroll", () => {
     }
 
     function applyPostTrialLocks(){
-  const locked = isTrialEnded(CURRENT_PROFILE);
+      const locked = isTrialEnded(CURRENT_PROFILE);
+      if (!locked) return;
 
-  // If not locked, do nothing
-  if (!locked) return;
+      // Force mode to profit
+      MODE = "profit";
+      setMode("profit");
 
-  // 1) Force mode to "profit" only
-  setMode("profit");
+      // Disable reverse + bulk buttons
+      document.querySelectorAll(".heroBtn").forEach(btn=>{
+        const m = btn.dataset.mode;
+        if (m === "reverse" || m === "bulk"){
+          btn.disabled = true;
+          btn.style.opacity = "0.5";
+          btn.style.cursor = "not-allowed";
+          btn.title = "Locked — requires PRO";
+        }
+      });
 
-  // Disable Reverse + Bulk mode buttons
-  document.querySelectorAll(".heroBtn").forEach(btn=>{
-    const m = btn.dataset.mode;
-    if (m === "reverse" || m === "bulk"){
-      btn.disabled = true;
-      btn.style.opacity = "0.5";
-      btn.style.cursor = "not-allowed";
-      btn.title = "Locked — requires PRO";
+      // Lock advanced box
+      if (advBox){
+        advBox.classList.remove("open");
+        advBox.style.opacity = "0.55";
+        advBox.style.pointerEvents = "none";
+      }
+
+      // Lock fee/preset controls
+      [presetSel, categorySel, fxRateEl].forEach(el=>{
+        if (!el) return;
+        el.disabled = true;
+        el.style.opacity = "0.6";
+        el.title = "Locked — requires PRO";
+      });
+
+      [feePctEl, feeFixedEl, adsPctEl, returnPctEl, targetProfitEl].forEach(el=>{
+        if (!el) return;
+        el.disabled = true;
+        el.style.opacity = "0.6";
+        el.title = "Locked — requires PRO";
+      });
+
+      if (pdfBtn) pdfBtn.disabled = true;
+      if (shareBtn) shareBtn.disabled = true;
+
+      // Lock competitor + insights controls
+      [runCompBtn, c1, c2, c3, positioning, floorBuffer].forEach(el=>{
+        if (!el) return;
+        el.disabled = true;
+        el.style.opacity = "0.6";
+        el.title = "Locked — requires PRO";
+      });
+      [targetMarginInput, refreshInsightsBtn].forEach(el=>{
+        if (!el) return;
+        el.disabled = true;
+        el.style.opacity = "0.6";
+        el.title = "Locked — requires PRO";
+      });
+
+      // Hide tabs/panels
+      ["insightsTab","competitorTab","savedTab"].forEach(id=>{
+        const panel = document.getElementById(id);
+        if (panel) panel.style.display = "none";
+      });
+      document.querySelectorAll(".ppTabBtn").forEach(btn=>{
+        const tab = btn.dataset.tab;
+        if (tab === "insightsTab" || tab === "competitorTab" || tab === "savedTab") btn.style.display = "none";
+      });
+
+      // Lock bulk tools
+      [bulkRunBtn, bulkAddRowBtn, bulkClearBtn, bulkApplyFeesBtn, bulkExportBtn, bulkImportBtn, bulkFillExampleBtn, bulkPasteEl].forEach(el=>{
+        if (!el) return;
+        el.disabled = true;
+        el.style.opacity = "0.6";
+        el.title = "Locked — requires PRO";
+      });
+
+      // Lock scenario buttons
+      [saveScenarioBtn, saveScenarioBtn2, loadScenarioBtn, deleteScenarioBtn].forEach(el=>{
+        if (!el) return;
+        el.disabled = true;
+        el.style.opacity = "0.6";
+        el.title = "Locked — requires PRO";
+      });
+
+      if (accessPill){
+        accessPill.textContent = "Trial ended • Simple mode";
+        accessPill.className = "pill bad";
+      }
     }
-  });
 
-  // 2) Lock Advanced box completely
-  if (advBox){
-    advBox.classList.remove("open");
-    advBox.style.opacity = "0.55";
-    advBox.style.pointerEvents = "none";
-  }
+    /* ✅ CLEAN + FIXED updateAccessUI (no broken duplicates) */
+    function updateAccessUI(profile){
+      CURRENT_PROFILE = profile;
+      recomputeLocked(profile);
 
-  // 3) Lock presets + category + currency + fx
-  [presetSel, categorySel, fxRateEl].forEach(el=>{
-  if (!el) return;
-  el.disabled = true;
-  el.style.opacity = "0.6";
-  el.title = "Locked — requires PRO";
-});
+      if (profile?.paid){
+        if (accessPill){ accessPill.textContent = "Unlocked (PRO)"; accessPill.className = "pill ok"; }
+        if (reverseUsesLine) reverseUsesLine.textContent = "Reverse uses: Unlimited (PRO)";
+        if (compUsesLine) compUsesLine.textContent = "Competitor uses: Unlimited (PRO)";
+        enableProUI(true);
 
-  // 4) Lock advanced fields (fees/ads/returns)
-  [feePctEl, feeFixedEl, adsPctEl, returnPctEl, targetProfitEl].forEach(el=>{
-    if (!el) return;
-    el.disabled = true;
-    el.style.opacity = "0.6";
-    el.title = "Locked — requires PRO";
-  });
+        refreshBulkLimitLine();
+        refreshInsights();
+        refreshScenarioDropdown();
+        return;
+      }
 
-  // 5) Lock PRO buttons already present
-  if (pdfBtn) pdfBtn.disabled = true;
-  if (shareBtn) shareBtn.disabled = true;
-
-      // EXTRA: lock competitor inputs + run button
-[runCompBtn, c1, c2, c3, positioning, floorBuffer].forEach(el=>{
-  if (!el) return;
-  el.disabled = true;
-  el.style.opacity = "0.6";
-  el.title = "Locked — requires PRO";
-});
-
-// EXTRA: lock insights controls
-[targetMarginInput, refreshInsightsBtn].forEach(el=>{
-  if (!el) return;
-  el.disabled = true;
-  el.style.opacity = "0.6";
-  el.title = "Locked — requires PRO";
-});
-
-  // 6) Lock competitor + insights + saved tabs (hide them)
-  ["insightsTab","competitorTab","savedTab"].forEach(id=>{
-    const panel = document.getElementById(id);
-    if (panel) panel.style.display = "none";
-  });
-
-  // Hide the tab buttons too
-  document.querySelectorAll(".ppTabBtn").forEach(btn=>{
-    const tab = btn.dataset.tab;
-    if (tab === "insightsTab" || tab === "competitorTab" || tab === "savedTab"){
-      btn.style.display = "none";
-    }
-  });
-
-  // 7) Lock bulk tools (just in case)
-  [bulkRunBtn, bulkAddRowBtn, bulkClearBtn, bulkApplyFeesBtn, bulkExportBtn, bulkImportBtn, bulkFillExampleBtn, bulkPasteEl].forEach(el=>{
-    if (!el) return;
-    el.disabled = true;
-    el.style.opacity = "0.6";
-    el.title = "Locked — requires PRO";
-  });
-
-  // 8) Any save scenario buttons
-  [saveScenarioBtn, saveScenarioBtn2, loadScenarioBtn, deleteScenarioBtn].forEach(el=>{
-    if (!el) return;
-    el.disabled = true;
-    el.style.opacity = "0.6";
-    el.title = "Locked — requires PRO";
-  });
-
-  // 9) Show a clear message
-  if (accessPill){
-    accessPill.textContent = "Trial ended • Simple mode";
-    accessPill.className = "pill bad";
-  }
-}
-
-    function setSimpleFreeMode(isSimple){
-  // Things to HIDE in simple mode
-  const hideIds = [
-    "advBox",        // Advanced inputs accordion
-    "presetNote",    // preset note text
-    "catLabel",      // category label
-    "category",      // category dropdown
-  ];
-
-  // Marketplace preset dropdown should be hidden too (optional)
-  if (presetSel) presetSel.style.display = isSimple ? "none" : "block";
-
-  hideIds.forEach(id=>{
-    const el = document.getElementById(id);
-    if (el) el.style.display = isSimple ? "none" : "";
-  });
-
-  // Force all fee/ads/return fields to 0 in simple mode
-  if (isSimple){
-    if (feePctEl) feePctEl.value = "0";
-    if (feeFixedEl) feeFixedEl.value = "0";
-    if (adsPctEl) adsPctEl.value = "0";
-    if (returnPctEl) returnPctEl.value = "0";
-  }
-}
-
-     function updateAccessUI(profile){
-  CURRENT_PROFILE = profile;
-
-  // Recompute lock state FIRST
-  recomputeLocked(profile);
-
-  // PRO user
-  if (profile?.paid){
-    if (accessPill){ accessPill.textContent = "Unlocked (PRO)"; accessPill.className = "pill ok"; }
-    if (reverseUsesLine) reverseUsesLine.textContent = "Reverse uses: Unlimited (PRO)";
-    if (compUsesLine) compUsesLine.textContent = "Competitor uses: Unlimited (PRO)";
-    enableProUI(true);
-
-    // If previously locked, PRO should restore UI (simple reload is easiest)
-    // But we at least ensure locks aren’t applied:
-    refreshBulkLimitLine();
-    refreshInsights();
-    refreshScenarioDropdown();
-    return;
-  }
-
-  // Trial / Free user
-  enableProUI(false);
-
-  const left = daysLeft(profile?.trial_start);
-
-  if (reverseUsesLine) reverseUsesLine.textContent = `Reverse uses: ${(profile?.reverse_uses ?? 0)}/${TRIAL_REVERSE_LIMIT} (Trial)`;
-  if (compUsesLine) compUsesLine.textContent = `Competitor uses: ${(profile?.comp_uses ?? 0)}/${TRIAL_COMP_LIMIT} (Trial)`;
-
-  if (accessPill){
-    if (left > 0){
-      accessPill.textContent = `Trial active • ${left} day(s) left`;
-      accessPill.className = "pill warn";
-    } else {
-      accessPill.textContent = "Trial ended • Simple mode";
-      accessPill.className = "pill bad";
-    }
-  }
-
-  refreshBulkLimitLine();
-  refreshInsights();
-  refreshScenarioDropdown();
-
-  // Apply locks ONLY if trial ended
-  if (LOCKED) applyPostTrialLocks();
-}
       enableProUI(false);
+
+      const left = daysLeft(profile?.trial_start);
       if (reverseUsesLine) reverseUsesLine.textContent = `Reverse uses: ${(profile?.reverse_uses ?? 0)}/${TRIAL_REVERSE_LIMIT} (Trial)`;
       if (compUsesLine) compUsesLine.textContent = `Competitor uses: ${(profile?.comp_uses ?? 0)}/${TRIAL_COMP_LIMIT} (Trial)`;
 
-      const left = daysLeft(profile?.trial_start);
       if (accessPill){
         if (left > 0){
           accessPill.textContent = `Trial active • ${left} day(s) left`;
           accessPill.className = "pill warn";
         } else {
-          accessPill.textContent = "Trial ended • PRO required";
+          accessPill.textContent = "Trial ended • Simple mode";
           accessPill.className = "pill bad";
         }
       }
 
       refreshBulkLimitLine();
-refreshInsights();
-refreshScenarioDropdown();
+      refreshInsights();
+      refreshScenarioDropdown();
 
-recomputeLocked(profile);
-if (LOCKED) applyPostTrialLocks();
-}
+      if (LOCKED) applyPostTrialLocks();
+    }
 
     function refreshBulkLimitLine(){
       if (!bulkLimitLine) return;
@@ -2157,7 +2000,7 @@ if (LOCKED) applyPostTrialLocks();
       if (scenarioToast) scenarioToast.textContent="—";
     });
 
-    // Insights (PRO)
+    // Insights
     function solvePriceForMargin(targetMarginPct){
       const C = n(productCostEl?.value) + n(shipCostEl?.value) + n(miscCostEl?.value);
       const pctFees = (clamp(n(feePctEl?.value),0,99) + clamp(n(adsPctEl?.value),0,99))/100;
@@ -2211,7 +2054,6 @@ if (LOCKED) applyPostTrialLocks();
 
     function refreshInsights(){
       if (!insStatus) return;
-
       const isPro = !!CURRENT_PROFILE?.paid;
 
       const sell = n(sellPriceEl?.value);
@@ -2340,6 +2182,7 @@ if (LOCKED) applyPostTrialLocks();
     runCompBtn?.addEventListener("click", async ()=>{
       if (LOCKED) { if (compToast) compToast.textContent = "Locked — requires PRO"; return; }
       track("competitor_run_clicked", { pro: !!CURRENT_PROFILE?.paid });
+
       if (compToast) compToast.textContent = "Running…";
       try{
         if (!CURRENT_PROFILE) throw new Error("Loading… try again in 2 seconds.");
@@ -2387,9 +2230,7 @@ if (LOCKED) applyPostTrialLocks();
         return Array.isArray(arr) ? arr : [];
       } catch { return []; }
     }
-    function saveScenarios(arr){
-      localStorage.setItem(scenarioKey(), JSON.stringify(arr));
-    }
+    function saveScenarios(arr){ localStorage.setItem(scenarioKey(), JSON.stringify(arr)); }
     function refreshScenarioDropdown(){
       if (!scenarioSel) return;
       scenarioSel.innerHTML = `<option value="">—</option>`;
@@ -2449,9 +2290,7 @@ if (LOCKED) applyPostTrialLocks();
 
       const preset = getPresetById(presetSel.value);
       showCategories(preset);
-      if (d.category && categorySel && preset.categories?.some(x=>x.id===d.category)){
-        categorySel.value = d.category;
-      }
+      if (d.category && categorySel && preset.categories?.some(x=>x.id===d.category)) categorySel.value = d.category;
 
       if (sellPriceEl) sellPriceEl.value = String(d.sellPrice ?? "0");
       if (productCostEl) productCostEl.value = String(d.productCost ?? "0");
@@ -2496,7 +2335,6 @@ if (LOCKED) applyPostTrialLocks();
 
     // Bulk
     let bulkLastRows = [];
-
     function mkCellInput(value="0"){
       const inp = document.createElement("input");
       inp.className = "mini";
@@ -2515,14 +2353,12 @@ if (LOCKED) applyPostTrialLocks();
       if (CURRENT_PROFILE.paid) return true;
       return rowCount() < TRIAL_BULK_MAX_ROWS;
     }
-
     function computeRow(sell,cost,ship,misc,feePct,feeFixed,adsPct,returnPct){
       const fees = sell*(feePct/100) + feeFixed + sell*(adsPct/100);
       const profit = sell - (cost+ship+misc+fees);
       const margin = sell>0 ? (profit/sell)*100 : 0;
       return { profit, margin, fees };
     }
-
     function previewRow(tr){
       if (!tr?._pp) return;
       const r = tr._pp;
@@ -2541,7 +2377,6 @@ if (LOCKED) applyPostTrialLocks();
       r.marginTd.textContent = pct(res.margin);
       r.marginTd.className = res.margin >= 10 ? "good" : (res.margin < 0 ? "bad" : "");
     }
-
     function addBulkRow(initial={}){
       if (!bulkTbody) return;
 
@@ -2588,7 +2423,6 @@ if (LOCKED) applyPostTrialLocks();
       renumberBulkRows();
       previewRow(tr);
     }
-
     function clearBulkRows(){
       if (!bulkTbody) return;
       bulkTbody.innerHTML = "";
@@ -2596,7 +2430,6 @@ if (LOCKED) applyPostTrialLocks();
       if (bulkStatus) bulkStatus.textContent = "—";
       refreshBulkLimitLine();
     }
-
     function applyFeesToAll(){
       if (!bulkTbody) return;
       [...bulkTbody.children].forEach(tr=>{
@@ -2611,6 +2444,7 @@ if (LOCKED) applyPostTrialLocks();
     }
 
     bulkAddRowBtn?.addEventListener("click", ()=>{
+      if (LOCKED){ if (bulkStatus) bulkStatus.textContent="Locked — requires PRO"; return; }
       if (!CURRENT_PROFILE){ if (bulkStatus) bulkStatus.textContent="Loading…"; return; }
       if (!canAddRow()){
         if (bulkStatus) bulkStatus.textContent = `Trial limit: max ${TRIAL_BULK_MAX_ROWS} rows. Unlock PRO for unlimited.`;
@@ -2633,6 +2467,7 @@ if (LOCKED) applyPostTrialLocks();
     bulkRunBtn?.addEventListener("click", async ()=>{
       if (LOCKED) { if (bulkStatus) bulkStatus.textContent = "Locked — requires PRO"; return; }
       track("bulk_run_clicked", { pro: !!CURRENT_PROFILE?.paid, rows: rowCount() });
+
       try{
         if (!CURRENT_PROFILE){ if (bulkStatus) bulkStatus.textContent="Loading…"; return; }
 
@@ -2713,6 +2548,7 @@ if (LOCKED) applyPostTrialLocks();
     });
 
     bulkImportBtn?.addEventListener("click", ()=>{
+      if (LOCKED){ if (bulkImportStatus) bulkImportStatus.textContent="Locked — requires PRO"; return; }
       if (bulkImportStatus) bulkImportStatus.textContent = "Importing…";
       const rows = parseLines(bulkPasteEl?.value || "");
       if (!rows.length){ if (bulkImportStatus) bulkImportStatus.textContent = "Nothing to import."; return; }
@@ -2765,8 +2601,7 @@ if (LOCKED) applyPostTrialLocks();
 
     [
       sellPriceEl, productCostEl, shipCostEl, miscCostEl,
-      feePctEl, feeFixedEl, adsPctEl, returnPctEl,
-      fxRateEl
+      feePctEl, feeFixedEl, adsPctEl, returnPctEl, fxRateEl
     ].filter(Boolean).forEach(el=>
       el.addEventListener("input", ()=>{
         computeProfit();
@@ -2866,11 +2701,11 @@ if (LOCKED) applyPostTrialLocks();
       }
     });
 
-    // Logout
+    // ✅ Logout (always redirects)
     document.getElementById("logoutBtn")?.addEventListener("click", async ()=>{
       track("logout_clicked", { pro: !!CURRENT_PROFILE?.paid });
-      await supabase.auth.signOut();
-      location.href = "login.html";
+      try{ await supabase.auth.signOut(); } catch(e){ console.warn("signOut failed:", e); }
+      window.location.replace("login.html");
     });
 
     // Buy button tracking
@@ -2893,9 +2728,7 @@ if (LOCKED) applyPostTrialLocks();
 
         const preset = getPresetById(presetSel.value);
         showCategories(preset);
-        if (data.category && categorySel && preset.categories?.some(x=>x.id===data.category)){
-          categorySel.value = data.category;
-        }
+        if (data.category && categorySel && preset.categories?.some(x=>x.id===data.category)) categorySel.value = data.category;
 
         if (sellPriceEl) sellPriceEl.value = String(data.sellPrice ?? "0");
         if (productCostEl) productCostEl.value = String(data.productCost ?? "0");
@@ -2917,9 +2750,8 @@ if (LOCKED) applyPostTrialLocks();
         updateDynamicFixedFee();
 
         setMode(data.mode || "profit");
-      } catch(e){
-        // ignore bad links
-      }
+      } catch(e){ /* ignore bad links */ }
+
       history.replaceState(null, "", location.pathname);
     }
 
@@ -2946,7 +2778,7 @@ if (LOCKED) applyPostTrialLocks();
             accessPill.textContent = "Trial";
             accessPill.className = "pill warn";
           }
-          location.href = "login.html";
+          window.location.replace("login.html");
           return;
         }
 
