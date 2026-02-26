@@ -1242,13 +1242,16 @@
     let LOCKED = false;
 
 function recomputeLocked(profile){
+  // Locked only if: has profile, NOT paid, and trial days are over
   LOCKED = !!profile && !profile.paid && daysLeft(profile.trial_start) <= 0;
   return LOCKED;
 }
-    const TRIAL_BULK_RUNS_PER_DAY = 1;
-    function isTrialEnded(profile){
+
+function isTrialEnded(profile){
   return recomputeLocked(profile);
 }
+
+const TRIAL_BULK_RUNS_PER_DAY = 1;
   if (!profile) return false;
   if (profile.paid) return false; // PRO never locked
   const left = daysLeft(profile.trial_start);
@@ -2002,18 +2005,21 @@ window.addEventListener("scroll", () => {
   }
 }
 
-    function updateAccessUI(profile){
-      CURRENT_PROFILE = profile;
-
      function updateAccessUI(profile){
   CURRENT_PROFILE = profile;
 
-  // PRO
+  // Compute lock state
+  const locked = recomputeLocked(profile);
+
+  // PRO users
   if (profile?.paid){
     if (accessPill){ accessPill.textContent = "Unlocked (PRO)"; accessPill.className = "pill ok"; }
     if (reverseUsesLine) reverseUsesLine.textContent = "Reverse uses: Unlimited (PRO)";
     if (compUsesLine) compUsesLine.textContent = "Competitor uses: Unlimited (PRO)";
     enableProUI(true);
+
+    // Make sure nothing is locked for PRO
+    LOCKED = false;
     refreshBulkLimitLine();
     refreshInsights();
     refreshScenarioDropdown();
@@ -2025,8 +2031,11 @@ window.addEventListener("scroll", () => {
 
   const left = daysLeft(profile?.trial_start);
 
-  if (reverseUsesLine) reverseUsesLine.textContent = `Reverse uses: ${(profile?.reverse_uses ?? 0)}/${TRIAL_REVERSE_LIMIT} (Trial)`;
-  if (compUsesLine) compUsesLine.textContent = `Competitor uses: ${(profile?.comp_uses ?? 0)}/${TRIAL_COMP_LIMIT} (Trial)`;
+  if (reverseUsesLine) reverseUsesLine.textContent =
+    `Reverse uses: ${(profile?.reverse_uses ?? 0)}/${TRIAL_REVERSE_LIMIT} (Trial)`;
+
+  if (compUsesLine) compUsesLine.textContent =
+    `Competitor uses: ${(profile?.comp_uses ?? 0)}/${TRIAL_COMP_LIMIT} (Trial)`;
 
   if (accessPill){
     if (left > 0){
@@ -2042,10 +2051,9 @@ window.addEventListener("scroll", () => {
   refreshInsights();
   refreshScenarioDropdown();
 
-  // ✅ only lock AFTER trial ends
-  if (left <= 0) applyPostTrialLocks();
+  // Apply locks only when trial ended
+  if (locked) applyPostTrialLocks();
 }
-
       enableProUI(false);
       if (reverseUsesLine) reverseUsesLine.textContent = `Reverse uses: ${(profile?.reverse_uses ?? 0)}/${TRIAL_REVERSE_LIMIT} (Trial)`;
       if (compUsesLine) compUsesLine.textContent = `Competitor uses: ${(profile?.comp_uses ?? 0)}/${TRIAL_COMP_LIMIT} (Trial)`;
@@ -2957,9 +2965,6 @@ if (LOCKED) applyPostTrialLocks();
 
         const prof = await rpcEnsureProfile();
         updateAccessUI(prof);
-
-        recomputeLocked(prof);
-if (LOCKED) applyPostTrialLocks();
 
         // Init bulk rows
         clearBulkRows();
