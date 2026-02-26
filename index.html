@@ -668,7 +668,10 @@
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
 
     // Checkout link
-    const CHECKOUT_URL = "https://stonevia.gumroad.com/l/goddhg";
+    // ✅ Paddle Hosted Checkout links
+const CHECKOUT_URL_PRO = "https://pay.paddle.io/hsc_01kjcns56g20crt51z8j2j9mqc_rrmv98b3szdmp9neyaxw5qmd5cjcb7ya";
+
+const CHECKOUT_URL_PROPLUS = "#"; // add PRO+ later
     const buyBtn = document.getElementById("buyBtn");
     buyBtn.href = CHECKOUT_URL;
 
