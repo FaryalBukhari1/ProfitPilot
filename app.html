@@ -483,7 +483,7 @@
     /* Right column sticky */
     .rightSide{
       position:static;
-      top:auto
+      top:auto;
       align-self:start;
       display:flex;
       flex-direction:column;
@@ -728,7 +728,7 @@
             Unlimited reverse + competitor + bulk, PDF export, share links, insights, saved scenarios. One-time unlock.
           </div>
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
-            <a class="btn primary" id="buyProBtn" href="https://stonevia.gumroad.com/l/goddhg" target="_blank" rel="noopener">Buy PRO</a>
+            <a class="btn primary" id="buyProBtn" href="#" target="_blank" rel="noopener">Buy PRO</a>
             <a class="btn" href="reviews.html">See reviews</a>
           </div>
         </div>
@@ -1240,6 +1240,12 @@
     const TRIAL_COMP_LIMIT = 3;
     const TRIAL_BULK_MAX_ROWS = 3;
     const TRIAL_BULK_RUNS_PER_DAY = 1;
+    function isTrialEnded(profile){
+  if (!profile) return false;
+  if (profile.paid) return false; // PRO never locked
+  const left = daysLeft(profile.trial_start);
+  return left <= 0;
+}
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON, {
       auth: {
@@ -1254,6 +1260,29 @@
     function track(eventName, params = {}) {
       try { if (typeof gtag === "function") gtag("event", eventName, params); } catch (e) {}
     }
+
+    // ---------- Paddle checkout URL + PH discount ----------
+const CHECKOUT_URL = "https://pay.paddle.io/hsc_01kjcns56g20crt51z8j2j9mqc_rrmv98b3szdmp9neyaxw5qmd5cjcb7ya";
+const DEFAULT_CODE = "PP30PH";
+
+function getDiscountCode() {
+  const p = new URLSearchParams(location.search);
+  return (p.get("code") || p.get("discount") || "").trim() || DEFAULT_CODE;
+}
+
+function buildCheckoutUrl() {
+  const url = new URL(CHECKOUT_URL);
+  const code = getDiscountCode();
+  if (code) url.searchParams.set("discount", code);
+  return url.toString();
+}
+
+const buyBtn = document.getElementById("buyProBtn");
+if (buyBtn) buyBtn.href = buildCheckoutUrl();
+
+// Apply to button
+const buyBtn = document.getElementById("buyProBtn");
+if (buyBtn) buyBtn.href = buildCheckoutUrl();
 
     // Helpers
     const CURRENCY_SYMBOL = { GBP:"£", USD:"$", EUR:"€", AUD:"$", CAD:"$", NZD:"$", AED:"AED ", SAR:"SAR ", PKR:"₨", INR:"₹" };
@@ -1770,6 +1799,10 @@ window.addEventListener("scroll", () => {
     // Modes
     let MODE = "profit";
     function setMode(m){
+      if (isTrialEnded(CURRENT_PROFILE) && (m === "reverse" || m === "bulk")){
+  if (shareStatus) shareStatus.textContent = "Locked — requires PRO";
+  return;
+}
       MODE = m;
 
       document.querySelectorAll(".heroBtn").forEach(btn=>{
@@ -1838,6 +1871,116 @@ window.addEventListener("scroll", () => {
       if (proCard) proCard.style.display = isPro ? "none" : "block";
     }
 
+    function applyPostTrialLocks(){
+  const locked = isTrialEnded(CURRENT_PROFILE);
+
+  // If not locked, do nothing
+  if (!locked) return;
+
+  // 1) Force mode to "profit" only
+  setMode("profit");
+
+  // Disable Reverse + Bulk mode buttons
+  document.querySelectorAll(".heroBtn").forEach(btn=>{
+    const m = btn.dataset.mode;
+    if (m === "reverse" || m === "bulk"){
+      btn.disabled = true;
+      btn.style.opacity = "0.5";
+      btn.style.cursor = "not-allowed";
+      btn.title = "Locked — requires PRO";
+    }
+  });
+
+  // 2) Lock Advanced box completely
+  if (advBox){
+    advBox.classList.remove("open");
+    advBox.style.opacity = "0.55";
+    advBox.style.pointerEvents = "none";
+  }
+
+  // 3) Lock presets + category + currency + fx
+  [presetSel, categorySel, currencyEl, fxRateEl].forEach(el=>{
+    if (!el) return;
+    el.disabled = true;
+    el.style.opacity = "0.6";
+    el.title = "Locked — requires PRO";
+  });
+
+  // 4) Lock advanced fields (fees/ads/returns)
+  [feePctEl, feeFixedEl, adsPctEl, returnPctEl, targetProfitEl].forEach(el=>{
+    if (!el) return;
+    el.disabled = true;
+    el.style.opacity = "0.6";
+    el.title = "Locked — requires PRO";
+  });
+
+  // 5) Lock PRO buttons already present
+  if (pdfBtn) pdfBtn.disabled = true;
+  if (shareBtn) shareBtn.disabled = true;
+
+  // 6) Lock competitor + insights + saved tabs (hide them)
+  ["insightsTab","competitorTab","savedTab"].forEach(id=>{
+    const panel = document.getElementById(id);
+    if (panel) panel.style.display = "none";
+  });
+
+  // Hide the tab buttons too
+  document.querySelectorAll(".ppTabBtn").forEach(btn=>{
+    const tab = btn.dataset.tab;
+    if (tab === "insightsTab" || tab === "competitorTab" || tab === "savedTab"){
+      btn.style.display = "none";
+    }
+  });
+
+  // 7) Lock bulk tools (just in case)
+  [bulkRunBtn, bulkAddRowBtn, bulkClearBtn, bulkApplyFeesBtn, bulkExportBtn, bulkImportBtn, bulkFillExampleBtn, bulkPasteEl].forEach(el=>{
+    if (!el) return;
+    el.disabled = true;
+    el.style.opacity = "0.6";
+    el.title = "Locked — requires PRO";
+  });
+
+  // 8) Any save scenario buttons
+  [saveScenarioBtn, saveScenarioBtn2, loadScenarioBtn, deleteScenarioBtn].forEach(el=>{
+    if (!el) return;
+    el.disabled = true;
+    el.style.opacity = "0.6";
+    el.title = "Locked — requires PRO";
+  });
+
+  // 9) Show a clear message
+  if (accessPill){
+    accessPill.textContent = "Trial ended • Simple mode";
+    accessPill.className = "pill bad";
+  }
+}
+
+    function setSimpleFreeMode(isSimple){
+  // Things to HIDE in simple mode
+  const hideIds = [
+    "advBox",        // Advanced inputs accordion
+    "presetNote",    // preset note text
+    "catLabel",      // category label
+    "category",      // category dropdown
+  ];
+
+  // Marketplace preset dropdown should be hidden too (optional)
+  if (presetSel) presetSel.style.display = isSimple ? "none" : "block";
+
+  hideIds.forEach(id=>{
+    const el = document.getElementById(id);
+    if (el) el.style.display = isSimple ? "none" : "";
+  });
+
+  // Force all fee/ads/return fields to 0 in simple mode
+  if (isSimple){
+    if (feePctEl) feePctEl.value = "0";
+    if (feeFixedEl) feeFixedEl.value = "0";
+    if (adsPctEl) adsPctEl.value = "0";
+    if (returnPctEl) returnPctEl.value = "0";
+  }
+}
+
     function updateAccessUI(profile){
       CURRENT_PROFILE = profile;
 
@@ -1849,6 +1992,7 @@ window.addEventListener("scroll", () => {
         refreshBulkLimitLine();
         refreshInsights();
         refreshScenarioDropdown();
+        applyPostTrialLocks();
         return;
       }
 
