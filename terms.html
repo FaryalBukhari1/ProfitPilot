@@ -41,8 +41,8 @@
 
     .wrap{max-width:980px;margin:0 auto;padding:14px 16px 54px}
 
-    /* ====== APP-STYLE STICKY HEADER ====== */
-    .pp-header{position:sticky; top:10px; z-index:100; margin:10px auto 0}
+    /* ====== APP-STYLE static HEADER ====== */
+    .pp-header{position:static; top:10px; z-index:100; margin:10px auto 0}
     .pp-headerbar{
       background:var(--h-bg);
       border:1px solid var(--line);
@@ -164,7 +164,7 @@
 <body>
   <div class="wrap">
 
-    <!-- ====== SIMPLE APP HEADER (STICKY) ====== -->
+    <!-- ====== SIMPLE APP HEADER (static) ====== -->
     <header class="pp-header" role="navigation" aria-label="Primary">
       <div class="pp-headerbar">
         <div class="pp-row">
@@ -263,7 +263,7 @@
           <div class="pp-footlinks" aria-label="Footer links">
             <a href="privacy.html">Privacy</a>
             <a href="refunds.html">Refund Policy</a>
-            <a href="terms.html" aria-current="page">Terms</a>
+            
             <a href="faq.html">FAQ</a>
             <a href="reviews.html">Reviews</a>
             <a href="pricing.html">Pricing</a>
