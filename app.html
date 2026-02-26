@@ -1239,8 +1239,16 @@
     const TRIAL_REVERSE_LIMIT = 3;
     const TRIAL_COMP_LIMIT = 3;
     const TRIAL_BULK_MAX_ROWS = 3;
+    let LOCKED = false;
+
+function recomputeLocked(profile){
+  LOCKED = !!profile && !profile.paid && daysLeft(profile.trial_start) <= 0;
+  return LOCKED;
+}
     const TRIAL_BULK_RUNS_PER_DAY = 1;
     function isTrialEnded(profile){
+  return recomputeLocked(profile);
+}
   if (!profile) return false;
   if (profile.paid) return false; // PRO never locked
   const left = daysLeft(profile.trial_start);
@@ -1915,6 +1923,22 @@ window.addEventListener("scroll", () => {
   if (pdfBtn) pdfBtn.disabled = true;
   if (shareBtn) shareBtn.disabled = true;
 
+      // EXTRA: lock competitor inputs + run button
+[runCompBtn, c1, c2, c3, positioning, floorBuffer].forEach(el=>{
+  if (!el) return;
+  el.disabled = true;
+  el.style.opacity = "0.6";
+  el.title = "Locked — requires PRO";
+});
+
+// EXTRA: lock insights controls
+[targetMarginInput, refreshInsightsBtn].forEach(el=>{
+  if (!el) return;
+  el.disabled = true;
+  el.style.opacity = "0.6";
+  el.title = "Locked — requires PRO";
+});
+
   // 6) Lock competitor + insights + saved tabs (hide them)
   ["insightsTab","competitorTab","savedTab"].forEach(id=>{
     const panel = document.getElementById(id);
@@ -2038,9 +2062,12 @@ window.addEventListener("scroll", () => {
       }
 
       refreshBulkLimitLine();
-      refreshInsights();
-      refreshScenarioDropdown();
-    }
+refreshInsights();
+refreshScenarioDropdown();
+
+recomputeLocked(profile);
+if (LOCKED) applyPostTrialLocks();
+}
 
     function refreshBulkLimitLine(){
       if (!bulkLimitLine) return;
@@ -2310,6 +2337,7 @@ window.addEventListener("scroll", () => {
     }
 
     runCompBtn?.addEventListener("click", async ()=>{
+      if (LOCKED) { if (compToast) compToast.textContent = "Locked — requires PRO"; return; }
       track("competitor_run_clicked", { pro: !!CURRENT_PROFILE?.paid });
       if (compToast) compToast.textContent = "Running…";
       try{
@@ -2602,6 +2630,7 @@ window.addEventListener("scroll", () => {
     bulkApplyFeesBtn?.addEventListener("click", applyFeesToAll);
 
     bulkRunBtn?.addEventListener("click", async ()=>{
+      if (LOCKED) { if (bulkStatus) bulkStatus.textContent = "Locked — requires PRO"; return; }
       track("bulk_run_clicked", { pro: !!CURRENT_PROFILE?.paid, rows: rowCount() });
       try{
         if (!CURRENT_PROFILE){ if (bulkStatus) bulkStatus.textContent="Loading…"; return; }
@@ -2749,6 +2778,7 @@ window.addEventListener("scroll", () => {
     targetProfitEl?.addEventListener("input", ()=>{ updateReverseHint(); });
 
     async function computeReverseWithLimit(){
+      if (LOCKED) throw new Error("Trial ended. Unlock PRO for Reverse mode.");
       if (!CURRENT_PROFILE?.paid){
         const left = daysLeft(CURRENT_PROFILE.trial_start);
         if (left <= 0) throw new Error("Trial ended. Unlock PRO for Reverse mode.");
@@ -2927,6 +2957,9 @@ window.addEventListener("scroll", () => {
 
         const prof = await rpcEnsureProfile();
         updateAccessUI(prof);
+
+        recomputeLocked(prof);
+if (LOCKED) applyPostTrialLocks();
 
         // Init bulk rows
         clearBulkRows();
