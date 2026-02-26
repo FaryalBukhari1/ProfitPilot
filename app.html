@@ -1234,28 +1234,24 @@
 
     const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
     const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
+const TRIAL_DAYS = 5;
+const TRIAL_REVERSE_LIMIT = 3;
+const TRIAL_COMP_LIMIT = 3;
+const TRIAL_BULK_MAX_ROWS = 3;
+const TRIAL_BULK_RUNS_PER_DAY = 1;
 
-    const TRIAL_DAYS = 5;
-    const TRIAL_REVERSE_LIMIT = 3;
-    const TRIAL_COMP_LIMIT = 3;
-    const TRIAL_BULK_MAX_ROWS = 3;
-    let LOCKED = false;
-
-function recomputeLocked(profile){
-  // Locked only if: has profile, NOT paid, and trial days are over
-  LOCKED = !!profile && !profile.paid && daysLeft(profile.trial_start) <= 0;
-  return LOCKED;
-}
+let LOCKED = false;
 
 function isTrialEnded(profile){
-  return recomputeLocked(profile);
-}
-
-const TRIAL_BULK_RUNS_PER_DAY = 1;
   if (!profile) return false;
-  if (profile.paid) return false; // PRO never locked
+  if (profile.paid) return false;          // PRO never locks
   const left = daysLeft(profile.trial_start);
   return left <= 0;
+}
+
+function recomputeLocked(profile){
+  LOCKED = isTrialEnded(profile);
+  return LOCKED;
 }
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON, {
@@ -2008,34 +2004,31 @@ window.addEventListener("scroll", () => {
      function updateAccessUI(profile){
   CURRENT_PROFILE = profile;
 
-  // Compute lock state
-  const locked = recomputeLocked(profile);
+  // Recompute lock state FIRST
+  recomputeLocked(profile);
 
-  // PRO users
+  // PRO user
   if (profile?.paid){
     if (accessPill){ accessPill.textContent = "Unlocked (PRO)"; accessPill.className = "pill ok"; }
     if (reverseUsesLine) reverseUsesLine.textContent = "Reverse uses: Unlimited (PRO)";
     if (compUsesLine) compUsesLine.textContent = "Competitor uses: Unlimited (PRO)";
     enableProUI(true);
 
-    // Make sure nothing is locked for PRO
-    LOCKED = false;
+    // If previously locked, PRO should restore UI (simple reload is easiest)
+    // But we at least ensure locks aren’t applied:
     refreshBulkLimitLine();
     refreshInsights();
     refreshScenarioDropdown();
     return;
   }
 
-  // Not PRO
+  // Trial / Free user
   enableProUI(false);
 
   const left = daysLeft(profile?.trial_start);
 
-  if (reverseUsesLine) reverseUsesLine.textContent =
-    `Reverse uses: ${(profile?.reverse_uses ?? 0)}/${TRIAL_REVERSE_LIMIT} (Trial)`;
-
-  if (compUsesLine) compUsesLine.textContent =
-    `Competitor uses: ${(profile?.comp_uses ?? 0)}/${TRIAL_COMP_LIMIT} (Trial)`;
+  if (reverseUsesLine) reverseUsesLine.textContent = `Reverse uses: ${(profile?.reverse_uses ?? 0)}/${TRIAL_REVERSE_LIMIT} (Trial)`;
+  if (compUsesLine) compUsesLine.textContent = `Competitor uses: ${(profile?.comp_uses ?? 0)}/${TRIAL_COMP_LIMIT} (Trial)`;
 
   if (accessPill){
     if (left > 0){
@@ -2051,8 +2044,8 @@ window.addEventListener("scroll", () => {
   refreshInsights();
   refreshScenarioDropdown();
 
-  // Apply locks only when trial ended
-  if (locked) applyPostTrialLocks();
+  // Apply locks ONLY if trial ended
+  if (LOCKED) applyPostTrialLocks();
 }
       enableProUI(false);
       if (reverseUsesLine) reverseUsesLine.textContent = `Reverse uses: ${(profile?.reverse_uses ?? 0)}/${TRIAL_REVERSE_LIMIT} (Trial)`;
