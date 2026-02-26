@@ -1,101 +1,307 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>ProfitPilot — Frequently Asked Questions</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Frequently asked questions about ProfitPilot pricing, free trial, PRO access, refunds, and how the calculator works.">
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>ProfitPilot — Frequently Asked Questions</title>
+<meta name="description" content="Frequently asked questions about ProfitPilot pricing, trial, PRO access and refunds.">
+<link rel="canonical" href="https://profitpilot.ukwebtools.com/faq.html">
+<link rel="icon" href="https://ukwebtools.com/favicon.svg">
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F12747YWBN"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());
+gtag('config','G-F12747YWBN',{anonymize_ip:true});
+</script>
+
+<!-- Microsoft Clarity -->
+<script>
+(function(c,l,a,r,i,t,y){
+c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+t=l.createElement(r);t.async=1;
+t.src="https://www.clarity.ms/tag/"+i;
+y=l.getElementsByTagName(r)[0];
+y.parentNode.insertBefore(t,y);
+})(window,document,"clarity","script","vjsgka2ywg");
+</script>
+
+<style>
+:root{
+--bg:#f7f9fc;
+--bg2:#eef3ff;
+--txt:#0b1220;
+--muted:#5b6474;
+--line:rgba(16,24,40,.10);
+--accent:#0ea5a4;
+--accent2:#4f46e5;
+--radius:22px;
+
+/* footer */
+--f-bg:#0b0f14;
+--f-line:rgba(255,255,255,.10);
+--f-txt:rgba(255,255,255,.92);
+--f-muted:rgba(255,255,255,.68);
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+color:var(--txt);
+background:
+radial-gradient(900px 520px at 20% 0%, rgba(14,165,164,.14),transparent 55%),
+radial-gradient(900px 520px at 80% 0%, rgba(79,70,229,.10),transparent 55%),
+linear-gradient(180deg,var(--bg2),var(--bg));
+}
+
+.wrap{max-width:980px;margin:auto;padding:18px 16px 50px}
+
+/* ===== STATIC HEADER ===== */
+
+.pp-header{
+margin:14px auto;
+}
+
+.pp-headerbar{
+background:rgba(255,255,255,.85);
+border:1px solid var(--line);
+border-radius:18px;
+padding:10px;
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.pp-row{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.pp-brand{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.pp-logo{
+width:40px;height:40px;
+border-radius:14px;
+background:linear-gradient(135deg,#0ea5a4,#4f46e5);
+color:#fff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:900;
+}
+
+.pp-title{font-weight:1000}
+.pp-sub{font-size:12px;color:var(--muted)}
+
+.pp-nav{
+margin-left:auto;
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.pp-btn{
+padding:10px 14px;
+border-radius:999px;
+border:1px solid var(--line);
+background:#fff;
+font-weight:900;
+text-decoration:none;
+color:#0b1220;
+}
+
+.pp-btn.primary{
+border:none;
+color:#fff;
+background:linear-gradient(135deg,var(--accent),var(--accent2));
+}
+
+/* ===== FAQ CARD ===== */
+
+.card{
+background:#fff;
+border-radius:var(--radius);
+border:1px solid var(--line);
+padding:24px;
+box-shadow:0 14px 36px rgba(0,0,0,.08);
+}
+
+h1{margin-top:0}
+h2{margin-top:28px}
+p{color:var(--muted);line-height:1.8}
+a{color:var(--accent);font-weight:700}
+
+/* ===== DARK FOOTER ===== */
+
+.pp-foot{margin-top:32px;border-radius:18px;overflow:hidden}
+
+.pp-footinner{
+background:
+radial-gradient(900px 520px at 20% 0%, rgba(94,234,212,.10),transparent 55%),
+radial-gradient(900px 520px at 80% 0%, rgba(96,165,250,.10),transparent 55%),
+var(--f-bg);
+border:1px solid var(--f-line);
+padding:18px;
+}
+
+.pp-footgrid{
+display:grid;
+grid-template-columns:1.2fr .8fr;
+gap:16px;
+}
+
+@media(max-width:820px){
+.pp-footgrid{grid-template-columns:1fr}
+}
+
+.pp-footbrand{color:var(--f-txt);font-weight:1000}
+
+.pp-footmut{
+margin-top:8px;
+color:var(--f-muted);
+font-size:13px;
+line-height:1.7;
+}
+
+.pp-footlinks{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+justify-content:flex-end;
+}
+
+@media(max-width:820px){
+.pp-footlinks{justify-content:flex-start}
+}
+
+.pp-footlinks a{
+padding:8px 12px;
+border-radius:999px;
+border:1px solid rgba(255,255,255,.12);
+background:rgba(255,255,255,.06);
+color:var(--f-txt);
+text-decoration:none;
+font-weight:900;
+}
+
+.pp-footbottom{
+margin-top:14px;
+padding-top:14px;
+border-top:1px solid rgba(255,255,255,.10);
+display:flex;
+justify-content:space-between;
+flex-wrap:wrap;
+color:rgba(255,255,255,.7);
+font-size:13px;
+}
+</style>
 </head>
+
 <body>
-  <header>
-    <nav>
-      <a href="/">Home</a>
-      <a href="/pricing.html">Pricing</a>
-      <a href="/reviews.html">Reviews</a>
-      <a href="/login.html">Login</a>
-    </nav>
-  </header>
 
-  <main class="wrap">
-    <h1>Frequently Asked Questions</h1>
+<div class="wrap">
 
-    <section>
-      <h2>General</h2>
+<!-- STATIC HEADER -->
+<header class="pp-header">
+<div class="pp-headerbar">
+<div class="pp-row">
 
-      <p>
-        <strong>Is ProfitPilot affiliated with eBay, Etsy, Amazon, or any marketplace?</strong><br>
-        No. ProfitPilot is an independent profit and pricing calculator. Marketplace names are used strictly for reference and familiarity. We are not endorsed by or connected to any marketplace.
-      </p>
+<div class="pp-brand">
+<div class="pp-logo">PP</div>
+<div>
+<div class="pp-title">ProfitPilot</div>
+<div class="pp-sub">Independent tool by UKwebtools</div>
+</div>
+</div>
 
-      <p>
-        <strong>Is ProfitPilot providing financial or legal advice?</strong><br>
-        No. All calculations are estimates based on the data you enter. Results are intended to support pricing decisions only and should not be considered financial, legal, or tax advice.
-      </p>
+<nav class="pp-nav">
+<a class="pp-btn" href="index.html">Home</a>
+<a class="pp-btn" href="pricing.html">Pricing</a>
+<a class="pp-btn" href="reviews.html">Reviews</a>
+<a class="pp-btn primary" href="login.html">Account</a>
+</nav>
 
-      <p>
-        <strong>Why do I need to log in?</strong><br>
-        Logging in securely links your trial and PRO access to your account and prevents abuse. Some basic tools may work without login, but PRO features require an account.
-      </p>
-    </section>
+</div>
+</div>
+</header>
 
-    <section>
-      <h2>Free Trial & PRO Access</h2>
+<div class="card">
 
-      <p>
-        <strong>How does the free trial work?</strong><br>
-        You receive a 5-day free trial. During the trial, advanced features such as reverse pricing, competitor mode, and bulk tools may be partially limited.
-      </p>
+<h1>Frequently Asked Questions</h1>
 
-      <p>
-        <strong>Is PRO a subscription?</strong><br>
-        No. PRO is a one-time purchase. Once unlocked, you get unlimited access to all current PRO features without recurring fees.
-      </p>
+<h2>General</h2>
+<p><strong>Is ProfitPilot affiliated with marketplaces?</strong><br>
+No. ProfitPilot is completely independent.</p>
 
-      <p>
-        <strong>How do I unlock PRO after purchase?</strong><br>
-        PRO access is automatically applied to the account you were logged into at checkout. If you change devices or log out, simply sign back in and your PRO access will be restored.
-      </p>
+<p><strong>Is this financial advice?</strong><br>
+No. Results are estimates only.</p>
 
-      <p>
-        <strong>Why is the checkout amount higher than the listed price?</strong><br>
-        Our payment provider may apply VAT or sales tax where required by law. This is handled automatically at checkout in compliance with local regulations.
-      </p>
-    </section>
+<p><strong>Why login?</strong><br>
+Login links trial and PRO access securely.</p>
 
-    <section>
-      <h2>Refunds & Returns</h2>
+<h2>Free Trial & PRO</h2>
 
-      <p>
-        <strong>Do you offer refunds?</strong><br>
-        Yes. Refunds are handled in accordance with our official policy. Please review the full details on our
-        <a href="refunds.html">Refund Policy</a> page.
-      </p>
+<p><strong>How does the trial work?</strong><br>
+You receive a 5-day free trial with limited advanced tools.</p>
 
-      <p>
-        <strong>Why are refunds limited on digital products?</strong><br>
-        Because ProfitPilot is a digital tool with instant access, refunds are evaluated based on usage and eligibility criteria outlined in the Refund Policy.
-      </p>
-    </section>
+<p><strong>Is PRO a subscription?</strong><br>
+No. PRO is a one-time purchase.</p>
 
-    <section>
-      <h2>Using the App</h2>
+<p><strong>Why is checkout higher?</strong><br>
+VAT or local taxes may be applied automatically.</p>
 
-      <p>
-        <strong>What features are included in the free version?</strong><br>
-        The free version includes basic profit and margin calculations along with a short preview of advanced modes. Full functionality requires PRO access.
-      </p>
+<h2>Refunds</h2>
+<p>
+Refunds follow our
+<a href="refunds.html">Refund Policy</a>.
+</p>
 
-      <p>
-        <strong>Can I view reviews without logging in?</strong><br>
-        Yes. The Reviews page is publicly accessible. Logging in is only required to submit a review.
-      </p>
+<h2>Need help?</h2>
+<p>
+Email <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a>
+</p>
 
-      <p>
-        <strong>Still need help?</strong><br>
-        Contact us at <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a> and we’ll respond as quickly as possible.
-      </p>
-    </section>
-  </main>
+</div>
 
-  <foote
+<footer class="pp-foot">
+<div class="pp-footinner">
+
+<div class="pp-footgrid">
+
+<div>
+<div class="pp-footbrand">ProfitPilot</div>
+<div class="pp-footmut">
+Legal entity: Stonevia Commerce.<br>
+Need help? support@ukwebtools.com
+</div>
+</div>
+
+<div class="pp-footlinks">
+<a href="privacy.html">Privacy</a>
+<a href="terms.html">Terms</a>
+<a href="refunds.html">Refund Policy</a>
+<a href="pricing.html">Pricing</a>
+<a href="reviews.html">Reviews</a>
+</div>
+
+</div>
+
+<div class="pp-footbottom">
+<div>© 2026 UKwebtools • ProfitPilot</div>
+<div><a href="https://ukwebtools.com">UKwebtools</a></div>
+</div>
+
+</div>
+</footer>
+
+</div>
+</body>
+</html>
