@@ -26,183 +26,109 @@
   </script>
 
   <style>
-    /* ================================
-      ProfitPilot Auth — Elite Themed
-      - matches app theme selector
-      - day/soft/midnight look different
-    ================================ */
-
     :root{
-      --bg:#0b1220;
-      --bg2:#0f172a;
-      --txt:#eaf0ff;
-      --muted:rgba(226,232,240,.72);
-
-      --card:#0f172a;
-      --card2:rgba(17,24,39,.84);
-
-      --line:rgba(255,255,255,.12);
-      --line2:rgba(255,255,255,.10);
-
-      --accent:#0ea5a4;
-      --accent2:#4f46e5;
-
+      --bg:#0b1220; --bg2:#0f172a;
+      --txt:#eaf0ff; --muted:rgba(226,232,240,.72);
+      --card:rgba(15,23,42,.86); --cardSolid:#0f172a;
+      --line:rgba(255,255,255,.12); --line2:rgba(255,255,255,.10);
+      --accent:#0ea5a4; --accent2:#4f46e5;
       --shadow:0 14px 44px rgba(0,0,0,.40);
-      --shadow2:0 20px 80px rgba(0,0,0,.50);
-      --ring:rgba(14,165,164,.55);
-
-      --inputBg:#0b1220;
-      --radius:18px;
-      --radius2:16px;
+      --shadow2:0 26px 90px rgba(0,0,0,.55);
+      --ring:rgba(14,165,164,.45);
+      --inputBg:rgba(2,6,23,.55);
+      --radius:20px;
     }
-
     :root[data-theme="day"]{
-      --bg:#f6f8fb;
-      --bg2:#eef2ff;
-      --txt:#0b1220;
-      --muted:#5b6474;
-
-      --card:#ffffff;
-      --card2:rgba(255,255,255,.88);
-
-      --line:rgba(16,24,40,.10);
-      --line2:rgba(16,24,40,.08);
-
-      --shadow:0 14px 44px rgba(16,24,40,.10);
-      --shadow2:0 20px 80px rgba(16,24,40,.12);
-      --ring:rgba(79,70,229,.45);
-
-      --inputBg:#fff;
+      --bg:#f6f8fb; --bg2:#eef2ff;
+      --txt:#0b1220; --muted:#556072;
+      --card:rgba(255,255,255,.86); --cardSolid:#ffffff;
+      --line:rgba(15,23,42,.12); --line2:rgba(15,23,42,.08);
+      --shadow:0 14px 44px rgba(15,23,42,.10);
+      --shadow2:0 26px 90px rgba(15,23,42,.12);
+      --ring:rgba(79,70,229,.35);
+      --inputBg:#ffffff;
     }
-
     :root[data-theme="soft"]{
-      --bg:#fbfbff;
-      --bg2:#f3f4ff;
-      --txt:#0b1220;
-      --muted:#596276;
-
-      --card:#ffffff;
-      --card2:rgba(255,255,255,.92);
-
-      --line:rgba(16,24,40,.12);
-      --line2:rgba(16,24,40,.09);
-
-      --shadow:0 14px 44px rgba(16,24,40,.10);
-      --shadow2:0 20px 80px rgba(16,24,40,.12);
-      --ring:rgba(14,165,164,.35);
-
-      --inputBg:#fff;
+      --bg:#fbfbff; --bg2:#f3f4ff;
+      --txt:#0b1220; --muted:#596276;
+      --card:rgba(255,255,255,.90); --cardSolid:#ffffff;
+      --line:rgba(15,23,42,.12); --line2:rgba(15,23,42,.09);
+      --shadow:0 14px 44px rgba(15,23,42,.10);
+      --shadow2:0 26px 90px rgba(15,23,42,.12);
+      --ring:rgba(14,165,164,.30);
+      --inputBg:#ffffff;
     }
-
-    :root[data-theme="midnight"]{
-      /* already defaulted in :root (kept for clarity) */
-    }
-
-    *{ box-sizing:border-box; }
-    html, body{ height:100%; }
+    *{box-sizing:border-box}
+    html,body{height:100%}
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--txt);
       background:
-        radial-gradient(900px 420px at 20% 0%, rgba(79,70,229,.10), transparent 60%),
-        radial-gradient(900px 420px at 80% 0%, rgba(14,165,164,.10), transparent 60%),
+        radial-gradient(900px 520px at 20% -10%, rgba(79,70,229,.14), transparent 60%),
+        radial-gradient(900px 520px at 80% -10%, rgba(14,165,164,.14), transparent 60%),
         linear-gradient(180deg,var(--bg2),var(--bg));
       min-height:100vh;
     }
-    a{ color:var(--accent); text-decoration:none; }
-    a:hover{ text-decoration:underline; }
-    :focus-visible{
-      outline:3px solid var(--ring);
-      outline-offset:3px;
-      border-radius:12px;
-    }
+    a{color:var(--accent);text-decoration:none;font-weight:900}
+    a:hover{text-decoration:underline}
+    :focus-visible{outline:3px solid var(--ring);outline-offset:3px;border-radius:12px}
 
-    .pp-wrap{ max-width:1100px; margin:0 auto; padding:0 18px; }
-
-    /* Header (minimal, app-like) */
-    header{ padding:14px 0; }
-    .bar{
+    .wrap{max-width:1120px;margin:0 auto;padding:0 18px}
+    header{padding:16px 0}
+    .nav{
       background:var(--card);
       border:1px solid var(--line);
-      border-radius: 0 0 20px 20px;
+      border-radius:0 0 22px 22px;
+      backdrop-filter:blur(14px);
       box-shadow:var(--shadow);
       overflow:hidden;
     }
-    .top{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      padding:12px 14px;
-      flex-wrap:wrap;
-    }
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-width:220px;
-    }
+    .navInner{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 14px}
+    .brand{display:flex;align-items:center;gap:12px;min-width:220px}
     .logo{
-      width:40px;height:40px;
-      border-radius:14px;
+      width:42px;height:42px;border-radius:14px;
       display:flex;align-items:center;justify-content:center;
-      font-weight:1000;
-      background:rgba(16,24,40,.04);
+      font-weight:1000;letter-spacing:-.5px;
       border:1px solid var(--line2);
-      letter-spacing:-.5px;
+      background:rgba(255,255,255,.06);
     }
-    :root[data-theme="midnight"] .logo{ background:rgba(255,255,255,.04); }
+    :root[data-theme="day"] .logo, :root[data-theme="soft"] .logo{background:rgba(15,23,42,.03)}
+    .bt{display:flex;flex-direction:column;line-height:1.1}
+    .t1{font-weight:1000;font-size:15px;letter-spacing:-.2px}
+    .t2{font-size:12px;color:var(--muted);margin-top:2px}
 
-    .title{ font-weight:1000; font-size:15px; letter-spacing:-.2px; }
-    .sub{ font-size:12px; color:var(--muted); }
-
-    .nav{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-
+    .right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
     .btn{
-      padding:10px 14px;
-      border-radius:999px;
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      padding:10px 14px;border-radius:999px;
       border:1px solid var(--line);
       background:var(--inputBg);
       color:var(--txt);
-      font-weight:900;
+      font-weight:950;
       cursor:pointer;
-      white-space:nowrap;
       transition:transform .08s ease, filter .15s ease, background .15s ease;
-      line-height:1;
       text-decoration:none;
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
+      white-space:nowrap;
     }
-    .btn:hover{ background:rgba(16,24,40,.03); }
-    :root[data-theme="midnight"] .btn:hover{ background:rgba(255,255,255,.05); }
-    .btn:active{ transform:translateY(1px); }
+    .btn:hover{filter:brightness(1.03)}
+    .btn:active{transform:translateY(1px)}
     .btn.primary{
-      background:linear-gradient(135deg, var(--accent), rgba(79,70,229,.92));
-      color:#fff;
       border-color:transparent;
+      background:linear-gradient(135deg,var(--accent),rgba(79,70,229,.92));
+      color:#fff;
+      box-shadow:0 18px 44px rgba(79,70,229,.22);
     }
-    .btn.primary:hover{ filter:brightness(.97); }
-
+    .btn.ghost{background:transparent}
     .select{
       appearance:none;
-      -webkit-appearance:none;
-      -moz-appearance:none;
-      padding:10px 38px 10px 14px;
+      padding:10px 40px 10px 14px;
       border-radius:999px;
       border:1px solid var(--line);
       background:var(--inputBg);
       color:var(--txt);
-      font-weight:900;
+      font-weight:950;
       cursor:pointer;
-      line-height:1;
       background-image:
         linear-gradient(45deg, transparent 50%, currentColor 50%),
         linear-gradient(135deg, currentColor 50%, transparent 50%);
@@ -214,370 +140,296 @@
       max-width:220px;
     }
 
-    main{ padding:18px 0 70px; }
-    .grid{
-      display:grid;
-      grid-template-columns:1fr;
-      place-items:center;
-    }
-
+    main{padding:22px 0 78px}
+    .grid{display:grid;grid-template-columns:1fr;place-items:center}
     .card{
-      width:min(560px, 100%);
+      width:min(560px,100%);
       background:var(--card);
       border:1px solid var(--line);
       border-radius:var(--radius);
+      backdrop-filter:blur(14px);
       box-shadow:var(--shadow2);
       padding:22px;
     }
-
-    h1{
-      margin:0 0 8px;
-      font-size:22px;
-      font-weight:1000;
-      letter-spacing:-.3px;
-    }
-    .lead{
-      margin:0 0 14px;
-      font-size:13.5px;
-      color:var(--muted);
-      line-height:1.6;
-    }
-
-    label{
-      font-size:13px;
-      font-weight:1000;
-      margin:12px 0 6px;
-      display:block;
-      letter-spacing:-0.1px;
-    }
-
+    h1{margin:0 0 8px;font-size:22px;font-weight:1000;letter-spacing:-.3px}
+    .lead{margin:0 0 16px;color:var(--muted);line-height:1.6;font-size:13.5px}
+    label{display:block;margin:12px 0 6px;font-size:13px;font-weight:1000}
+    .field{position:relative}
     input{
       width:100%;
       padding:12px 14px;
       border-radius:14px;
-      border:1px solid rgba(16,24,40,.12);
-      font-size:15px;
-      background:var(--inputBg);
-      color:var(--txt);
-    }
-    :root[data-theme="midnight"] input{
-      border-color:rgba(255,255,255,.16);
-    }
-    input:focus{
-      outline:none;
-      border-color:rgba(14,165,164,.45);
-      box-shadow:0 0 0 4px rgba(14,165,164,.12);
-    }
-
-    .row{
-      display:grid;
-      grid-template-columns:1fr auto;
-      gap:10px;
-      align-items:center;
-    }
-    .toggle{
-      padding:10px 12px;
-      border-radius:14px;
       border:1px solid var(--line);
       background:var(--inputBg);
-      font-weight:900;
-      cursor:pointer;
       color:var(--txt);
+      font-size:15px;
+      outline:none;
     }
-
+    input:focus{border-color:rgba(14,165,164,.42);box-shadow:0 0 0 4px rgba(14,165,164,.12)}
+    .row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+    .toggle{
+      padding:10px 12px;border-radius:14px;
+      border:1px solid var(--line);
+      background:var(--inputBg);
+      color:var(--txt);
+      font-weight:950;
+      cursor:pointer;
+    }
     .msg{
       margin-top:12px;
-      font-size:12.5px;
-      line-height:1.55;
-      color:var(--muted);
-      background:rgba(16,24,40,.02);
-      border:1px solid var(--line2);
-      border-radius:14px;
-      padding:10px 12px;
       min-height:44px;
-      display:flex;
-      align-items:center;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--line2);
+      background:rgba(255,255,255,.04);
+      color:var(--muted);
+      display:flex;align-items:center;
+      font-size:12.8px;line-height:1.55;
       word-break:break-word;
     }
-    :root[data-theme="midnight"] .msg{ background:rgba(255,255,255,.04); }
-    .msg.ok{
-      color:var(--txt);
-      border-color:rgba(14,165,164,.32);
-      background:rgba(14,165,164,.08);
-    }
-    .msg.bad{
-      color:var(--txt);
-      border-color:rgba(239,68,68,.32);
-      background:rgba(239,68,68,.08);
-    }
-
-    .small{
-      font-size:12.5px;
-      color:var(--muted);
-      margin-top:12px;
-      line-height:1.6;
-    }
+    .msg.ok{border-color:rgba(14,165,164,.32);background:rgba(14,165,164,.08);color:var(--txt)}
+    .msg.bad{border-color:rgba(239,68,68,.30);background:rgba(239,68,68,.08);color:var(--txt)}
+    .small{margin-top:12px;font-size:12.5px;color:var(--muted);line-height:1.6}
 
     footer{
-      margin-top:80px;
-      padding:44px 0;
-      background:#0f172a;
-      color:#cbd5e1;
+      margin-top:84px;
+      padding:46px 0;
+      background:var(--cardSolid);
+      color:var(--muted);
+      border-top:1px solid var(--line);
     }
-    .footbox{ max-width:1100px; margin:auto; padding:0 20px; }
-    .footgrid{ display:grid; grid-template-columns:1fr 1fr; gap:40px; }
-    @media(max-width:768px){ .footgrid{ grid-template-columns:1fr; } }
-    .footbrand b{ color:#fff; font-size:18px; }
-    .footmut{ margin-top:10px; font-size:13px; line-height:1.6; color:rgba(226,232,240,.70); }
-    .footlinks{ display:flex; flex-wrap:wrap; gap:12px; }
-    .footlinks a{ color:#cbd5e1; font-weight:700; font-size:14px; text-decoration:none; opacity:.85; }
-    .footlinks a:hover{ opacity:1; }
-    .footbottom{
-      margin-top:40px;
-      padding-top:20px;
-      border-top:1px solid rgba(255,255,255,.08);
-      display:flex;
-      justify-content:space-between;
+    .foot{max-width:1120px;margin:0 auto;padding:0 18px}
+    .footGrid{display:grid;grid-template-columns:1fr 1fr;gap:36px}
+    @media(max-width:780px){.footGrid{grid-template-columns:1fr}}
+    .footLinks{display:flex;flex-wrap:wrap;gap:12px}
+    .footLinks a{color:var(--muted);font-weight:900;opacity:.9}
+    .footLinks a:hover{opacity:1;color:var(--txt);text-decoration:none}
+    .footBottom{
+      margin-top:34px;padding-top:18px;border-top:1px solid var(--line);
+      display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
       font-size:13px;
-      color:rgba(226,232,240,.60);
-      gap:12px;
     }
-    @media(max-width:768px){ .footbottom{ flex-direction:column; } }
   </style>
 </head>
 
 <body>
-  <header role="navigation" aria-label="Primary">
-    <div class="pp-wrap">
-      <div class="bar">
-        <div class="top">
-          <div class="brand" aria-label="ProfitPilot">
-            <div class="logo" aria-hidden="true">PP</div>
-            <div>
-              <div class="title">ProfitPilot</div>
-              <div class="sub">Independent tool by UKwebtools</div>
-            </div>
-          </div>
-
-          <nav class="nav" aria-label="Main">
-            <a class="btn" href="index.html">Home</a>
-            <a class="btn" href="reviews.html">Reviews</a>
-            <a class="btn" href="login.html">Log in</a>
-            <span class="btn primary" aria-current="page" style="pointer-events:none">Sign up</span>
-
-            <select class="select" id="themeSel" aria-label="Theme">
-              <option value="day">Day</option>
-              <option value="soft">Soft</option>
-              <option value="midnight">Midnight</option>
-            </select>
-          </nav>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <main class="pp-wrap">
-    <div class="grid">
-      <div class="card">
-        <h1>Create your account</h1>
-        <p class="lead">
-          Start the 5-day trial. After signup, you’ll be sent a verification email to activate your account.
-        </p>
-
-        <form id="form" novalidate>
-          <label for="email">Email</label>
-          <input id="email" type="email" placeholder="you@example.com" autocomplete="email" required>
-
-          <label for="password">Password</label>
-          <div class="row">
-            <input id="password" type="password" placeholder="Minimum 8 characters" autocomplete="new-password" required>
-            <button class="toggle" id="togglePw" type="button" aria-label="Show password">Show</button>
-          </div>
-
-          <label for="password2">Confirm password</label>
-          <div class="row">
-            <input id="password2" type="password" placeholder="Repeat password" autocomplete="new-password" required>
-            <button class="toggle" id="togglePw2" type="button" aria-label="Show confirm password">Show</button>
-          </div>
-
-          <button class="btn primary" id="create" type="submit" style="width:100%;justify-content:center;margin-top:14px;">
-            Create account
-          </button>
-
-          <button class="btn" id="goLogin" type="button" style="width:100%;justify-content:center;margin-top:10px;">
-            I already have an account
-          </button>
-
-          <div class="msg" id="msg" role="status" aria-live="polite">—</div>
-
-          <div class="small">
-            By signing up, you agree to the <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy</a>.
-          </div>
-        </form>
-      </div>
-    </div>
-  </main>
-
-  <footer role="contentinfo">
-    <div class="footbox">
-      <div class="footgrid">
-        <div class="footbrand">
-          <div><b>ProfitPilot</b></div>
-          <div class="footmut">
-            <b>Independent tool:</b> not affiliated with any marketplace/platform/payment provider.<br>
-            <b>Estimates only:</b> outputs depend on your inputs and assumptions; no profit guarantees.<br>
-            Need help? <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a>
+<header role="navigation" aria-label="Primary">
+  <div class="wrap">
+    <div class="nav">
+      <div class="navInner">
+        <div class="brand" aria-label="ProfitPilot">
+          <div class="logo" aria-hidden="true">PP</div>
+          <div class="bt">
+            <div class="t1">ProfitPilot</div>
+            <div class="t2">Luxury-grade tools by UKwebtools</div>
           </div>
         </div>
 
-        <div class="footlinks" aria-label="Footer links">
-          <a href="pricing.html">Pricing</a>
-          <a href="reviews.html">Reviews</a>
-          <a href="refunds.html">Refund Policy</a>
-          <a href="faq.html">FAQ</a>
-          <a href="terms.html">Terms</a>
-          <a href="privacy.html">Privacy</a>
+        <div class="right">
+          <a class="btn ghost" href="index.html">Home</a>
+          <a class="btn ghost" href="reviews.html">Reviews</a>
+          <a class="btn ghost" href="pricing.html">Pricing</a>
+          <a class="btn" href="login.html">Log in</a>
+          <span class="btn primary" aria-current="page" style="pointer-events:none">Sign up</span>
+
+          <select class="select" id="themeSel" aria-label="Theme">
+            <option value="day">Day</option>
+            <option value="soft">Soft</option>
+            <option value="midnight">Midnight</option>
+          </select>
         </div>
       </div>
+    </div>
+  </div>
+</header>
 
-      <div class="footbottom">
-        <div>© <span id="yr"></span> UKwebtools • ProfitPilot</div>
-        <div><a href="https://ukwebtools.com/" rel="nofollow">UKwebtools</a></div>
+<main class="wrap">
+  <div class="grid">
+    <div class="card">
+      <h1>Create your account</h1>
+      <p class="lead">
+        Start the 5-day trial. We’ll email you a verification link to activate your account.
+      </p>
+
+      <form id="form" novalidate>
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+
+        <label for="password">Password</label>
+        <div class="row">
+          <input id="password" type="password" placeholder="Minimum 8 characters" autocomplete="new-password" required>
+          <button class="toggle" id="togglePw" type="button">Show</button>
+        </div>
+
+        <label for="password2">Confirm password</label>
+        <div class="row">
+          <input id="password2" type="password" placeholder="Repeat password" autocomplete="new-password" required>
+          <button class="toggle" id="togglePw2" type="button">Show</button>
+        </div>
+
+        <button class="btn primary" id="create" type="submit" style="width:100%;margin-top:14px">Create account</button>
+        <button class="btn" id="goLogin" type="button" style="width:100%;margin-top:10px">I already have an account</button>
+
+        <div class="msg" id="msg" role="status" aria-live="polite">—</div>
+
+        <div class="small">
+          By signing up, you agree to the <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy</a>.
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+
+<footer role="contentinfo">
+  <div class="foot">
+    <div class="footGrid">
+      <div>
+        <div style="font-weight:1000;color:var(--txt);font-size:18px">ProfitPilot</div>
+        <div style="margin-top:10px;line-height:1.6">
+          Independent tool. Not affiliated with marketplaces/payment providers.<br>
+          Need help? <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a>
+        </div>
+      </div>
+      <div class="footLinks" aria-label="Footer links">
+        <a href="pricing.html">Pricing</a>
+        <a href="reviews.html">Reviews</a>
+        <a href="faq.html">FAQ</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
       </div>
     </div>
-  </footer>
+    <div class="footBottom">
+      <div>© <span id="yr"></span> UKwebtools • ProfitPilot</div>
+      <div><a href="https://ukwebtools.com/" rel="nofollow">UKwebtools</a></div>
+    </div>
+  </div>
+</footer>
 
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-    const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
-    const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
+  const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
+  const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true,
-        flowType: "pkce",
-        storageKey: "profitpilot_auth"
-      }
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      flowType: "pkce",
+      storageKey: "profitpilot_auth"
+    }
+  });
+
+  // Footer year
+  document.getElementById("yr").textContent = new Date().getFullYear();
+
+  // Theme
+  const themeSel = document.getElementById("themeSel");
+  function setTheme(t){
+    document.documentElement.setAttribute("data-theme", t);
+    try{ localStorage.setItem("pp_theme", t); }catch(e){}
+  }
+  (function initTheme(){
+    const saved = localStorage.getItem("pp_theme") || "midnight";
+    setTheme(saved);
+    themeSel.value = saved;
+  })();
+  themeSel.addEventListener("change", ()=> setTheme(themeSel.value));
+
+  // UI
+  const form = document.getElementById("form");
+  const msg = document.getElementById("msg");
+  const emailEl = document.getElementById("email");
+  const pwEl = document.getElementById("password");
+  const pw2El = document.getElementById("password2");
+  const createBtn = document.getElementById("create");
+
+  function setMsg(text, kind=""){
+    msg.textContent = text || "—";
+    msg.className = "msg" + (kind ? " " + kind : "");
+  }
+
+  function normalizeSignupError(error){
+    const raw = String(error?.message || error || "");
+    const low = raw.toLowerCase();
+    if (low.includes("redirect url is not allowed")) return "Blocked: redirect URL not allowed in Supabase Auth → URL Configuration.";
+    if (low.includes("user already registered")) return "This email is already registered. Please log in.";
+    if (low.includes("invalid email")) return "That email address looks invalid.";
+    if (low.includes("password")) return "Please use a stronger password (8+ characters).";
+    if (low.includes("rate limit") || low.includes("too many")) return "Too many attempts. Please wait and try again.";
+    return "Could not create account. Please try again.";
+  }
+
+  function bindToggle(btnId, inputEl){
+    const btn = document.getElementById(btnId);
+    btn.addEventListener("click", ()=>{
+      const isPw = inputEl.type === "password";
+      inputEl.type = isPw ? "text" : "password";
+      btn.textContent = isPw ? "Hide" : "Show";
+      inputEl.focus();
     });
+  }
+  bindToggle("togglePw", pwEl);
+  bindToggle("togglePw2", pw2El);
 
-    // Footer year
-    document.getElementById("yr").textContent = new Date().getFullYear();
+  document.getElementById("goLogin").addEventListener("click", ()=> location.href = "login.html");
 
-    // Theme (works like app)
-    const themeSel = document.getElementById("themeSel");
-    function setTheme(t){
-      document.documentElement.setAttribute("data-theme", t);
-      try{ localStorage.setItem("pp_theme", t); }catch(e){}
-    }
-    (function initTheme(){
-      const saved = localStorage.getItem("pp_theme") || "midnight";
-      setTheme(saved);
-      if (themeSel) themeSel.value = saved;
-    })();
-    themeSel?.addEventListener("change", ()=> setTheme(themeSel.value));
+  // If already signed in, go app
+  try{
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user) location.replace("app.html");
+  }catch(e){}
 
-    // Elements
-    const form = document.getElementById("form");
-    const msg = document.getElementById("msg");
-    const emailEl = document.getElementById("email");
-    const pwEl = document.getElementById("password");
-    const pw2El = document.getElementById("password2");
-    const createBtn = document.getElementById("create");
+  form.addEventListener("submit", async (e)=>{
+    e.preventDefault();
 
-    function setMsg(text, kind=""){
-      msg.textContent = text;
-      msg.className = "msg" + (kind ? " " + kind : "");
-    }
+    const email = emailEl.value.trim();
+    const password = pwEl.value;
+    const password2 = pw2El.value;
 
-    function normalizeErrorMessage(err){
-      const raw = String(err?.message || err || "");
-      const low = raw.toLowerCase();
-      if (low.includes("redirect url is not allowed")) return "Signup blocked: redirect URL not allowed in Supabase settings (URL Configuration).";
-      if (low.includes("user already registered")) return "This email is already registered. Try logging in.";
-      if (low.includes("invalid email")) return "That email address looks invalid.";
-      if (low.includes("password")) return "Please choose a stronger password (8+ characters).";
-      if (low.includes("rate limit") || low.includes("too many")) return "Too many attempts. Please wait a minute and try again.";
-      return raw || "Could not create account. Please try again.";
-    }
+    if (!email){ setMsg("Please enter your email.", "bad"); emailEl.focus(); return; }
+    if (!password || password.length < 8){ setMsg("Password must be at least 8 characters.", "bad"); pwEl.focus(); return; }
+    if (password !== password2){ setMsg("Passwords do not match.", "bad"); pw2El.focus(); return; }
 
-    // Show/hide password
-    function bindToggle(btnId, inputId){
-      const btn = document.getElementById(btnId);
-      const input = document.getElementById(inputId);
-      btn.addEventListener("click", ()=>{
-        const isPw = input.type === "password";
-        input.type = isPw ? "text" : "password";
-        btn.textContent = isPw ? "Hide" : "Show";
-        input.focus();
-      });
-    }
-    bindToggle("togglePw", "password");
-    bindToggle("togglePw2", "password2");
+    createBtn.disabled = true;
+    setMsg("Creating account…");
 
-    document.getElementById("goLogin").addEventListener("click", ()=>location.href="login.html");
-
-    // If already signed in, send them to app
     try{
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) location.replace("app.html");
-    }catch(e){}
+      const redirectTo = `${location.origin}/login.html`;
 
-    // Submit
-    form.addEventListener("submit", async (e)=>{
-      e.preventDefault();
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { emailRedirectTo: redirectTo }
+      });
 
-      const email = emailEl.value.trim();
-      const password = pwEl.value;
-      const password2 = pw2El.value;
-
-      if (!email){ setMsg("Please enter your email.", "bad"); emailEl.focus(); return; }
-      if (!password || password.length < 8){ setMsg("Password must be at least 8 characters.", "bad"); pwEl.focus(); return; }
-      if (password !== password2){ setMsg("Passwords do not match.", "bad"); pw2El.focus(); return; }
-
-      createBtn.disabled = true;
-      setMsg("Creating account…");
-
-      try{
-        // Use origin to avoid domain mismatch in redirects
-        const redirectTo = `${location.origin}/login.html`;
-
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: { emailRedirectTo: redirectTo }
-        });
-
-        if (error){
-          console.error("Supabase signUp error:", error);
-          setMsg(normalizeErrorMessage(error), "bad");
-          createBtn.disabled = false;
-          return;
-        }
-
-        // Store for verify page (resend convenience)
-        localStorage.setItem("pp_pending_email", email);
-        localStorage.setItem("pp_pending_email_ts", String(Date.now()));
-
-        // ✅ Always go to verify screen if session is null (email confirm on)
-        if (!data?.session){
-          setMsg("Verification link sent. Go to verify and check your inbox/spam.", "ok");
-          location.href = "verify.html";
-          return;
-        }
-
-        // If confirmation is OFF, user gets a session immediately
-        setMsg("Account created. Redirecting…", "ok");
-        location.replace("app.html");
-
-      } catch (err){
-        console.error("Signup fatal error:", err);
-        setMsg("Something went wrong. Please try again.", "bad");
+      if (error){
+        console.error(error);
+        setMsg(normalizeSignupError(error), "bad");
         createBtn.disabled = false;
+        return;
       }
-    });
-  </script>
+
+      localStorage.setItem("pp_pending_email", email);
+      localStorage.setItem("pp_pending_email_ts", String(Date.now()));
+
+      // If email confirmations are ON => session null => go verify page
+      if (!data?.session){
+        setMsg("Verification link sent. Redirecting to Verify…", "ok");
+        location.href = "verify.html";
+        return;
+      }
+
+      // If confirmations OFF => session exists => go app
+      setMsg("Account created. Redirecting…", "ok");
+      location.replace("app.html");
+    }catch(err){
+      console.error(err);
+      setMsg("Something went wrong. Please try again.", "bad");
+      createBtn.disabled = false;
+    }
+  });
+</script>
 </body>
 </html>
