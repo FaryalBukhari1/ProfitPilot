@@ -7,41 +7,18 @@
   <meta name="robots" content="noindex,nofollow">
   <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
 
-  <!-- Google Analytics (GA4) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-F12747YWBN"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-F12747YWBN', { anonymize_ip: true });
-  </script>
-
-  <!-- Microsoft Clarity -->
-  <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)}
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "vjsgka2ywg");
-  </script>
+  <!-- Supabase UMD (NO MODULE) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     :root{
-      --bg:#0b0f14;
-      --card:#111826;
-      --card2:#0e1521;
-      --txt:#eaf0ff;
-      --muted:#9aa7bd;
-      --line:rgba(255,255,255,.10);
-      --accent:#5eead4;
-      --accent2:#60a5fa;
-      --good:#34d399;
-      --warn:#fbbf24;
-      --bad:#fb7185;
+      --bg:#0b0f14; --card:#111826; --card2:#0e1521;
+      --txt:#eaf0ff; --muted:#9aa7bd; --line:rgba(255,255,255,.10);
+      --accent:#5eead4; --accent2:#60a5fa;
+      --good:#34d399; --warn:#fbbf24; --bad:#fb7185;
       --shadow:0 18px 46px rgba(0,0,0,.35);
     }
     *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
     body{
       margin:0;
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
@@ -55,111 +32,68 @@
     a:hover{text-decoration:underline}
     :focus-visible{outline:3px solid rgba(96,165,250,.45);outline-offset:3px;border-radius:10px}
 
-    /* NAV */
-    .pp-navwrap{max-width:1200px;margin:0 auto;padding:14px 16px;position:relative;z-index:50}
+    .pp-navwrap{max-width:1200px;margin:0 auto;padding:14px 16px}
     .pp-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
     .pp-left,.pp-right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .pp-btn{
       padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.10);
       background:rgba(255,255,255,.06);
-      font-weight:900;text-decoration:none;color:rgba(255,255,255,.92);
+      font-weight:900;color:rgba(255,255,255,.92);
       display:inline-flex;gap:8px;align-items:center;white-space:nowrap;
       transition:transform .08s ease;
       backdrop-filter: blur(10px);
     }
     .pp-btn:hover{transform:translateY(-1px)}
-    .pp-btn:active{transform:translateY(0)}
     .pp-primary{
       border:none;color:#0b1220;
       background:linear-gradient(135deg,var(--accent),var(--accent2));
       box-shadow:0 14px 28px rgba(96,165,250,.18);
     }
-    .pp-active{
-      border-color:rgba(94,234,212,.35);
-      background:rgba(94,234,212,.10);
-    }
+    .pp-active{border-color:rgba(94,234,212,.35);background:rgba(94,234,212,.10);}
     .pp-user{
       padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.10);
       background:rgba(255,255,255,.06);
       color:rgba(255,255,255,.80);
-      font-weight:900;
-      display:none;
+      font-weight:900;display:none;
       max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
     }
-    .pp-crumbs{
-      margin-top:10px;font-size:12.5px;color:rgba(255,255,255,.70);
-      display:flex;gap:6px;flex-wrap:wrap;align-items:center;
-    }
-    .pp-crumbs a{color:rgba(94,234,212,.95);font-weight:900;text-decoration:none}
-    .pp-sep{opacity:.55}
-
-    /* PAGE */
     .wrap{max-width:520px;margin:26px auto 70px;padding:0 14px}
     .hero{
       margin:0 auto 14px;
       background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
       border:1px solid rgba(255,255,255,.08);
-      border-radius:18px;
-      padding:14px;
-      box-shadow:0 10px 30px rgba(0,0,0,.22);
+      border-radius:18px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.22);
     }
     h1{margin:0;font-size:20px;letter-spacing:-.02em}
     .lead{margin-top:8px;color:rgba(234,240,255,.75);line-height:1.6;font-size:13px}
 
     .card{
       background:linear-gradient(180deg,rgba(94,234,212,.10),transparent 60%),var(--card);
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:20px;
-      box-shadow:var(--shadow);
+      border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow);
     }
-    .brandline{
-      display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
-      margin-bottom:10px;
-    }
-    .brand{font-weight:1000;letter-spacing:-.02em;font-size:18px;}
-    .pillrow{display:flex;gap:8px;flex-wrap:wrap}
-    .pill{
-      padding:7px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.05);
-      color:rgba(234,240,255,.72);
-      font-size:12px;font-weight:900;
-    }
-
     label{font-size:12px;color:var(--muted);margin-top:14px;display:block}
     input{
-      width:100%;padding:12px 12px;border-radius:14px;border:1px solid var(--line);
+      width:100%;padding:12px;border-radius:14px;border:1px solid var(--line);
       background:var(--card2);color:var(--txt);outline:none;
     }
     input:focus{border-color:rgba(94,234,212,.35);box-shadow:0 0 0 4px rgba(94,234,212,.10);}
     .row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;}
     .toggle{
       padding:10px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.06);
-      color:rgba(255,255,255,.90);
-      font-weight:900;cursor:pointer;user-select:none;white-space:nowrap;
+      background:rgba(255,255,255,.06);color:rgba(255,255,255,.90);
+      font-weight:900;cursor:pointer;white-space:nowrap;
       transition:transform .08s ease;
     }
     .toggle:hover{transform:translateY(-1px)}
-    .toggle:active{transform:translateY(0)}
-
-    .hint{font-size:12px;color:rgba(234,240,255,.70);margin-top:8px;line-height:1.5}
-    .hint b{color:rgba(255,255,255,.92)}
-    .meter{margin-top:10px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);border-radius:999px;overflow:hidden;height:10px;}
-    .fill{height:100%;width:0%;background:linear-gradient(90deg,var(--bad),var(--warn),var(--good))}
-    .meterline{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:8px}
-    .score{font-size:12px;color:rgba(234,240,255,.70)}
-    .score strong{color:rgba(255,255,255,.92)}
 
     .btn{
       width:100%;margin-top:14px;padding:12px;border-radius:999px;
       border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.03);
-      color:var(--txt);cursor:pointer;font-weight:1000;
+      background:rgba(255,255,255,.03);color:var(--txt);
+      cursor:pointer;font-weight:1000;
       transition:transform .08s ease, opacity .08s ease, filter .15s ease;
     }
     .btn:hover{transform:translateY(-1px)}
-    .btn:active{transform:translateY(0)}
     .btn.primary{
       border:none;color:#0b1220;
       background:linear-gradient(135deg,var(--accent),var(--accent2));
@@ -167,23 +101,21 @@
     }
     .btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
 
-    .small{font-size:12px;color:rgba(234,240,255,.68);margin-top:12px;line-height:1.55}
     .msg{
       margin-top:12px;font-size:12.5px;line-height:1.55;color:rgba(234,240,255,.78);
       background:rgba(255,255,255,.04);
       border:1px solid rgba(255,255,255,.08);
-      border-radius:14px;
-      padding:10px 12px;
+      border-radius:14px;padding:10px 12px;
+      white-space:pre-wrap;
     }
     .msg.ok{border-color:rgba(52,211,153,.22);background:rgba(52,211,153,.06)}
     .msg.bad{border-color:rgba(251,113,133,.22);background:rgba(251,113,133,.06)}
     .msg.warn{border-color:rgba(251,191,36,.20);background:rgba(251,191,36,.06)}
+    .small{font-size:12px;color:rgba(234,240,255,.68);margin-top:12px;line-height:1.55}
   </style>
 </head>
 
 <body>
-
-  <!-- NAV -->
   <div class="pp-navwrap" role="navigation" aria-label="Primary">
     <div class="pp-nav">
       <div class="pp-left">
@@ -194,26 +126,13 @@
         <a class="pp-btn" href="terms.html">Terms</a>
         <a class="pp-btn" href="faq.html">FAQ</a>
       </div>
-
       <div class="pp-right">
         <span class="pp-user" id="ppUserChip">—</span>
-
-        <!-- Signed OUT -->
         <a class="pp-btn" id="ppLoginBtn" href="login.html">Log in</a>
         <a class="pp-btn pp-primary pp-active" id="ppSignupBtn" href="signup.html">Sign up</a>
-
-        <!-- Signed IN -->
         <a class="pp-btn pp-primary" id="ppOpenBtn" href="app.html" style="display:none">Open app</a>
         <a class="pp-btn" id="ppLogoutBtn" href="#" style="display:none">Log out</a>
       </div>
-    </div>
-
-    <div class="pp-crumbs" aria-label="Breadcrumb">
-      <a href="https://ukwebtools.com/">UKwebtools</a>
-      <span class="pp-sep">›</span>
-      <a href="index.html">ProfitPilot</a>
-      <span class="pp-sep">›</span>
-      <span>Sign up</span>
     </div>
   </div>
 
@@ -227,15 +146,6 @@
     </div>
 
     <div class="card">
-      <div class="brandline">
-        <div class="brand">ProfitPilot</div>
-        <div class="pillrow" aria-label="Trust">
-          <span class="pill">One-time purchase</span>
-          <span class="pill">No recurring billing</span>
-          <span class="pill">Email signup only</span>
-        </div>
-      </div>
-
       <form id="form" novalidate>
         <label for="email">Email</label>
         <input id="email" type="email" placeholder="you@example.com" autocomplete="email" required>
@@ -243,54 +153,55 @@
         <label for="password">Password</label>
         <div class="row">
           <input id="password" type="password" placeholder="Minimum 8 characters" autocomplete="new-password" required>
-          <button class="toggle" id="togglePw" type="button" aria-label="Show password">Show</button>
-        </div>
-
-        <div class="meter" aria-label="Password strength">
-          <div class="fill" id="pwFill"></div>
-        </div>
-        <div class="meterline">
-          <div class="score" id="pwScore">Strength: <strong>—</strong></div>
-          <div class="score" id="capsHint" style="display:none">Caps Lock is ON</div>
+          <button class="toggle" id="togglePw" type="button">Show</button>
         </div>
 
         <label for="password2">Confirm password</label>
         <div class="row">
           <input id="password2" type="password" placeholder="Repeat password" autocomplete="new-password" required>
-          <button class="toggle" id="togglePw2" type="button" aria-label="Show confirm password">Show</button>
+          <button class="toggle" id="togglePw2" type="button">Show</button>
         </div>
 
         <button class="btn primary" id="create" type="submit">Create account</button>
-        <button class="btn" id="resend" type="button" style="display:none">Resend verification email</button>
         <button class="btn" id="goLogin" type="button">I already have an account</button>
 
         <div class="msg" id="msg" role="status" aria-live="polite">—</div>
 
-        <div class="small" style="margin-top:12px">
+        <div class="small">
           By signing up, you agree to the <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy</a>.
-        </div>
-        <div class="hint" style="margin-top:10px">
-          <b>Privacy:</b> We do not connect to your marketplace accounts. Payment details are handled by the checkout provider.
         </div>
       </form>
     </div>
   </div>
 
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
-    // ✅ IMPORTANT: Supabase Auth does NOT work reliably from file:// URLs.
-    if (location.protocol === "file:") {
-      document.getElementById("msg").textContent =
-        "You are opening this page as a file (file://). Please use a web server (e.g., VS Code Live Server) so the URL looks like http://localhost:xxxx.";
-      document.getElementById("msg").className = "msg warn";
-    }
-
+  <script>
+    // ============ CONFIG ============
     const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
     const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
 
-    // ✅ Use the same auth config as your app (stops weird session issues)
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON, {
+    // ============ SAFE GUARDS ============
+    const msg = document.getElementById("msg");
+    function setMsg(text, kind=""){
+      msg.textContent = text;
+      msg.className = "msg" + (kind ? " " + kind : "");
+    }
+
+    // If Supabase library fails to load, show it immediately
+    if (!window.supabase || !window.supabase.createClient){
+      setMsg("Supabase library failed to load. Check your internet connection or CDN blocking.", "bad");
+      throw new Error("Supabase not loaded");
+    }
+
+    // Big newbie trap: file://
+    if (location.protocol === "file:"){
+      setMsg(
+        "You opened this page as a file (file://).\n\nSupabase Auth will NOT work like this.\nUse a server (VS Code Live Server) so your URL looks like http://localhost:5500/signup.html",
+        "warn"
+      );
+    }
+
+    // ============ CLIENT ============
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON, {
       auth: {
         persistSession: true,
         autoRefreshToken: true,
@@ -300,76 +211,15 @@
       }
     });
 
-    // Elements
+    // ============ UI ============
     const form = document.getElementById("form");
-    const msg = document.getElementById("msg");
     const emailEl = document.getElementById("email");
     const pwEl = document.getElementById("password");
     const pw2El = document.getElementById("password2");
     const createBtn = document.getElementById("create");
-    const resendBtn = document.getElementById("resend");
-    const pwFill = document.getElementById("pwFill");
-    const pwScore = document.getElementById("pwScore");
-    const capsHint = document.getElementById("capsHint");
 
-    function setMsg(text, kind=""){
-      msg.textContent = text;
-      msg.className = "msg" + (kind ? " " + kind : "");
-    }
+    document.getElementById("goLogin").addEventListener("click", ()=> location.href="login.html");
 
-    function track(eventName, params = {}) {
-      try { if (typeof gtag === "function") gtag("event", eventName, params); } catch (e) {}
-    }
-
-    function normalizeErrorMessage(err){
-      const raw = String(err?.message || err || "");
-      const lower = raw.toLowerCase();
-
-      if (lower.includes("user already registered")) return "This email is already registered. Try logging in instead.";
-      if (lower.includes("invalid email")) return "That email address doesn’t look valid.";
-      if (lower.includes("password")) return "Password must be strong (8+ chars recommended).";
-      if (lower.includes("redirect")) return "Auth redirect URL is not allowed. Add your site URL + redirect URLs in Supabase Auth settings.";
-      if (lower.includes("rate limit")) return "Too many attempts. Please wait a minute and try again.";
-      if (lower.includes("network")) return "Network error. Please check your connection and try again.";
-
-      return raw ? raw : "Could not create account. Please try again.";
-    }
-
-    // Password strength
-    function scorePassword(pw){
-      const s = String(pw || "");
-      let score = 0;
-      if (s.length >= 8) score += 25;
-      if (s.length >= 12) score += 15;
-      if (/[A-Z]/.test(s)) score += 15;
-      if (/[a-z]/.test(s)) score += 10;
-      if (/[0-9]/.test(s)) score += 15;
-      if (/[^A-Za-z0-9]/.test(s)) score += 20;
-      score = Math.min(100, score);
-
-      let label = "Weak";
-      if (score >= 70) label = "Strong";
-      else if (score >= 45) label = "Okay";
-      return { score, label };
-    }
-
-    function updateStrength(){
-      const { score, label } = scorePassword(pwEl.value);
-      pwFill.style.width = score + "%";
-      pwScore.innerHTML = `Strength: <strong>${label}</strong>`;
-    }
-    pwEl.addEventListener("input", updateStrength);
-    updateStrength();
-
-    // Caps lock hint
-    function capsCheck(e){
-      const on = e.getModifierState && e.getModifierState("CapsLock");
-      capsHint.style.display = on ? "inline" : "none";
-    }
-    pwEl.addEventListener("keydown", capsCheck);
-    pw2El.addEventListener("keydown", capsCheck);
-
-    // Show/hide toggles
     function bindToggle(btnId, inputId){
       const btn = document.getElementById(btnId);
       const input = document.getElementById(inputId);
@@ -382,139 +232,76 @@
     bindToggle("togglePw", "password");
     bindToggle("togglePw2", "password2");
 
-    // Auth nav UI
-    const userChip = document.getElementById("ppUserChip");
-    const loginBtn = document.getElementById("ppLoginBtn");
-    const signupBtn = document.getElementById("ppSignupBtn");
-    const openBtn = document.getElementById("ppOpenBtn");
-    const logoutBtn = document.getElementById("ppLogoutBtn");
-
-    async function refreshAuthUI(){
-      const { data: { session } } = await supabase.auth.getSession();
-      const email = session?.user?.email;
-
-      if (email){
-        userChip.style.display = "inline-flex";
-        userChip.textContent = email;
-        userChip.title = email;
-
-        loginBtn.style.display = "none";
-        signupBtn.style.display = "none";
-        openBtn.style.display = "inline-flex";
-        logoutBtn.style.display = "inline-flex";
-      } else {
-        userChip.style.display = "none";
-        userChip.textContent = "—";
-        userChip.title = "";
-
-        loginBtn.style.display = "inline-flex";
-        signupBtn.style.display = "inline-flex";
-        openBtn.style.display = "none";
-        logoutBtn.style.display = "none";
-      }
+    function redirectToLoginUrl(){
+      // ✅ Works on localhost AND production
+      return new URL("login.html", location.origin).toString();
     }
 
-    logoutBtn.addEventListener("click", async (e)=>{
-      e.preventDefault();
-      await supabase.auth.signOut();
-      location.href = "login.html";
-    });
+    function explainSupabaseError(err){
+      const raw = String(err?.message || err || "Unknown error");
+      const low = raw.toLowerCase();
+
+      // We show raw too (so you can fix settings quickly)
+      if (low.includes("redirect") || low.includes("url") && low.includes("not allowed")){
+        return "Supabase rejected your redirect URL.\n\nFix in Supabase Dashboard → Auth → URL Configuration:\n- Site URL must match your domain\n- Add Redirect URL: " + redirectToLoginUrl() + "\n\nRaw: " + raw;
+      }
+      if (low.includes("user already registered")){
+        return "This email is already registered. Try logging in.\n\nRaw: " + raw;
+      }
+      if (low.includes("invalid email")){
+        return "That email address doesn't look valid.\n\nRaw: " + raw;
+      }
+      if (low.includes("password")){
+        return "Password is not accepted. Use 8+ characters.\n\nRaw: " + raw;
+      }
+      if (low.includes("rate limit")){
+        return "Too many attempts. Wait 60 seconds and try again.\n\nRaw: " + raw;
+      }
+      return "Signup failed.\n\nRaw: " + raw;
+    }
 
     // If already signed in, go to app
-    {
-      const { data: { session } } = await supabase.auth.getSession();
+    (async ()=>{
+      const { data: { session } } = await supabaseClient.auth.getSession();
       if (session?.user) location.href = "app.html";
-    }
+    })();
 
-    await refreshAuthUI();
-    supabase.auth.onAuthStateChange(()=>refreshAuthUI());
-
-    // Buttons
-    document.getElementById("goLogin").addEventListener("click", ()=>location.href="login.html");
-
-    // ✅ Dynamic redirect (works on localhost + production)
-    // IMPORTANT: Add these in Supabase Auth -> URL Configuration:
-    // - Site URL: https://profitpilot.ukwebtools.com  (and/or localhost)
-    // - Redirect URLs: https://profitpilot.ukwebtools.com/login.html  + http://localhost:xxxx/login.html
-    function emailRedirectTo(){
-      return new URL("login.html", window.location.origin).toString();
-    }
-
-    // Resend confirmation email
-    resendBtn.addEventListener("click", async ()=>{
-      const email = (emailEl.value || localStorage.getItem("pp_pending_email") || "").trim();
-      if (!email) { setMsg("Enter your email above first.", "bad"); return; }
-
-      resendBtn.disabled = true;
-      setMsg("Resending verification email…");
-      track("resend_verification_clicked");
-
-      try{
-        const { error } = await supabase.auth.resend({
-          type: "signup",
-          email,
-          options: { emailRedirectTo: emailRedirectTo() }
-        });
-        if (error) throw error;
-
-        setMsg("Verification email sent. Check Spam/Promotions too.", "ok");
-      } catch (err){
-        console.error("Resend error:", err);
-        setMsg(normalizeErrorMessage(err), "bad");
-      } finally {
-        resendBtn.disabled = false;
-      }
-    });
-
-    // Submit
+    // ============ SIGNUP ============
     form.addEventListener("submit", async (e)=>{
       e.preventDefault();
 
-      const email = emailEl.value.trim();
-      const password = pwEl.value;
-      const password2 = pw2El.value;
+      const email = (emailEl.value || "").trim();
+      const pw = pwEl.value || "";
+      const pw2 = pw2El.value || "";
 
       if (!email){ setMsg("Please enter your email.", "bad"); emailEl.focus(); return; }
-      if (!password || password.length < 8){ setMsg("Password must be at least 8 characters.", "bad"); pwEl.focus(); return; }
-      if (password !== password2){ setMsg("Passwords do not match.", "bad"); pw2El.focus(); return; }
+      if (pw.length < 8){ setMsg("Password must be at least 8 characters.", "bad"); pwEl.focus(); return; }
+      if (pw !== pw2){ setMsg("Passwords do not match.", "bad"); pw2El.focus(); return; }
 
       createBtn.disabled = true;
-      resendBtn.style.display = "none";
       setMsg("Creating account…");
-      track("signup_submit_clicked");
 
       try{
-        const redirectTo = emailRedirectTo();
+        const redirectTo = redirectToLoginUrl();
 
-        const { data, error } = await supabase.auth.signUp({
+        const { data, error } = await supabaseClient.auth.signUp({
           email,
-          password,
-          options: {
-            emailRedirectTo: redirectTo
-          }
+          password: pw,
+          options: { emailRedirectTo: redirectTo }
         });
 
         if (error) throw error;
 
+        // Store email for verify page
         localStorage.setItem("pp_pending_email", email);
 
-        // If email confirmations ON, session will be null until verified.
-        if (!data?.session){
-          setMsg(
-            "Account created. Check your inbox for the verification email. Then come back and log in. (Also check Spam/Promotions.)",
-            "ok"
-          );
-          resendBtn.style.display = "block";
-          // Optional: send to verify page if you have it
-          // setTimeout(()=>{ location.href = "verify.html"; }, 800);
-        } else {
-          setMsg("Account created. Redirecting…", "ok");
-          setTimeout(()=>{ location.href = "app.html"; }, 500);
-        }
+        // ALWAYS move to verify page (no guessing)
+        setMsg("Account created. Redirecting to verification page…", "ok");
+        setTimeout(()=> location.href = "verify.html", 500);
+
       } catch (err){
         console.error("Signup error:", err);
-        setMsg(normalizeErrorMessage(err), "bad");
-        resendBtn.style.display = "block";
+        setMsg(explainSupabaseError(err), "bad");
       } finally {
         createBtn.disabled = false;
       }
