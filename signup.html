@@ -5,11 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Sign up — ProfitPilot</title>
   <meta name="robots" content="noindex,nofollow">
-  <meta name="description" content="Create a ProfitPilot account.">
-
   <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
 
-  <!-- Analytics: GA4 -->
+  <!-- Google Analytics (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-F12747YWBN"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -18,7 +16,7 @@
     gtag('config', 'G-F12747YWBN', { anonymize_ip: true });
   </script>
 
-  <!-- Analytics: Microsoft Clarity -->
+  <!-- Microsoft Clarity -->
   <script>
     (function(c,l,a,r,i,t,y){
       c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -27,37 +25,77 @@
     })(window, document, "clarity", "script", "vjsgka2ywg");
   </script>
 
-  <!-- ✅ Supabase UMD (reliable) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <style>
-    /* Same styling as login.html (kept inline for copy/paste simplicity) */
+    /* ================================
+      ProfitPilot Auth — Elite Themed
+      - matches app theme selector
+      - day/soft/midnight look different
+    ================================ */
+
     :root{
-      --bg:#0b1220; --bg2:#0f172a; --txt:#eaf0ff; --muted:rgba(226,232,240,.72);
-      --card:rgba(17,24,39,.86); --card2:rgba(15,23,42,.78);
-      --line:rgba(255,255,255,.12); --line2:rgba(255,255,255,.10);
-      --accent:#0ea5a4; --accent2:#4f46e5;
-      --ok:#34d399; --warn:#fbbf24; --bad:#fb7185;
-      --shadow:0 18px 60px rgba(0,0,0,.55); --shadow2:0 10px 28px rgba(0,0,0,.35);
+      --bg:#0b1220;
+      --bg2:#0f172a;
+      --txt:#eaf0ff;
+      --muted:rgba(226,232,240,.72);
+
+      --card:#0f172a;
+      --card2:rgba(17,24,39,.84);
+
+      --line:rgba(255,255,255,.12);
+      --line2:rgba(255,255,255,.10);
+
+      --accent:#0ea5a4;
+      --accent2:#4f46e5;
+
+      --shadow:0 14px 44px rgba(0,0,0,.40);
+      --shadow2:0 20px 80px rgba(0,0,0,.50);
       --ring:rgba(14,165,164,.55);
-      --radius:18px; --radius2:14px;
-      --inputBg:rgba(2,6,23,.52);
+
+      --inputBg:#0b1220;
+      --radius:18px;
+      --radius2:16px;
     }
+
     :root[data-theme="day"]{
-      --bg:#f6f8fb; --bg2:#eef2ff; --txt:#0b1220; --muted:#5b6474;
-      --card:rgba(255,255,255,.88); --card2:rgba(255,255,255,.80);
-      --line:rgba(16,24,40,.10); --line2:rgba(16,24,40,.08);
-      --shadow:0 18px 60px rgba(16,24,40,.12); --shadow2:0 10px 28px rgba(16,24,40,.10);
+      --bg:#f6f8fb;
+      --bg2:#eef2ff;
+      --txt:#0b1220;
+      --muted:#5b6474;
+
+      --card:#ffffff;
+      --card2:rgba(255,255,255,.88);
+
+      --line:rgba(16,24,40,.10);
+      --line2:rgba(16,24,40,.08);
+
+      --shadow:0 14px 44px rgba(16,24,40,.10);
+      --shadow2:0 20px 80px rgba(16,24,40,.12);
       --ring:rgba(79,70,229,.45);
+
       --inputBg:#fff;
     }
+
     :root[data-theme="soft"]{
-      --bg:#fbfbff; --bg2:#f3f4ff; --txt:#0b1220; --muted:#5b6474;
-      --card:rgba(255,255,255,.90); --card2:rgba(255,255,255,.84);
-      --line:rgba(16,24,40,.12); --line2:rgba(16,24,40,.09);
-      --shadow:0 18px 60px rgba(16,24,40,.10); --shadow2:0 10px 28px rgba(16,24,40,.10);
+      --bg:#fbfbff;
+      --bg2:#f3f4ff;
+      --txt:#0b1220;
+      --muted:#596276;
+
+      --card:#ffffff;
+      --card2:rgba(255,255,255,.92);
+
+      --line:rgba(16,24,40,.12);
+      --line2:rgba(16,24,40,.09);
+
+      --shadow:0 14px 44px rgba(16,24,40,.10);
+      --shadow2:0 20px 80px rgba(16,24,40,.12);
       --ring:rgba(14,165,164,.35);
+
       --inputBg:#fff;
+    }
+
+    :root[data-theme="midnight"]{
+      /* already defaulted in :root (kept for clarity) */
     }
 
     *{ box-sizing:border-box; }
@@ -67,48 +105,59 @@
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--txt);
       background:
-        radial-gradient(900px 420px at 20% 0%, rgba(79,70,229,.14), transparent 60%),
-        radial-gradient(900px 420px at 80% 0%, rgba(14,165,164,.14), transparent 60%),
+        radial-gradient(900px 420px at 20% 0%, rgba(79,70,229,.10), transparent 60%),
+        radial-gradient(900px 420px at 80% 0%, rgba(14,165,164,.10), transparent 60%),
         linear-gradient(180deg,var(--bg2),var(--bg));
       min-height:100vh;
     }
     a{ color:var(--accent); text-decoration:none; }
     a:hover{ text-decoration:underline; }
-    :focus-visible{ outline:3px solid var(--ring); outline-offset:3px; border-radius:12px; }
+    :focus-visible{
+      outline:3px solid var(--ring);
+      outline-offset:3px;
+      border-radius:12px;
+    }
 
-    .pp-wrap{ max-width:1200px; margin:0 auto; padding:0 20px; }
+    .pp-wrap{ max-width:1100px; margin:0 auto; padding:0 18px; }
 
-    .pp-header{ padding:14px 0; }
-    .pp-headerbar{
+    /* Header (minimal, app-like) */
+    header{ padding:14px 0; }
+    .bar{
       background:var(--card);
       border:1px solid var(--line);
-      border-radius:0 0 20px 20px;
-      box-shadow:var(--shadow2);
+      border-radius: 0 0 20px 20px;
+      box-shadow:var(--shadow);
       overflow:hidden;
     }
-    .pp-toprow{
+    .top{
       display:flex;
       justify-content:space-between;
       align-items:center;
-      gap:16px;
+      gap:12px;
       padding:12px 14px;
+      flex-wrap:wrap;
     }
-    .pp-brand{ display:flex; align-items:center; gap:12px; min-width:220px; }
-    .pp-logo{
-      width:40px; height:40px;
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:220px;
+    }
+    .logo{
+      width:40px;height:40px;
       border-radius:14px;
-      display:flex; align-items:center; justify-content:center;
+      display:flex;align-items:center;justify-content:center;
       font-weight:1000;
-      background:rgba(255,255,255,.06);
+      background:rgba(16,24,40,.04);
       border:1px solid var(--line2);
       letter-spacing:-.5px;
     }
-    :root[data-theme="day"] .pp-logo,
-    :root[data-theme="soft"] .pp-logo{ background:rgba(16,24,40,.04); }
-    .pp-title{ font-weight:1000; font-size:15px; letter-spacing:-.2px; }
-    .pp-sub{ font-size:12px; color:var(--muted); }
+    :root[data-theme="midnight"] .logo{ background:rgba(255,255,255,.04); }
 
-    .pp-nav{
+    .title{ font-weight:1000; font-size:15px; letter-spacing:-.2px; }
+    .sub{ font-size:12px; color:var(--muted); }
+
+    .nav{
       display:flex;
       align-items:center;
       gap:10px;
@@ -120,39 +169,27 @@
       padding:10px 14px;
       border-radius:999px;
       border:1px solid var(--line);
-      background:rgba(255,255,255,.02);
+      background:var(--inputBg);
       color:var(--txt);
       font-weight:900;
       cursor:pointer;
       white-space:nowrap;
-      transition:transform .08s ease, background .15s ease, filter .15s ease;
+      transition:transform .08s ease, filter .15s ease, background .15s ease;
       line-height:1;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
     }
-    :root[data-theme="day"] .btn,
-    :root[data-theme="soft"] .btn{ background:var(--inputBg); }
-    .btn:hover{ background:rgba(255,255,255,.06); }
-    :root[data-theme="day"] .btn:hover,
-    :root[data-theme="soft"] .btn:hover{ background:rgba(16,24,40,.03); }
+    .btn:hover{ background:rgba(16,24,40,.03); }
+    :root[data-theme="midnight"] .btn:hover{ background:rgba(255,255,255,.05); }
     .btn:active{ transform:translateY(1px); }
     .btn.primary{
       background:linear-gradient(135deg, var(--accent), rgba(79,70,229,.92));
       color:#fff;
       border-color:transparent;
     }
-    .btn.primary:hover{ filter:brightness(.96); }
-
-    .pill{
-      padding:8px 14px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:900;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.02);
-      color:var(--txt);
-      line-height:1;
-    }
-    :root[data-theme="day"] .pill,
-    :root[data-theme="soft"] .pill{ background:var(--inputBg); }
+    .btn.primary:hover{ filter:brightness(.97); }
 
     .select{
       appearance:none;
@@ -161,7 +198,7 @@
       padding:10px 38px 10px 14px;
       border-radius:999px;
       border:1px solid var(--line);
-      background:rgba(255,255,255,.02);
+      background:var(--inputBg);
       color:var(--txt);
       font-weight:900;
       cursor:pointer;
@@ -176,63 +213,35 @@
       background-repeat:no-repeat;
       max-width:220px;
     }
-    :root[data-theme="day"] .select,
-    :root[data-theme="soft"] .select{ background:var(--inputBg); }
-    .select:focus{ outline:none; box-shadow:0 0 0 4px rgba(14,165,164,.12); border-color:rgba(14,165,164,.45); }
 
-    @media (max-width:900px){
-      .pp-toprow{ flex-direction:column; align-items:flex-start; gap:12px; }
-      .pp-nav{ width:100%; justify-content:flex-start; }
-      .select{ max-width:100%; }
-    }
-
-    .wrap{
-      max-width:1100px;
-      margin:0 auto 90px;
-      padding:24px 18px 0;
-    }
+    main{ padding:18px 0 70px; }
     .grid{
       display:grid;
-      grid-template-columns:1.15fr .85fr;
-      gap:22px;
-      align-items:start;
+      grid-template-columns:1fr;
+      place-items:center;
     }
-    @media (max-width:960px){ .grid{ grid-template-columns:1fr; } }
 
     .card{
+      width:min(560px, 100%);
       background:var(--card);
       border:1px solid var(--line);
       border-radius:var(--radius);
-      box-shadow:var(--shadow);
+      box-shadow:var(--shadow2);
       padding:22px;
-      overflow:hidden;
-      position:relative;
     }
-    .card:before{
-      content:"";
-      position:absolute; inset:-60px -80px auto auto;
-      width:240px; height:240px;
-      background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 60%);
-      transform:rotate(10deg);
-      pointer-events:none;
-      opacity:.55;
-    }
-    :root[data-theme="day"] .card:before,
-    :root[data-theme="soft"] .card:before{ opacity:.35; }
 
-    .title{
-      font-size:20px;
+    h1{
+      margin:0 0 8px;
+      font-size:22px;
       font-weight:1000;
-      margin:0 0 10px;
-      line-height:1.2;
-      letter-spacing:-0.3px;
+      letter-spacing:-.3px;
     }
-    .small{
+    .lead{
+      margin:0 0 14px;
       font-size:13.5px;
       color:var(--muted);
-      line-height:1.55;
+      line-height:1.6;
     }
-    .divider{ height:1px; background:var(--line2); margin:18px 0; }
 
     label{
       font-size:13px;
@@ -246,10 +255,13 @@
       width:100%;
       padding:12px 14px;
       border-radius:14px;
-      border:1px solid var(--line);
+      border:1px solid rgba(16,24,40,.12);
       font-size:15px;
       background:var(--inputBg);
       color:var(--txt);
+    }
+    :root[data-theme="midnight"] input{
+      border-color:rgba(255,255,255,.16);
     }
     input:focus{
       outline:none;
@@ -257,88 +269,70 @@
       box-shadow:0 0 0 4px rgba(14,165,164,.12);
     }
 
-    .row2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-    @media(max-width:640px){ .row2{ grid-template-columns:1fr; } }
-
-    .inline{
-      display:flex;
+    .row{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:10px;
       align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-top:10px;
     }
-    .miniLink{ font-size:13px; color:var(--muted); font-weight:900; }
+    .toggle{
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:var(--inputBg);
+      font-weight:900;
+      cursor:pointer;
+      color:var(--txt);
+    }
 
     .msg{
       margin-top:12px;
-      font-size:12.8px;
+      font-size:12.5px;
       line-height:1.55;
-      color:rgba(234,240,255,.82);
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);
+      color:var(--muted);
+      background:rgba(16,24,40,.02);
+      border:1px solid var(--line2);
       border-radius:14px;
       padding:10px 12px;
-      white-space:pre-wrap;
+      min-height:44px;
+      display:flex;
+      align-items:center;
+      word-break:break-word;
     }
-    :root[data-theme="day"] .msg,
-    :root[data-theme="soft"] .msg{
-      color:rgba(16,24,40,.80);
-      background:rgba(16,24,40,.03);
-      border-color:rgba(16,24,40,.10);
-    }
-    .msg.ok{ border-color:rgba(52,211,153,.25); background:rgba(52,211,153,.08); }
-    .msg.bad{ border-color:rgba(251,113,133,.25); background:rgba(251,113,133,.08); }
-    .msg.warn{ border-color:rgba(251,191,36,.22); background:rgba(251,191,36,.08); }
-
-    .feature{
-      border:1px solid var(--line2);
-      border-radius:16px;
-      padding:14px;
-      background:rgba(255,255,255,.02);
-    }
-    :root[data-theme="day"] .feature,
-    :root[data-theme="soft"] .feature{ background:rgba(16,24,40,.02); }
-    .fTitle{ font-weight:1000; letter-spacing:-.2px; }
-    .fText{ margin-top:6px; font-size:13px; color:var(--muted); line-height:1.55; }
-    .list{ margin:10px 0 0; padding-left:18px; color:var(--muted); font-size:13px; line-height:1.6; }
-    .list li{ margin:6px 0; }
-
-    .toggleRow{
-      display:flex; gap:10px; align-items:center; margin-top:10px; flex-wrap:wrap;
-    }
-    .toggleBtn{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.02);
+    :root[data-theme="midnight"] .msg{ background:rgba(255,255,255,.04); }
+    .msg.ok{
       color:var(--txt);
-      border-radius:999px;
-      padding:10px 14px;
-      font-weight:1000;
-      cursor:pointer;
-      line-height:1;
+      border-color:rgba(14,165,164,.32);
+      background:rgba(14,165,164,.08);
     }
-    .toggleBtn:hover{ background:rgba(255,255,255,.06); }
-    :root[data-theme="day"] .toggleBtn,
-    :root[data-theme="soft"] .toggleBtn{ background:var(--inputBg); }
-    :root[data-theme="day"] .toggleBtn:hover,
-    :root[data-theme="soft"] .toggleBtn:hover{ background:rgba(16,24,40,.03); }
+    .msg.bad{
+      color:var(--txt);
+      border-color:rgba(239,68,68,.32);
+      background:rgba(239,68,68,.08);
+    }
 
-    /* Footer */
-    .pp-footer{
+    .small{
+      font-size:12.5px;
+      color:var(--muted);
+      margin-top:12px;
+      line-height:1.6;
+    }
+
+    footer{
       margin-top:80px;
       padding:44px 0;
       background:#0f172a;
       color:#cbd5e1;
     }
-    .pp-footbox{ max-width:1100px; margin:auto; padding:0 20px; }
-    .pp-footgrid{ display:grid; grid-template-columns:1fr 1fr; gap:40px; }
-    @media(max-width:768px){ .pp-footgrid{ grid-template-columns:1fr; } }
-    .pp-footbrand b{ color:#fff; font-size:18px; }
-    .pp-footmut{ margin-top:10px; font-size:13px; line-height:1.6; color:rgba(226,232,240,.70); }
-    .pp-footlinks{ display:flex; flex-wrap:wrap; gap:12px; }
-    .pp-footlinks a{ color:#cbd5e1; font-weight:700; font-size:14px; text-decoration:none; opacity:.85; }
-    .pp-footlinks a:hover{ opacity:1; }
-    .pp-footbottom{
+    .footbox{ max-width:1100px; margin:auto; padding:0 20px; }
+    .footgrid{ display:grid; grid-template-columns:1fr 1fr; gap:40px; }
+    @media(max-width:768px){ .footgrid{ grid-template-columns:1fr; } }
+    .footbrand b{ color:#fff; font-size:18px; }
+    .footmut{ margin-top:10px; font-size:13px; line-height:1.6; color:rgba(226,232,240,.70); }
+    .footlinks{ display:flex; flex-wrap:wrap; gap:12px; }
+    .footlinks a{ color:#cbd5e1; font-weight:700; font-size:14px; text-decoration:none; opacity:.85; }
+    .footlinks a:hover{ opacity:1; }
+    .footbottom{
       margin-top:40px;
       padding-top:20px;
       border-top:1px solid rgba(255,255,255,.08);
@@ -348,118 +342,95 @@
       color:rgba(226,232,240,.60);
       gap:12px;
     }
-    @media(max-width:768px){ .pp-footbottom{ flex-direction:column; } }
+    @media(max-width:768px){ .footbottom{ flex-direction:column; } }
   </style>
 </head>
 
 <body>
-  <header class="pp-header" role="navigation" aria-label="Primary">
+  <header role="navigation" aria-label="Primary">
     <div class="pp-wrap">
-      <div class="pp-headerbar">
-        <div class="pp-toprow">
-          <div class="pp-brand" aria-label="ProfitPilot">
-            <div class="pp-logo" aria-hidden="true">PP</div>
+      <div class="bar">
+        <div class="top">
+          <div class="brand" aria-label="ProfitPilot">
+            <div class="logo" aria-hidden="true">PP</div>
             <div>
-              <div class="pp-title">ProfitPilot</div>
-              <div class="pp-sub">Create account • UKwebtools</div>
+              <div class="title">ProfitPilot</div>
+              <div class="sub">Independent tool by UKwebtools</div>
             </div>
           </div>
 
-          <nav class="pp-nav" aria-label="Main">
+          <nav class="nav" aria-label="Main">
             <a class="btn" href="index.html">Home</a>
-            <a class="btn" href="pricing.html">Pricing</a>
             <a class="btn" href="reviews.html">Reviews</a>
-
-            <span class="pill" id="authPill">Signed out</span>
+            <a class="btn" href="login.html">Log in</a>
+            <span class="btn primary" aria-current="page" style="pointer-events:none">Sign up</span>
 
             <select class="select" id="themeSel" aria-label="Theme">
-              <option value="midnight">Midnight</option>
               <option value="day">Day</option>
               <option value="soft">Soft</option>
+              <option value="midnight">Midnight</option>
             </select>
-
-            <a class="btn primary" href="login.html" id="loginTop">Log in</a>
           </nav>
         </div>
       </div>
     </div>
   </header>
 
-  <main class="wrap" id="content">
+  <main class="pp-wrap">
     <div class="grid">
-      <section class="card" aria-label="Sign up">
-        <div class="title">Create your account</div>
-        <div class="small">Start the 5-day trial. Verify email to activate.</div>
-
-        <div class="divider"></div>
+      <div class="card">
+        <h1>Create your account</h1>
+        <p class="lead">
+          Start the 5-day trial. After signup, you’ll be sent a verification email to activate your account.
+        </p>
 
         <form id="form" novalidate>
           <label for="email">Email</label>
-          <input id="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+          <input id="email" type="email" placeholder="you@example.com" autocomplete="email" required>
 
           <label for="password">Password</label>
-          <input id="password" type="password" autocomplete="new-password" placeholder="Minimum 8 characters" required>
-
-          <div class="toggleRow">
-            <button class="toggleBtn" id="togglePw" type="button">Show password</button>
-            <span class="miniLink">Already have an account? <a href="login.html">Log in</a></span>
+          <div class="row">
+            <input id="password" type="password" placeholder="Minimum 8 characters" autocomplete="new-password" required>
+            <button class="toggle" id="togglePw" type="button" aria-label="Show password">Show</button>
           </div>
 
           <label for="password2">Confirm password</label>
-          <input id="password2" type="password" autocomplete="new-password" placeholder="Repeat password" required>
-
-          <div class="row2" style="margin-top:14px">
-            <button class="btn primary" id="createBtn" type="submit">Create account</button>
-            <a class="btn" href="login.html">I already have one</a>
+          <div class="row">
+            <input id="password2" type="password" placeholder="Repeat password" autocomplete="new-password" required>
+            <button class="toggle" id="togglePw2" type="button" aria-label="Show confirm password">Show</button>
           </div>
 
+          <button class="btn primary" id="create" type="submit" style="width:100%;justify-content:center;margin-top:14px;">
+            Create account
+          </button>
+
+          <button class="btn" id="goLogin" type="button" style="width:100%;justify-content:center;margin-top:10px;">
+            I already have an account
+          </button>
+
           <div class="msg" id="msg" role="status" aria-live="polite">—</div>
+
+          <div class="small">
+            By signing up, you agree to the <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy</a>.
+          </div>
         </form>
-
-        <div class="small" style="margin-top:12px">
-          By signing up, you agree to the <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy</a>.
-        </div>
-      </section>
-
-      <aside class="card" aria-label="Trust">
-        <div class="title">No subscriptions</div>
-        <div class="small">One-time PRO unlock. Runs locally in your browser.</div>
-
-        <div class="divider"></div>
-
-        <div class="feature">
-          <div class="fTitle">After signup</div>
-          <div class="fText">You must verify your email before logging in. We’ll send a link instantly.</div>
-          <ul class="list">
-            <li>Check Spam/Junk + Promotions.</li>
-            <li>If you didn’t receive it, use the resend button on <a href="verify">verify.html</a>.</li>
-          </ul>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="feature">
-          <div class="fTitle">Need help?</div>
-          <div class="fText">Email <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a>.</div>
-        </div>
-      </aside>
+      </div>
     </div>
   </main>
 
-  <footer class="pp-footer" role="contentinfo">
-    <div class="pp-footbox">
-      <div class="pp-footgrid">
-        <div class="pp-footbrand">
+  <footer role="contentinfo">
+    <div class="footbox">
+      <div class="footgrid">
+        <div class="footbrand">
           <div><b>ProfitPilot</b></div>
-          <div class="pp-footmut">
+          <div class="footmut">
             <b>Independent tool:</b> not affiliated with any marketplace/platform/payment provider.<br>
-            <b>Estimates only:</b> outputs depend on your inputs; no profit guarantees.<br>
+            <b>Estimates only:</b> outputs depend on your inputs and assumptions; no profit guarantees.<br>
             Need help? <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a>
           </div>
         </div>
 
-        <div class="pp-footlinks" aria-label="Footer links">
-          <a href="index.html">Home</a>
+        <div class="footlinks" aria-label="Footer links">
           <a href="pricing.html">Pricing</a>
           <a href="reviews.html">Reviews</a>
           <a href="refunds.html">Refund Policy</a>
@@ -469,63 +440,20 @@
         </div>
       </div>
 
-      <div class="pp-footbottom">
+      <div class="footbottom">
         <div>© <span id="yr"></span> UKwebtools • ProfitPilot</div>
         <div><a href="https://ukwebtools.com/" rel="nofollow">UKwebtools</a></div>
       </div>
     </div>
   </footer>
 
-  <script>
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
     const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
     const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
 
-    document.getElementById("yr").textContent = new Date().getFullYear();
-
-    // Theme (shared)
-    const themeSel = document.getElementById("themeSel");
-    function setTheme(t){
-      document.documentElement.setAttribute("data-theme", t);
-      try{ localStorage.setItem("pp_theme", t); }catch(e){}
-    }
-    (function initTheme(){
-      const saved = (localStorage.getItem("pp_theme") || "midnight");
-      setTheme(saved);
-      themeSel.value = saved;
-    })();
-    themeSel.addEventListener("change", ()=> setTheme(themeSel.value));
-
-    function track(eventName, params = {}) {
-      try { if (typeof gtag === "function") gtag("event", eventName, params); } catch (e) {}
-    }
-
-    const msg = document.getElementById("msg");
-    const authPill = document.getElementById("authPill");
-    const form = document.getElementById("form");
-    const emailEl = document.getElementById("email");
-    const pwEl = document.getElementById("password");
-    const pw2El = document.getElementById("password2");
-    const createBtn = document.getElementById("createBtn");
-    const togglePw = document.getElementById("togglePw");
-    const loginTop = document.getElementById("loginTop");
-
-    function setMsg(text, kind=""){
-      msg.textContent = text;
-      msg.className = "msg" + (kind ? " " + kind : "");
-    }
-
-    function normalizeSignupError(err){
-      const raw = String(err?.message || err || "");
-      const low = raw.toLowerCase();
-
-      if (low.includes("user already registered")) return "This email is already registered. Please log in instead.";
-      if (low.includes("password")) return "Please choose a stronger password (8+ characters recommended).";
-      if (low.includes("invalid email")) return "That email address looks invalid.";
-      if (low.includes("too many requests") || low.includes("rate limit")) return "Too many attempts. Please wait a minute and try again.";
-      return "Could not create account. Please try again.\n\nDetails: " + raw;
-    }
-
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON, {
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON, {
       auth: {
         persistSession: true,
         autoRefreshToken: true,
@@ -535,84 +463,118 @@
       }
     });
 
-    async function refreshAuthPill(){
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user){
-        authPill.textContent = "Signed in";
-        authPill.style.borderColor = "rgba(52,211,153,.25)";
-        authPill.style.background = "rgba(52,211,153,.08)";
-        loginTop.style.display = "none";
-        location.href = "app.html";
-      } else {
-        authPill.textContent = "Signed out";
-        authPill.style.borderColor = "";
-        authPill.style.background = "";
-        loginTop.style.display = "";
-      }
+    // Footer year
+    document.getElementById("yr").textContent = new Date().getFullYear();
+
+    // Theme (works like app)
+    const themeSel = document.getElementById("themeSel");
+    function setTheme(t){
+      document.documentElement.setAttribute("data-theme", t);
+      try{ localStorage.setItem("pp_theme", t); }catch(e){}
+    }
+    (function initTheme(){
+      const saved = localStorage.getItem("pp_theme") || "midnight";
+      setTheme(saved);
+      if (themeSel) themeSel.value = saved;
+    })();
+    themeSel?.addEventListener("change", ()=> setTheme(themeSel.value));
+
+    // Elements
+    const form = document.getElementById("form");
+    const msg = document.getElementById("msg");
+    const emailEl = document.getElementById("email");
+    const pwEl = document.getElementById("password");
+    const pw2El = document.getElementById("password2");
+    const createBtn = document.getElementById("create");
+
+    function setMsg(text, kind=""){
+      msg.textContent = text;
+      msg.className = "msg" + (kind ? " " + kind : "");
     }
 
-    (async ()=>{
-      setMsg("—");
-      await refreshAuthPill();
-
-      // Prefill if they came back
-      const pending = localStorage.getItem("pp_pending_email") || "";
-      if (pending && !emailEl.value) emailEl.value = pending;
-    })();
+    function normalizeErrorMessage(err){
+      const raw = String(err?.message || err || "");
+      const low = raw.toLowerCase();
+      if (low.includes("redirect url is not allowed")) return "Signup blocked: redirect URL not allowed in Supabase settings (URL Configuration).";
+      if (low.includes("user already registered")) return "This email is already registered. Try logging in.";
+      if (low.includes("invalid email")) return "That email address looks invalid.";
+      if (low.includes("password")) return "Please choose a stronger password (8+ characters).";
+      if (low.includes("rate limit") || low.includes("too many")) return "Too many attempts. Please wait a minute and try again.";
+      return raw || "Could not create account. Please try again.";
+    }
 
     // Show/hide password
-    togglePw.addEventListener("click", ()=>{
-      const isPw = pwEl.type === "password";
-      pwEl.type = isPw ? "text" : "password";
-      togglePw.textContent = isPw ? "Hide password" : "Show password";
-      pwEl.focus();
-    });
+    function bindToggle(btnId, inputId){
+      const btn = document.getElementById(btnId);
+      const input = document.getElementById(inputId);
+      btn.addEventListener("click", ()=>{
+        const isPw = input.type === "password";
+        input.type = isPw ? "text" : "password";
+        btn.textContent = isPw ? "Hide" : "Show";
+        input.focus();
+      });
+    }
+    bindToggle("togglePw", "password");
+    bindToggle("togglePw2", "password2");
 
+    document.getElementById("goLogin").addEventListener("click", ()=>location.href="login.html");
+
+    // If already signed in, send them to app
+    try{
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) location.replace("app.html");
+    }catch(e){}
+
+    // Submit
     form.addEventListener("submit", async (e)=>{
       e.preventDefault();
 
-      const email = (emailEl.value || "").trim();
-      const password = pwEl.value || "";
-      const password2 = pw2El.value || "";
+      const email = emailEl.value.trim();
+      const password = pwEl.value;
+      const password2 = pw2El.value;
 
       if (!email){ setMsg("Please enter your email.", "bad"); emailEl.focus(); return; }
-      if (password.length < 8){ setMsg("Password must be at least 8 characters.", "bad"); pwEl.focus(); return; }
+      if (!password || password.length < 8){ setMsg("Password must be at least 8 characters.", "bad"); pwEl.focus(); return; }
       if (password !== password2){ setMsg("Passwords do not match.", "bad"); pw2El.focus(); return; }
 
       createBtn.disabled = true;
       setMsg("Creating account…");
-      track("signup_submit_clicked");
 
       try{
-        // IMPORTANT:
-        // - emailRedirectTo MUST be on your allowed redirect URLs in Supabase Auth settings
-        // - we send them to verify.html to keep the flow smooth
+        // Use origin to avoid domain mismatch in redirects
+        const redirectTo = `${location.origin}/login.html`;
+
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
-          options: {
-            emailRedirectTo: "https://profitpilot.ukwebtools.com/login.html"
-          }
+          options: { emailRedirectTo: redirectTo }
         });
 
-        if (error) throw error;
+        if (error){
+          console.error("Supabase signUp error:", error);
+          setMsg(normalizeErrorMessage(error), "bad");
+          createBtn.disabled = false;
+          return;
+        }
 
-        // Save for verify page
+        // Store for verify page (resend convenience)
         localStorage.setItem("pp_pending_email", email);
         localStorage.setItem("pp_pending_email_ts", String(Date.now()));
 
-        // If email confirmations enabled, session is often null → that's fine
+        // ✅ Always go to verify screen if session is null (email confirm on)
         if (!data?.session){
-          setMsg("Verification email sent. Check your inbox (and spam). Redirecting…", "ok");
-          setTimeout(()=> location.href="verify.html", 650);
-        } else {
-          setMsg("Account created. Opening app…", "ok");
-          setTimeout(()=> location.href="app.html", 350);
+          setMsg("Verification link sent. Go to verify and check your inbox/spam.", "ok");
+          location.href = "verify.html";
+          return;
         }
-      } catch(err){
-        console.error("Signup error:", err);
-        setMsg(normalizeSignupError(err), "bad");
-      } finally {
+
+        // If confirmation is OFF, user gets a session immediately
+        setMsg("Account created. Redirecting…", "ok");
+        location.replace("app.html");
+
+      } catch (err){
+        console.error("Signup fatal error:", err);
+        setMsg("Something went wrong. Please try again.", "bad");
         createBtn.disabled = false;
       }
     });
