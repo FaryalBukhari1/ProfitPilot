@@ -27,107 +27,118 @@
 
   <style>
     :root{
-      --bg:#0b1220; --bg2:#0f172a;
-      --txt:#eaf0ff; --muted:rgba(226,232,240,.72);
-      --card:rgba(15,23,42,.86); --cardSolid:#0f172a;
-      --line:rgba(255,255,255,.12); --line2:rgba(255,255,255,.10);
-      --accent:#0ea5a4; --accent2:#4f46e5;
-      --shadow:0 14px 44px rgba(0,0,0,.40);
-      --shadow2:0 26px 90px rgba(0,0,0,.55);
-      --ring:rgba(14,165,164,.45);
-      --inputBg:rgba(2,6,23,.55);
-      --radius:20px;
+      --bg:#070b12; --bg2:#0a1020; --card:#0c1426; --card2:#0a1222;
+      --txt:#eaf0ff; --muted:rgba(234,240,255,.70);
+      --line:rgba(255,255,255,.10); --line2:rgba(255,255,255,.08);
+      --accent:#5eead4; --accent2:#60a5fa;
+      --shadow:0 16px 50px rgba(0,0,0,.45);
+      --shadow2:0 24px 90px rgba(0,0,0,.55);
+      --ring:rgba(96,165,250,.55);
+      --ok:rgba(52,211,153,.28);
+      --bad:rgba(251,113,133,.28);
     }
     :root[data-theme="day"]{
-      --bg:#f6f8fb; --bg2:#eef2ff;
-      --txt:#0b1220; --muted:#556072;
-      --card:rgba(255,255,255,.86); --cardSolid:#ffffff;
-      --line:rgba(15,23,42,.12); --line2:rgba(15,23,42,.08);
-      --shadow:0 14px 44px rgba(15,23,42,.10);
-      --shadow2:0 26px 90px rgba(15,23,42,.12);
-      --ring:rgba(79,70,229,.35);
-      --inputBg:#ffffff;
+      --bg:#f6f8fb; --bg2:#eef2ff; --card:#fff; --card2:#fff;
+      --txt:#0b1220; --muted:rgba(11,18,32,.65);
+      --line:rgba(16,24,40,.10); --line2:rgba(16,24,40,.08);
+      --shadow:0 16px 50px rgba(16,24,40,.10);
+      --shadow2:0 24px 90px rgba(16,24,40,.12);
+      --ring:rgba(79,70,229,.40);
+      --ok:rgba(34,197,94,.22);
+      --bad:rgba(239,68,68,.22);
     }
     :root[data-theme="soft"]{
-      --bg:#fbfbff; --bg2:#f3f4ff;
-      --txt:#0b1220; --muted:#596276;
-      --card:rgba(255,255,255,.90); --cardSolid:#ffffff;
-      --line:rgba(15,23,42,.12); --line2:rgba(15,23,42,.09);
-      --shadow:0 14px 44px rgba(15,23,42,.10);
-      --shadow2:0 26px 90px rgba(15,23,42,.12);
-      --ring:rgba(14,165,164,.30);
-      --inputBg:#ffffff;
+      --bg:#fbfbff; --bg2:#f3f4ff; --card:#fff; --card2:#fff;
+      --txt:#0b1220; --muted:rgba(11,18,32,.65);
+      --line:rgba(16,24,40,.11); --line2:rgba(16,24,40,.08);
+      --shadow:0 16px 50px rgba(16,24,40,.10);
+      --shadow2:0 24px 90px rgba(16,24,40,.12);
+      --ring:rgba(94,234,212,.35);
+      --ok:rgba(34,197,94,.22);
+      --bad:rgba(239,68,68,.22);
     }
+
     *{box-sizing:border-box}
     body{
       margin:0;
-      font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--txt);
       background:
-        radial-gradient(900px 520px at 20% -10%, rgba(79,70,229,.14), transparent 60%),
-        radial-gradient(900px 520px at 80% -10%, rgba(14,165,164,.14), transparent 60%),
-        linear-gradient(180deg,var(--bg2),var(--bg));
+        radial-gradient(900px 520px at 20% -10%, rgba(94,234,212,.10), transparent 55%),
+        radial-gradient(900px 520px at 80% -10%, rgba(96,165,250,.10), transparent 55%),
+        linear-gradient(180deg, var(--bg2), var(--bg));
       min-height:100vh;
     }
-    a{color:var(--accent);text-decoration:none;font-weight:900}
+    a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
     :focus-visible{outline:3px solid var(--ring);outline-offset:3px;border-radius:12px}
 
-    .wrap{max-width:1120px;margin:0 auto;padding:0 18px}
-    header{padding:16px 0}
-    .nav{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:0 0 22px 22px;
-      backdrop-filter:blur(14px);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-    }
-    .navInner{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 14px}
-    .brand{display:flex;align-items:center;gap:12px;min-width:220px}
-    .logo{
-      width:42px;height:42px;border-radius:14px;
-      display:flex;align-items:center;justify-content:center;
-      font-weight:1000;letter-spacing:-.5px;
-      border:1px solid var(--line2);
+    .pp-shell{max-width:1200px;margin:0 auto;padding:14px 16px}
+    .pp-nav{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+      padding:10px 10px;
+      border-radius:18px;
       background:rgba(255,255,255,.06);
+      border:1px solid var(--line);
+      backdrop-filter: blur(10px);
+      box-shadow:0 10px 30px rgba(0,0,0,.18);
     }
-    :root[data-theme="day"] .logo, :root[data-theme="soft"] .logo{background:rgba(15,23,42,.03)}
-    .bt{display:flex;flex-direction:column;line-height:1.1}
-    .t1{font-weight:1000;font-size:15px;letter-spacing:-.2px}
-    .t2{font-size:12px;color:var(--muted);margin-top:2px}
+    :root[data-theme="day"] .pp-nav,
+    :root[data-theme="soft"] .pp-nav{ background:rgba(255,255,255,.72); }
 
-    .right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-    .btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    .pp-left,.pp-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .pp-brand{
+      display:flex;align-items:center;gap:10px;
+      padding:8px 10px;border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+      color:var(--txt);
+      font-weight:1000;
+    }
+    .pp-logo{
+      width:34px;height:34px;border-radius:12px;
+      display:grid;place-items:center;
+      border:1px solid var(--line2);
+      background:rgba(255,255,255,.05);
+      font-weight:1000;
+    }
+    .pp-btn{
       padding:10px 14px;border-radius:999px;
       border:1px solid var(--line);
-      background:var(--inputBg);
+      background:rgba(255,255,255,.06);
       color:var(--txt);
-      font-weight:950;
-      cursor:pointer;
-      transition:transform .08s ease, filter .15s ease, background .15s ease;
+      font-weight:900;
+      display:inline-flex;gap:8px;align-items:center;
+      transition:transform .08s ease, filter .15s ease;
       text-decoration:none;
+      line-height:1;
       white-space:nowrap;
     }
-    .btn:hover{filter:brightness(1.03)}
-    .btn:active{transform:translateY(1px)}
-    .btn.primary{
-      border-color:transparent;
-      background:linear-gradient(135deg,var(--accent),rgba(79,70,229,.92));
-      color:#fff;
-      box-shadow:0 18px 44px rgba(79,70,229,.22);
+    :root[data-theme="day"] .pp-btn,
+    :root[data-theme="soft"] .pp-btn{ background:rgba(255,255,255,.78); }
+
+    .pp-btn:hover{transform:translateY(-1px);filter:brightness(1.03)}
+    .pp-btn:active{transform:translateY(0)}
+    .pp-primary{
+      border:none;
+      color:#061018;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      box-shadow:0 14px 28px rgba(96,165,250,.18);
     }
-    .btn.ghost{background:transparent}
-    .select{
+    .pp-active{
+      border-color:rgba(94,234,212,.32);
+      background:rgba(94,234,212,.10);
+    }
+    .pp-select{
       appearance:none;
       padding:10px 40px 10px 14px;
       border-radius:999px;
       border:1px solid var(--line);
-      background:var(--inputBg);
+      background:rgba(255,255,255,.06);
       color:var(--txt);
-      font-weight:950;
+      font-weight:900;
       cursor:pointer;
+      line-height:1;
       background-image:
         linear-gradient(45deg, transparent 50%, currentColor 50%),
         linear-gradient(135deg, currentColor 50%, transparent 50%);
@@ -136,144 +147,174 @@
         calc(100% - 13px) calc(50% - 3px);
       background-size:5px 5px, 5px 5px;
       background-repeat:no-repeat;
-      max-width:220px;
     }
+    :root[data-theme="day"] .pp-select,
+    :root[data-theme="soft"] .pp-select{ background:rgba(255,255,255,.78); }
 
-    main{padding:22px 0 78px}
-    .grid{display:grid;grid-template-columns:1fr;place-items:center}
+    .wrap{max-width:560px;margin:44px auto 70px;padding:0 16px}
     .card{
-      width:min(560px,100%);
-      background:var(--card);
+      background:linear-gradient(180deg, rgba(94,234,212,.10), transparent 60%), var(--card);
       border:1px solid var(--line);
-      border-radius:var(--radius);
-      backdrop-filter:blur(14px);
-      box-shadow:var(--shadow2);
+      border-radius:18px;
       padding:22px;
+      box-shadow:var(--shadow2);
     }
-    h1{margin:0 0 8px;font-size:22px;font-weight:1000;letter-spacing:-.3px}
-    .lead{margin:0 0 16px;color:var(--muted);line-height:1.6;font-size:13.5px}
-    label{display:block;margin:12px 0 6px;font-size:13px;font-weight:1000}
+    h1{margin:0 0 8px;font-size:22px;letter-spacing:-.02em}
+    .subtitle{margin:0 0 16px;color:var(--muted);font-size:13px;line-height:1.6}
+
+    label{font-size:12px;color:var(--muted);margin-top:14px;display:block;font-weight:900}
     .field{position:relative}
     input{
       width:100%;
-      padding:12px 44px 12px 14px;
+      margin-top:8px;
+      padding:12px 44px 12px 12px;
       border-radius:14px;
       border:1px solid var(--line);
-      background:var(--inputBg);
+      background:var(--card2);
       color:var(--txt);
-      font-size:15px;
       outline:none;
+      font-size:15px;
     }
-    input:focus{border-color:rgba(14,165,164,.42);box-shadow:0 0 0 4px rgba(14,165,164,.12)}
-    .eye{
-      position:absolute;right:8px;top:50%;transform:translateY(-50%);
-      border:1px solid var(--line);
+    :root[data-theme="day"] input,
+    :root[data-theme="soft"] input{ background:#fff; }
+    input:focus{border-color:rgba(94,234,212,.35);box-shadow:0 0 0 4px rgba(94,234,212,.10)}
+    .iconbtn{
+      position:absolute;right:8px;top:50%;
+      transform:translateY(-50%);
+      border:1px solid var(--line2);
       background:rgba(255,255,255,.06);
       color:var(--txt);
       border-radius:12px;
       padding:8px 10px;
-      font-weight:950;
       cursor:pointer;
+      font-weight:900;
       font-size:12px;
     }
-    .row{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px}
+    :root[data-theme="day"] .iconbtn,
+    :root[data-theme="soft"] .iconbtn{ background:rgba(255,255,255,.78); }
+    .iconbtn:hover{filter:brightness(1.05)}
+
+    .row{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px;align-items:center}
+    .tiny{font-size:12px;color:var(--muted);font-weight:900}
+
+    .btn{
+      width:100%;
+      margin-top:14px;
+      padding:12px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.06);
+      color:var(--txt);
+      cursor:pointer;
+      font-weight:1000;
+      transition:transform .08s ease, filter .15s ease, opacity .15s ease;
+    }
+    :root[data-theme="day"] .btn,
+    :root[data-theme="soft"] .btn{ background:rgba(255,255,255,.78); }
+    .btn:hover{transform:translateY(-1px);filter:brightness(1.03)}
+    .btn:active{transform:translateY(0)}
+    .btn.primary{
+      border:none;
+      color:#061018;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      box-shadow:0 14px 28px rgba(96,165,250,.18);
+    }
+    .btn:disabled{opacity:.55;cursor:not-allowed;transform:none;filter:none}
+
     .msg{
       margin-top:12px;
-      min-height:44px;
+      font-size:12.5px;
+      line-height:1.6;
+      color:var(--muted);
       padding:10px 12px;
       border-radius:14px;
       border:1px solid var(--line2);
       background:rgba(255,255,255,.04);
-      color:var(--muted);
-      display:flex;align-items:center;
-      font-size:12.8px;line-height:1.55;
       word-break:break-word;
+      min-height:44px;
+      display:flex;align-items:center;
     }
-    .msg.ok{border-color:rgba(14,165,164,.32);background:rgba(14,165,164,.08);color:var(--txt)}
-    .msg.bad{border-color:rgba(239,68,68,.30);background:rgba(239,68,68,.08);color:var(--txt)}
+    .msg.ok{border-color:var(--ok);background:rgba(52,211,153,.08);color:var(--txt)}
+    .msg.bad{border-color:var(--bad);background:rgba(251,113,133,.08);color:var(--txt)}
+    .divider{height:1px;background:var(--line2);margin:14px 0}
 
     footer{
-      margin-top:84px;
-      padding:46px 0;
-      background:var(--cardSolid);
-      color:var(--muted);
-      border-top:1px solid var(--line);
-    }
-    .foot{max-width:1120px;margin:0 auto;padding:0 18px}
-    .footBottom{
-      display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+      margin-top:30px;
+      padding:26px 0 0;
+      border-top:1px solid var(--line2);
+      text-align:center;
       font-size:13px;
+      color:var(--muted);
     }
+    footer a{color:var(--muted);font-weight:900}
   </style>
 </head>
 
 <body>
-<header role="navigation" aria-label="Primary">
-  <div class="wrap">
-    <div class="nav">
-      <div class="navInner">
-        <div class="brand">
-          <div class="logo" aria-hidden="true">PP</div>
-          <div class="bt">
-            <div class="t1">ProfitPilot</div>
-            <div class="t2">Secure access</div>
-          </div>
-        </div>
+  <div class="pp-shell">
+    <div class="pp-nav" role="navigation" aria-label="Primary">
+      <div class="pp-left">
+        <a class="pp-brand" href="index.html">
+          <span class="pp-logo" aria-hidden="true">PP</span>
+          <span>ProfitPilot</span>
+        </a>
+        <a class="pp-btn" href="pricing.html">Pricing</a>
+        <a class="pp-btn" href="reviews.html">Reviews</a>
+      </div>
 
-        <div class="right">
-          <a class="btn ghost" href="index.html">Home</a>
-          <a class="btn ghost" href="reviews.html">Reviews</a>
-          <a class="btn ghost" href="pricing.html">Pricing</a>
-          <span class="btn primary" aria-current="page" style="pointer-events:none">Log in</span>
-          <a class="btn" href="signup.html">Sign up</a>
+      <div class="pp-right">
+        <span class="pp-btn pp-active" aria-current="page" style="pointer-events:none">Log in</span>
+        <a class="pp-btn pp-primary" href="signup.html">Sign up</a>
 
-          <select class="select" id="themeSel" aria-label="Theme">
-            <option value="day">Day</option>
-            <option value="soft">Soft</option>
-            <option value="midnight">Midnight</option>
-          </select>
-        </div>
+        <select class="pp-select" id="themeSel" aria-label="Theme">
+          <option value="day">Day</option>
+          <option value="soft">Soft</option>
+          <option value="midnight">Midnight</option>
+        </select>
       </div>
     </div>
   </div>
-</header>
 
-<main class="wrap">
-  <div class="grid">
+  <div class="wrap">
     <div class="card">
       <h1>Log in</h1>
-      <p class="lead">Access your account, trial, and PRO tools.</p>
+      <p class="subtitle">Access your account and PRO status.</p>
 
       <label for="email">Email</label>
-      <input id="email" type="email" placeholder="you@example.com" autocomplete="email" inputmode="email">
+      <div class="field">
+        <input id="email" type="email" placeholder="you@example.com" autocomplete="email" inputmode="email"/>
+      </div>
 
       <label for="password">Password</label>
       <div class="field">
-        <input id="password" type="password" placeholder="••••••••" autocomplete="current-password">
-        <button class="eye" id="togglePw" type="button">Show</button>
+        <input id="password" type="password" placeholder="••••••••" autocomplete="current-password"/>
+        <button class="iconbtn" id="togglePw" type="button">Show</button>
       </div>
 
       <div class="row">
-        <a href="reset.html">Forgot password?</a>
-        <a href="verify.html">Need verification email?</a>
+        <a class="tiny" href="reset.html">Forgot password?</a>
+        <a class="tiny" href="verify.html">Need verification email?</a>
       </div>
 
-      <button class="btn primary" id="loginBtn" type="button" style="width:100%;margin-top:14px">Log in</button>
-      <button class="btn" id="goSignup" type="button" style="width:100%;margin-top:10px">Create account</button>
+      <button class="btn primary" id="loginBtn" type="button">Log in</button>
+      <button class="btn" id="goSignupBtn" type="button">Create account</button>
 
-      <div class="msg" id="msg" role="status" aria-live="polite">Enter your email and password to continue.</div>
+      <div class="msg" id="msgBox">Enter your email and password to continue.</div>
+
+      <div class="divider"></div>
+
+      <footer>
+        <div style="margin-bottom:10px;font-weight:1000">ProfitPilot</div>
+        <div style="margin-bottom:10px">
+          <a href="faq.html">FAQ</a> •
+          <a href="privacy.html">Privacy</a> •
+          <a href="terms.html">Terms</a> •
+          <a href="help.html">How to use</a>
+        </div>
+        <div>© <span id="yr"></span> UKwebtools</div>
+      </footer>
     </div>
   </div>
-</main>
-
-<footer>
-  <div class="foot">
-    <div class="footBottom">
-      <div>© <span id="yr"></span> UKwebtools • ProfitPilot</div>
-      <div><a href="terms.html">Terms</a> • <a href="privacy.html">Privacy</a></div>
-    </div>
-  </div>
-</footer>
 
 <script type="module">
   import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
@@ -291,6 +332,7 @@
     }
   });
 
+  // Year
   document.getElementById("yr").textContent = new Date().getFullYear();
 
   // Theme
@@ -306,49 +348,61 @@
   })();
   themeSel.addEventListener("change", ()=> setTheme(themeSel.value));
 
-  const msg = document.getElementById("msg");
+  const msgBox = document.getElementById("msgBox");
   const emailEl = document.getElementById("email");
   const pwEl = document.getElementById("password");
   const loginBtn = document.getElementById("loginBtn");
+  const goSignupBtn = document.getElementById("goSignupBtn");
+  const togglePw = document.getElementById("togglePw");
 
-  function setMsg(text, kind=""){
-    msg.textContent = text || "—";
-    msg.className = "msg" + (kind ? " " + kind : "");
+  function setMsg(text, type=""){
+    msgBox.textContent = text || "—";
+    msgBox.classList.remove("ok","bad");
+    if (type === "ok") msgBox.classList.add("ok");
+    if (type === "bad") msgBox.classList.add("bad");
   }
+
   function setLoading(on){
-    loginBtn.disabled = !!on;
+    loginBtn.disabled = on;
+    goSignupBtn.disabled = on;
     loginBtn.textContent = on ? "Logging in…" : "Log in";
   }
 
   function friendlyAuthError(message){
     const m = String(message || "").toLowerCase();
     if (m.includes("invalid login credentials")) return "Email or password is incorrect.";
-    if (m.includes("email not confirmed")) return "Please verify your email first (check spam/junk).";
-    if (m.includes("too many requests")) return "Too many attempts. Wait a moment and try again.";
+    if (m.includes("email not confirmed")) return "Please verify your email first (check Spam/Junk too).";
+    if (m.includes("too many requests")) return "Too many attempts. Wait a bit and try again.";
     if (m.includes("invalid email")) return "That email address looks invalid.";
     if (m.includes("network")) return "Network error. Check your connection and try again.";
     return "Login failed. Please try again.";
   }
 
-  document.getElementById("goSignup").addEventListener("click", ()=> location.href="signup.html");
-
-  document.getElementById("togglePw").addEventListener("click", ()=>{
+  togglePw.addEventListener("click", ()=>{
     const isPw = pwEl.type === "password";
     pwEl.type = isPw ? "text" : "password";
-    document.getElementById("togglePw").textContent = isPw ? "Hide" : "Show";
+    togglePw.textContent = isPw ? "Hide" : "Show";
     pwEl.focus();
   });
 
-  // If user arrives via email confirmation redirect, detect session in URL then go app if logged
+  [emailEl, pwEl].forEach(el=>{
+    el.addEventListener("keydown", (e)=>{
+      if (e.key === "Enter") loginBtn.click();
+    });
+  });
+
+  goSignupBtn.addEventListener("click", ()=> location.href = "signup.html");
+
+  // If already signed in, go app
   try{
     const { data: { session } } = await supabase.auth.getSession();
     if (session?.user){
-      setMsg("You're already signed in. Redirecting…", "ok");
-      setTimeout(()=>location.replace("app.html"), 350);
+      setMsg("You’re already signed in. Redirecting…", "ok");
+      setTimeout(()=> location.replace("app.html"), 350);
     }
   }catch(e){}
 
-  async function doLogin(){
+  loginBtn.addEventListener("click", async ()=>{
     const email = emailEl.value.trim();
     const password = pwEl.value;
 
@@ -370,20 +424,18 @@
       const { data: s2 } = await supabase.auth.getSession();
       if (!s2?.session){
         setLoading(false);
-        setMsg("Login succeeded but session wasn’t saved. Try another browser or disable extensions.", "bad");
+        setMsg("Login succeeded but session did not persist. Try another browser or disable extensions.", "bad");
         return;
       }
 
       setMsg("Success. Redirecting…", "ok");
-      setTimeout(()=>location.replace("app.html"), 250);
-    }catch(err){
+      setTimeout(()=> location.replace("app.html"), 300);
+    } catch(err){
       setLoading(false);
-      setMsg("Unexpected error: " + (err?.message || String(err)), "bad");
+      setMsg("Unexpected error. Please try again.", "bad");
+      console.error(err);
     }
-  }
-
-  loginBtn.addEventListener("click", doLogin);
-  [emailEl, pwEl].forEach(el=> el.addEventListener("keydown", (e)=>{ if (e.key==="Enter") doLogin(); }));
+  });
 </script>
 </body>
 </html>
