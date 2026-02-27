@@ -9,92 +9,113 @@
 
   <style>
     :root{
-      --bg:#0b1220; --bg2:#0f172a;
-      --txt:#eaf0ff; --muted:rgba(226,232,240,.72);
-      --card:rgba(15,23,42,.86); --cardSolid:#0f172a;
-      --line:rgba(255,255,255,.12); --line2:rgba(255,255,255,.10);
-      --accent:#0ea5a4; --accent2:#4f46e5;
-      --shadow:0 14px 44px rgba(0,0,0,.40);
-      --shadow2:0 26px 90px rgba(0,0,0,.55);
-      --ring:rgba(14,165,164,.45);
-      --inputBg:rgba(2,6,23,.55);
-      --radius:20px;
+      --bg:#070b12; --bg2:#0a1020; --card:#0c1426; --card2:#0a1222;
+      --txt:#eaf0ff; --muted:rgba(234,240,255,.70);
+      --line:rgba(255,255,255,.10); --line2:rgba(255,255,255,.08);
+      --accent:#5eead4; --accent2:#60a5fa;
+      --shadow:0 16px 50px rgba(0,0,0,.45);
+      --shadow2:0 24px 90px rgba(0,0,0,.55);
+      --ring:rgba(96,165,250,.55);
+      --ok:rgba(52,211,153,.28);
+      --bad:rgba(251,113,133,.28);
     }
     :root[data-theme="day"]{
-      --bg:#f6f8fb; --bg2:#eef2ff;
-      --txt:#0b1220; --muted:#556072;
-      --card:rgba(255,255,255,.86); --cardSolid:#ffffff;
-      --line:rgba(15,23,42,.12); --line2:rgba(15,23,42,.08);
-      --shadow:0 14px 44px rgba(15,23,42,.10);
-      --shadow2:0 26px 90px rgba(15,23,42,.12);
-      --ring:rgba(79,70,229,.35);
-      --inputBg:#ffffff;
+      --bg:#f6f8fb; --bg2:#eef2ff; --card:#fff; --card2:#fff;
+      --txt:#0b1220; --muted:rgba(11,18,32,.65);
+      --line:rgba(16,24,40,.10); --line2:rgba(16,24,40,.08);
+      --shadow:0 16px 50px rgba(16,24,40,.10);
+      --shadow2:0 24px 90px rgba(16,24,40,.12);
+      --ring:rgba(79,70,229,.40);
+      --ok:rgba(34,197,94,.22);
+      --bad:rgba(239,68,68,.22);
     }
     :root[data-theme="soft"]{
-      --bg:#fbfbff; --bg2:#f3f4ff;
-      --txt:#0b1220; --muted:#596276;
-      --card:rgba(255,255,255,.90); --cardSolid:#ffffff;
-      --line:rgba(15,23,42,.12); --line2:rgba(15,23,42,.09);
-      --shadow:0 14px 44px rgba(15,23,42,.10);
-      --shadow2:0 26px 90px rgba(15,23,42,.12);
-      --ring:rgba(14,165,164,.30);
-      --inputBg:#ffffff;
+      --bg:#fbfbff; --bg2:#f3f4ff; --card:#fff; --card2:#fff;
+      --txt:#0b1220; --muted:rgba(11,18,32,.65);
+      --line:rgba(16,24,40,.11); --line2:rgba(16,24,40,.08);
+      --shadow:0 16px 50px rgba(16,24,40,.10);
+      --shadow2:0 24px 90px rgba(16,24,40,.12);
+      --ring:rgba(94,234,212,.35);
+      --ok:rgba(34,197,94,.22);
+      --bad:rgba(239,68,68,.22);
     }
+
     *{box-sizing:border-box}
     body{
       margin:0;
-      font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--txt);
       background:
-        radial-gradient(900px 520px at 20% -10%, rgba(79,70,229,.14), transparent 60%),
-        radial-gradient(900px 520px at 80% -10%, rgba(14,165,164,.14), transparent 60%),
-        linear-gradient(180deg,var(--bg2),var(--bg));
+        radial-gradient(900px 520px at 20% -10%, rgba(94,234,212,.10), transparent 55%),
+        radial-gradient(900px 520px at 80% -10%, rgba(96,165,250,.10), transparent 55%),
+        linear-gradient(180deg, var(--bg2), var(--bg));
       min-height:100vh;
     }
-    a{color:var(--accent);text-decoration:none;font-weight:900}
+    a{color:var(--accent);text-decoration:none}
     a:hover{text-decoration:underline}
     :focus-visible{outline:3px solid var(--ring);outline-offset:3px;border-radius:12px}
 
-    .wrap{max-width:1120px;margin:0 auto;padding:0 18px}
-    header{padding:16px 0}
-    .nav{background:var(--card);border:1px solid var(--line);border-radius:0 0 22px 22px;backdrop-filter:blur(14px);box-shadow:var(--shadow);overflow:hidden}
-    .navInner{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 14px}
-    .brand{display:flex;align-items:center;gap:12px;min-width:220px}
-    .logo{
-      width:42px;height:42px;border-radius:14px;
-      display:flex;align-items:center;justify-content:center;
-      font-weight:1000;letter-spacing:-.5px;
-      border:1px solid var(--line2);
+    .pp-shell{max-width:1200px;margin:0 auto;padding:14px 16px}
+    .pp-nav{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+      padding:10px 10px;
+      border-radius:18px;
       background:rgba(255,255,255,.06);
+      border:1px solid var(--line);
+      backdrop-filter: blur(10px);
+      box-shadow:0 10px 30px rgba(0,0,0,.18);
     }
-    :root[data-theme="day"] .logo, :root[data-theme="soft"] .logo{background:rgba(15,23,42,.03)}
-    .bt{display:flex;flex-direction:column;line-height:1.1}
-    .t1{font-weight:1000;font-size:15px;letter-spacing:-.2px}
-    .t2{font-size:12px;color:var(--muted);margin-top:2px}
+    :root[data-theme="day"] .pp-nav,
+    :root[data-theme="soft"] .pp-nav{ background:rgba(255,255,255,.72); }
 
-    .right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-    .btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    .pp-left,.pp-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .pp-brand{
+      display:flex;align-items:center;gap:10px;
+      padding:8px 10px;border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+      color:var(--txt);
+      font-weight:1000;
+    }
+    .pp-logo{
+      width:34px;height:34px;border-radius:12px;
+      display:grid;place-items:center;
+      border:1px solid var(--line2);
+      background:rgba(255,255,255,.05);
+      font-weight:1000;
+    }
+    .pp-btn{
       padding:10px 14px;border-radius:999px;
       border:1px solid var(--line);
-      background:var(--inputBg);
+      background:rgba(255,255,255,.06);
       color:var(--txt);
-      font-weight:950;
-      cursor:pointer;
+      font-weight:900;
+      display:inline-flex;gap:8px;align-items:center;
+      transition:transform .08s ease, filter .15s ease;
       text-decoration:none;
+      line-height:1;
       white-space:nowrap;
     }
-    .btn.primary{
-      border-color:transparent;
-      background:linear-gradient(135deg,var(--accent),rgba(79,70,229,.92));
-      color:#fff;
+    :root[data-theme="day"] .pp-btn,
+    :root[data-theme="soft"] .pp-btn{ background:rgba(255,255,255,.78); }
+    .pp-btn:hover{transform:translateY(-1px);filter:brightness(1.03)}
+    .pp-btn:active{transform:translateY(0)}
+    .pp-primary{
+      border:none;
+      color:#061018;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      box-shadow:0 14px 28px rgba(96,165,250,.18);
     }
-    .select{
+    .pp-select{
       appearance:none;
-      padding:10px 40px 10px 14px;border-radius:999px;
+      padding:10px 40px 10px 14px;
+      border-radius:999px;
       border:1px solid var(--line);
-      background:var(--inputBg);
-      color:var(--txt);font-weight:950;cursor:pointer;
+      background:rgba(255,255,255,.06);
+      color:var(--txt);
+      font-weight:900;
+      cursor:pointer;
+      line-height:1;
       background-image:
         linear-gradient(45deg, transparent 50%, currentColor 50%),
         linear-gradient(135deg, currentColor 50%, transparent 50%);
@@ -103,22 +124,18 @@
         calc(100% - 13px) calc(50% - 3px);
       background-size:5px 5px, 5px 5px;
       background-repeat:no-repeat;
-      max-width:220px;
     }
+    :root[data-theme="day"] .pp-select,
+    :root[data-theme="soft"] .pp-select{ background:rgba(255,255,255,.78); }
 
-    main{padding:22px 0 78px}
-    .grid{display:grid;place-items:center}
+    .wrap{max-width:640px;margin:44px auto 70px;padding:0 16px}
     .card{
-      width:min(640px,100%);
-      background:var(--card);
+      background:linear-gradient(180deg, rgba(94,234,212,.10), transparent 60%), var(--card);
       border:1px solid var(--line);
-      border-radius:var(--radius);
-      backdrop-filter:blur(14px);
-      box-shadow:var(--shadow2);
+      border-radius:18px;
       padding:22px;
+      box-shadow:var(--shadow2);
     }
-    h1{margin:0 0 8px;font-size:22px;font-weight:1000;letter-spacing:-.3px}
-    .lead{margin:0 0 16px;color:var(--muted);line-height:1.6;font-size:13.5px}
     .pill{
       display:inline-flex;align-items:center;gap:8px;
       border:1px solid var(--line);
@@ -127,6 +144,9 @@
       font-weight:950;font-size:12px;color:var(--txt);
       margin-bottom:10px;
     }
+    h1{margin:0 0 8px;font-size:22px;letter-spacing:-.02em}
+    .lead{margin:0 0 14px;color:var(--muted);font-size:13.5px;line-height:1.65}
+
     .msg{
       margin-top:12px;
       min-height:44px;
@@ -139,63 +159,69 @@
       font-size:12.8px;line-height:1.55;
       word-break:break-word;
     }
-    .msg.ok{border-color:rgba(14,165,164,.32);background:rgba(14,165,164,.08);color:var(--txt)}
-    .msg.bad{border-color:rgba(239,68,68,.30);background:rgba(239,68,68,.08);color:var(--txt)}
-    label{display:block;margin:12px 0 6px;font-size:13px;font-weight:1000}
+    .msg.ok{border-color:var(--ok);background:rgba(52,211,153,.08);color:var(--txt)}
+    .msg.bad{border-color:var(--bad);background:rgba(251,113,133,.08);color:var(--txt)}
+
+    label{display:block;margin:12px 0 6px;font-size:12px;color:var(--muted);font-weight:900}
     input{
       width:100%;
-      padding:12px 14px;
+      padding:12px 12px;
       border-radius:14px;
       border:1px solid var(--line);
-      background:var(--inputBg);
+      background:var(--card2);
       color:var(--txt);
-      font-size:15px;
       outline:none;
+      font-size:15px;
     }
-    input:focus{border-color:rgba(14,165,164,.42);box-shadow:0 0 0 4px rgba(14,165,164,.12)}
-    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    :root[data-theme="day"] input,
+    :root[data-theme="soft"] input{ background:#fff; }
+    input:focus{border-color:rgba(94,234,212,.35);box-shadow:0 0 0 4px rgba(94,234,212,.10)}
+    .btnfull{
+      width:100%;
+      margin-top:12px;
+      padding:12px;
+      border-radius:999px;
+      border:none;
+      cursor:pointer;
+      font-weight:1000;
+      color:#061018;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      box-shadow:0 14px 28px rgba(96,165,250,.18);
+    }
+    .btnfull:disabled{opacity:.6;cursor:not-allowed}
     ul{margin:10px 0 0;padding-left:18px;color:var(--muted);line-height:1.65;font-size:13px}
     li{margin:6px 0}
   </style>
 </head>
 
 <body>
-<header>
-  <div class="wrap">
-    <div class="nav">
-      <div class="navInner">
-        <div class="brand">
-          <div class="logo" aria-hidden="true">PP</div>
-          <div class="bt">
-            <div class="t1">ProfitPilot</div>
-            <div class="t2">Verify access</div>
-          </div>
-        </div>
-        <div class="right">
-          <a class="btn" href="login.html">Back to login</a>
-          <a class="btn" href="signup.html">Change email</a>
-          <select class="select" id="themeSel" aria-label="Theme">
-            <option value="day">Day</option>
-            <option value="soft">Soft</option>
-            <option value="midnight">Midnight</option>
-          </select>
-        </div>
+  <div class="pp-shell">
+    <div class="pp-nav">
+      <div class="pp-left">
+        <a class="pp-brand" href="index.html">
+          <span class="pp-logo" aria-hidden="true">PP</span>
+          <span>ProfitPilot</span>
+        </a>
+      </div>
+      <div class="pp-right">
+        <a class="pp-btn" href="login.html">Back to login</a>
+        <a class="pp-btn" href="signup.html">Change email</a>
+        <select class="pp-select" id="themeSel" aria-label="Theme">
+          <option value="day">Day</option>
+          <option value="soft">Soft</option>
+          <option value="midnight">Midnight</option>
+        </select>
       </div>
     </div>
   </div>
-</header>
 
-<main class="wrap">
-  <div class="grid">
+  <div class="wrap">
     <div class="card">
       <div class="pill">✅ Almost there</div>
       <h1>Verify your email</h1>
-      <p class="lead">
-        We sent a verification link to your email. Open it to activate your account.
-      </p>
+      <p class="lead">We sent a verification link to your email. Open it to activate your account.</p>
 
       <div class="msg" id="emailLine">Email: —</div>
-
       <div class="msg" id="msg" role="status" aria-live="polite">If you didn’t receive it, resend below.</div>
 
       <div style="margin-top:14px">
@@ -210,11 +236,10 @@
       <form id="resendForm" novalidate style="margin-top:16px">
         <label for="emailInput">Email</label>
         <input id="emailInput" type="email" placeholder="you@example.com" autocomplete="email" required>
-        <button class="btn primary" id="resendBtn" type="submit" style="width:100%;margin-top:12px">Resend verification email</button>
+        <button class="btnfull" id="resendBtn" type="submit">Resend verification email</button>
       </form>
     </div>
   </div>
-</main>
 
 <script type="module">
   import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
@@ -266,7 +291,7 @@
     return `${u2}@${dom2}${tld ? "."+tld : ""}`;
   }
 
-  // If they are already signed in, just go app
+  // If already signed in, go app
   try{
     const { data: { session } } = await supabase.auth.getSession();
     if (session?.user) location.replace("app.html");
@@ -276,8 +301,6 @@
   if (stored){
     emailLine.textContent = "Email: " + maskEmail(stored);
     emailInput.value = stored;
-  } else {
-    emailLine.textContent = "Email: —";
   }
 
   function normalizeError(err){
