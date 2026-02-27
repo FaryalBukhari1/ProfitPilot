@@ -3,83 +3,137 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Verify email — ProfitPilot</title>
+  <title>Verify your email — ProfitPilot</title>
   <meta name="robots" content="noindex,nofollow">
   <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
 
+  <!-- ✅ Supabase UMD (reliable everywhere, no module import issues) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     :root{
-      --bg:#0b0f14; --card:#111826; --card2:#0e1521;
-      --txt:#eaf0ff; --muted:#9aa7bd; --line:rgba(255,255,255,.10);
-      --accent:#5eead4; --accent2:#60a5fa;
-      --good:#34d399; --warn:#fbbf24; --bad:#fb7185;
-      --shadow:0 18px 46px rgba(0,0,0,.35);
+      --bg:#0b0f14;--card:#111826;--card2:#0e1521;--txt:#eaf0ff;--muted:#9aa7bd;
+      --line:rgba(255,255,255,.10);--accent:#5eead4;--accent2:#60a5fa;
+      --ok:rgba(52,211,153,.22);--bad:rgba(251,113,133,.22);
     }
     *{box-sizing:border-box}
     body{
-      margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       background:
         radial-gradient(900px 520px at 20% 0%, rgba(94,234,212,.12), transparent 55%),
         radial-gradient(900px 520px at 80% 0%, rgba(96,165,250,.10), transparent 55%),
         linear-gradient(180deg, #090c11, var(--bg));
-      color:var(--txt);
+      color:var(--txt)
     }
-    .wrap{max-width:520px;margin:40px auto 70px;padding:0 14px}
+    .wrap{max-width:560px;margin:34px auto;padding:0 14px}
     .card{
       background:linear-gradient(180deg,rgba(94,234,212,.10),transparent 60%),var(--card);
-      border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow);
+      border:1px solid var(--line);border-radius:18px;padding:20px;
+      box-shadow:0 18px 46px rgba(0,0,0,.35);
     }
-    h1{margin:0;font-size:20px;letter-spacing:-.02em}
-    .lead{margin-top:8px;color:rgba(234,240,255,.75);line-height:1.6;font-size:13px}
-    .msg{
-      margin-top:12px;font-size:12.5px;line-height:1.55;color:rgba(234,240,255,.78);
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:14px;padding:10px 12px;white-space:pre-wrap;
-    }
-    .msg.ok{border-color:rgba(52,211,153,.22);background:rgba(52,211,153,.06)}
-    .msg.bad{border-color:rgba(251,113,133,.22);background:rgba(251,113,133,.06)}
-    .msg.warn{border-color:rgba(251,191,36,.20);background:rgba(251,191,36,.06)}
-    input{
-      width:100%;padding:12px;border-radius:14px;border:1px solid var(--line);
-      background:var(--card2);color:var(--txt);outline:none;margin-top:10px;
-    }
-    .btn{
-      width:100%;margin-top:14px;padding:12px;border-radius:999px;
+    .pill{
+      display:inline-flex;padding:8px 10px;border-radius:999px;
       border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.03);color:var(--txt);
-      cursor:pointer;font-weight:1000;
+      background:rgba(255,255,255,.03);
+      font-size:12px;color:rgba(234,240,255,.72);
+      gap:8px;align-items:center;font-weight:900;
     }
+    h1{margin:10px 0 10px;font-size:22px;letter-spacing:-.02em}
+    p{margin:0;color:rgba(234,240,255,.70);line-height:1.65}
+    .divider{height:1px;background:rgba(255,255,255,.08);margin:14px 0}
+
+    .small{font-size:12.5px;color:rgba(234,240,255,.70);margin-top:10px;line-height:1.6}
+    .note{margin-top:10px}
+
+    label{font-size:12px;color:rgba(234,240,255,.62);margin-top:14px;display:block}
+    input{
+      width:100%;margin-top:8px;padding:12px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:var(--card2);color:var(--txt);outline:none
+    }
+    input:focus{border-color:rgba(94,234,212,.35)}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .btn{
+      display:inline-flex;gap:8px;align-items:center;justify-content:center;
+      padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);color:var(--txt);text-decoration:none;cursor:pointer;
+      font-weight:1000;user-select:none;
+      transition:transform .08s ease, opacity .08s ease;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(0)}
     .btn.primary{
       border:none;color:#0b1220;
       background:linear-gradient(135deg,var(--accent),var(--accent2));
       box-shadow:0 14px 28px rgba(96,165,250,.16);
     }
-    a{color:var(--accent);text-decoration:none}
-    a:hover{text-decoration:underline}
+    .btn.full{width:100%}
+    .btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+
+    .msg{
+      margin-top:12px;
+      font-size:12.5px;
+      line-height:1.55;
+      color:rgba(234,240,255,.78);
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px;
+      padding:10px 12px;
+      white-space:pre-wrap;
+    }
+    .msg.ok{border-color:var(--ok);background:rgba(52,211,153,.06)}
+    .msg.bad{border-color:var(--bad);background:rgba(251,113,133,.06)}
+
+    ul{margin:10px 0 0;padding-left:18px;color:rgba(234,240,255,.68);line-height:1.65;font-size:13px}
+    li{margin:6px 0}
   </style>
 </head>
+
 <body>
   <div class="wrap">
     <div class="card">
-      <h1>Verify your email</h1>
-      <div class="lead">
-        We sent you a verification link. Open it, then come back and log in.
-        (Check Spam/Promotions too.)
+      <div class="pill">✅ Almost there</div>
+
+      <h1>Verify your email to activate your account</h1>
+      <p>
+        We sent a verification link to your email. Open it to finish signup.
+      </p>
+
+      <div class="small note" id="emailLine">Email: —</div>
+
+      <div class="divider"></div>
+
+      <div class="small"><b>Do this now:</b></div>
+      <ul>
+        <li>Open the email titled like “Confirm your signup”.</li>
+        <li>Click the verification link.</li>
+        <li>Return here and log in.</li>
+        <li>If you can’t find it: check Spam/Junk + Promotions.</li>
+      </ul>
+
+      <div class="row" style="margin-top:14px">
+        <a class="btn primary" href="login.html">Back to login</a>
+        <a class="btn" href="signup.html">Change email</a>
       </div>
 
-      <input id="email" type="email" placeholder="your email (for resend)" autocomplete="email">
-      <button class="btn" id="resend" type="button">Resend verification email</button>
+      <div class="divider"></div>
 
-      <button class="btn primary" id="goLogin" type="button">Go to login</button>
+      <div class="small"><b>Didn’t get the email?</b> Resend it below.</div>
 
-      <div class="msg" id="msg">—</div>
+      <form id="resendForm" novalidate>
+        <label for="emailInput">Email</label>
+        <input id="emailInput" type="email" placeholder="you@example.com" autocomplete="email" required>
 
-      <div class="lead" style="margin-top:12px">
-        If you keep getting nothing, your Supabase Auth URLs likely aren’t set correctly.
+        <button class="btn full" id="resendBtn" type="submit">Resend verification email</button>
+      </form>
+
+      <div class="msg" id="msg" role="status" aria-live="polite">—</div>
+
+      <div class="small" style="margin-top:12px">
+        Need help? <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a>
       </div>
     </div>
   </div>
@@ -89,20 +143,28 @@
     const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
 
     const msg = document.getElementById("msg");
-    function setMsg(t,k=""){ msg.textContent=t; msg.className="msg"+(k?" "+k:""); }
+    const emailLine = document.getElementById("emailLine");
+    const emailInput = document.getElementById("emailInput");
+    const resendBtn = document.getElementById("resendBtn");
+    const resendForm = document.getElementById("resendForm");
+
+    function setMsg(text, kind=""){
+      msg.textContent = text;
+      msg.className = "msg" + (kind ? " " + kind : "");
+    }
 
     if (!window.supabase || !window.supabase.createClient){
-      setMsg("Supabase library failed to load. Check your internet/CDN.", "bad");
+      setMsg("Supabase failed to load. Check your internet/CDN blocking.", "bad");
       throw new Error("Supabase not loaded");
     }
 
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON, {
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON, {
       auth: {
-        persistSession:true,
-        autoRefreshToken:true,
-        detectSessionInUrl:true,
-        flowType:"pkce",
-        storageKey:"profitpilot_auth"
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+        flowType: "pkce",
+        storageKey: "profitpilot_auth"
       }
     });
 
@@ -110,34 +172,107 @@
       return new URL("login.html", location.origin).toString();
     }
 
-    const emailEl = document.getElementById("email");
-    emailEl.value = localStorage.getItem("pp_pending_email") || "";
+    function maskEmail(email){
+      if (!email || !email.includes("@")) return email || "—";
+      const [u, d] = email.split("@");
+      const u2 = u.length <= 2 ? u[0] + "*" : u.slice(0,2) + "*".repeat(Math.min(6, Math.max(2, u.length-2)));
+      const parts = d.split(".");
+      const dom = parts[0] || d;
+      const tld = parts.slice(1).join(".") || "";
+      const dom2 = dom.length <= 2 ? dom[0] + "*" : dom.slice(0,2) + "*".repeat(Math.min(6, Math.max(2, dom.length-2)));
+      return `${u2}@${dom2}${tld ? "."+tld : ""}`;
+    }
 
-    document.getElementById("goLogin").addEventListener("click", ()=> location.href="login.html");
+    function normalizeErrorMessage(err){
+      const raw = String(err?.message || err || "");
+      const low = raw.toLowerCase();
+      if (low.includes("rate limit") || low.includes("too many requests")) return "Too many resend attempts. Please wait a minute and try again.\n\nRaw: " + raw;
+      if (low.includes("invalid") && low.includes("email")) return "Please enter a valid email address.\n\nRaw: " + raw;
+      if (low.includes("redirect") && (low.includes("not allowed") || low.includes("allowed"))){
+        return "Supabase rejected the redirect URL.\n\nAdd this in Supabase Dashboard → Auth → URL Configuration → Redirect URLs:\n" +
+          redirectToLoginUrl() + "\n\nRaw: " + raw;
+      }
+      return "Could not resend right now. Please try again.\n\nRaw: " + raw;
+    }
 
-    document.getElementById("resend").addEventListener("click", async ()=>{
-      const email = (emailEl.value || "").trim();
-      if (!email){ setMsg("Enter your email first.", "bad"); return; }
-
-      setMsg("Resending…");
+    // If already signed in, go to app
+    (async ()=>{
       try{
-        const { error } = await supabaseClient.auth.resend({
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.user){
+          location.href = "app.html";
+          return;
+        }
+      } catch {}
+    })();
+
+    // Prefill email
+    const stored = localStorage.getItem("pp_pending_email");
+    if (stored){
+      emailLine.textContent = "Email: " + maskEmail(stored);
+      emailInput.value = stored;
+      setMsg("Open your inbox and click the verification link.", "");
+    } else {
+      setMsg("Enter your email below to resend the verification link.", "");
+    }
+
+    // Cooldown helper
+    let timer = null;
+    function startCooldown(seconds){
+      let left = seconds;
+      resendBtn.disabled = true;
+
+      const tick = () => {
+        if (left <= 0){
+          resendBtn.disabled = false;
+          resendBtn.textContent = "Resend verification email";
+          if (timer) clearInterval(timer);
+          timer = null;
+          return;
+        }
+        resendBtn.textContent = `Resend in ${left}s`;
+        left -= 1;
+      };
+
+      tick();
+      timer = setInterval(tick, 1000);
+    }
+
+    // Only auto cooldown if they just came from signup
+    const ts = Number(localStorage.getItem("pp_pending_email_ts") || 0);
+    if (stored && ts && (Date.now() - ts) < 60_000){
+      startCooldown(10);
+    }
+
+    resendForm.addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      const email = (emailInput.value || "").trim();
+      if (!email){ setMsg("Please enter your email.", "bad"); return; }
+
+      resendBtn.disabled = true;
+      setMsg("Sending…");
+
+      try{
+        const { error } = await supabase.auth.resend({
           type: "signup",
           email,
           options: { emailRedirectTo: redirectToLoginUrl() }
         });
+
         if (error) throw error;
-        setMsg("Sent. Check your inbox (and Spam/Promotions).", "ok");
-      } catch (e){
-        setMsg("Resend failed.\n\nRaw: " + (e?.message || e), "bad");
+
+        localStorage.setItem("pp_pending_email", email);
+        localStorage.setItem("pp_pending_email_ts", String(Date.now()));
+        emailLine.textContent = "Email: " + maskEmail(email);
+
+        setMsg("Verification email resent. Check inbox + spam/junk.", "ok");
+        startCooldown(30);
+      } catch (err){
+        console.error("Supabase resend error:", err);
+        resendBtn.disabled = false;
+        setMsg(normalizeErrorMessage(err), "bad");
       }
     });
-
-    setMsg(
-      "Redirect URL used:\n" + redirectToLoginUrl() +
-      "\n\nIf Supabase rejects it, add it in Supabase → Auth → URL Configuration.",
-      "warn"
-    );
   </script>
 </body>
 </html>
