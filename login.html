@@ -5,11 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Log in — ProfitPilot</title>
   <meta name="robots" content="noindex,nofollow">
-  <meta name="description" content="Log in to ProfitPilot.">
-
   <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
 
-  <!-- Analytics: GA4 -->
+  <!-- GA4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-F12747YWBN"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -18,7 +16,7 @@
     gtag('config', 'G-F12747YWBN', { anonymize_ip: true });
   </script>
 
-  <!-- Analytics: Microsoft Clarity -->
+  <!-- Clarity -->
   <script>
     (function(c,l,a,r,i,t,y){
       c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -27,199 +25,109 @@
     })(window, document, "clarity", "script", "vjsgka2ywg");
   </script>
 
-  <!-- ✅ Supabase UMD (more reliable than type="module") -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <style>
-    /* =========================
-       ProfitPilot — Auth (Elite)
-       Matches app.html feel
-    ========================== */
-
     :root{
-      --bg:#0b1220;
-      --bg2:#0f172a;
-      --txt:#eaf0ff;
-      --muted:rgba(226,232,240,.72);
-
-      --card:rgba(17,24,39,.86);
-      --card2:rgba(15,23,42,.78);
-
-      --line:rgba(255,255,255,.12);
-      --line2:rgba(255,255,255,.10);
-
-      --accent:#0ea5a4;
-      --accent2:#4f46e5;
-
-      --ok:#34d399;
-      --warn:#fbbf24;
-      --bad:#fb7185;
-
-      --shadow:0 18px 60px rgba(0,0,0,.55);
-      --shadow2:0 10px 28px rgba(0,0,0,.35);
-      --ring:rgba(14,165,164,.55);
-
-      --radius:18px;
-      --radius2:14px;
-
-      --inputBg:rgba(2,6,23,.52);
+      --bg:#0b1220; --bg2:#0f172a;
+      --txt:#eaf0ff; --muted:rgba(226,232,240,.72);
+      --card:rgba(15,23,42,.86); --cardSolid:#0f172a;
+      --line:rgba(255,255,255,.12); --line2:rgba(255,255,255,.10);
+      --accent:#0ea5a4; --accent2:#4f46e5;
+      --shadow:0 14px 44px rgba(0,0,0,.40);
+      --shadow2:0 26px 90px rgba(0,0,0,.55);
+      --ring:rgba(14,165,164,.45);
+      --inputBg:rgba(2,6,23,.55);
+      --radius:20px;
     }
-
     :root[data-theme="day"]{
-      --bg:#f6f8fb;
-      --bg2:#eef2ff;
-      --txt:#0b1220;
-      --muted:#5b6474;
-
-      --card:rgba(255,255,255,.88);
-      --card2:rgba(255,255,255,.80);
-
-      --line:rgba(16,24,40,.10);
-      --line2:rgba(16,24,40,.08);
-
-      --shadow:0 18px 60px rgba(16,24,40,.12);
-      --shadow2:0 10px 28px rgba(16,24,40,.10);
-      --ring:rgba(79,70,229,.45);
-
-      --inputBg:#fff;
+      --bg:#f6f8fb; --bg2:#eef2ff;
+      --txt:#0b1220; --muted:#556072;
+      --card:rgba(255,255,255,.86); --cardSolid:#ffffff;
+      --line:rgba(15,23,42,.12); --line2:rgba(15,23,42,.08);
+      --shadow:0 14px 44px rgba(15,23,42,.10);
+      --shadow2:0 26px 90px rgba(15,23,42,.12);
+      --ring:rgba(79,70,229,.35);
+      --inputBg:#ffffff;
     }
-
     :root[data-theme="soft"]{
-      --bg:#fbfbff;
-      --bg2:#f3f4ff;
-      --txt:#0b1220;
-      --muted:#5b6474;
-
-      --card:rgba(255,255,255,.90);
-      --card2:rgba(255,255,255,.84);
-
-      --line:rgba(16,24,40,.12);
-      --line2:rgba(16,24,40,.09);
-
-      --shadow:0 18px 60px rgba(16,24,40,.10);
-      --shadow2:0 10px 28px rgba(16,24,40,.10);
-      --ring:rgba(14,165,164,.35);
-
-      --inputBg:#fff;
+      --bg:#fbfbff; --bg2:#f3f4ff;
+      --txt:#0b1220; --muted:#596276;
+      --card:rgba(255,255,255,.90); --cardSolid:#ffffff;
+      --line:rgba(15,23,42,.12); --line2:rgba(15,23,42,.09);
+      --shadow:0 14px 44px rgba(15,23,42,.10);
+      --shadow2:0 26px 90px rgba(15,23,42,.12);
+      --ring:rgba(14,165,164,.30);
+      --inputBg:#ffffff;
     }
-
-    *{ box-sizing:border-box; }
-    html, body{ height:100%; }
+    *{box-sizing:border-box}
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       color:var(--txt);
       background:
-        radial-gradient(900px 420px at 20% 0%, rgba(79,70,229,.14), transparent 60%),
-        radial-gradient(900px 420px at 80% 0%, rgba(14,165,164,.14), transparent 60%),
+        radial-gradient(900px 520px at 20% -10%, rgba(79,70,229,.14), transparent 60%),
+        radial-gradient(900px 520px at 80% -10%, rgba(14,165,164,.14), transparent 60%),
         linear-gradient(180deg,var(--bg2),var(--bg));
       min-height:100vh;
     }
+    a{color:var(--accent);text-decoration:none;font-weight:900}
+    a:hover{text-decoration:underline}
+    :focus-visible{outline:3px solid var(--ring);outline-offset:3px;border-radius:12px}
 
-    a{ color:var(--accent); text-decoration:none; }
-    a:hover{ text-decoration:underline; }
-
-    :focus-visible{
-      outline:3px solid var(--ring);
-      outline-offset:3px;
-      border-radius:12px;
-    }
-
-    .pp-wrap{ max-width:1200px; margin:0 auto; padding:0 20px; }
-
-    /* Header (minimal like app) */
-    .pp-header{ padding:14px 0; }
-    .pp-headerbar{
+    .wrap{max-width:1120px;margin:0 auto;padding:0 18px}
+    header{padding:16px 0}
+    .nav{
       background:var(--card);
       border:1px solid var(--line);
-      border-radius:0 0 20px 20px;
-      box-shadow:var(--shadow2);
+      border-radius:0 0 22px 22px;
+      backdrop-filter:blur(14px);
+      box-shadow:var(--shadow);
       overflow:hidden;
     }
-    .pp-toprow{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:16px;
-      padding:12px 14px;
-    }
-
-    .pp-brand{ display:flex; align-items:center; gap:12px; min-width:220px; }
-    .pp-logo{
-      width:40px; height:40px;
-      border-radius:14px;
-      display:flex; align-items:center; justify-content:center;
-      font-weight:1000;
-      background:rgba(255,255,255,.06);
+    .navInner{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 14px}
+    .brand{display:flex;align-items:center;gap:12px;min-width:220px}
+    .logo{
+      width:42px;height:42px;border-radius:14px;
+      display:flex;align-items:center;justify-content:center;
+      font-weight:1000;letter-spacing:-.5px;
       border:1px solid var(--line2);
-      letter-spacing:-.5px;
+      background:rgba(255,255,255,.06);
     }
-    :root[data-theme="day"] .pp-logo,
-    :root[data-theme="soft"] .pp-logo{
-      background:rgba(16,24,40,.04);
-    }
+    :root[data-theme="day"] .logo, :root[data-theme="soft"] .logo{background:rgba(15,23,42,.03)}
+    .bt{display:flex;flex-direction:column;line-height:1.1}
+    .t1{font-weight:1000;font-size:15px;letter-spacing:-.2px}
+    .t2{font-size:12px;color:var(--muted);margin-top:2px}
 
-    .pp-title{ font-weight:1000; font-size:15px; letter-spacing:-.2px; }
-    .pp-sub{ font-size:12px; color:var(--muted); }
-
-    .pp-nav{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-
+    .right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
     .btn{
-      padding:10px 14px;
-      border-radius:999px;
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      padding:10px 14px;border-radius:999px;
       border:1px solid var(--line);
-      background:rgba(255,255,255,.02);
+      background:var(--inputBg);
       color:var(--txt);
-      font-weight:900;
+      font-weight:950;
       cursor:pointer;
+      transition:transform .08s ease, filter .15s ease, background .15s ease;
+      text-decoration:none;
       white-space:nowrap;
-      transition:transform .08s ease, background .15s ease, filter .15s ease;
-      line-height:1;
     }
-    :root[data-theme="day"] .btn,
-    :root[data-theme="soft"] .btn{ background:var(--inputBg); }
-    .btn:hover{ background:rgba(255,255,255,.06); }
-    :root[data-theme="day"] .btn:hover,
-    :root[data-theme="soft"] .btn:hover{ background:rgba(16,24,40,.03); }
-    .btn:active{ transform:translateY(1px); }
+    .btn:hover{filter:brightness(1.03)}
+    .btn:active{transform:translateY(1px)}
     .btn.primary{
-      background:linear-gradient(135deg, var(--accent), rgba(79,70,229,.92));
-      color:#fff;
       border-color:transparent;
+      background:linear-gradient(135deg,var(--accent),rgba(79,70,229,.92));
+      color:#fff;
+      box-shadow:0 18px 44px rgba(79,70,229,.22);
     }
-    .btn.primary:hover{ filter:brightness(.96); }
-
-    .pill{
-      padding:8px 14px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:900;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.02);
-      color:var(--txt);
-      line-height:1;
-    }
-    :root[data-theme="day"] .pill,
-    :root[data-theme="soft"] .pill{ background:var(--inputBg); }
-
+    .btn.ghost{background:transparent}
     .select{
       appearance:none;
-      -webkit-appearance:none;
-      -moz-appearance:none;
-      padding:10px 38px 10px 14px;
+      padding:10px 40px 10px 14px;
       border-radius:999px;
       border:1px solid var(--line);
-      background:rgba(255,255,255,.02);
+      background:var(--inputBg);
       color:var(--txt);
-      font-weight:900;
+      font-weight:950;
       cursor:pointer;
-      line-height:1;
       background-image:
         linear-gradient(45deg, transparent 50%, currentColor 50%),
         linear-gradient(135deg, currentColor 50%, transparent 50%);
@@ -230,400 +138,252 @@
       background-repeat:no-repeat;
       max-width:220px;
     }
-    :root[data-theme="day"] .select,
-    :root[data-theme="soft"] .select{ background:var(--inputBg); }
-    .select:focus{ outline:none; box-shadow:0 0 0 4px rgba(14,165,164,.12); border-color:rgba(14,165,164,.45); }
 
-    @media (max-width:900px){
-      .pp-toprow{ flex-direction:column; align-items:flex-start; gap:12px; }
-      .pp-nav{ width:100%; justify-content:flex-start; }
-      .select{ max-width:100%; }
-    }
-
-    /* Main */
-    .wrap{
-      max-width:1100px;
-      margin:0 auto 90px;
-      padding:24px 18px 0;
-    }
-    .grid{
-      display:grid;
-      grid-template-columns:1.15fr .85fr;
-      gap:22px;
-      align-items:start;
-    }
-    @media (max-width:960px){ .grid{ grid-template-columns:1fr; } }
-
+    main{padding:22px 0 78px}
+    .grid{display:grid;grid-template-columns:1fr;place-items:center}
     .card{
+      width:min(560px,100%);
       background:var(--card);
       border:1px solid var(--line);
       border-radius:var(--radius);
-      box-shadow:var(--shadow);
+      backdrop-filter:blur(14px);
+      box-shadow:var(--shadow2);
       padding:22px;
-      overflow:hidden;
-      position:relative;
     }
-    .card:before{
-      content:"";
-      position:absolute; inset:-60px -80px auto auto;
-      width:240px; height:240px;
-      background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 60%);
-      transform:rotate(10deg);
-      pointer-events:none;
-      opacity:.55;
-    }
-    :root[data-theme="day"] .card:before,
-    :root[data-theme="soft"] .card:before{ opacity:.35; }
-
-    .title{
-      font-size:20px;
-      font-weight:1000;
-      margin:0 0 10px;
-      line-height:1.2;
-      letter-spacing:-0.3px;
-    }
-    .small{
-      font-size:13.5px;
-      color:var(--muted);
-      line-height:1.55;
-    }
-    .divider{ height:1px; background:var(--line2); margin:18px 0; }
-
-    label{
-      font-size:13px;
-      font-weight:1000;
-      margin:12px 0 6px;
-      display:block;
-      letter-spacing:-0.1px;
-    }
-
+    h1{margin:0 0 8px;font-size:22px;font-weight:1000;letter-spacing:-.3px}
+    .lead{margin:0 0 16px;color:var(--muted);line-height:1.6;font-size:13.5px}
+    label{display:block;margin:12px 0 6px;font-size:13px;font-weight:1000}
+    .field{position:relative}
     input{
       width:100%;
-      padding:12px 14px;
+      padding:12px 44px 12px 14px;
       border-radius:14px;
       border:1px solid var(--line);
-      font-size:15px;
       background:var(--inputBg);
       color:var(--txt);
-    }
-    input:focus{
+      font-size:15px;
       outline:none;
-      border-color:rgba(14,165,164,.45);
-      box-shadow:0 0 0 4px rgba(14,165,164,.12);
     }
-
-    .row2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-    @media(max-width:640px){ .row2{ grid-template-columns:1fr; } }
-
-    .inline{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-top:10px;
+    input:focus{border-color:rgba(14,165,164,.42);box-shadow:0 0 0 4px rgba(14,165,164,.12)}
+    .eye{
+      position:absolute;right:8px;top:50%;transform:translateY(-50%);
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.06);
+      color:var(--txt);
+      border-radius:12px;
+      padding:8px 10px;
+      font-weight:950;
+      cursor:pointer;
+      font-size:12px;
     }
-    .miniLink{ font-size:13px; color:var(--muted); font-weight:900; }
-
+    .row{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px}
     .msg{
       margin-top:12px;
-      font-size:12.8px;
-      line-height:1.55;
-      color:rgba(234,240,255,.82);
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:14px;
+      min-height:44px;
       padding:10px 12px;
-      white-space:pre-wrap;
-    }
-    :root[data-theme="day"] .msg,
-    :root[data-theme="soft"] .msg{
-      color:rgba(16,24,40,.80);
-      background:rgba(16,24,40,.03);
-      border-color:rgba(16,24,40,.10);
-    }
-    .msg.ok{ border-color:rgba(52,211,153,.25); background:rgba(52,211,153,.08); }
-    .msg.bad{ border-color:rgba(251,113,133,.25); background:rgba(251,113,133,.08); }
-    .msg.warn{ border-color:rgba(251,191,36,.22); background:rgba(251,191,36,.08); }
-
-    .feature{
+      border-radius:14px;
       border:1px solid var(--line2);
-      border-radius:16px;
-      padding:14px;
-      background:rgba(255,255,255,.02);
+      background:rgba(255,255,255,.04);
+      color:var(--muted);
+      display:flex;align-items:center;
+      font-size:12.8px;line-height:1.55;
+      word-break:break-word;
     }
-    :root[data-theme="day"] .feature,
-    :root[data-theme="soft"] .feature{ background:rgba(16,24,40,.02); }
-    .fTitle{ font-weight:1000; letter-spacing:-.2px; }
-    .fText{ margin-top:6px; font-size:13px; color:var(--muted); line-height:1.55; }
-    .list{ margin:10px 0 0; padding-left:18px; color:var(--muted); font-size:13px; line-height:1.6; }
-    .list li{ margin:6px 0; }
+    .msg.ok{border-color:rgba(14,165,164,.32);background:rgba(14,165,164,.08);color:var(--txt)}
+    .msg.bad{border-color:rgba(239,68,68,.30);background:rgba(239,68,68,.08);color:var(--txt)}
 
-    /* Footer */
-    .pp-footer{
-      margin-top:80px;
-      padding:44px 0;
-      background:#0f172a;
-      color:#cbd5e1;
+    footer{
+      margin-top:84px;
+      padding:46px 0;
+      background:var(--cardSolid);
+      color:var(--muted);
+      border-top:1px solid var(--line);
     }
-    .pp-footbox{ max-width:1100px; margin:auto; padding:0 20px; }
-    .pp-footgrid{ display:grid; grid-template-columns:1fr 1fr; gap:40px; }
-    @media(max-width:768px){ .pp-footgrid{ grid-template-columns:1fr; } }
-    .pp-footbrand b{ color:#fff; font-size:18px; }
-    .pp-footmut{ margin-top:10px; font-size:13px; line-height:1.6; color:rgba(226,232,240,.70); }
-    .pp-footlinks{ display:flex; flex-wrap:wrap; gap:12px; }
-    .pp-footlinks a{ color:#cbd5e1; font-weight:700; font-size:14px; text-decoration:none; opacity:.85; }
-    .pp-footlinks a:hover{ opacity:1; }
-    .pp-footbottom{
-      margin-top:40px;
-      padding-top:20px;
-      border-top:1px solid rgba(255,255,255,.08);
-      display:flex;
-      justify-content:space-between;
+    .foot{max-width:1120px;margin:0 auto;padding:0 18px}
+    .footBottom{
+      display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
       font-size:13px;
-      color:rgba(226,232,240,.60);
-      gap:12px;
     }
-    @media(max-width:768px){ .pp-footbottom{ flex-direction:column; } }
   </style>
 </head>
 
 <body>
-  <header class="pp-header" role="navigation" aria-label="Primary">
-    <div class="pp-wrap">
-      <div class="pp-headerbar">
-        <div class="pp-toprow">
-          <div class="pp-brand" aria-label="ProfitPilot">
-            <div class="pp-logo" aria-hidden="true">PP</div>
-            <div>
-              <div class="pp-title">ProfitPilot</div>
-              <div class="pp-sub">Account access • UKwebtools</div>
-            </div>
+<header role="navigation" aria-label="Primary">
+  <div class="wrap">
+    <div class="nav">
+      <div class="navInner">
+        <div class="brand">
+          <div class="logo" aria-hidden="true">PP</div>
+          <div class="bt">
+            <div class="t1">ProfitPilot</div>
+            <div class="t2">Secure access</div>
           </div>
+        </div>
 
-          <nav class="pp-nav" aria-label="Main">
-            <a class="btn" href="index.html">Home</a>
-            <a class="btn" href="pricing.html">Pricing</a>
-            <a class="btn" href="reviews.html">Reviews</a>
+        <div class="right">
+          <a class="btn ghost" href="index.html">Home</a>
+          <a class="btn ghost" href="reviews.html">Reviews</a>
+          <a class="btn ghost" href="pricing.html">Pricing</a>
+          <span class="btn primary" aria-current="page" style="pointer-events:none">Log in</span>
+          <a class="btn" href="signup.html">Sign up</a>
 
-            <span class="pill" id="authPill">Signed out</span>
-
-            <select class="select" id="themeSel" aria-label="Theme">
-              <option value="midnight">Midnight</option>
-              <option value="day">Day</option>
-              <option value="soft">Soft</option>
-            </select>
-
-            <a class="btn primary" href="signup.html" id="signupTop">Sign up</a>
-          </nav>
+          <select class="select" id="themeSel" aria-label="Theme">
+            <option value="day">Day</option>
+            <option value="soft">Soft</option>
+            <option value="midnight">Midnight</option>
+          </select>
         </div>
       </div>
     </div>
-  </header>
+  </div>
+</header>
 
-  <main class="wrap" id="content">
-    <div class="grid">
-      <section class="card" aria-label="Login">
-        <div class="title">Log in</div>
-        <div class="small">Access your ProfitPilot account and PRO status.</div>
+<main class="wrap">
+  <div class="grid">
+    <div class="card">
+      <h1>Log in</h1>
+      <p class="lead">Access your account, trial, and PRO tools.</p>
 
-        <div class="divider"></div>
+      <label for="email">Email</label>
+      <input id="email" type="email" placeholder="you@example.com" autocomplete="email" inputmode="email">
 
-        <form id="form" novalidate>
-          <label for="email">Email</label>
-          <input id="email" type="email" autocomplete="email" placeholder="you@example.com" required>
-
-          <label for="password">Password</label>
-          <input id="password" type="password" autocomplete="current-password" placeholder="••••••••" required>
-
-          <div class="inline">
-            <span class="miniLink"><a href="reset.html">Forgot password?</a></span>
-            <span class="miniLink"><a href="verify.html">Need verification email?</a></span>
-          </div>
-
-          <div class="row2" style="margin-top:14px">
-            <button class="btn primary" id="loginBtn" type="submit">Log in</button>
-            <a class="btn" href="signup.html">Create account</a>
-          </div>
-
-          <div class="msg" id="msg" role="status" aria-live="polite">—</div>
-        </form>
-
-        <div class="small" style="margin-top:12px">
-          By logging in, you agree to the <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy</a>.
-        </div>
-      </section>
-
-      <aside class="card" aria-label="Help">
-        <div class="title">Fast + simple</div>
-        <div class="small">If login fails, it’s usually one of these:</div>
-
-        <div class="divider"></div>
-
-        <div class="feature">
-          <div class="fTitle">Email not verified</div>
-          <div class="fText">Open your inbox and click the verification link. Check spam/promotions too.</div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="feature">
-          <div class="fTitle">Wrong password</div>
-          <div class="fText">Use “Forgot password” to reset quickly.</div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="feature">
-          <div class="fTitle">Need help?</div>
-          <div class="fText">Email <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a>.</div>
-        </div>
-      </aside>
-    </div>
-  </main>
-
-  <footer class="pp-footer" role="contentinfo">
-    <div class="pp-footbox">
-      <div class="pp-footgrid">
-        <div class="pp-footbrand">
-          <div><b>ProfitPilot</b></div>
-          <div class="pp-footmut">
-            <b>Independent tool:</b> not affiliated with any marketplace/platform/payment provider.<br>
-            <b>Estimates only:</b> outputs depend on your inputs; no profit guarantees.<br>
-            Need help? <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a>
-          </div>
-        </div>
-
-        <div class="pp-footlinks" aria-label="Footer links">
-          <a href="index.html">Home</a>
-          <a href="pricing.html">Pricing</a>
-          <a href="reviews.html">Reviews</a>
-          <a href="refunds.html">Refund Policy</a>
-          <a href="faq.html">FAQ</a>
-          <a href="terms.html">Terms</a>
-          <a href="privacy.html">Privacy</a>
-        </div>
+      <label for="password">Password</label>
+      <div class="field">
+        <input id="password" type="password" placeholder="••••••••" autocomplete="current-password">
+        <button class="eye" id="togglePw" type="button">Show</button>
       </div>
 
-      <div class="pp-footbottom">
-        <div>© <span id="yr"></span> UKwebtools • ProfitPilot</div>
-        <div><a href="https://ukwebtools.com/" rel="nofollow">UKwebtools</a></div>
+      <div class="row">
+        <a href="reset.html">Forgot password?</a>
+        <a href="verify.html">Need verification email?</a>
       </div>
+
+      <button class="btn primary" id="loginBtn" type="button" style="width:100%;margin-top:14px">Log in</button>
+      <button class="btn" id="goSignup" type="button" style="width:100%;margin-top:10px">Create account</button>
+
+      <div class="msg" id="msg" role="status" aria-live="polite">Enter your email and password to continue.</div>
     </div>
-  </footer>
+  </div>
+</main>
 
-  <script>
-    const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
-    const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
+<footer>
+  <div class="foot">
+    <div class="footBottom">
+      <div>© <span id="yr"></span> UKwebtools • ProfitPilot</div>
+      <div><a href="terms.html">Terms</a> • <a href="privacy.html">Privacy</a></div>
+    </div>
+  </div>
+</footer>
 
-    // Footer year
-    document.getElementById("yr").textContent = new Date().getFullYear();
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-    // Theme (shared with app)
-    const themeSel = document.getElementById("themeSel");
-    function setTheme(t){
-      document.documentElement.setAttribute("data-theme", t);
-      try{ localStorage.setItem("pp_theme", t); }catch(e){}
+  const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
+  const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      flowType: "pkce",
+      storageKey: "profitpilot_auth"
     }
-    (function initTheme(){
-      const saved = (localStorage.getItem("pp_theme") || "midnight");
-      setTheme(saved);
-      themeSel.value = saved;
-    })();
-    themeSel.addEventListener("change", ()=> setTheme(themeSel.value));
+  });
 
-    function track(eventName, params = {}) {
-      try { if (typeof gtag === "function") gtag("event", eventName, params); } catch (e) {}
+  document.getElementById("yr").textContent = new Date().getFullYear();
+
+  // Theme
+  const themeSel = document.getElementById("themeSel");
+  function setTheme(t){
+    document.documentElement.setAttribute("data-theme", t);
+    try{ localStorage.setItem("pp_theme", t); }catch(e){}
+  }
+  (function initTheme(){
+    const saved = localStorage.getItem("pp_theme") || "midnight";
+    setTheme(saved);
+    themeSel.value = saved;
+  })();
+  themeSel.addEventListener("change", ()=> setTheme(themeSel.value));
+
+  const msg = document.getElementById("msg");
+  const emailEl = document.getElementById("email");
+  const pwEl = document.getElementById("password");
+  const loginBtn = document.getElementById("loginBtn");
+
+  function setMsg(text, kind=""){
+    msg.textContent = text || "—";
+    msg.className = "msg" + (kind ? " " + kind : "");
+  }
+  function setLoading(on){
+    loginBtn.disabled = !!on;
+    loginBtn.textContent = on ? "Logging in…" : "Log in";
+  }
+
+  function friendlyAuthError(message){
+    const m = String(message || "").toLowerCase();
+    if (m.includes("invalid login credentials")) return "Email or password is incorrect.";
+    if (m.includes("email not confirmed")) return "Please verify your email first (check spam/junk).";
+    if (m.includes("too many requests")) return "Too many attempts. Wait a moment and try again.";
+    if (m.includes("invalid email")) return "That email address looks invalid.";
+    if (m.includes("network")) return "Network error. Check your connection and try again.";
+    return "Login failed. Please try again.";
+  }
+
+  document.getElementById("goSignup").addEventListener("click", ()=> location.href="signup.html");
+
+  document.getElementById("togglePw").addEventListener("click", ()=>{
+    const isPw = pwEl.type === "password";
+    pwEl.type = isPw ? "text" : "password";
+    document.getElementById("togglePw").textContent = isPw ? "Hide" : "Show";
+    pwEl.focus();
+  });
+
+  // If user arrives via email confirmation redirect, detect session in URL then go app if logged
+  try{
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user){
+      setMsg("You're already signed in. Redirecting…", "ok");
+      setTimeout(()=>location.replace("app.html"), 350);
     }
+  }catch(e){}
 
-    const msg = document.getElementById("msg");
-    const authPill = document.getElementById("authPill");
-    const form = document.getElementById("form");
-    const emailEl = document.getElementById("email");
-    const pwEl = document.getElementById("password");
-    const loginBtn = document.getElementById("loginBtn");
-    const signupTop = document.getElementById("signupTop");
+  async function doLogin(){
+    const email = emailEl.value.trim();
+    const password = pwEl.value;
 
-    function setMsg(text, kind=""){
-      msg.textContent = text;
-      msg.className = "msg" + (kind ? " " + kind : "");
-    }
+    if (!email){ setMsg("Please enter your email.", "bad"); emailEl.focus(); return; }
+    if (!password){ setMsg("Please enter your password.", "bad"); pwEl.focus(); return; }
 
-    function normalizeLoginError(err){
-      const raw = String(err?.message || err || "");
-      const low = raw.toLowerCase();
+    setLoading(true);
+    setMsg("Logging in…");
 
-      if (low.includes("invalid login credentials")) return "Incorrect email or password.";
-      if (low.includes("email not confirmed") || low.includes("not confirmed"))
-        return "Your email isn’t verified yet. Please check your inbox and click the verification link (spam/promotions too).";
-      if (low.includes("too many requests") || low.includes("rate limit"))
-        return "Too many attempts. Wait 60 seconds and try again.";
-      return "Could not log in. Please try again.\n\nDetails: " + raw;
-    }
+    try{
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true,
-        flowType: "pkce",
-        storageKey: "profitpilot_auth"
+      if (error){
+        setLoading(false);
+        setMsg(friendlyAuthError(error.message), "bad");
+        return;
       }
-    });
 
-    async function refreshAuthPill(){
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user){
-        authPill.textContent = "Signed in";
-        authPill.style.borderColor = "rgba(52,211,153,.25)";
-        authPill.style.background = "rgba(52,211,153,.08)";
-        signupTop.style.display = "none";
-        location.href = "app.html";
-      } else {
-        authPill.textContent = "Signed out";
-        authPill.style.borderColor = "";
-        authPill.style.background = "";
-        signupTop.style.display = "";
+      const { data: s2 } = await supabase.auth.getSession();
+      if (!s2?.session){
+        setLoading(false);
+        setMsg("Login succeeded but session wasn’t saved. Try another browser or disable extensions.", "bad");
+        return;
       }
+
+      setMsg("Success. Redirecting…", "ok");
+      setTimeout(()=>location.replace("app.html"), 250);
+    }catch(err){
+      setLoading(false);
+      setMsg("Unexpected error: " + (err?.message || String(err)), "bad");
     }
+  }
 
-    (async ()=>{
-      setMsg("—");
-      await refreshAuthPill();
-
-      const pending = localStorage.getItem("pp_pending_email") || "";
-      if (pending && !emailEl.value) emailEl.value = pending;
-    })();
-
-    form.addEventListener("submit", async (e)=>{
-      e.preventDefault();
-
-      const email = (emailEl.value || "").trim();
-      const password = pwEl.value || "";
-
-      if (!email){ setMsg("Please enter your email.", "bad"); emailEl.focus(); return; }
-      if (!password){ setMsg("Please enter your password.", "bad"); pwEl.focus(); return; }
-
-      loginBtn.disabled = true;
-      setMsg("Logging in…");
-      track("login_submit_clicked");
-
-      try{
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-
-        localStorage.removeItem("pp_pending_email");
-        localStorage.removeItem("pp_pending_email_ts");
-
-        setMsg("Success. Opening app…", "ok");
-        setTimeout(()=> location.href="app.html", 250);
-      } catch(err){
-        console.error("Login error:", err);
-        setMsg(normalizeLoginError(err), "bad");
-      } finally {
-        loginBtn.disabled = false;
-      }
-    });
-  </script>
+  loginBtn.addEventListener("click", doLogin);
+  [emailEl, pwEl].forEach(el=> el.addEventListener("keydown", (e)=>{ if (e.key==="Enter") doLogin(); }));
+</script>
 </body>
 </html>
