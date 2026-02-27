@@ -1,317 +1,237 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Reset password — ProfitPilot</title>
-  <meta name="robots" content="noindex,nofollow">
-  <link rel="icon" href="https://ukwebtools.com/favicon.svg" type="image/svg+xml">
-  <link rel="canonical" href="https://profitpilot.ukwebtools.com/reset.html">
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Reset password — ProfitPilot</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="https://ukwebtools.com/favicon.svg">
 
-  <style>
-    :root{
-      --bg:#0b0f14;
-      --card:#111826;
-      --card2:#0e1521;
-      --txt:#eaf0ff;
-      --muted:#9aa7bd;
-      --line:rgba(255,255,255,.10);
-      --accent:#5eead4;
-      --accent2:#60a5fa;
-      --danger:#fb7185;
-      --ok:#34d399;
-    }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--txt)}
-    a{color:var(--accent);text-decoration:none}
-    a:hover{text-decoration:underline}
-    :focus-visible{outline:3px solid rgba(96,165,250,.55);outline-offset:3px;border-radius:10px}
+<style>
+:root{
+  --bg:#0b1220;
+  --bg2:#0f172a;
+  --card:#0f172a;
+  --txt:#eaf0ff;
+  --muted:#9aa7bd;
+  --line:rgba(255,255,255,.12);
+  --accent:#0ea5a4;
+  --accent2:#4f46e5;
+  --shadow:0 22px 80px rgba(0,0,0,.55);
+}
+*{box-sizing:border-box}
 
-    .wrap{max-width:560px;margin:34px auto;padding:0 14px}
-    .card{
-      background:linear-gradient(180deg,rgba(94,234,212,.10),transparent 60%),var(--card);
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:20px;
-      box-shadow:0 16px 44px rgba(0,0,0,.35);
-    }
-    h1{margin:0 0 10px;font-size:22px;letter-spacing:-.02em}
-    .subtitle{margin:0 0 14px;color:var(--muted);font-size:13px;line-height:1.6}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  color:var(--txt);
+  background:
+    radial-gradient(900px 420px at 20% 0%, rgba(79,70,229,.18), transparent 60%),
+    radial-gradient(900px 420px at 80% 0%, rgba(14,165,164,.18), transparent 60%),
+    linear-gradient(180deg,var(--bg2),var(--bg));
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
 
-    label{font-size:12px;color:var(--muted);margin-top:14px;display:block}
-    input{
-      width:100%;
-      padding:12px;
-      border-radius:14px;
-      border:1px solid var(--line);
-      background:var(--card2);
-      color:var(--txt);
-      outline:none;
-    }
-    input:focus{border-color:rgba(94,234,212,.35)}
+.card{
+  width:min(560px,100%);
+  background:rgba(15,23,42,.94);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:24px;
+  box-shadow:var(--shadow);
+}
 
-    .btn{
-      width:100%;
-      margin-top:14px;
-      padding:12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.05);
-      color:var(--txt);
-      cursor:pointer;
-      font-weight:900;
-      transition:transform .08s ease, filter .08s ease;
-    }
-    .btn:hover{transform:translateY(-1px)}
-    .btn:active{transform:translateY(0)}
-    .btn.primary{
-      border:none;
-      color:#0b1220;
-      background:linear-gradient(135deg,var(--accent),var(--accent2));
-      box-shadow:0 14px 28px rgba(96,165,250,.18);
-    }
-    .btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+h1{
+  margin:0 0 8px;
+  font-size:22px;
+  font-weight:1000;
+}
 
-    .row{
-      display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
-      margin-top:12px;align-items:center;
-    }
-    .note{font-size:12px;color:var(--muted);line-height:1.6}
-    .msg{
-      margin-top:12px;
-      font-size:12.5px;
-      line-height:1.6;
-      padding:10px 12px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.04);
-      color:rgba(255,255,255,.86);
-      display:none;
-    }
-    .msg.ok{border-color:rgba(52,211,153,.35);background:rgba(52,211,153,.10)}
-    .msg.err{border-color:rgba(251,113,133,.35);background:rgba(251,113,133,.10)}
+.sub{
+  margin-bottom:14px;
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.6;
+}
 
-    /* PROFITPILOT NAV (single, clean) */
-    .pp-navwrap{max-width:1200px;margin:0 auto;padding:14px 16px;position:relative;z-index:50}
-    .pp-nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-    .pp-left,.pp-right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .pp-btn{
-      padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.06);font-weight:800;text-decoration:none;color:rgba(255,255,255,.92);
-      display:inline-flex;gap:8px;align-items:center;
-      transition:transform .08s ease;
-    }
-    .pp-btn:hover{transform:translateY(-1px);text-decoration:none}
-    .pp-btn:active{transform:translateY(0)}
-    .pp-primary{
-      border:none;color:#0b1220;
-      background:linear-gradient(135deg,#5eead4,#60a5fa);
-      box-shadow:0 14px 28px rgba(96,165,250,.18);
-    }
-    .pp-active{
-      border-color:rgba(94,234,212,.35);
-      background:rgba(94,234,212,.10);
-    }
-    .pp-user{
-      padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.06);
-      color:rgba(255,255,255,.80);
-      font-weight:800;
-      display:none;
-      max-width:260px;
-      overflow:hidden;text-overflow:ellipsis;
-      white-space:nowrap;
-    }
-    .pp-crumbs{
-      margin-top:10px;
-      font-size:12.5px;
-      color:rgba(255,255,255,.70);
-      display:flex;gap:6px;flex-wrap:wrap;align-items:center;
-    }
-    .pp-crumbs a{color:rgba(94,234,212,.95);font-weight:800;text-decoration:none}
-    .pp-sep{opacity:.55}
+label{
+  display:block;
+  margin:12px 0 6px;
+  font-size:12px;
+  font-weight:900;
+  color:var(--muted);
+}
 
-    @media (prefers-reduced-motion: reduce){
-      .btn,.pp-btn{transition:none}
-      .btn:hover,.pp-btn:hover{transform:none}
-    }
-  </style>
+input{
+  width:100%;
+  padding:12px 14px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:#0b1220;
+  color:var(--txt);
+  outline:none;
+}
+input:focus{
+  border-color:rgba(14,165,164,.45);
+  box-shadow:0 0 0 4px rgba(14,165,164,.14);
+}
+
+.btn{
+  width:100%;
+  margin-top:16px;
+  padding:13px;
+  border-radius:999px;
+  border:none;
+  font-weight:1000;
+  cursor:pointer;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;
+}
+
+.btn:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+.msg{
+  margin-top:14px;
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.04);
+  font-size:13px;
+  min-height:44px;
+  display:flex;
+  align-items:center;
+}
+
+.ok{
+  border-color:rgba(34,197,94,.35);
+  background:rgba(34,197,94,.10);
+}
+
+.bad{
+  border-color:rgba(239,68,68,.35);
+  background:rgba(239,68,68,.12);
+}
+
+.small{
+  margin-top:12px;
+  font-size:12px;
+  color:var(--muted);
+}
+
+a{color:#5eead4;text-decoration:none;font-weight:900}
+a:hover{text-decoration:underline}
+</style>
 </head>
 
 <body>
-  <!-- NAV -->
-  <div class="pp-navwrap" role="navigation" aria-label="Primary">
-    <div class="pp-nav">
-      <div class="pp-left">
-        <a class="pp-btn" href="https://ukwebtools.com/" rel="nofollow">← UKwebtools</a>
-        <a class="pp-btn" href="index.html">Home</a>
-        <a class="pp-btn" href="pricing.html">Pricing</a>
-        <a class="pp-btn" href="reviews.html">Reviews</a>
-        <a class="pp-btn" href="help.html">How to use</a>
-        <a class="pp-btn" href="faq.html">FAQ</a>
-        <a class="pp-btn" href="privacy.html">Privacy</a>
-        <a class="pp-btn" href="terms.html">Terms</a>
-        <a class="pp-btn pp-active" href="reset.html" aria-current="page">Reset</a>
-      </div>
 
-      <div class="pp-right">
-        <span class="pp-user" id="ppUserChip" title="Signed in user">Signed in</span>
+<div class="card">
 
-        <!-- Signed OUT -->
-        <a class="pp-btn pp-active" id="ppLoginBtn" href="login.html">Log in</a>
-        <a class="pp-btn pp-primary" id="ppSignupBtn" href="signup.html">Sign up</a>
+<h1>Reset password</h1>
 
-        <!-- Signed IN -->
-        <a class="pp-btn pp-primary" id="ppOpenBtn" href="app.html" style="display:none">Open app</a>
-        <a class="pp-btn" id="ppLogoutBtn" href="#" style="display:none">Log out</a>
-      </div>
-    </div>
+<div class="sub">
+Enter your account email and we'll send a secure password reset link.
+</div>
 
-    <div class="pp-crumbs" aria-label="Breadcrumb">
-      <a href="https://ukwebtools.com/">UKwebtools</a>
-      <span class="pp-sep">›</span>
-      <a href="index.html">ProfitPilot</a>
-      <span class="pp-sep">›</span>
-      <span>Reset password</span>
-    </div>
-  </div>
+<label>Email</label>
+<input id="email" type="email" placeholder="you@example.com">
 
-  <div class="wrap">
-    <div class="card">
-      <h1>Reset your password</h1>
-      <p class="subtitle">
-        Enter your account email and we’ll send you a secure reset link.
-        If you don’t see it within a few minutes, check Spam/Junk.
-      </p>
+<button class="btn" id="sendBtn">Send reset email</button>
 
-      <label for="email">Email</label>
-      <input id="email" type="email" placeholder="you@example.com" autocomplete="email" inputmode="email" required>
+<div class="msg" id="msg">—</div>
 
-      <button class="btn primary" id="sendBtn" type="button">Send reset link</button>
+<div class="small">
+Remembered your password?
+<a href="login.html">Back to login</a>
+</div>
 
-      <div class="msg" id="msg" role="status" aria-live="polite"></div>
-
-      <div class="row">
-        <span class="note">Remembered it? <a href="login.html">Back to login</a></span>
-        <span class="note">Need an account? <a href="signup.html">Sign up</a></span>
-      </div>
-
-      <div class="note" style="margin-top:12px">
-        Need help? Email <a href="mailto:support@ukwebtools.com">support@ukwebtools.com</a>.
-      </div>
-    </div>
-  </div>
+</div>
 
 <script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+import { createClient }
+from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-  const SUPABASE_URL = "https://xsigsftvfknefpdfsyae.supabase.co";
-  const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzaWdzZnR2ZmtuZWZwZGZzeWFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAyNzY4NjksImV4cCI6MjA4NTg1Mjg2OX0.Jkkh9Jd46saYBVipN8bxbWhjmhG6mgaFgtTpirKUAWg";
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+const SUPABASE_URL =
+"https://xsigsftvfknefpdfsyae.supabase.co";
 
-  const emailEl = document.getElementById("email");
-  const sendBtn = document.getElementById("sendBtn");
-  const msg = document.getElementById("msg");
+const SUPABASE_ANON =
+"YOUR_ANON_KEY_HERE";   // ✅ keep your anon key
 
-  function showMsg(text, type){
-    msg.style.display = "block";
-    msg.className = "msg " + (type || "");
-    msg.textContent = text || "";
-  }
-  function clearMsg(){
-    msg.style.display = "none";
-    msg.className = "msg";
-    msg.textContent = "";
-  }
-  function setLoading(isLoading){
-    sendBtn.disabled = !!isLoading;
-    sendBtn.textContent = isLoading ? "Sending…" : "Send reset link";
-  }
-  function safeText(s){ return String(s || "").replace(/\s+/g, " ").trim(); }
-
-  // NAV auth UI (same pattern as login)
-  const userChip = document.getElementById("ppUserChip");
-  const loginBtn = document.getElementById("ppLoginBtn");
-  const signupBtn = document.getElementById("ppSignupBtn");
-  const openBtn = document.getElementById("ppOpenBtn");
-  const logoutBtn = document.getElementById("ppLogoutBtn");
-
-  async function refreshAuthUI(){
-    const { data: { session } } = await supabase.auth.getSession();
-    const email = safeText(session?.user?.email);
-
-    if (email){
-      userChip.style.display = "inline-flex";
-      userChip.textContent = email;
-      userChip.title = email;
-
-      loginBtn.style.display = "none";
-      signupBtn.style.display = "none";
-
-      openBtn.style.display = "inline-flex";
-      logoutBtn.style.display = "inline-flex";
-    } else {
-      userChip.style.display = "none";
-      userChip.textContent = "Signed in";
-      userChip.title = "";
-
-      loginBtn.style.display = "inline-flex";
-      signupBtn.style.display = "inline-flex";
-
-      openBtn.style.display = "none";
-      logoutBtn.style.display = "none";
+/* ===== SAME AUTH CONFIG AS APP ===== */
+const supabase = createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON,
+  {
+    auth:{
+      persistSession:true,
+      autoRefreshToken:true,
+      detectSessionInUrl:true,
+      flowType:"pkce",
+      storageKey:"profitpilot_auth"
     }
   }
+);
 
-  logoutBtn.addEventListener("click", async (e)=>{
-    e.preventDefault();
-    await supabase.auth.signOut();
-    location.href = "login.html";
-  });
+const emailEl=document.getElementById("email");
+const btn=document.getElementById("sendBtn");
+const msg=document.getElementById("msg");
 
-  await refreshAuthUI();
-  supabase.auth.onAuthStateChange(() => refreshAuthUI());
+function setMsg(text,type=""){
+  msg.textContent=text;
+  msg.className="msg "+type;
+}
 
-  function looksLikeEmail(v){
-    // intentionally simple; avoids rejecting valid but uncommon emails
-    return v.includes("@") && v.includes(".") && v.length >= 6;
+async function sendReset(){
+
+  const email=emailEl.value.trim();
+
+  if(!email){
+    setMsg("Please enter your email.","bad");
+    return;
   }
 
-  async function sendReset(){
-    clearMsg();
+  btn.disabled=true;
+  setMsg("Sending reset email…");
 
-    const email = safeText(emailEl.value);
-    if (!email){ showMsg("Please enter your email.", "err"); emailEl.focus(); return; }
-    if (!looksLikeEmail(email)){ showMsg("Please enter a valid email address.", "err"); emailEl.focus(); return; }
-
-    setLoading(true);
-
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: "https://profitpilot.ukwebtools.com/update-password.html"
-    });
-
-    setLoading(false);
-
-    if (error){
-      const m = String(error.message || "").toLowerCase();
-      if (m.includes("rate") || m.includes("too many")){
-        showMsg("Too many attempts. Please wait a moment and try again.", "err");
-      } else {
-        // Don’t leak too much detail; keep it user-friendly.
-        showMsg("If an account exists for that email, a reset link has been sent. Please check your inbox and spam folder.", "ok");
-      }
-      return;
+  const { error } =
+  await supabase.auth.resetPasswordForEmail(
+    email,
+    {
+      redirectTo:
+      location.origin + "/update-password.html"
     }
+  );
 
-    showMsg("If an account exists for that email, a reset link has been sent. Please check your inbox and spam folder.", "ok");
+  btn.disabled=false;
+
+  if(error){
+    console.error(error);
+    setMsg(
+      "Could not send reset email. Try again shortly.",
+      "bad"
+    );
+    return;
   }
 
-  sendBtn.addEventListener("click", sendReset);
+  setMsg(
+    "Reset email sent ✅ Check inbox + spam folder.",
+    "ok"
+  );
+}
 
-  // Enter-to-submit
-  emailEl.addEventListener("keydown", (e)=>{
-    if (e.key === "Enter") sendReset();
-  });
+btn.addEventListener("click",sendReset);
+
+emailEl.addEventListener("keydown",e=>{
+  if(e.key==="Enter") sendReset();
+});
 </script>
+
 </body>
 </html>
